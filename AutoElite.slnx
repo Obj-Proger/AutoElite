@@ -1,0 +1,7 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/AutoElite.Application/AutoElite.Application.csproj" Id="12a6fdf0-c895-420b-821c-2ed87a07f94a" />
+    <Project Path="src/AutoElite.Domain/AutoElite.Domain.csproj" Id="f671f2b1-03d6-45b7-b1ce-f200dc0b52d6" />
+    <Project Path="src/AutoElite.Infrastructure/AutoElite.Infrastructure.csproj" Id="263f0bca-5807-49d0-a490-027509578cc7" />
+  </Folder>
+</Solution>
