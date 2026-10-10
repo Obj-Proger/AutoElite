@@ -1,4 +1,4 @@
-﻿namespace AutoElite.Domain.Common;
+namespace AutoElite.Domain.Common;
 
 /// <summary>
 /// Base class for Value Objects.

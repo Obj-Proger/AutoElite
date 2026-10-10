@@ -1,4 +1,4 @@
-﻿namespace AutoElite.Domain.Common;
+namespace AutoElite.Domain.Common;
 
 /// <summary>
 /// Shared validation for entity fields that repeat the same

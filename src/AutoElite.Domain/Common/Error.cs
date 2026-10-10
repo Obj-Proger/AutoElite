@@ -1,4 +1,4 @@
-﻿namespace AutoElite.Domain.Common;
+namespace AutoElite.Domain.Common;
 
 /// <summary>
 /// Classifies an <see cref="Error"/> so the API layer can map it to the correct

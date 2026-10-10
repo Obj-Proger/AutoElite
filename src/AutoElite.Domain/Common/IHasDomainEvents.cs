@@ -1,4 +1,4 @@
-﻿namespace AutoElite.Domain.Common;
+namespace AutoElite.Domain.Common;
 
 /// <summary>
 /// Defines a contract for entities that raise domain events — facts that already happened

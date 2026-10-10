@@ -1,1 +1,1 @@
-﻿global using AutoElite.Domain.Common;
+global using AutoElite.Domain.Common;

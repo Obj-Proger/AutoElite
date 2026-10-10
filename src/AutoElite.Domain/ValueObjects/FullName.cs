@@ -1,4 +1,4 @@
-﻿namespace AutoElite.Domain.ValueObjects;
+namespace AutoElite.Domain.ValueObjects;
 
 /// <summary>
 /// A person's full name: last name, first name, and an optional middle name (patronymic).

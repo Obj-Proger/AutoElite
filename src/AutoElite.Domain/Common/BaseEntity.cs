@@ -1,4 +1,4 @@
-﻿namespace AutoElite.Domain.Common;
+namespace AutoElite.Domain.Common;
 
 /// <summary>
 /// Base class for all domain entities.
@@ -9,7 +9,7 @@ public abstract class BaseEntity : IHasDomainEvents, IEquatable<BaseEntity>
     private readonly List<IDomainEvent> _domainEvents = [];
 
     /// <param name="id">The identifier, assigned by the aggregate's own factory method.</param>
-    protected BaseEntity(Guid id) 
+    protected BaseEntity(Guid id)
     {
         Id = id;
     }

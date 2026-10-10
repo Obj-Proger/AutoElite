@@ -1,4 +1,4 @@
-﻿namespace AutoElite.Domain.Common;
+namespace AutoElite.Domain.Common;
 
 /// <summary>
 /// Central catalog of domain-specific <see cref="Error"/> instances, grouped by concept.

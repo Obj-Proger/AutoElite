@@ -1,4 +1,4 @@
-﻿namespace AutoElite.Domain.Common;
+namespace AutoElite.Domain.Common;
 
 /// <summary>
 /// Represents the outcome of an operation that does not return a value.
@@ -16,14 +16,14 @@ public class Result
     /// Thrown when a successful result is given a non-empty error,
     /// or a failed result is given an empty error.
     /// </exception>
-    protected Result(bool isSuccess, Error error) 
-    { 
-        if (isSuccess && error != Error.None) 
+    protected Result(bool isSuccess, Error error)
+    {
+        if (isSuccess && error != Error.None)
             throw new InvalidOperationException("A successful result cannot carry an error.");
-        
+
         if (!isSuccess && error == Error.None)
             throw new InvalidOperationException("A failed result must carry a non-empty error.");
-        
+
         IsSuccess = isSuccess;
         Error = error;
     }

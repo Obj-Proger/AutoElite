@@ -1,0 +1,113 @@
+# Top-most EditorConfig file: editors stop searching parent folders here.
+root = true
+
+# ---------------------------------------------------------------------------
+# All files
+# ---------------------------------------------------------------------------
+[*]
+charset = utf-8
+indent_style = space
+indent_size = 4
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.{csproj,props,targets,slnx,json,yml,yaml}]
+indent_size = 2
+
+# Two trailing spaces mean a line break in Markdown.
+[*.md]
+trim_trailing_whitespace = false
+
+# ---------------------------------------------------------------------------
+# C# files
+# ---------------------------------------------------------------------------
+[*.cs]
+
+# Namespaces and usings
+csharp_style_namespace_declarations = file_scoped:warning
+csharp_using_directive_placement = outside_namespace:warning
+dotnet_sort_system_directives_first = true
+dotnet_separate_import_directive_groups = false
+dotnet_diagnostic.IDE0005.severity = warning
+
+# Formatting violations are reported as warnings
+dotnet_diagnostic.IDE0055.severity = warning
+
+# ---------------------------------------------------------------------------
+# Naming styles
+# ---------------------------------------------------------------------------
+dotnet_naming_style.pascal_case_style.capitalization = pascal_case
+
+dotnet_naming_style.camel_case_style.capitalization = camel_case
+
+dotnet_naming_style.begins_with_i.required_prefix = I
+dotnet_naming_style.begins_with_i.capitalization = pascal_case
+
+dotnet_naming_style.begins_with_t.required_prefix = T
+dotnet_naming_style.begins_with_t.capitalization = pascal_case
+
+dotnet_naming_style.underscore_camel_case.required_prefix = _
+dotnet_naming_style.underscore_camel_case.capitalization = camel_case
+
+# ---------------------------------------------------------------------------
+# Naming symbols
+# ---------------------------------------------------------------------------
+dotnet_naming_symbols.interfaces.applicable_kinds = interface
+dotnet_naming_symbols.interfaces.applicable_accessibilities = *
+
+dotnet_naming_symbols.type_parameters.applicable_kinds = type_parameter
+dotnet_naming_symbols.type_parameters.applicable_accessibilities = *
+
+dotnet_naming_symbols.constants.applicable_kinds = field
+dotnet_naming_symbols.constants.applicable_accessibilities = *
+dotnet_naming_symbols.constants.required_modifiers = const
+
+dotnet_naming_symbols.private_fields.applicable_kinds = field
+dotnet_naming_symbols.private_fields.applicable_accessibilities = private
+
+dotnet_naming_symbols.nonprivate_fields.applicable_kinds = field
+dotnet_naming_symbols.nonprivate_fields.applicable_accessibilities = public, internal, protected, protected_internal, private_protected
+
+dotnet_naming_symbols.types.applicable_kinds = class, struct, enum, delegate
+dotnet_naming_symbols.types.applicable_accessibilities = *
+
+dotnet_naming_symbols.members.applicable_kinds = property, method, event
+dotnet_naming_symbols.members.applicable_accessibilities = *
+
+dotnet_naming_symbols.parameters_and_locals.applicable_kinds = parameter, local
+dotnet_naming_symbols.parameters_and_locals.applicable_accessibilities = *
+
+# ---------------------------------------------------------------------------
+# Naming rules
+# ---------------------------------------------------------------------------
+dotnet_naming_rule.constants_pascal_case.symbols = constants
+dotnet_naming_rule.constants_pascal_case.style = pascal_case_style
+dotnet_naming_rule.constants_pascal_case.severity = warning
+
+dotnet_naming_rule.interfaces_begin_with_i.symbols = interfaces
+dotnet_naming_rule.interfaces_begin_with_i.style = begins_with_i
+dotnet_naming_rule.interfaces_begin_with_i.severity = warning
+
+dotnet_naming_rule.type_parameters_begin_with_t.symbols = type_parameters
+dotnet_naming_rule.type_parameters_begin_with_t.style = begins_with_t
+dotnet_naming_rule.type_parameters_begin_with_t.severity = warning
+
+dotnet_naming_rule.private_fields_underscore_camel_case.symbols = private_fields
+dotnet_naming_rule.private_fields_underscore_camel_case.style = underscore_camel_case
+dotnet_naming_rule.private_fields_underscore_camel_case.severity = warning
+
+dotnet_naming_rule.nonprivate_fields_pascal_case.symbols = nonprivate_fields
+dotnet_naming_rule.nonprivate_fields_pascal_case.style = pascal_case_style
+dotnet_naming_rule.nonprivate_fields_pascal_case.severity = warning
+
+dotnet_naming_rule.types_pascal_case.symbols = types
+dotnet_naming_rule.types_pascal_case.style = pascal_case_style
+dotnet_naming_rule.types_pascal_case.severity = warning
+
+dotnet_naming_rule.members_pascal_case.symbols = members
+dotnet_naming_rule.members_pascal_case.style = pascal_case_style
+dotnet_naming_rule.members_pascal_case.severity = warning
+
+dotnet_naming_rule.parameters_and_locals_camel_case.symbols = parameters_and_locals
+dotnet_naming_rule.parameters_and_locals_camel_case.style = camel_case_style
+dotnet_naming_rule.parameters_and_locals_camel_case.severity = suggestion

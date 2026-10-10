@@ -1,4 +1,4 @@
-﻿namespace AutoElite.Domain.Enums;
+namespace AutoElite.Domain.Enums;
 
 /// <summary>
 /// The set of roles a user account can be assigned within the driving school.

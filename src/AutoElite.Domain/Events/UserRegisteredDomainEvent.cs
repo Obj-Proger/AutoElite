@@ -1,4 +1,4 @@
-﻿namespace AutoElite.Domain.Events;
+namespace AutoElite.Domain.Events;
 
 /// <summary>Raised when a new user is registered.</summary>
 /// <param name="UserId">The identifier of the registered user.</param>

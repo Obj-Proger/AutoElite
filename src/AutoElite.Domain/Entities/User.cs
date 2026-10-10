@@ -1,4 +1,4 @@
-﻿using AutoElite.Domain.Events;
+using AutoElite.Domain.Events;
 using AutoElite.Domain.ValueObjects;
 
 namespace AutoElite.Domain.Entities;
