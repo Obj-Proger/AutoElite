@@ -19,6 +19,22 @@ internal static class Guard
             : trimmed;
     }
 
+    /// <summary>
+    /// Validates optional text. A null, empty, or whitespace-only value is valid and is normalized to
+    /// <see langword="null"/>; otherwise the value is trimmed and must not exceed the maximum length.
+    /// </summary>
+    public static Result<string?> OptionalText(string? value, int maxLength, Error tooLongError)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+            return Result.Success<string?>(null);
+
+        var trimmed = value.Trim();
+
+        return trimmed.Length > maxLength
+            ? Result.Failure<string?>(tooLongError)
+            : trimmed;
+    }
+
     /// <summary>Validates that a referenced identifier is not <see cref="Guid.Empty"/>.</summary>
     public static Result<Guid> NotEmpty(Guid value, Error error) =>
         value == Guid.Empty ? Result.Failure<Guid>(error) : value;
