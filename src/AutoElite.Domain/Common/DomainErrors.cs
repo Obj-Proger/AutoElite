@@ -68,4 +68,14 @@ public static class DomainErrors
         /// <summary>The operation modifies an inactive user, which is not allowed.</summary>
         public static readonly Error CannotModifyInactive = new("User.CannotModifyInactive", "An inactive user cannot be modified. Reactivate the user first.", ErrorType.Conflict);
     }
+
+    /// <summary>Errors related to the <see cref="Entities.UserRoleAssignment"/> entity.</summary>
+    public static class UserRoleAssignment
+    {
+        /// <summary>The user identifier is an empty GUID.</summary>
+        public static readonly Error UserIdEmpty = new("UserRoleAssignment.UserIdEmpty", "User ID cannot be an empty GUID.", ErrorType.Validation);
+
+        /// <summary>The role is not a defined <see cref="Enums.UserRole"/> value.</summary>
+        public static readonly Error RoleNotDefined = new("UserRoleAssignment.RoleNotDefined", "Role is not a valid user role.", ErrorType.Validation);
+    }
 }

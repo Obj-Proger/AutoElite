@@ -1,8 +1,9 @@
 namespace AutoElite.Domain.Common;
 
 /// <summary>
-/// Shared validation for entity fields that repeat the same
-/// "required, trimmed, length-limited" shape across multiple entities.
+/// Shared validation helpers for the factory methods of entities and value objects.
+/// Each helper returns a <see cref="Result{TValue}"/> instead of throwing, so that
+/// expected validation failures flow through the domain as values.
 /// </summary>
 internal static class Guard
 {
@@ -42,4 +43,13 @@ internal static class Guard
     /// <summary>Validates that a UTC instant is strictly later than the current time.</summary>
     public static Result<DateTime> NotPast(DateTime value, DateTime utcNow, Error error) =>
         value <= utcNow ? Result.Failure<DateTime>(error) : value;
+
+    /// <summary>
+    /// Validates that an enum value is one of the members declared by its type.
+    /// Rejects both out-of-range values (for example <c>(MyEnum)99</c>) and the uninitialized
+    /// default, provided the enum does not declare a member with the value zero.
+    /// </summary>
+    /// <typeparam name="TEnum">The enum type to validate against.</typeparam>
+    public static Result<TEnum> DefinedEnum<TEnum>(TEnum value, Error error) where TEnum : struct, Enum =>
+        Enum.IsDefined(value) ? value : Result.Failure<TEnum>(error);
 }
