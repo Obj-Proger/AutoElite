@@ -28,7 +28,7 @@ csharp_style_namespace_declarations = file_scoped:warning
 csharp_using_directive_placement = outside_namespace:warning
 dotnet_sort_system_directives_first = true
 dotnet_separate_import_directive_groups = false
-dotnet_diagnostic.IDE0005.severity = warning
+dotnet_diagnostic.IDE0005.severity = suggestion
 
 # Formatting violations are reported as warnings
 dotnet_diagnostic.IDE0055.severity = warning

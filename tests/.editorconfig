@@ -1,0 +1,4 @@
+# Test projects: allow underscores in test method names, e.g. Create_EmptyValue_ReturnsEmptyError.
+# This file inherits all other rules from the root .editorconfig.
+[*.cs]
+dotnet_naming_rule.members_pascal_case.severity = none
