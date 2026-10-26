@@ -1,10 +1,6 @@
 namespace AutoElite.Domain.Tests.TestDoubles;
 
-internal sealed class SampleEntity : BaseEntity
+internal sealed class SampleEntity(Guid id) : BaseEntity(id)
 {
-    public SampleEntity(Guid id) : base(id)
-    {
-    }
-
     public void Raise(IDomainEvent domainEvent) => RaiseDomainEvent(domainEvent);
 }

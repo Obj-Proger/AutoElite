@@ -1,16 +1,10 @@
 namespace AutoElite.Domain.Tests.TestDoubles;
 
-internal sealed class SampleValueObject : ValueObject
+internal sealed class SampleValueObject(string name, int? number = null) : ValueObject
 {
-    public SampleValueObject(string name, int? number = null)
-    {
-        Name = name;
-        Number = number;
-    }
+    public string Name { get; } = name;
 
-    public string Name { get; }
-
-    public int? Number { get; }
+    public int? Number { get; } = number;
 
     protected override IEnumerable<object?> GetEqualityComponents()
     {

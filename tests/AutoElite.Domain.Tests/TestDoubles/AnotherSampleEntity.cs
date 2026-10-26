@@ -1,8 +1,5 @@
 namespace AutoElite.Domain.Tests.TestDoubles;
 
-internal sealed class AnotherSampleEntity : BaseEntity
+internal sealed class AnotherSampleEntity(Guid id) : BaseEntity(id)
 {
-    public AnotherSampleEntity(Guid id) : base(id)
-    {
-    }
 }
