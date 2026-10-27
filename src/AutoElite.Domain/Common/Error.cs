@@ -19,13 +19,20 @@ public enum ErrorType
 /// and a type used for HTTP status mapping at the API boundary.
 /// Errors are used as the failure state inside <see cref="Result"/> and <see cref="Result{TValue}"/>.
 /// </summary>
+/// <remarks>
+/// Equality is based on all components. Field errors are compared by content and in order,
+/// and a <see langword="null"/> list is treated as equal to an empty one.
+/// </remarks>
 /// <param name="Code">
 /// Machine-readable error identifier following the convention <c>Concept.ErrorName</c>,
-/// e.g. <c>Student.NotFound</c> or <c>PhoneNumber.InvalidFormat</c>.
+/// e.g. <c>User.CannotModifyInactive</c> or <c>PhoneNumber.InvalidFormat</c>.
 /// </param>
 /// <param name="Message">Human-readable error description.</param>
 /// <param name="Type">The category of failure.</param>
-public sealed record Error(string Code, string Message, ErrorType Type)
+/// <param name="FieldErrors">
+/// Optional per-field details, used by validation errors that aggregate several failures at once.
+/// </param>
+public sealed record Error(string Code, string Message, ErrorType Type, IReadOnlyList<FieldError>? FieldErrors = null)
 {
     /// <summary>Represents the absence of an error. Used for successful results.</summary>
     public static readonly Error None = new(string.Empty, string.Empty, ErrorType.Failure);
@@ -35,6 +42,10 @@ public sealed record Error(string Code, string Message, ErrorType Type)
 
     /// <summary>Creates a validation error.</summary>
     public static Error Validation(string code, string message) => new(code, message, ErrorType.Validation);
+
+    /// <summary>Creates a validation error that carries the failures of individual fields.</summary>
+    public static Error Validation(string code, string message, IReadOnlyList<FieldError> fieldErrors) =>
+        new(code, message, ErrorType.Validation, fieldErrors);
 
     /// <summary>Creates an error indicating the requested resource does not exist.</summary>
     public static Error NotFound(string code, string message) => new(code, message, ErrorType.NotFound);
@@ -47,4 +58,36 @@ public sealed record Error(string Code, string Message, ErrorType Type)
 
     /// <summary>Creates an error indicating the caller is authenticated but lacks permission.</summary>
     public static Error Forbidden(string code, string message) => new(code, message, ErrorType.Forbidden);
+
+    /// <summary>
+    /// Determines whether this error equals another one.
+    /// Replaces the generated comparison, which would compare the field error lists by reference.
+    /// </summary>
+    public bool Equals(Error? other)
+    {
+        if (other is null)
+            return false;
+
+        if (ReferenceEquals(this, other))
+            return true;
+
+        return Code == other.Code
+            && Message == other.Message
+            && Type == other.Type
+            && (FieldErrors ?? []).SequenceEqual(other.FieldErrors ?? []);
+    }
+
+    /// <inheritdoc />
+    public override int GetHashCode()
+    {
+        var hash = new HashCode();
+        hash.Add(Code);
+        hash.Add(Message);
+        hash.Add(Type);
+
+        foreach (var fieldError in FieldErrors ?? [])
+            hash.Add(fieldError);
+
+        return hash.ToHashCode();
+    }
 }
