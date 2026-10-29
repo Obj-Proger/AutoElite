@@ -5,6 +5,7 @@
     <Project Path="src/AutoElite.Infrastructure/AutoElite.Infrastructure.csproj" Id="263f0bca-5807-49d0-a490-027509578cc7" />
   </Folder>
   <Folder Name="/tests/">
+    <Project Path="tests/AutoElite.Application.Tests/AutoElite.Application.Tests.csproj" Id="89e76eaa-a02d-482d-b503-691ea7f8077c" />
     <Project Path="tests/AutoElite.Domain.Tests/AutoElite.Domain.Tests.csproj" Id="8af2c48d-10d6-4cf2-bf09-9c3b421254ad" />
   </Folder>
 </Solution>

@@ -18,4 +18,9 @@
     <InternalsVisibleTo Include="AutoElite.Application.Tests" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Common\Messaging\" />
+    <Folder Include="Common\Behaviors\" />
+  </ItemGroup>
+
 </Project>

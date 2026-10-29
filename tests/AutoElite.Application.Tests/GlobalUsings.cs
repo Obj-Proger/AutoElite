@@ -1,0 +1,12 @@
+global using AutoElite.Application.Common;
+global using AutoElite.Application.Common.Behaviors;
+global using AutoElite.Application.Common.Messaging;
+global using AutoElite.Application.Common.Validation;
+global using AutoElite.Application.Tests.TestDoubles;
+global using AutoElite.Domain.Common;
+global using AutoElite.Domain.ValueObjects;
+global using AwesomeAssertions;
+global using FluentValidation;
+global using Microsoft.Extensions.DependencyInjection;
+global using Microsoft.Extensions.Logging;
+global using Xunit;
