@@ -1,324 +1,11 @@
 namespace AutoElite.Domain.Common;
 
 /// <summary>
-/// Central catalog of domain-specific <see cref="Error"/> instances, grouped by concept.
+/// Central catalog of domain-specific <see cref="Error"/> instances, grouped by concept in alphabetical order.
+/// Every code is <c>Group.Name</c>, matching the nested class and the field, which a test checks.
 /// </summary>
 public static class DomainErrors
 {
-    /// <summary>Errors related to the <see cref="Entities.Document"/> aggregate.</summary>
-    public static class Document
-    {
-        /// <summary>The file name is null, empty, or whitespace.</summary>
-        public static readonly Error FileNameEmpty = new("Document.FileNameEmpty", "File name cannot be empty.", ErrorType.Validation);
-
-        /// <summary>The file name exceeds the maximum allowed length.</summary>
-        public static readonly Error FileNameTooLong = new("Document.FileNameTooLong", "File name exceeds the maximum allowed length.", ErrorType.Validation);
-
-        /// <summary>The file name contains a path or control characters.</summary>
-        public static readonly Error FileNameInvalid = new("Document.FileNameInvalid", "File name must not contain a path or control characters.", ErrorType.Validation);
-
-        /// <summary>The file extension is not in the list of allowed formats.</summary>
-        public static readonly Error FormatNotAllowed = new("Document.FormatNotAllowed", "This file format is not allowed.", ErrorType.Validation);
-
-        /// <summary>The declared content type does not match the file extension.</summary>
-        public static readonly Error ContentTypeMismatch = new("Document.ContentTypeMismatch", "The file type does not match its extension.", ErrorType.Validation);
-
-        /// <summary>The file is empty or larger than 20 MB.</summary>
-        public static readonly Error SizeOutOfRange = new("Document.SizeOutOfRange", "File size must be between 1 byte and 20 MB.", ErrorType.Validation);
-
-        /// <summary>The storage key is null, empty, or whitespace.</summary>
-        public static readonly Error StorageKeyEmpty = new("Document.StorageKeyEmpty", "Storage key cannot be empty.", ErrorType.Validation);
-
-        /// <summary>The storage key exceeds the maximum allowed length.</summary>
-        public static readonly Error StorageKeyTooLong = new("Document.StorageKeyTooLong", "Storage key exceeds the maximum allowed length.", ErrorType.Validation);
-
-        /// <summary>The description exceeds the maximum allowed length.</summary>
-        public static readonly Error DescriptionTooLong = new("Document.DescriptionTooLong", "Description exceeds the maximum allowed length.", ErrorType.Validation);
-
-        /// <summary>The uploader identifier is an empty GUID.</summary>
-        public static readonly Error UploadedByUserIdEmpty = new("Document.UploadedByUserIdEmpty", "User ID cannot be an empty GUID.", ErrorType.Validation);
-
-        /// <summary>Deletion of the document was already requested.</summary>
-        public static readonly Error AlreadyDeleted = new("Document.AlreadyDeleted", "The document is already deleted.", ErrorType.Conflict);
-    }
-
-    /// <summary>Errors related to the <see cref="Entities.DrivingSlot"/> aggregate.</summary>
-    public static class DrivingSlot
-    {
-        /// <summary>The instructor identifier is an empty GUID.</summary>
-        public static readonly Error InstructorIdEmpty = new("DrivingSlot.InstructorIdEmpty", "Instructor ID cannot be an empty GUID.", ErrorType.Validation);
-
-        /// <summary>The vehicle is out of service.</summary>
-        public static readonly Error VehicleInactive = new("DrivingSlot.VehicleInactive", "An inactive vehicle cannot be used for a slot.", ErrorType.Conflict);
-
-        /// <summary>The training ground is no longer used.</summary>
-        public static readonly Error TrainingGroundInactive = new("DrivingSlot.TrainingGroundInactive", "An inactive training ground cannot be used for a slot.", ErrorType.Conflict);
-
-        /// <summary>The route is no longer used.</summary>
-        public static readonly Error RouteInactive = new("DrivingSlot.RouteInactive", "An inactive route cannot be used for a slot.", ErrorType.Conflict);
-
-        /// <summary>The slot would start at or before the current time.</summary>
-        public static readonly Error StartInPast = new("DrivingSlot.StartInPast", "A slot must start in the future.", ErrorType.Validation);
-
-        /// <summary>The slot is longer than the maximum duration.</summary>
-        public static readonly Error DurationTooLong = new("DrivingSlot.DurationTooLong", "A slot cannot be longer than 4 hours.", ErrorType.Validation);
-
-        /// <summary>The slot is booked, completed or withdrawn.</summary>
-        public static readonly Error NotAvailable = new("DrivingSlot.NotAvailable", "The slot is not available for booking.", ErrorType.Conflict);
-
-        /// <summary>The lesson has already started.</summary>
-        public static readonly Error AlreadyStarted = new("DrivingSlot.AlreadyStarted", "The lesson has already started.", ErrorType.Conflict);
-
-        /// <summary>The lesson outcome can be recorded only once the lesson has started.</summary>
-        public static readonly Error NotStarted = new("DrivingSlot.NotStarted", "The lesson has not started yet.", ErrorType.Conflict);
-
-        /// <summary>Only an active contract can book a slot.</summary>
-        public static readonly Error ContractNotActive = new("DrivingSlot.ContractNotActive", "Only an active contract can book a lesson.", ErrorType.Conflict);
-
-        /// <summary>The contract's licence category differs from the vehicle's.</summary>
-        public static readonly Error CategoryMismatch = new("DrivingSlot.CategoryMismatch", "The vehicle is for a different licence category than the contract.", ErrorType.Conflict);
-
-        /// <summary>The slot has no active booking.</summary>
-        public static readonly Error NotBooked = new("DrivingSlot.NotBooked", "The slot has no active booking.", ErrorType.Conflict);
-
-        /// <summary>The slot is completed or already withdrawn.</summary>
-        public static readonly Error NotOpen = new("DrivingSlot.NotOpen", "Only an available or booked slot can be withdrawn.", ErrorType.Conflict);
-
-        /// <summary>The contract passed in is not the contract of the active booking.</summary>
-        public static readonly Error ContractMismatch = new("DrivingSlot.ContractMismatch", "The contract does not belong to the booking.", ErrorType.Validation);
-
-        /// <summary>The identifier of the user making the change was provided but is an empty GUID.</summary>
-        public static readonly Error UserIdEmpty = new("DrivingSlot.UserIdEmpty", "User ID cannot be an empty GUID.", ErrorType.Validation);
-
-        /// <summary>No reason was given for the cancellation.</summary>
-        public static readonly Error ReasonEmpty = new("DrivingSlot.ReasonEmpty", "A reason is required.", ErrorType.Validation);
-
-        /// <summary>The reason exceeds the maximum allowed length.</summary>
-        public static readonly Error ReasonTooLong = new("DrivingSlot.ReasonTooLong", "Reason exceeds the maximum allowed length.", ErrorType.Validation);
-
-        /// <summary>The same skill is graded more than once.</summary>
-        public static readonly Error DuplicateSkillGrade = new("DrivingSlot.DuplicateSkillGrade", "Each skill can be graded only once.", ErrorType.Validation);
-
-        /// <summary>The instructor note exceeds the maximum allowed length.</summary>
-        public static readonly Error NoteTooLong = new("DrivingSlot.NoteTooLong", "Note exceeds the maximum allowed length.", ErrorType.Validation);
-
-        /// <summary>Only a completed lesson can be rated.</summary>
-        public static readonly Error LessonNotCompleted = new("DrivingSlot.LessonNotCompleted", "Only a completed lesson can be rated.", ErrorType.Conflict);
-
-        /// <summary>The student has already rated the lesson.</summary>
-        public static readonly Error AlreadyRated = new("DrivingSlot.AlreadyRated", "The lesson has already been rated.", ErrorType.Conflict);
-
-        /// <summary>The rating is outside 1..5.</summary>
-        public static readonly Error RatingOutOfRange = new("DrivingSlot.RatingOutOfRange", "Rating must be between 1 and 5.", ErrorType.Validation);
-
-        /// <summary>The rating comment exceeds the maximum allowed length.</summary>
-        public static readonly Error RatingCommentTooLong = new("DrivingSlot.RatingCommentTooLong", "Comment exceeds the maximum allowed length.", ErrorType.Validation);
-    }
-
-    /// <summary>Errors related to <see cref="ValueObjects.EntityReference"/> validation.</summary>
-    public static class EntityReference
-    {
-        /// <summary>The kind is not a defined <see cref="Enums.EntityKind"/> value.</summary>
-        public static readonly Error KindNotDefined = new("EntityReference.KindNotDefined", "Object kind is not valid.", ErrorType.Validation);
-
-        /// <summary>The identifier is an empty GUID.</summary>
-        public static readonly Error IdEmpty = new("EntityReference.IdEmpty", "Object ID cannot be an empty GUID.", ErrorType.Validation);
-    }
-
-    /// <summary>Errors related to the <see cref="Entities.Exam"/> aggregate.</summary>
-    public static class Exam
-    {
-        /// <summary>The study group is inactive.</summary>
-        public static readonly Error GroupInactive = new("Exam.GroupInactive", "An exam cannot be scheduled for an inactive group.", ErrorType.Conflict);
-
-        /// <summary>The kind is not a defined <see cref="Enums.ExamKind"/> value.</summary>
-        public static readonly Error KindNotDefined = new("Exam.KindNotDefined", "Exam kind is not valid.", ErrorType.Validation);
-
-        /// <summary>A theory exam was scheduled without a test template.</summary>
-        public static readonly Error TemplateRequired = new("Exam.TemplateRequired", "A theory exam requires a test template.", ErrorType.Validation);
-
-        /// <summary>A practical exam was given a test template.</summary>
-        public static readonly Error TemplateNotAllowed = new("Exam.TemplateNotAllowed", "A practical exam does not use a test template.", ErrorType.Validation);
-
-        /// <summary>The test template is no longer used.</summary>
-        public static readonly Error TemplateInactive = new("Exam.TemplateInactive", "An inactive test template cannot be used for an exam.", ErrorType.Conflict);
-
-        /// <summary>The template is for another licence category than the group.</summary>
-        public static readonly Error TemplateCategoryMismatch = new("Exam.TemplateCategoryMismatch", "The test template is for a different licence category than the group.", ErrorType.Conflict);
-
-        /// <summary>The exam would start at or before the current time.</summary>
-        public static readonly Error ScheduledInPast = new("Exam.ScheduledInPast", "An exam must be scheduled in the future.", ErrorType.Validation);
-
-        /// <summary>The exam is cancelled.</summary>
-        public static readonly Error NotScheduled = new("Exam.NotScheduled", "The exam is cancelled.", ErrorType.Conflict);
-
-        /// <summary>The exam already has results, so it took place.</summary>
-        public static readonly Error HasResults = new("Exam.HasResults", "An exam with results cannot be moved or cancelled.", ErrorType.Conflict);
-
-        /// <summary>No reason was given for the cancellation.</summary>
-        public static readonly Error CancellationReasonEmpty = new("Exam.CancellationReasonEmpty", "A reason is required to cancel an exam.", ErrorType.Validation);
-
-        /// <summary>The cancellation reason exceeds the maximum allowed length.</summary>
-        public static readonly Error CancellationReasonTooLong = new("Exam.CancellationReasonTooLong", "Cancellation reason exceeds the maximum allowed length.", ErrorType.Validation);
-
-        /// <summary>The result does not match the kind of the exam.</summary>
-        public static readonly Error WrongKind = new("Exam.WrongKind", "This kind of result cannot be recorded for this exam.", ErrorType.Conflict);
-
-        /// <summary>The test attempt was not started for this exam.</summary>
-        public static readonly Error SessionNotForExam = new("Exam.SessionNotForExam", "The test attempt does not belong to this exam.", ErrorType.Validation);
-
-        /// <summary>The test attempt is still in progress.</summary>
-        public static readonly Error SessionNotFinished = new("Exam.SessionNotFinished", "The test attempt is not finished yet.", ErrorType.Conflict);
-
-        /// <summary>Results can be recorded only once the exam has started.</summary>
-        public static readonly Error NotStarted = new("Exam.NotStarted", "The exam has not started yet.", ErrorType.Conflict);
-
-        /// <summary>The group passed in is not the exam's group.</summary>
-        public static readonly Error GroupMismatch = new("Exam.GroupMismatch", "The group does not belong to the exam.", ErrorType.Validation);
-
-        /// <summary>The contract is not a current member of the exam's group.</summary>
-        public static readonly Error NotGroupMember = new("Exam.NotGroupMember", "The student is not a member of the group.", ErrorType.Conflict);
-
-        /// <summary>The student already has a result; correct it instead.</summary>
-        public static readonly Error AlreadyRecorded = new("Exam.AlreadyRecorded", "The student already has a result for this exam.", ErrorType.Conflict);
-
-        /// <summary>The student has no result to correct.</summary>
-        public static readonly Error ResultNotFound = new("Exam.ResultNotFound", "The student has no result for this exam.", ErrorType.NotFound);
-
-        /// <summary>The score is negative or above the maximum.</summary>
-        public static readonly Error ScoreOutOfRange = new("Exam.ScoreOutOfRange", "Score must be between 0 and 1000.", ErrorType.Validation);
-
-        /// <summary>The comment exceeds the maximum allowed length.</summary>
-        public static readonly Error CommentTooLong = new("Exam.CommentTooLong", "Comment exceeds the maximum allowed length.", ErrorType.Validation);
-
-        /// <summary>The identifier of the user entering the result is an empty GUID.</summary>
-        public static readonly Error UserIdEmpty = new("Exam.UserIdEmpty", "User ID cannot be an empty GUID.", ErrorType.Validation);
-    }
-
-    /// <summary>Errors related to <see cref="ValueObjects.Email"/> validation.</summary>
-    public static class Email
-    {
-        /// <summary>The email address is null, empty, or whitespace.</summary>
-        public static readonly Error Empty = new("Email.Empty", "Email address cannot be empty.", ErrorType.Validation);
-
-        /// <summary>The email address exceeds the maximum allowed length.</summary>
-        public static readonly Error TooLong = new("Email.TooLong", "Email address exceeds the maximum allowed length.", ErrorType.Validation);
-
-        /// <summary>The email address does not match the expected structure.</summary>
-        public static readonly Error InvalidFormat = new("Email.InvalidFormat", "Email address is not in a valid format.", ErrorType.Validation);
-    }
-
-    /// <summary>Errors related to <see cref="Entities.LessonAttendance"/>.</summary>
-    public static class LessonAttendance
-    {
-        /// <summary>The comment exceeds the maximum allowed length.</summary>
-        public static readonly Error CommentTooLong = new("LessonAttendance.CommentTooLong", "Comment exceeds the maximum allowed length.", ErrorType.Validation);
-
-        /// <summary>The identifier of the user making the mark is an empty GUID.</summary>
-        public static readonly Error MarkedByUserIdEmpty = new("LessonAttendance.MarkedByUserIdEmpty", "User ID cannot be an empty GUID.", ErrorType.Validation);
-    }
-
-    /// <summary>Errors related to <see cref="ValueObjects.LicensePlate"/> validation.</summary>
-    public static class LicensePlate
-    {
-        /// <summary>The plate is null, empty, or whitespace.</summary>
-        public static readonly Error Empty = new("LicensePlate.Empty", "Licence plate cannot be empty.", ErrorType.Validation);
-
-        /// <summary>The plate is not 2 to 15 letters and digits after removing spaces and hyphens.</summary>
-        public static readonly Error InvalidFormat = new("LicensePlate.InvalidFormat", "Licence plate must consist of 2 to 15 letters and digits.", ErrorType.Validation);
-    }
-
-    /// <summary>Errors related to the <see cref="Entities.Notification"/> aggregate.</summary>
-    public static class Notification
-    {
-        /// <summary>The recipient identifier is an empty GUID.</summary>
-        public static readonly Error RecipientIdEmpty = new("Notification.RecipientIdEmpty", "Recipient ID cannot be an empty GUID.", ErrorType.Validation);
-
-        /// <summary>The type is not a defined <see cref="Enums.NotificationType"/> value.</summary>
-        public static readonly Error TypeNotDefined = new("Notification.TypeNotDefined", "Notification type is not valid.", ErrorType.Validation);
-
-        /// <summary>The title is null, empty, or whitespace.</summary>
-        public static readonly Error TitleEmpty = new("Notification.TitleEmpty", "Notification title cannot be empty.", ErrorType.Validation);
-
-        /// <summary>The title exceeds the maximum allowed length.</summary>
-        public static readonly Error TitleTooLong = new("Notification.TitleTooLong", "Notification title exceeds the maximum allowed length.", ErrorType.Validation);
-
-        /// <summary>The body exceeds the maximum allowed length.</summary>
-        public static readonly Error BodyTooLong = new("Notification.BodyTooLong", "Notification body exceeds the maximum allowed length.", ErrorType.Validation);
-    }
-
-    /// <summary>Errors related to the <see cref="Entities.Payment"/> aggregate.</summary>
-    public static class Payment
-    {
-        /// <summary>The amount is not in the currency of the contract.</summary>
-        public static readonly Error CurrencyMismatch = new("Payment.CurrencyMismatch", "Payment must be in the currency of the contract.", ErrorType.Validation);
-
-        /// <summary>The amount is zero or negative.</summary>
-        public static readonly Error AmountNotPositive = new("Payment.AmountNotPositive", "Payment amount must be greater than zero.", ErrorType.Validation);
-
-        /// <summary>The method is not a defined <see cref="Enums.PaymentMethod"/> value.</summary>
-        public static readonly Error MethodNotDefined = new("Payment.MethodNotDefined", "Payment method is not valid.", ErrorType.Validation);
-
-        /// <summary>The purpose is null, empty, or whitespace.</summary>
-        public static readonly Error PurposeEmpty = new("Payment.PurposeEmpty", "Payment purpose cannot be empty.", ErrorType.Validation);
-
-        /// <summary>The purpose exceeds the maximum allowed length.</summary>
-        public static readonly Error PurposeTooLong = new("Payment.PurposeTooLong", "Payment purpose exceeds the maximum allowed length.", ErrorType.Validation);
-
-        /// <summary>The external reference is null, empty, or whitespace.</summary>
-        public static readonly Error ExternalReferenceEmpty = new("Payment.ExternalReferenceEmpty", "External reference cannot be empty.", ErrorType.Validation);
-
-        /// <summary>The external reference exceeds the maximum allowed length.</summary>
-        public static readonly Error ExternalReferenceTooLong = new("Payment.ExternalReferenceTooLong", "External reference exceeds the maximum allowed length.", ErrorType.Validation);
-
-        /// <summary>The identifier of the user recording the payment was provided but is an empty GUID.</summary>
-        public static readonly Error UserIdEmpty = new("Payment.UserIdEmpty", "User ID cannot be an empty GUID.", ErrorType.Validation);
-
-        /// <summary>No reason was given for the refund or cancellation.</summary>
-        public static readonly Error ReasonEmpty = new("Payment.ReasonEmpty", "A reason is required.", ErrorType.Validation);
-
-        /// <summary>The reason exceeds the maximum allowed length.</summary>
-        public static readonly Error ReasonTooLong = new("Payment.ReasonTooLong", "Reason exceeds the maximum allowed length.", ErrorType.Validation);
-
-        /// <summary>The contract passed in is not the contract of the payment.</summary>
-        public static readonly Error ContractMismatch = new("Payment.ContractMismatch", "The payment belongs to a different contract.", ErrorType.Validation);
-
-        /// <summary>The operation requires a registered, not yet confirmed payment.</summary>
-        public static readonly Error NotRegistered = new("Payment.NotRegistered", "Only a registered payment can be confirmed, cancelled or updated.", ErrorType.Conflict);
-
-        /// <summary>Only a confirmed payment can be refunded.</summary>
-        public static readonly Error NotConfirmed = new("Payment.NotConfirmed", "Only a confirmed payment can be refunded.", ErrorType.Conflict);
-    }
-
-    /// <summary>Errors related to <see cref="ValueObjects.PhoneNumber"/> validation.</summary>
-    public static class PhoneNumber
-    {
-        /// <summary>The phone number is null, empty, or whitespace.</summary>
-        public static readonly Error Empty = new("PhoneNumber.Empty", "Phone number cannot be empty.", ErrorType.Validation);
-
-        /// <summary>The phone number is not in international E.164 format.</summary>
-        public static readonly Error InvalidFormat = new("PhoneNumber.InvalidFormat", "Phone number must be in international E.164 format, e.g. +79991234567.", ErrorType.Validation);
-    }
-
-    /// <summary>Errors related to <see cref="ValueObjects.FullName"/> validation.</summary>
-    public static class FullName
-    {
-        /// <summary>The last name is null, empty, or whitespace.</summary>
-        public static readonly Error LastNameEmpty = new("FullName.LastNameEmpty", "Last name cannot be empty.", ErrorType.Validation);
-
-        /// <summary>The last name exceeds the maximum allowed length.</summary>
-        public static readonly Error LastNameTooLong = new("FullName.LastNameTooLong", "Last name exceeds the maximum allowed length.", ErrorType.Validation);
-
-        /// <summary>The first name is null, empty, or whitespace.</summary>
-        public static readonly Error FirstNameEmpty = new("FullName.FirstNameEmpty", "First name cannot be empty.", ErrorType.Validation);
-
-        /// <summary>The first name exceeds the maximum allowed length.</summary>
-        public static readonly Error FirstNameTooLong = new("FullName.FirstNameTooLong", "First name exceeds the maximum allowed length.", ErrorType.Validation);
-
-        /// <summary>The middle name exceeds the maximum allowed length.</summary>
-        public static readonly Error MiddleNameTooLong = new("FullName.MiddleNameTooLong", "Middle name exceeds the maximum allowed length.", ErrorType.Validation);
-    }
-
     /// <summary>Errors related to <see cref="ValueObjects.Address"/> validation.</summary>
     public static class Address
     {
@@ -333,6 +20,31 @@ public static class DomainErrors
 
         /// <summary>The street part of the address exceeds the maximum allowed length.</summary>
         public static readonly Error StreetTooLong = new("Address.StreetTooLong", "Street address exceeds the maximum allowed length.", ErrorType.Validation);
+    }
+
+    /// <summary>Errors related to the <see cref="Entities.Branch"/> entity.</summary>
+    public static class Branch
+    {
+        /// <summary>The branch name is null, empty, or whitespace.</summary>
+        public static readonly Error NameEmpty = new("Branch.NameEmpty", "Branch name cannot be empty.", ErrorType.Validation);
+
+        /// <summary>The branch name exceeds the maximum allowed length.</summary>
+        public static readonly Error NameTooLong = new("Branch.NameTooLong", "Branch name exceeds the maximum allowed length.", ErrorType.Validation);
+
+        /// <summary>The time zone identifier is null, empty, or whitespace.</summary>
+        public static readonly Error TimeZoneEmpty = new("Branch.TimeZoneEmpty", "Time zone cannot be empty.", ErrorType.Validation);
+
+        /// <summary>The time zone identifier is not a known IANA identifier.</summary>
+        public static readonly Error TimeZoneUnknown = new("Branch.TimeZoneUnknown", "Time zone must be a known IANA identifier, e.g. Europe/Moscow.", ErrorType.Validation);
+
+        /// <summary>The branch is already active, so activating it again is not a valid transition.</summary>
+        public static readonly Error AlreadyActive = new("Branch.AlreadyActive", "Branch is already active.", ErrorType.Conflict);
+
+        /// <summary>The branch is already inactive, so deactivating it again is not a valid transition.</summary>
+        public static readonly Error AlreadyInactive = new("Branch.AlreadyInactive", "Branch is already inactive.", ErrorType.Conflict);
+
+        /// <summary>The operation modifies an inactive branch, which is not allowed.</summary>
+        public static readonly Error CannotModifyInactive = new("Branch.CannotModifyInactive", "An inactive branch cannot be modified. Reactivate the branch first.", ErrorType.Conflict);
     }
 
     /// <summary>Errors related to the <see cref="Entities.Chat"/> aggregate.</summary>
@@ -536,6 +248,344 @@ public static class DomainErrors
         public static readonly Error NotSupported = new("Currency.NotSupported", "Currency is not supported.", ErrorType.Validation);
     }
 
+    /// <summary>Errors related to the <see cref="Entities.Document"/> aggregate.</summary>
+    public static class Document
+    {
+        /// <summary>The file name is null, empty, or whitespace.</summary>
+        public static readonly Error FileNameEmpty = new("Document.FileNameEmpty", "File name cannot be empty.", ErrorType.Validation);
+
+        /// <summary>The file name exceeds the maximum allowed length.</summary>
+        public static readonly Error FileNameTooLong = new("Document.FileNameTooLong", "File name exceeds the maximum allowed length.", ErrorType.Validation);
+
+        /// <summary>The file name contains a path or control characters.</summary>
+        public static readonly Error FileNameInvalid = new("Document.FileNameInvalid", "File name must not contain a path or control characters.", ErrorType.Validation);
+
+        /// <summary>The file extension is not in the list of allowed formats.</summary>
+        public static readonly Error FormatNotAllowed = new("Document.FormatNotAllowed", "This file format is not allowed.", ErrorType.Validation);
+
+        /// <summary>The declared content type does not match the file extension.</summary>
+        public static readonly Error ContentTypeMismatch = new("Document.ContentTypeMismatch", "The file type does not match its extension.", ErrorType.Validation);
+
+        /// <summary>The file is empty or larger than 20 MB.</summary>
+        public static readonly Error SizeOutOfRange = new("Document.SizeOutOfRange", "File size must be between 1 byte and 20 MB.", ErrorType.Validation);
+
+        /// <summary>The storage key is null, empty, or whitespace.</summary>
+        public static readonly Error StorageKeyEmpty = new("Document.StorageKeyEmpty", "Storage key cannot be empty.", ErrorType.Validation);
+
+        /// <summary>The storage key exceeds the maximum allowed length.</summary>
+        public static readonly Error StorageKeyTooLong = new("Document.StorageKeyTooLong", "Storage key exceeds the maximum allowed length.", ErrorType.Validation);
+
+        /// <summary>The description exceeds the maximum allowed length.</summary>
+        public static readonly Error DescriptionTooLong = new("Document.DescriptionTooLong", "Description exceeds the maximum allowed length.", ErrorType.Validation);
+
+        /// <summary>The uploader identifier is an empty GUID.</summary>
+        public static readonly Error UploadedByUserIdEmpty = new("Document.UploadedByUserIdEmpty", "User ID cannot be an empty GUID.", ErrorType.Validation);
+
+        /// <summary>Deletion of the document was already requested.</summary>
+        public static readonly Error AlreadyDeleted = new("Document.AlreadyDeleted", "The document is already deleted.", ErrorType.Conflict);
+    }
+
+    /// <summary>Errors related to the <see cref="Entities.DrivingRoute"/> aggregate.</summary>
+    public static class DrivingRoute
+    {
+        /// <summary>The name is null, empty, or whitespace.</summary>
+        public static readonly Error NameEmpty = new("DrivingRoute.NameEmpty", "Route name cannot be empty.", ErrorType.Validation);
+
+        /// <summary>The name exceeds the maximum allowed length.</summary>
+        public static readonly Error NameTooLong = new("DrivingRoute.NameTooLong", "Route name exceeds the maximum allowed length.", ErrorType.Validation);
+
+        /// <summary>The description is null, empty, or whitespace.</summary>
+        public static readonly Error DescriptionEmpty = new("DrivingRoute.DescriptionEmpty", "Route description cannot be empty.", ErrorType.Validation);
+
+        /// <summary>The description exceeds the maximum allowed length.</summary>
+        public static readonly Error DescriptionTooLong = new("DrivingRoute.DescriptionTooLong", "Route description exceeds the maximum allowed length.", ErrorType.Validation);
+
+        /// <summary>The author identifier is an empty GUID.</summary>
+        public static readonly Error AuthorIdEmpty = new("DrivingRoute.AuthorIdEmpty", "Author ID cannot be an empty GUID.", ErrorType.Validation);
+
+        /// <summary>The training ground identifier was provided but is an empty GUID.</summary>
+        public static readonly Error TrainingGroundIdEmpty = new("DrivingRoute.TrainingGroundIdEmpty", "Training ground ID cannot be an empty GUID.", ErrorType.Validation);
+
+        /// <summary>The route is already active, so activating it again is not a valid transition.</summary>
+        public static readonly Error AlreadyActive = new("DrivingRoute.AlreadyActive", "Route is already active.", ErrorType.Conflict);
+
+        /// <summary>The route is already inactive, so deactivating it again is not a valid transition.</summary>
+        public static readonly Error AlreadyInactive = new("DrivingRoute.AlreadyInactive", "Route is already inactive.", ErrorType.Conflict);
+
+        /// <summary>The operation modifies an inactive route, which is not allowed.</summary>
+        public static readonly Error CannotModifyInactive = new("DrivingRoute.CannotModifyInactive", "An inactive route cannot be modified. Reactivate it first.", ErrorType.Conflict);
+    }
+
+    /// <summary>Errors related to the <see cref="Entities.DrivingSlot"/> aggregate.</summary>
+    public static class DrivingSlot
+    {
+        /// <summary>The instructor identifier is an empty GUID.</summary>
+        public static readonly Error InstructorIdEmpty = new("DrivingSlot.InstructorIdEmpty", "Instructor ID cannot be an empty GUID.", ErrorType.Validation);
+
+        /// <summary>The vehicle is out of service.</summary>
+        public static readonly Error VehicleInactive = new("DrivingSlot.VehicleInactive", "An inactive vehicle cannot be used for a slot.", ErrorType.Conflict);
+
+        /// <summary>The training ground is no longer used.</summary>
+        public static readonly Error TrainingGroundInactive = new("DrivingSlot.TrainingGroundInactive", "An inactive training ground cannot be used for a slot.", ErrorType.Conflict);
+
+        /// <summary>The route is no longer used.</summary>
+        public static readonly Error RouteInactive = new("DrivingSlot.RouteInactive", "An inactive route cannot be used for a slot.", ErrorType.Conflict);
+
+        /// <summary>The slot would start at or before the current time.</summary>
+        public static readonly Error StartInPast = new("DrivingSlot.StartInPast", "A slot must start in the future.", ErrorType.Validation);
+
+        /// <summary>The slot is longer than the maximum duration.</summary>
+        public static readonly Error DurationTooLong = new("DrivingSlot.DurationTooLong", "A slot cannot be longer than 4 hours.", ErrorType.Validation);
+
+        /// <summary>The slot is booked, completed or withdrawn.</summary>
+        public static readonly Error NotAvailable = new("DrivingSlot.NotAvailable", "The slot is not available for booking.", ErrorType.Conflict);
+
+        /// <summary>The lesson has already started.</summary>
+        public static readonly Error AlreadyStarted = new("DrivingSlot.AlreadyStarted", "The lesson has already started.", ErrorType.Conflict);
+
+        /// <summary>The lesson outcome can be recorded only once the lesson has started.</summary>
+        public static readonly Error NotStarted = new("DrivingSlot.NotStarted", "The lesson has not started yet.", ErrorType.Conflict);
+
+        /// <summary>Only an active contract can book a slot.</summary>
+        public static readonly Error ContractNotActive = new("DrivingSlot.ContractNotActive", "Only an active contract can book a lesson.", ErrorType.Conflict);
+
+        /// <summary>The contract's licence category differs from the vehicle's.</summary>
+        public static readonly Error CategoryMismatch = new("DrivingSlot.CategoryMismatch", "The vehicle is for a different licence category than the contract.", ErrorType.Conflict);
+
+        /// <summary>The slot has no active booking.</summary>
+        public static readonly Error NotBooked = new("DrivingSlot.NotBooked", "The slot has no active booking.", ErrorType.Conflict);
+
+        /// <summary>The slot is completed or already withdrawn.</summary>
+        public static readonly Error NotOpen = new("DrivingSlot.NotOpen", "Only an available or booked slot can be withdrawn.", ErrorType.Conflict);
+
+        /// <summary>The contract passed in is not the contract of the active booking.</summary>
+        public static readonly Error ContractMismatch = new("DrivingSlot.ContractMismatch", "The contract does not belong to the booking.", ErrorType.Validation);
+
+        /// <summary>The identifier of the user making the change was provided but is an empty GUID.</summary>
+        public static readonly Error UserIdEmpty = new("DrivingSlot.UserIdEmpty", "User ID cannot be an empty GUID.", ErrorType.Validation);
+
+        /// <summary>No reason was given for the cancellation.</summary>
+        public static readonly Error ReasonEmpty = new("DrivingSlot.ReasonEmpty", "A reason is required.", ErrorType.Validation);
+
+        /// <summary>The reason exceeds the maximum allowed length.</summary>
+        public static readonly Error ReasonTooLong = new("DrivingSlot.ReasonTooLong", "Reason exceeds the maximum allowed length.", ErrorType.Validation);
+
+        /// <summary>The same skill is graded more than once.</summary>
+        public static readonly Error DuplicateSkillGrade = new("DrivingSlot.DuplicateSkillGrade", "Each skill can be graded only once.", ErrorType.Validation);
+
+        /// <summary>The instructor note exceeds the maximum allowed length.</summary>
+        public static readonly Error NoteTooLong = new("DrivingSlot.NoteTooLong", "Note exceeds the maximum allowed length.", ErrorType.Validation);
+
+        /// <summary>Only a completed lesson can be rated.</summary>
+        public static readonly Error LessonNotCompleted = new("DrivingSlot.LessonNotCompleted", "Only a completed lesson can be rated.", ErrorType.Conflict);
+
+        /// <summary>The student has already rated the lesson.</summary>
+        public static readonly Error AlreadyRated = new("DrivingSlot.AlreadyRated", "The lesson has already been rated.", ErrorType.Conflict);
+
+        /// <summary>The rating is outside 1..5.</summary>
+        public static readonly Error RatingOutOfRange = new("DrivingSlot.RatingOutOfRange", "Rating must be between 1 and 5.", ErrorType.Validation);
+
+        /// <summary>The rating comment exceeds the maximum allowed length.</summary>
+        public static readonly Error RatingCommentTooLong = new("DrivingSlot.RatingCommentTooLong", "Comment exceeds the maximum allowed length.", ErrorType.Validation);
+    }
+
+    /// <summary>Errors related to <see cref="ValueObjects.Email"/> validation.</summary>
+    public static class Email
+    {
+        /// <summary>The email address is null, empty, or whitespace.</summary>
+        public static readonly Error Empty = new("Email.Empty", "Email address cannot be empty.", ErrorType.Validation);
+
+        /// <summary>The email address exceeds the maximum allowed length.</summary>
+        public static readonly Error TooLong = new("Email.TooLong", "Email address exceeds the maximum allowed length.", ErrorType.Validation);
+
+        /// <summary>The email address does not match the expected structure.</summary>
+        public static readonly Error InvalidFormat = new("Email.InvalidFormat", "Email address is not in a valid format.", ErrorType.Validation);
+    }
+
+    /// <summary>Errors related to <see cref="ValueObjects.EntityReference"/> validation.</summary>
+    public static class EntityReference
+    {
+        /// <summary>The kind is not a defined <see cref="Enums.EntityKind"/> value.</summary>
+        public static readonly Error KindNotDefined = new("EntityReference.KindNotDefined", "Object kind is not valid.", ErrorType.Validation);
+
+        /// <summary>The identifier is an empty GUID.</summary>
+        public static readonly Error IdEmpty = new("EntityReference.IdEmpty", "Object ID cannot be an empty GUID.", ErrorType.Validation);
+    }
+
+    /// <summary>Errors related to the <see cref="Entities.Exam"/> aggregate.</summary>
+    public static class Exam
+    {
+        /// <summary>The study group is inactive.</summary>
+        public static readonly Error GroupInactive = new("Exam.GroupInactive", "An exam cannot be scheduled for an inactive group.", ErrorType.Conflict);
+
+        /// <summary>The kind is not a defined <see cref="Enums.ExamKind"/> value.</summary>
+        public static readonly Error KindNotDefined = new("Exam.KindNotDefined", "Exam kind is not valid.", ErrorType.Validation);
+
+        /// <summary>A theory exam was scheduled without a test template.</summary>
+        public static readonly Error TemplateRequired = new("Exam.TemplateRequired", "A theory exam requires a test template.", ErrorType.Validation);
+
+        /// <summary>A practical exam was given a test template.</summary>
+        public static readonly Error TemplateNotAllowed = new("Exam.TemplateNotAllowed", "A practical exam does not use a test template.", ErrorType.Validation);
+
+        /// <summary>The test template is no longer used.</summary>
+        public static readonly Error TemplateInactive = new("Exam.TemplateInactive", "An inactive test template cannot be used for an exam.", ErrorType.Conflict);
+
+        /// <summary>The template is for another licence category than the group.</summary>
+        public static readonly Error TemplateCategoryMismatch = new("Exam.TemplateCategoryMismatch", "The test template is for a different licence category than the group.", ErrorType.Conflict);
+
+        /// <summary>The exam would start at or before the current time.</summary>
+        public static readonly Error ScheduledInPast = new("Exam.ScheduledInPast", "An exam must be scheduled in the future.", ErrorType.Validation);
+
+        /// <summary>The exam is cancelled.</summary>
+        public static readonly Error NotScheduled = new("Exam.NotScheduled", "The exam is cancelled.", ErrorType.Conflict);
+
+        /// <summary>The exam already has results, so it took place.</summary>
+        public static readonly Error HasResults = new("Exam.HasResults", "An exam with results cannot be moved or cancelled.", ErrorType.Conflict);
+
+        /// <summary>No reason was given for the cancellation.</summary>
+        public static readonly Error CancellationReasonEmpty = new("Exam.CancellationReasonEmpty", "A reason is required to cancel an exam.", ErrorType.Validation);
+
+        /// <summary>The cancellation reason exceeds the maximum allowed length.</summary>
+        public static readonly Error CancellationReasonTooLong = new("Exam.CancellationReasonTooLong", "Cancellation reason exceeds the maximum allowed length.", ErrorType.Validation);
+
+        /// <summary>The result does not match the kind of the exam.</summary>
+        public static readonly Error WrongKind = new("Exam.WrongKind", "This kind of result cannot be recorded for this exam.", ErrorType.Conflict);
+
+        /// <summary>The test attempt was not started for this exam.</summary>
+        public static readonly Error SessionNotForExam = new("Exam.SessionNotForExam", "The test attempt does not belong to this exam.", ErrorType.Validation);
+
+        /// <summary>The test attempt is still in progress.</summary>
+        public static readonly Error SessionNotFinished = new("Exam.SessionNotFinished", "The test attempt is not finished yet.", ErrorType.Conflict);
+
+        /// <summary>Results can be recorded only once the exam has started.</summary>
+        public static readonly Error NotStarted = new("Exam.NotStarted", "The exam has not started yet.", ErrorType.Conflict);
+
+        /// <summary>The group passed in is not the exam's group.</summary>
+        public static readonly Error GroupMismatch = new("Exam.GroupMismatch", "The group does not belong to the exam.", ErrorType.Validation);
+
+        /// <summary>The contract is not a current member of the exam's group.</summary>
+        public static readonly Error NotGroupMember = new("Exam.NotGroupMember", "The student is not a member of the group.", ErrorType.Conflict);
+
+        /// <summary>The student already has a result; correct it instead.</summary>
+        public static readonly Error AlreadyRecorded = new("Exam.AlreadyRecorded", "The student already has a result for this exam.", ErrorType.Conflict);
+
+        /// <summary>The student has no result to correct.</summary>
+        public static readonly Error ResultNotFound = new("Exam.ResultNotFound", "The student has no result for this exam.", ErrorType.NotFound);
+
+        /// <summary>The score is negative or above the maximum.</summary>
+        public static readonly Error ScoreOutOfRange = new("Exam.ScoreOutOfRange", "Score must be between 0 and 1000.", ErrorType.Validation);
+
+        /// <summary>The comment exceeds the maximum allowed length.</summary>
+        public static readonly Error CommentTooLong = new("Exam.CommentTooLong", "Comment exceeds the maximum allowed length.", ErrorType.Validation);
+
+        /// <summary>The identifier of the user entering the result is an empty GUID.</summary>
+        public static readonly Error UserIdEmpty = new("Exam.UserIdEmpty", "User ID cannot be an empty GUID.", ErrorType.Validation);
+    }
+
+    /// <summary>Errors related to <see cref="ValueObjects.FullName"/> validation.</summary>
+    public static class FullName
+    {
+        /// <summary>The last name is null, empty, or whitespace.</summary>
+        public static readonly Error LastNameEmpty = new("FullName.LastNameEmpty", "Last name cannot be empty.", ErrorType.Validation);
+
+        /// <summary>The last name exceeds the maximum allowed length.</summary>
+        public static readonly Error LastNameTooLong = new("FullName.LastNameTooLong", "Last name exceeds the maximum allowed length.", ErrorType.Validation);
+
+        /// <summary>The first name is null, empty, or whitespace.</summary>
+        public static readonly Error FirstNameEmpty = new("FullName.FirstNameEmpty", "First name cannot be empty.", ErrorType.Validation);
+
+        /// <summary>The first name exceeds the maximum allowed length.</summary>
+        public static readonly Error FirstNameTooLong = new("FullName.FirstNameTooLong", "First name exceeds the maximum allowed length.", ErrorType.Validation);
+
+        /// <summary>The middle name exceeds the maximum allowed length.</summary>
+        public static readonly Error MiddleNameTooLong = new("FullName.MiddleNameTooLong", "Middle name exceeds the maximum allowed length.", ErrorType.Validation);
+    }
+
+    /// <summary>Errors related to the <see cref="Entities.Lead"/> aggregate.</summary>
+    public static class Lead
+    {
+        /// <summary>The contact name is null, empty, or whitespace.</summary>
+        public static readonly Error ContactNameEmpty = new("Lead.ContactNameEmpty", "Contact name cannot be empty.", ErrorType.Validation);
+
+        /// <summary>The contact name exceeds the maximum allowed length.</summary>
+        public static readonly Error ContactNameTooLong = new("Lead.ContactNameTooLong", "Contact name exceeds the maximum allowed length.", ErrorType.Validation);
+
+        /// <summary>Neither a phone number nor an email address was given.</summary>
+        public static readonly Error ContactRequired = new("Lead.ContactRequired", "A phone number or an email address is required.", ErrorType.Validation);
+
+        /// <summary>The source is not a defined <see cref="Enums.LeadSource"/> value.</summary>
+        public static readonly Error SourceNotDefined = new("Lead.SourceNotDefined", "Source is not a valid lead source.", ErrorType.Validation);
+
+        /// <summary>The desired category is not a defined <see cref="Enums.LicenseCategory"/> value.</summary>
+        public static readonly Error CategoryNotDefined = new("Lead.CategoryNotDefined", "Desired category is not a valid licence category.", ErrorType.Validation);
+
+        /// <summary>The comment exceeds the maximum allowed length.</summary>
+        public static readonly Error CommentTooLong = new("Lead.CommentTooLong", "Comment exceeds the maximum allowed length.", ErrorType.Validation);
+
+        /// <summary>The branch identifier was provided but is an empty GUID.</summary>
+        public static readonly Error BranchIdEmpty = new("Lead.BranchIdEmpty", "Branch ID cannot be an empty GUID.", ErrorType.Validation);
+
+        /// <summary>The manager identifier is an empty GUID.</summary>
+        public static readonly Error ManagerIdEmpty = new("Lead.ManagerIdEmpty", "Manager ID cannot be an empty GUID.", ErrorType.Validation);
+
+        /// <summary>The contract identifier is an empty GUID.</summary>
+        public static readonly Error ContractIdEmpty = new("Lead.ContractIdEmpty", "Contract ID cannot be an empty GUID.", ErrorType.Validation);
+
+        /// <summary>The identifier of the user making the change was provided but is an empty GUID.</summary>
+        public static readonly Error UserIdEmpty = new("Lead.UserIdEmpty", "User ID cannot be an empty GUID.", ErrorType.Validation);
+
+        /// <summary>No reason was given for losing the lead.</summary>
+        public static readonly Error LostReasonEmpty = new("Lead.LostReasonEmpty", "A reason is required when a lead is lost.", ErrorType.Validation);
+
+        /// <summary>The lost reason exceeds the maximum allowed length.</summary>
+        public static readonly Error LostReasonTooLong = new("Lead.LostReasonTooLong", "Lost reason exceeds the maximum allowed length.", ErrorType.Validation);
+
+        /// <summary>The manager is already responsible for the lead.</summary>
+        public static readonly Error ManagerAlreadyAssigned = new("Lead.ManagerAlreadyAssigned", "This manager is already assigned to the lead.", ErrorType.Conflict);
+
+        /// <summary>The operation requires a new or in-progress lead.</summary>
+        public static readonly Error NotOpen = new("Lead.NotOpen", "Only a new or in-progress lead can be changed.", ErrorType.Conflict);
+
+        /// <summary>Work can be started only on a new lead.</summary>
+        public static readonly Error NotNew = new("Lead.NotNew", "Only a new lead can be taken into work.", ErrorType.Conflict);
+
+        /// <summary>Only a lost lead can be reopened.</summary>
+        public static readonly Error NotLost = new("Lead.NotLost", "Only a lost lead can be reopened.", ErrorType.Conflict);
+    }
+
+    /// <summary>Errors related to <see cref="Entities.LeadNote"/>.</summary>
+    public static class LeadNote
+    {
+        /// <summary>The note text is null, empty, or whitespace.</summary>
+        public static readonly Error TextEmpty = new("LeadNote.TextEmpty", "Note text cannot be empty.", ErrorType.Validation);
+
+        /// <summary>The note text exceeds the maximum allowed length.</summary>
+        public static readonly Error TextTooLong = new("LeadNote.TextTooLong", "Note text exceeds the maximum allowed length.", ErrorType.Validation);
+
+        /// <summary>The author identifier is an empty GUID.</summary>
+        public static readonly Error AuthorIdEmpty = new("LeadNote.AuthorIdEmpty", "Author ID cannot be an empty GUID.", ErrorType.Validation);
+    }
+
+    /// <summary>Errors related to <see cref="Entities.LessonAttendance"/>.</summary>
+    public static class LessonAttendance
+    {
+        /// <summary>The comment exceeds the maximum allowed length.</summary>
+        public static readonly Error CommentTooLong = new("LessonAttendance.CommentTooLong", "Comment exceeds the maximum allowed length.", ErrorType.Validation);
+
+        /// <summary>The identifier of the user making the mark is an empty GUID.</summary>
+        public static readonly Error MarkedByUserIdEmpty = new("LessonAttendance.MarkedByUserIdEmpty", "User ID cannot be an empty GUID.", ErrorType.Validation);
+    }
+
+    /// <summary>Errors related to <see cref="ValueObjects.LicensePlate"/> validation.</summary>
+    public static class LicensePlate
+    {
+        /// <summary>The plate is null, empty, or whitespace.</summary>
+        public static readonly Error Empty = new("LicensePlate.Empty", "Licence plate cannot be empty.", ErrorType.Validation);
+
+        /// <summary>The plate is not 2 to 15 letters and digits after removing spaces and hyphens.</summary>
+        public static readonly Error InvalidFormat = new("LicensePlate.InvalidFormat", "Licence plate must consist of 2 to 15 letters and digits.", ErrorType.Validation);
+    }
+
     /// <summary>Errors related to <see cref="ValueObjects.Money"/> validation.</summary>
     public static class Money
     {
@@ -544,6 +594,78 @@ public static class DomainErrors
 
         /// <summary>The absolute amount exceeds the maximum.</summary>
         public static readonly Error TooLarge = new("Money.TooLarge", "Amount exceeds the maximum allowed value.", ErrorType.Validation);
+    }
+
+    /// <summary>Errors related to the <see cref="Entities.Notification"/> aggregate.</summary>
+    public static class Notification
+    {
+        /// <summary>The recipient identifier is an empty GUID.</summary>
+        public static readonly Error RecipientIdEmpty = new("Notification.RecipientIdEmpty", "Recipient ID cannot be an empty GUID.", ErrorType.Validation);
+
+        /// <summary>The type is not a defined <see cref="Enums.NotificationType"/> value.</summary>
+        public static readonly Error TypeNotDefined = new("Notification.TypeNotDefined", "Notification type is not valid.", ErrorType.Validation);
+
+        /// <summary>The title is null, empty, or whitespace.</summary>
+        public static readonly Error TitleEmpty = new("Notification.TitleEmpty", "Notification title cannot be empty.", ErrorType.Validation);
+
+        /// <summary>The title exceeds the maximum allowed length.</summary>
+        public static readonly Error TitleTooLong = new("Notification.TitleTooLong", "Notification title exceeds the maximum allowed length.", ErrorType.Validation);
+
+        /// <summary>The body exceeds the maximum allowed length.</summary>
+        public static readonly Error BodyTooLong = new("Notification.BodyTooLong", "Notification body exceeds the maximum allowed length.", ErrorType.Validation);
+    }
+
+    /// <summary>Errors related to the <see cref="Entities.Payment"/> aggregate.</summary>
+    public static class Payment
+    {
+        /// <summary>The amount is not in the currency of the contract.</summary>
+        public static readonly Error CurrencyMismatch = new("Payment.CurrencyMismatch", "Payment must be in the currency of the contract.", ErrorType.Validation);
+
+        /// <summary>The amount is zero or negative.</summary>
+        public static readonly Error AmountNotPositive = new("Payment.AmountNotPositive", "Payment amount must be greater than zero.", ErrorType.Validation);
+
+        /// <summary>The method is not a defined <see cref="Enums.PaymentMethod"/> value.</summary>
+        public static readonly Error MethodNotDefined = new("Payment.MethodNotDefined", "Payment method is not valid.", ErrorType.Validation);
+
+        /// <summary>The purpose is null, empty, or whitespace.</summary>
+        public static readonly Error PurposeEmpty = new("Payment.PurposeEmpty", "Payment purpose cannot be empty.", ErrorType.Validation);
+
+        /// <summary>The purpose exceeds the maximum allowed length.</summary>
+        public static readonly Error PurposeTooLong = new("Payment.PurposeTooLong", "Payment purpose exceeds the maximum allowed length.", ErrorType.Validation);
+
+        /// <summary>The external reference is null, empty, or whitespace.</summary>
+        public static readonly Error ExternalReferenceEmpty = new("Payment.ExternalReferenceEmpty", "External reference cannot be empty.", ErrorType.Validation);
+
+        /// <summary>The external reference exceeds the maximum allowed length.</summary>
+        public static readonly Error ExternalReferenceTooLong = new("Payment.ExternalReferenceTooLong", "External reference exceeds the maximum allowed length.", ErrorType.Validation);
+
+        /// <summary>The identifier of the user recording the payment was provided but is an empty GUID.</summary>
+        public static readonly Error UserIdEmpty = new("Payment.UserIdEmpty", "User ID cannot be an empty GUID.", ErrorType.Validation);
+
+        /// <summary>No reason was given for the refund or cancellation.</summary>
+        public static readonly Error ReasonEmpty = new("Payment.ReasonEmpty", "A reason is required.", ErrorType.Validation);
+
+        /// <summary>The reason exceeds the maximum allowed length.</summary>
+        public static readonly Error ReasonTooLong = new("Payment.ReasonTooLong", "Reason exceeds the maximum allowed length.", ErrorType.Validation);
+
+        /// <summary>The contract passed in is not the contract of the payment.</summary>
+        public static readonly Error ContractMismatch = new("Payment.ContractMismatch", "The payment belongs to a different contract.", ErrorType.Validation);
+
+        /// <summary>The operation requires a registered, not yet confirmed payment.</summary>
+        public static readonly Error NotRegistered = new("Payment.NotRegistered", "Only a registered payment can be confirmed, cancelled or updated.", ErrorType.Conflict);
+
+        /// <summary>Only a confirmed payment can be refunded.</summary>
+        public static readonly Error NotConfirmed = new("Payment.NotConfirmed", "Only a confirmed payment can be refunded.", ErrorType.Conflict);
+    }
+
+    /// <summary>Errors related to <see cref="ValueObjects.PhoneNumber"/> validation.</summary>
+    public static class PhoneNumber
+    {
+        /// <summary>The phone number is null, empty, or whitespace.</summary>
+        public static readonly Error Empty = new("PhoneNumber.Empty", "Phone number cannot be empty.", ErrorType.Validation);
+
+        /// <summary>The phone number is not in international E.164 format.</summary>
+        public static readonly Error InvalidFormat = new("PhoneNumber.InvalidFormat", "Phone number must be in international E.164 format, e.g. +79991234567.", ErrorType.Validation);
     }
 
     /// <summary>Errors related to the <see cref="Entities.Question"/> aggregate.</summary>
@@ -605,37 +727,6 @@ public static class DomainErrors
 
         /// <summary>The operation modifies an inactive question, which is not allowed.</summary>
         public static readonly Error CannotModifyInactive = new("Question.CannotModifyInactive", "An inactive question cannot be modified. Reactivate it first.", ErrorType.Conflict);
-    }
-
-    /// <summary>Errors related to the <see cref="Entities.DrivingRoute"/> aggregate.</summary>
-    public static class DrivingRoute
-    {
-        /// <summary>The name is null, empty, or whitespace.</summary>
-        public static readonly Error NameEmpty = new("DrivingRoute.NameEmpty", "Route name cannot be empty.", ErrorType.Validation);
-
-        /// <summary>The name exceeds the maximum allowed length.</summary>
-        public static readonly Error NameTooLong = new("DrivingRoute.NameTooLong", "Route name exceeds the maximum allowed length.", ErrorType.Validation);
-
-        /// <summary>The description is null, empty, or whitespace.</summary>
-        public static readonly Error DescriptionEmpty = new("DrivingRoute.DescriptionEmpty", "Route description cannot be empty.", ErrorType.Validation);
-
-        /// <summary>The description exceeds the maximum allowed length.</summary>
-        public static readonly Error DescriptionTooLong = new("DrivingRoute.DescriptionTooLong", "Route description exceeds the maximum allowed length.", ErrorType.Validation);
-
-        /// <summary>The author identifier is an empty GUID.</summary>
-        public static readonly Error AuthorIdEmpty = new("DrivingRoute.AuthorIdEmpty", "Author ID cannot be an empty GUID.", ErrorType.Validation);
-
-        /// <summary>The training ground identifier was provided but is an empty GUID.</summary>
-        public static readonly Error TrainingGroundIdEmpty = new("DrivingRoute.TrainingGroundIdEmpty", "Training ground ID cannot be an empty GUID.", ErrorType.Validation);
-
-        /// <summary>The route is already active, so activating it again is not a valid transition.</summary>
-        public static readonly Error AlreadyActive = new("DrivingRoute.AlreadyActive", "Route is already active.", ErrorType.Conflict);
-
-        /// <summary>The route is already inactive, so deactivating it again is not a valid transition.</summary>
-        public static readonly Error AlreadyInactive = new("DrivingRoute.AlreadyInactive", "Route is already inactive.", ErrorType.Conflict);
-
-        /// <summary>The operation modifies an inactive route, which is not allowed.</summary>
-        public static readonly Error CannotModifyInactive = new("DrivingRoute.CannotModifyInactive", "An inactive route cannot be modified. Reactivate it first.", ErrorType.Conflict);
     }
 
     /// <summary>Errors related to <see cref="ValueObjects.SkillGrade"/> validation.</summary>
@@ -930,96 +1021,6 @@ public static class DomainErrors
 
         /// <summary>The end is equal to or earlier than the start.</summary>
         public static readonly Error EndNotAfterStart = new("TimeInterval.EndNotAfterStart", "End must be later than start.", ErrorType.Validation);
-    }
-
-    /// <summary>Errors related to the <see cref="Entities.Branch"/> entity.</summary>
-    public static class Branch
-    {
-        /// <summary>The branch name is null, empty, or whitespace.</summary>
-        public static readonly Error NameEmpty = new("Branch.NameEmpty", "Branch name cannot be empty.", ErrorType.Validation);
-
-        /// <summary>The branch name exceeds the maximum allowed length.</summary>
-        public static readonly Error NameTooLong = new("Branch.NameTooLong", "Branch name exceeds the maximum allowed length.", ErrorType.Validation);
-
-        /// <summary>The time zone identifier is null, empty, or whitespace.</summary>
-        public static readonly Error TimeZoneEmpty = new("Branch.TimeZoneEmpty", "Time zone cannot be empty.", ErrorType.Validation);
-
-        /// <summary>The time zone identifier is not a known IANA identifier.</summary>
-        public static readonly Error TimeZoneUnknown = new("Branch.TimeZoneUnknown", "Time zone must be a known IANA identifier, e.g. Europe/Moscow.", ErrorType.Validation);
-
-        /// <summary>The branch is already active, so activating it again is not a valid transition.</summary>
-        public static readonly Error AlreadyActive = new("Branch.AlreadyActive", "Branch is already active.", ErrorType.Conflict);
-
-        /// <summary>The branch is already inactive, so deactivating it again is not a valid transition.</summary>
-        public static readonly Error AlreadyInactive = new("Branch.AlreadyInactive", "Branch is already inactive.", ErrorType.Conflict);
-
-        /// <summary>The operation modifies an inactive branch, which is not allowed.</summary>
-        public static readonly Error CannotModifyInactive = new("Branch.CannotModifyInactive", "An inactive branch cannot be modified. Reactivate the branch first.", ErrorType.Conflict);
-    }
-
-    /// <summary>Errors related to the <see cref="Entities.Lead"/> aggregate.</summary>
-    public static class Lead
-    {
-        /// <summary>The contact name is null, empty, or whitespace.</summary>
-        public static readonly Error ContactNameEmpty = new("Lead.ContactNameEmpty", "Contact name cannot be empty.", ErrorType.Validation);
-
-        /// <summary>The contact name exceeds the maximum allowed length.</summary>
-        public static readonly Error ContactNameTooLong = new("Lead.ContactNameTooLong", "Contact name exceeds the maximum allowed length.", ErrorType.Validation);
-
-        /// <summary>Neither a phone number nor an email address was given.</summary>
-        public static readonly Error ContactRequired = new("Lead.ContactRequired", "A phone number or an email address is required.", ErrorType.Validation);
-
-        /// <summary>The source is not a defined <see cref="Enums.LeadSource"/> value.</summary>
-        public static readonly Error SourceNotDefined = new("Lead.SourceNotDefined", "Source is not a valid lead source.", ErrorType.Validation);
-
-        /// <summary>The desired category is not a defined <see cref="Enums.LicenseCategory"/> value.</summary>
-        public static readonly Error CategoryNotDefined = new("Lead.CategoryNotDefined", "Desired category is not a valid licence category.", ErrorType.Validation);
-
-        /// <summary>The comment exceeds the maximum allowed length.</summary>
-        public static readonly Error CommentTooLong = new("Lead.CommentTooLong", "Comment exceeds the maximum allowed length.", ErrorType.Validation);
-
-        /// <summary>The branch identifier was provided but is an empty GUID.</summary>
-        public static readonly Error BranchIdEmpty = new("Lead.BranchIdEmpty", "Branch ID cannot be an empty GUID.", ErrorType.Validation);
-
-        /// <summary>The manager identifier is an empty GUID.</summary>
-        public static readonly Error ManagerIdEmpty = new("Lead.ManagerIdEmpty", "Manager ID cannot be an empty GUID.", ErrorType.Validation);
-
-        /// <summary>The contract identifier is an empty GUID.</summary>
-        public static readonly Error ContractIdEmpty = new("Lead.ContractIdEmpty", "Contract ID cannot be an empty GUID.", ErrorType.Validation);
-
-        /// <summary>The identifier of the user making the change was provided but is an empty GUID.</summary>
-        public static readonly Error UserIdEmpty = new("Lead.UserIdEmpty", "User ID cannot be an empty GUID.", ErrorType.Validation);
-
-        /// <summary>No reason was given for losing the lead.</summary>
-        public static readonly Error LostReasonEmpty = new("Lead.LostReasonEmpty", "A reason is required when a lead is lost.", ErrorType.Validation);
-
-        /// <summary>The lost reason exceeds the maximum allowed length.</summary>
-        public static readonly Error LostReasonTooLong = new("Lead.LostReasonTooLong", "Lost reason exceeds the maximum allowed length.", ErrorType.Validation);
-
-        /// <summary>The manager is already responsible for the lead.</summary>
-        public static readonly Error ManagerAlreadyAssigned = new("Lead.ManagerAlreadyAssigned", "This manager is already assigned to the lead.", ErrorType.Conflict);
-
-        /// <summary>The operation requires a new or in-progress lead.</summary>
-        public static readonly Error NotOpen = new("Lead.NotOpen", "Only a new or in-progress lead can be changed.", ErrorType.Conflict);
-
-        /// <summary>Work can be started only on a new lead.</summary>
-        public static readonly Error NotNew = new("Lead.NotNew", "Only a new lead can be taken into work.", ErrorType.Conflict);
-
-        /// <summary>Only a lost lead can be reopened.</summary>
-        public static readonly Error NotLost = new("Lead.NotLost", "Only a lost lead can be reopened.", ErrorType.Conflict);
-    }
-
-    /// <summary>Errors related to <see cref="Entities.LeadNote"/>.</summary>
-    public static class LeadNote
-    {
-        /// <summary>The note text is null, empty, or whitespace.</summary>
-        public static readonly Error TextEmpty = new("LeadNote.TextEmpty", "Note text cannot be empty.", ErrorType.Validation);
-
-        /// <summary>The note text exceeds the maximum allowed length.</summary>
-        public static readonly Error TextTooLong = new("LeadNote.TextTooLong", "Note text exceeds the maximum allowed length.", ErrorType.Validation);
-
-        /// <summary>The author identifier is an empty GUID.</summary>
-        public static readonly Error AuthorIdEmpty = new("LeadNote.AuthorIdEmpty", "Author ID cannot be an empty GUID.", ErrorType.Validation);
     }
 
     /// <summary>Errors related to the <see cref="Entities.TrainingGround"/> aggregate.</summary>
