@@ -18,6 +18,16 @@ public static class DomainErrors
         public static readonly Error InvalidFormat = new("Email.InvalidFormat", "Email address is not in a valid format.", ErrorType.Validation);
     }
 
+    /// <summary>Errors related to <see cref="Entities.LessonAttendance"/>.</summary>
+    public static class LessonAttendance
+    {
+        /// <summary>The comment exceeds the maximum allowed length.</summary>
+        public static readonly Error CommentTooLong = new("LessonAttendance.CommentTooLong", "Comment exceeds the maximum allowed length.", ErrorType.Validation);
+
+        /// <summary>The identifier of the user making the mark is an empty GUID.</summary>
+        public static readonly Error MarkedByUserIdEmpty = new("LessonAttendance.MarkedByUserIdEmpty", "User ID cannot be an empty GUID.", ErrorType.Validation);
+    }
+
     /// <summary>Errors related to the <see cref="Entities.Payment"/> aggregate.</summary>
     public static class Payment
     {
@@ -293,6 +303,52 @@ public static class DomainErrors
 
         /// <summary>The operation modifies an inactive group, which is not allowed.</summary>
         public static readonly Error CannotModifyInactive = new("StudyGroup.CannotModifyInactive", "An inactive group cannot be modified. Reactivate the group first.", ErrorType.Conflict);
+    }
+
+    /// <summary>Errors related to the <see cref="Entities.TheoryLesson"/> aggregate.</summary>
+    public static class TheoryLesson
+    {
+        /// <summary>The study group is inactive.</summary>
+        public static readonly Error GroupInactive = new("TheoryLesson.GroupInactive", "Lessons cannot be scheduled for an inactive group.", ErrorType.Conflict);
+
+        /// <summary>The course passed in is not the group's course.</summary>
+        public static readonly Error CourseMismatch = new("TheoryLesson.CourseMismatch", "The course does not belong to the group.", ErrorType.Validation);
+
+        /// <summary>The topic is not part of the group's course.</summary>
+        public static readonly Error TopicNotInCourse = new("TheoryLesson.TopicNotInCourse", "The topic does not belong to the group's course.", ErrorType.Validation);
+
+        /// <summary>The instructor identifier is an empty GUID.</summary>
+        public static readonly Error InstructorIdEmpty = new("TheoryLesson.InstructorIdEmpty", "Instructor ID cannot be an empty GUID.", ErrorType.Validation);
+
+        /// <summary>The lesson would start at or before the current time.</summary>
+        public static readonly Error StartInPast = new("TheoryLesson.StartInPast", "A lesson must start in the future.", ErrorType.Validation);
+
+        /// <summary>The lesson is longer than the maximum duration.</summary>
+        public static readonly Error DurationTooLong = new("TheoryLesson.DurationTooLong", "A lesson cannot be longer than 8 hours.", ErrorType.Validation);
+
+        /// <summary>No reason was given for the cancellation.</summary>
+        public static readonly Error CancellationReasonEmpty = new("TheoryLesson.CancellationReasonEmpty", "A reason is required to cancel a lesson.", ErrorType.Validation);
+
+        /// <summary>The cancellation reason exceeds the maximum allowed length.</summary>
+        public static readonly Error CancellationReasonTooLong = new("TheoryLesson.CancellationReasonTooLong", "Cancellation reason exceeds the maximum allowed length.", ErrorType.Validation);
+
+        /// <summary>The operation requires a scheduled lesson.</summary>
+        public static readonly Error NotScheduled = new("TheoryLesson.NotScheduled", "Only a scheduled lesson can be changed or cancelled.", ErrorType.Conflict);
+
+        /// <summary>Attendance has been marked, so the lesson took place.</summary>
+        public static readonly Error AttendanceAlreadyMarked = new("TheoryLesson.AttendanceAlreadyMarked", "The lesson already has attendance marks.", ErrorType.Conflict);
+
+        /// <summary>Attendance cannot be marked for a cancelled lesson.</summary>
+        public static readonly Error LessonCancelled = new("TheoryLesson.LessonCancelled", "The lesson was cancelled.", ErrorType.Conflict);
+
+        /// <summary>Attendance can be marked only once the lesson has started.</summary>
+        public static readonly Error NotStarted = new("TheoryLesson.NotStarted", "The lesson has not started yet.", ErrorType.Conflict);
+
+        /// <summary>The group passed in is not the lesson's group.</summary>
+        public static readonly Error GroupMismatch = new("TheoryLesson.GroupMismatch", "The group does not belong to the lesson.", ErrorType.Validation);
+
+        /// <summary>The contract is not a current member of the lesson's group.</summary>
+        public static readonly Error NotGroupMember = new("TheoryLesson.NotGroupMember", "The student is not a member of the group.", ErrorType.Conflict);
     }
 
     /// <summary>Errors related to <see cref="ValueObjects.TimeInterval"/> validation.</summary>
