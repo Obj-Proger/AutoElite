@@ -78,6 +78,16 @@ public static class DomainErrors
         public static readonly Error RatingCommentTooLong = new("DrivingSlot.RatingCommentTooLong", "Comment exceeds the maximum allowed length.", ErrorType.Validation);
     }
 
+    /// <summary>Errors related to <see cref="ValueObjects.EntityReference"/> validation.</summary>
+    public static class EntityReference
+    {
+        /// <summary>The kind is not a defined <see cref="Enums.EntityKind"/> value.</summary>
+        public static readonly Error KindNotDefined = new("EntityReference.KindNotDefined", "Object kind is not valid.", ErrorType.Validation);
+
+        /// <summary>The identifier is an empty GUID.</summary>
+        public static readonly Error IdEmpty = new("EntityReference.IdEmpty", "Object ID cannot be an empty GUID.", ErrorType.Validation);
+    }
+
     /// <summary>Errors related to the <see cref="Entities.Exam"/> aggregate.</summary>
     public static class Exam
     {
@@ -179,6 +189,25 @@ public static class DomainErrors
 
         /// <summary>The plate is not 2 to 15 letters and digits after removing spaces and hyphens.</summary>
         public static readonly Error InvalidFormat = new("LicensePlate.InvalidFormat", "Licence plate must consist of 2 to 15 letters and digits.", ErrorType.Validation);
+    }
+
+    /// <summary>Errors related to the <see cref="Entities.Notification"/> aggregate.</summary>
+    public static class Notification
+    {
+        /// <summary>The recipient identifier is an empty GUID.</summary>
+        public static readonly Error RecipientIdEmpty = new("Notification.RecipientIdEmpty", "Recipient ID cannot be an empty GUID.", ErrorType.Validation);
+
+        /// <summary>The type is not a defined <see cref="Enums.NotificationType"/> value.</summary>
+        public static readonly Error TypeNotDefined = new("Notification.TypeNotDefined", "Notification type is not valid.", ErrorType.Validation);
+
+        /// <summary>The title is null, empty, or whitespace.</summary>
+        public static readonly Error TitleEmpty = new("Notification.TitleEmpty", "Notification title cannot be empty.", ErrorType.Validation);
+
+        /// <summary>The title exceeds the maximum allowed length.</summary>
+        public static readonly Error TitleTooLong = new("Notification.TitleTooLong", "Notification title exceeds the maximum allowed length.", ErrorType.Validation);
+
+        /// <summary>The body exceeds the maximum allowed length.</summary>
+        public static readonly Error BodyTooLong = new("Notification.BodyTooLong", "Notification body exceeds the maximum allowed length.", ErrorType.Validation);
     }
 
     /// <summary>Errors related to the <see cref="Entities.Payment"/> aggregate.</summary>
@@ -580,6 +609,46 @@ public static class DomainErrors
 
         /// <summary>The grade is outside 1..5.</summary>
         public static readonly Error GradeOutOfRange = new("SkillGrade.GradeOutOfRange", "Skill grade must be between 1 and 5.", ErrorType.Validation);
+    }
+
+    /// <summary>Errors related to the <see cref="Entities.StaffTask"/> aggregate.</summary>
+    public static class StaffTask
+    {
+        /// <summary>The title is null, empty, or whitespace.</summary>
+        public static readonly Error TitleEmpty = new("StaffTask.TitleEmpty", "Task title cannot be empty.", ErrorType.Validation);
+
+        /// <summary>The title exceeds the maximum allowed length.</summary>
+        public static readonly Error TitleTooLong = new("StaffTask.TitleTooLong", "Task title exceeds the maximum allowed length.", ErrorType.Validation);
+
+        /// <summary>The description exceeds the maximum allowed length.</summary>
+        public static readonly Error DescriptionTooLong = new("StaffTask.DescriptionTooLong", "Task description exceeds the maximum allowed length.", ErrorType.Validation);
+
+        /// <summary>The assignee identifier is an empty GUID.</summary>
+        public static readonly Error AssigneeIdEmpty = new("StaffTask.AssigneeIdEmpty", "Assignee ID cannot be an empty GUID.", ErrorType.Validation);
+
+        /// <summary>The deadline is at or before the current time.</summary>
+        public static readonly Error DueInPast = new("StaffTask.DueInPast", "The deadline must be in the future.", ErrorType.Validation);
+
+        /// <summary>The recurrence is not a defined <see cref="Enums.TaskRecurrence"/> value.</summary>
+        public static readonly Error RecurrenceNotDefined = new("StaffTask.RecurrenceNotDefined", "Recurrence is not valid.", ErrorType.Validation);
+
+        /// <summary>The task is already assigned to this staff member.</summary>
+        public static readonly Error AlreadyAssigned = new("StaffTask.AlreadyAssigned", "The task is already assigned to this staff member.", ErrorType.Conflict);
+
+        /// <summary>The task is already done.</summary>
+        public static readonly Error AlreadyDone = new("StaffTask.AlreadyDone", "The task is already done.", ErrorType.Conflict);
+
+        /// <summary>Only a new task can be started.</summary>
+        public static readonly Error NotNew = new("StaffTask.NotNew", "Only a new task can be started.", ErrorType.Conflict);
+
+        /// <summary>Only a done task can be reopened.</summary>
+        public static readonly Error NotDone = new("StaffTask.NotDone", "Only a done task can be reopened.", ErrorType.Conflict);
+
+        /// <summary>The deadline has not passed.</summary>
+        public static readonly Error NotOverdue = new("StaffTask.NotOverdue", "The task is not overdue.", ErrorType.Conflict);
+
+        /// <summary>The assignee was already reminded for this deadline.</summary>
+        public static readonly Error OverdueAlreadyNotified = new("StaffTask.OverdueAlreadyNotified", "The overdue reminder was already sent.", ErrorType.Conflict);
     }
 
     /// <summary>Errors related to the <see cref="Entities.StudyGroup"/> aggregate.</summary>
