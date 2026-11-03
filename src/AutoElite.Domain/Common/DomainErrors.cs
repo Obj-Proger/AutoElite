@@ -63,6 +63,62 @@ public static class DomainErrors
         public static readonly Error StreetTooLong = new("Address.StreetTooLong", "Street address exceeds the maximum allowed length.", ErrorType.Validation);
     }
 
+    /// <summary>Errors related to the <see cref="Entities.Course"/> aggregate.</summary>
+    public static class Course
+    {
+        /// <summary>The course name is null, empty, or whitespace.</summary>
+        public static readonly Error NameEmpty = new("Course.NameEmpty", "Course name cannot be empty.", ErrorType.Validation);
+
+        /// <summary>The course name exceeds the maximum allowed length.</summary>
+        public static readonly Error NameTooLong = new("Course.NameTooLong", "Course name exceeds the maximum allowed length.", ErrorType.Validation);
+
+        /// <summary>The category is not a defined <see cref="Enums.LicenseCategory"/> value.</summary>
+        public static readonly Error CategoryNotDefined = new("Course.CategoryNotDefined", "Category is not a valid licence category.", ErrorType.Validation);
+
+        /// <summary>The price is zero or negative.</summary>
+        public static readonly Error PriceNotPositive = new("Course.PriceNotPositive", "Course price must be greater than zero.", ErrorType.Validation);
+
+        /// <summary>Theory or practice hours are negative or above the maximum.</summary>
+        public static readonly Error HoursOutOfRange = new("Course.HoursOutOfRange", "Theory and practice hours must be between 0 and 1000.", ErrorType.Validation);
+
+        /// <summary>Both theory and practice hours are zero.</summary>
+        public static readonly Error NoHours = new("Course.NoHours", "A course must have theory or practice hours.", ErrorType.Validation);
+
+        /// <summary>The description exceeds the maximum allowed length.</summary>
+        public static readonly Error DescriptionTooLong = new("Course.DescriptionTooLong", "Description exceeds the maximum allowed length.", ErrorType.Validation);
+
+        /// <summary>The topic does not belong to the course.</summary>
+        public static readonly Error TopicNotFound = new("Course.TopicNotFound", "Topic was not found in the course.", ErrorType.NotFound);
+
+        /// <summary>The target position is outside 1..number of topics.</summary>
+        public static readonly Error TopicPositionOutOfRange = new("Course.TopicPositionOutOfRange", "Topic position is out of range.", ErrorType.Validation);
+
+        /// <summary>Another topic of the course has the same title, ignoring letter case.</summary>
+        public static readonly Error DuplicateTopicTitle = new("Course.DuplicateTopicTitle", "The course already has a topic with this title.", ErrorType.Conflict);
+
+        /// <summary>The course is already active, so activating it again is not a valid transition.</summary>
+        public static readonly Error AlreadyActive = new("Course.AlreadyActive", "Course is already active.", ErrorType.Conflict);
+
+        /// <summary>The course is already inactive, so deactivating it again is not a valid transition.</summary>
+        public static readonly Error AlreadyInactive = new("Course.AlreadyInactive", "Course is already inactive.", ErrorType.Conflict);
+
+        /// <summary>The operation modifies an inactive course, which is not allowed.</summary>
+        public static readonly Error CannotModifyInactive = new("Course.CannotModifyInactive", "An inactive course cannot be modified. Reactivate the course first.", ErrorType.Conflict);
+    }
+
+    /// <summary>Errors related to <see cref="Entities.CourseTopic"/>.</summary>
+    public static class CourseTopic
+    {
+        /// <summary>The topic title is null, empty, or whitespace.</summary>
+        public static readonly Error TitleEmpty = new("CourseTopic.TitleEmpty", "Topic title cannot be empty.", ErrorType.Validation);
+
+        /// <summary>The topic title exceeds the maximum allowed length.</summary>
+        public static readonly Error TitleTooLong = new("CourseTopic.TitleTooLong", "Topic title exceeds the maximum allowed length.", ErrorType.Validation);
+
+        /// <summary>The topic description exceeds the maximum allowed length.</summary>
+        public static readonly Error DescriptionTooLong = new("CourseTopic.DescriptionTooLong", "Topic description exceeds the maximum allowed length.", ErrorType.Validation);
+    }
+
     /// <summary>Errors related to <see cref="ValueObjects.Currency"/> validation.</summary>
     public static class Currency
     {
