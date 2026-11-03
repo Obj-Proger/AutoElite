@@ -490,6 +490,59 @@ public static class DomainErrors
         public static readonly Error CannotModifyInactive = new("StudyGroup.CannotModifyInactive", "An inactive group cannot be modified. Reactivate the group first.", ErrorType.Conflict);
     }
 
+    /// <summary>Errors related to <see cref="ValueObjects.TestRules"/> validation.</summary>
+    public static class TestRules
+    {
+        /// <summary>The question count is below 1 or above 100.</summary>
+        public static readonly Error QuestionCountOutOfRange = new("TestRules.QuestionCountOutOfRange", "Question count must be between 1 and 100.", ErrorType.Validation);
+
+        /// <summary>The time limit is below 1 minute or above 3 hours.</summary>
+        public static readonly Error TimeLimitOutOfRange = new("TestRules.TimeLimitOutOfRange", "Time limit must be between 1 minute and 3 hours.", ErrorType.Validation);
+
+        /// <summary>The allowed mistakes are negative or not fewer than the questions.</summary>
+        public static readonly Error MaxMistakesOutOfRange = new("TestRules.MaxMistakesOutOfRange", "Allowed mistakes must be at least 0 and fewer than the questions.", ErrorType.Validation);
+
+        /// <summary>The questions added per mistake are negative or above 20.</summary>
+        public static readonly Error ExtraQuestionsOutOfRange = new("TestRules.ExtraQuestionsOutOfRange", "Questions added per mistake must be between 0 and 20.", ErrorType.Validation);
+
+        /// <summary>The time added per mistake is negative or above 30 minutes.</summary>
+        public static readonly Error ExtraTimeOutOfRange = new("TestRules.ExtraTimeOutOfRange", "Time added per mistake must be between 0 and 30 minutes.", ErrorType.Validation);
+
+        /// <summary>Time is added per mistake although no questions are added.</summary>
+        public static readonly Error ExtraTimeWithoutExtraQuestions = new("TestRules.ExtraTimeWithoutExtraQuestions", "Time can be added per mistake only together with added questions.", ErrorType.Validation);
+    }
+
+    /// <summary>Errors related to the <see cref="Entities.TestTemplate"/> aggregate.</summary>
+    public static class TestTemplate
+    {
+        /// <summary>The name is null, empty, or whitespace.</summary>
+        public static readonly Error NameEmpty = new("TestTemplate.NameEmpty", "Template name cannot be empty.", ErrorType.Validation);
+
+        /// <summary>The name exceeds the maximum allowed length.</summary>
+        public static readonly Error NameTooLong = new("TestTemplate.NameTooLong", "Template name exceeds the maximum allowed length.", ErrorType.Validation);
+
+        /// <summary>The category is not a defined <see cref="Enums.LicenseCategory"/> value.</summary>
+        public static readonly Error CategoryNotDefined = new("TestTemplate.CategoryNotDefined", "Category is not a valid licence category.", ErrorType.Validation);
+
+        /// <summary>A topic identifier is an empty GUID.</summary>
+        public static readonly Error TopicIdEmpty = new("TestTemplate.TopicIdEmpty", "Topic ID cannot be an empty GUID.", ErrorType.Validation);
+
+        /// <summary>The same topic is listed more than once.</summary>
+        public static readonly Error DuplicateTopic = new("TestTemplate.DuplicateTopic", "Each topic can be listed only once.", ErrorType.Validation);
+
+        /// <summary>The source is not a defined <see cref="Enums.QuestionSource"/> value.</summary>
+        public static readonly Error SourceNotDefined = new("TestTemplate.SourceNotDefined", "Question source is not valid.", ErrorType.Validation);
+
+        /// <summary>The template is already active, so activating it again is not a valid transition.</summary>
+        public static readonly Error AlreadyActive = new("TestTemplate.AlreadyActive", "Template is already active.", ErrorType.Conflict);
+
+        /// <summary>The template is already inactive, so deactivating it again is not a valid transition.</summary>
+        public static readonly Error AlreadyInactive = new("TestTemplate.AlreadyInactive", "Template is already inactive.", ErrorType.Conflict);
+
+        /// <summary>The operation modifies an inactive template, which is not allowed.</summary>
+        public static readonly Error CannotModifyInactive = new("TestTemplate.CannotModifyInactive", "An inactive template cannot be modified. Reactivate it first.", ErrorType.Conflict);
+    }
+
     /// <summary>Errors related to the <see cref="Entities.TheoryLesson"/> aggregate.</summary>
     public static class TheoryLesson
     {
