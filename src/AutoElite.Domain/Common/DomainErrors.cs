@@ -5,6 +5,79 @@ namespace AutoElite.Domain.Common;
 /// </summary>
 public static class DomainErrors
 {
+    /// <summary>Errors related to the <see cref="Entities.DrivingSlot"/> aggregate.</summary>
+    public static class DrivingSlot
+    {
+        /// <summary>The instructor identifier is an empty GUID.</summary>
+        public static readonly Error InstructorIdEmpty = new("DrivingSlot.InstructorIdEmpty", "Instructor ID cannot be an empty GUID.", ErrorType.Validation);
+
+        /// <summary>The vehicle is out of service.</summary>
+        public static readonly Error VehicleInactive = new("DrivingSlot.VehicleInactive", "An inactive vehicle cannot be used for a slot.", ErrorType.Conflict);
+
+        /// <summary>The training ground is no longer used.</summary>
+        public static readonly Error TrainingGroundInactive = new("DrivingSlot.TrainingGroundInactive", "An inactive training ground cannot be used for a slot.", ErrorType.Conflict);
+
+        /// <summary>The route is no longer used.</summary>
+        public static readonly Error RouteInactive = new("DrivingSlot.RouteInactive", "An inactive route cannot be used for a slot.", ErrorType.Conflict);
+
+        /// <summary>The slot would start at or before the current time.</summary>
+        public static readonly Error StartInPast = new("DrivingSlot.StartInPast", "A slot must start in the future.", ErrorType.Validation);
+
+        /// <summary>The slot is longer than the maximum duration.</summary>
+        public static readonly Error DurationTooLong = new("DrivingSlot.DurationTooLong", "A slot cannot be longer than 4 hours.", ErrorType.Validation);
+
+        /// <summary>The slot is booked, completed or withdrawn.</summary>
+        public static readonly Error NotAvailable = new("DrivingSlot.NotAvailable", "The slot is not available for booking.", ErrorType.Conflict);
+
+        /// <summary>The lesson has already started.</summary>
+        public static readonly Error AlreadyStarted = new("DrivingSlot.AlreadyStarted", "The lesson has already started.", ErrorType.Conflict);
+
+        /// <summary>The lesson outcome can be recorded only once the lesson has started.</summary>
+        public static readonly Error NotStarted = new("DrivingSlot.NotStarted", "The lesson has not started yet.", ErrorType.Conflict);
+
+        /// <summary>Only an active contract can book a slot.</summary>
+        public static readonly Error ContractNotActive = new("DrivingSlot.ContractNotActive", "Only an active contract can book a lesson.", ErrorType.Conflict);
+
+        /// <summary>The contract's licence category differs from the vehicle's.</summary>
+        public static readonly Error CategoryMismatch = new("DrivingSlot.CategoryMismatch", "The vehicle is for a different licence category than the contract.", ErrorType.Conflict);
+
+        /// <summary>The slot has no active booking.</summary>
+        public static readonly Error NotBooked = new("DrivingSlot.NotBooked", "The slot has no active booking.", ErrorType.Conflict);
+
+        /// <summary>The slot is completed or already withdrawn.</summary>
+        public static readonly Error NotOpen = new("DrivingSlot.NotOpen", "Only an available or booked slot can be withdrawn.", ErrorType.Conflict);
+
+        /// <summary>The contract passed in is not the contract of the active booking.</summary>
+        public static readonly Error ContractMismatch = new("DrivingSlot.ContractMismatch", "The contract does not belong to the booking.", ErrorType.Validation);
+
+        /// <summary>The identifier of the user making the change was provided but is an empty GUID.</summary>
+        public static readonly Error UserIdEmpty = new("DrivingSlot.UserIdEmpty", "User ID cannot be an empty GUID.", ErrorType.Validation);
+
+        /// <summary>No reason was given for the cancellation.</summary>
+        public static readonly Error ReasonEmpty = new("DrivingSlot.ReasonEmpty", "A reason is required.", ErrorType.Validation);
+
+        /// <summary>The reason exceeds the maximum allowed length.</summary>
+        public static readonly Error ReasonTooLong = new("DrivingSlot.ReasonTooLong", "Reason exceeds the maximum allowed length.", ErrorType.Validation);
+
+        /// <summary>The same skill is graded more than once.</summary>
+        public static readonly Error DuplicateSkillGrade = new("DrivingSlot.DuplicateSkillGrade", "Each skill can be graded only once.", ErrorType.Validation);
+
+        /// <summary>The instructor note exceeds the maximum allowed length.</summary>
+        public static readonly Error NoteTooLong = new("DrivingSlot.NoteTooLong", "Note exceeds the maximum allowed length.", ErrorType.Validation);
+
+        /// <summary>Only a completed lesson can be rated.</summary>
+        public static readonly Error LessonNotCompleted = new("DrivingSlot.LessonNotCompleted", "Only a completed lesson can be rated.", ErrorType.Conflict);
+
+        /// <summary>The student has already rated the lesson.</summary>
+        public static readonly Error AlreadyRated = new("DrivingSlot.AlreadyRated", "The lesson has already been rated.", ErrorType.Conflict);
+
+        /// <summary>The rating is outside 1..5.</summary>
+        public static readonly Error RatingOutOfRange = new("DrivingSlot.RatingOutOfRange", "Rating must be between 1 and 5.", ErrorType.Validation);
+
+        /// <summary>The rating comment exceeds the maximum allowed length.</summary>
+        public static readonly Error RatingCommentTooLong = new("DrivingSlot.RatingCommentTooLong", "Comment exceeds the maximum allowed length.", ErrorType.Validation);
+    }
+
     /// <summary>Errors related to <see cref="ValueObjects.Email"/> validation.</summary>
     public static class Email
     {
@@ -292,6 +365,16 @@ public static class DomainErrors
 
         /// <summary>The operation modifies an inactive route, which is not allowed.</summary>
         public static readonly Error CannotModifyInactive = new("DrivingRoute.CannotModifyInactive", "An inactive route cannot be modified. Reactivate it first.", ErrorType.Conflict);
+    }
+
+    /// <summary>Errors related to <see cref="ValueObjects.SkillGrade"/> validation.</summary>
+    public static class SkillGrade
+    {
+        /// <summary>The skill is not a defined <see cref="Enums.DrivingSkill"/> value.</summary>
+        public static readonly Error SkillNotDefined = new("SkillGrade.SkillNotDefined", "Skill is not valid.", ErrorType.Validation);
+
+        /// <summary>The grade is outside 1..5.</summary>
+        public static readonly Error GradeOutOfRange = new("SkillGrade.GradeOutOfRange", "Skill grade must be between 1 and 5.", ErrorType.Validation);
     }
 
     /// <summary>Errors related to the <see cref="Entities.StudyGroup"/> aggregate.</summary>
