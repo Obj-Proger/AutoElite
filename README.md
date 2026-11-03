@@ -1,5 +1,7 @@
 # AutoElite
 
+[![CI](https://github.com/Obj-Proger/AutoElite/actions/workflows/ci.yml/badge.svg)](https://github.com/Obj-Proger/AutoElite/actions/workflows/ci.yml)
+
 Management system for driving schools: the full student lifecycle from the first enquiry to
 graduation, in one self-hosted application.
 
@@ -53,7 +55,8 @@ dotnet test
 
 ```
 src/     production code, one project per layer
-tests/   one test project per layer (xUnit v3, AwesomeAssertions)
+tests/   one test project per layer (xUnit v3, AwesomeAssertions), plus architecture tests
+          that check layer dependencies and code conventions
 ```
 
 ## License
