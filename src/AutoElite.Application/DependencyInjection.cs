@@ -11,7 +11,8 @@ public static class DependencyInjection
 {
     /// <summary>
     /// Registers the dispatcher, all request handlers and validators found in this assembly,
-    /// and the pipeline behaviors in execution order: logging, then validation.
+    /// and the pipeline behaviors in execution order: logging, authorization, then validation.
+    /// The host must register <see cref="Common.Abstractions.ICurrentUser"/>.
     /// Also registers the system clock as <see cref="TimeProvider"/> unless a clock is already registered,
     /// so that tests can substitute their own.
     /// </summary>
@@ -24,6 +25,7 @@ public static class DependencyInjection
         RegisterOpenGenericImplementations(services, typeof(IValidator<>));
 
         services.AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
+        services.AddScoped(typeof(IPipelineBehavior<,>), typeof(AuthorizationBehavior<,>));
         services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
         return services;

@@ -1,12 +1,16 @@
+using AutoElite.Application.Common.Abstractions;
+using AutoElite.Domain.Enums;
+
 namespace AutoElite.Application.Tests;
 
 public class PipelineIntegrationTests
 {
-    private static (IDispatcher Dispatcher, CallJournal Journal) CreateDispatcher()
+    private static (IDispatcher Dispatcher, CallJournal Journal) CreateDispatcher(FakeCurrentUser? currentUser = null)
     {
         var journal = new CallJournal();
         var services = new ServiceCollection();
         services.AddSingleton(journal);
+        services.AddSingleton<ICurrentUser>(currentUser ?? FakeCurrentUser.SignedIn(UserRole.Student));
         services.AddSingleton(typeof(ILogger<>), typeof(ListLogger<>));
         services.AddApplication();
         services.AddScoped<IRequestHandler<TestCommand, Result>, TestCommandHandler>();
@@ -38,6 +42,17 @@ public class PipelineIntegrationTests
         result.IsFailure.Should().BeTrue();
         result.Error.Code.Should().Be("Validation.Failed");
         result.Error.FieldErrors.Should().Equal(new FieldError("Name", "Test.NameEmpty", "Name is required."));
+        journal.Entries.Should().BeEmpty();
+    }
+
+    [Fact]
+    public async Task Send_InvalidCommandFromAnonymousCaller_ReturnsUnauthenticatedBeforeValidation()
+    {
+        var (dispatcher, journal) = CreateDispatcher(FakeCurrentUser.Anonymous());
+
+        var result = await dispatcher.Send(new TestCommand(string.Empty), TestContext.Current.CancellationToken);
+
+        result.Error.Should().Be(ApplicationErrors.Auth.Unauthenticated);
         journal.Entries.Should().BeEmpty();
     }
 

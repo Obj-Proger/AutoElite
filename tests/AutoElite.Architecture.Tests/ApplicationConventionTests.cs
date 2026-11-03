@@ -1,3 +1,5 @@
+using AutoElite.Application.Common.Authorization;
+
 namespace AutoElite.Architecture.Tests;
 
 public class ApplicationConventionTests
@@ -42,6 +44,17 @@ public class ApplicationConventionTests
             .Select(type => type.Name);
 
         violating.Should().BeEmpty();
+    }
+
+    [Fact]
+    public void Requests_DoNotBothAllowAnonymousCallersAndRequireRoles()
+    {
+        var contradictory = Layers.ClassesImplementing(Layers.Application, typeof(IRequest<>))
+            .Where(type => type.GetCustomAttribute<AllowAnonymousRequestAttribute>() is not null
+                && type.GetCustomAttribute<RequireRolesAttribute>() is not null)
+            .Select(type => type.Name);
+
+        contradictory.Should().BeEmpty("a request is either open to anonymous callers or restricted to roles");
     }
 
     private static bool Implements(Type type, Type openGenericInterface) =>
