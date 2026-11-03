@@ -18,6 +18,49 @@ public static class DomainErrors
         public static readonly Error InvalidFormat = new("Email.InvalidFormat", "Email address is not in a valid format.", ErrorType.Validation);
     }
 
+    /// <summary>Errors related to the <see cref="Entities.Payment"/> aggregate.</summary>
+    public static class Payment
+    {
+        /// <summary>The amount is not in the currency of the contract.</summary>
+        public static readonly Error CurrencyMismatch = new("Payment.CurrencyMismatch", "Payment must be in the currency of the contract.", ErrorType.Validation);
+
+        /// <summary>The amount is zero or negative.</summary>
+        public static readonly Error AmountNotPositive = new("Payment.AmountNotPositive", "Payment amount must be greater than zero.", ErrorType.Validation);
+
+        /// <summary>The method is not a defined <see cref="Enums.PaymentMethod"/> value.</summary>
+        public static readonly Error MethodNotDefined = new("Payment.MethodNotDefined", "Payment method is not valid.", ErrorType.Validation);
+
+        /// <summary>The purpose is null, empty, or whitespace.</summary>
+        public static readonly Error PurposeEmpty = new("Payment.PurposeEmpty", "Payment purpose cannot be empty.", ErrorType.Validation);
+
+        /// <summary>The purpose exceeds the maximum allowed length.</summary>
+        public static readonly Error PurposeTooLong = new("Payment.PurposeTooLong", "Payment purpose exceeds the maximum allowed length.", ErrorType.Validation);
+
+        /// <summary>The external reference is null, empty, or whitespace.</summary>
+        public static readonly Error ExternalReferenceEmpty = new("Payment.ExternalReferenceEmpty", "External reference cannot be empty.", ErrorType.Validation);
+
+        /// <summary>The external reference exceeds the maximum allowed length.</summary>
+        public static readonly Error ExternalReferenceTooLong = new("Payment.ExternalReferenceTooLong", "External reference exceeds the maximum allowed length.", ErrorType.Validation);
+
+        /// <summary>The identifier of the user recording the payment was provided but is an empty GUID.</summary>
+        public static readonly Error UserIdEmpty = new("Payment.UserIdEmpty", "User ID cannot be an empty GUID.", ErrorType.Validation);
+
+        /// <summary>No reason was given for the refund or cancellation.</summary>
+        public static readonly Error ReasonEmpty = new("Payment.ReasonEmpty", "A reason is required.", ErrorType.Validation);
+
+        /// <summary>The reason exceeds the maximum allowed length.</summary>
+        public static readonly Error ReasonTooLong = new("Payment.ReasonTooLong", "Reason exceeds the maximum allowed length.", ErrorType.Validation);
+
+        /// <summary>The contract passed in is not the contract of the payment.</summary>
+        public static readonly Error ContractMismatch = new("Payment.ContractMismatch", "The payment belongs to a different contract.", ErrorType.Validation);
+
+        /// <summary>The operation requires a registered, not yet confirmed payment.</summary>
+        public static readonly Error NotRegistered = new("Payment.NotRegistered", "Only a registered payment can be confirmed, cancelled or updated.", ErrorType.Conflict);
+
+        /// <summary>Only a confirmed payment can be refunded.</summary>
+        public static readonly Error NotConfirmed = new("Payment.NotConfirmed", "Only a confirmed payment can be refunded.", ErrorType.Conflict);
+    }
+
     /// <summary>Errors related to <see cref="ValueObjects.PhoneNumber"/> validation.</summary>
     public static class PhoneNumber
     {
