@@ -269,6 +269,80 @@ public static class DomainErrors
         public static readonly Error StreetTooLong = new("Address.StreetTooLong", "Street address exceeds the maximum allowed length.", ErrorType.Validation);
     }
 
+    /// <summary>Errors related to the <see cref="Entities.Chat"/> aggregate.</summary>
+    public static class Chat
+    {
+        /// <summary>A user identifier is an empty GUID.</summary>
+        public static readonly Error UserIdEmpty = new("Chat.UserIdEmpty", "User ID cannot be an empty GUID.", ErrorType.Validation);
+
+        /// <summary>Both users of a personal chat are the same.</summary>
+        public static readonly Error DirectChatWithSelf = new("Chat.DirectChatWithSelf", "A personal chat needs two different users.", ErrorType.Validation);
+
+        /// <summary>The title is null, empty, or whitespace.</summary>
+        public static readonly Error TitleEmpty = new("Chat.TitleEmpty", "Chat title cannot be empty.", ErrorType.Validation);
+
+        /// <summary>The title exceeds the maximum allowed length.</summary>
+        public static readonly Error TitleTooLong = new("Chat.TitleTooLong", "Chat title exceeds the maximum allowed length.", ErrorType.Validation);
+
+        /// <summary>The same user is listed more than once.</summary>
+        public static readonly Error DuplicateMember = new("Chat.DuplicateMember", "Each member can be listed only once.", ErrorType.Validation);
+
+        /// <summary>The study group identifier was provided but is an empty GUID.</summary>
+        public static readonly Error StudyGroupIdEmpty = new("Chat.StudyGroupIdEmpty", "Study group ID cannot be an empty GUID.", ErrorType.Validation);
+
+        /// <summary>The operation is available only in group chats.</summary>
+        public static readonly Error NotGroupChat = new("Chat.NotGroupChat", "This operation is available only in group chats.", ErrorType.Conflict);
+
+        /// <summary>The acting user is not an administrator of the chat.</summary>
+        public static readonly Error NotAdministrator = new("Chat.NotAdministrator", "Only a chat administrator can do this.", ErrorType.Forbidden);
+
+        /// <summary>The user is not a current member of the chat.</summary>
+        public static readonly Error NotMember = new("Chat.NotMember", "The user is not a member of the chat.", ErrorType.NotFound);
+
+        /// <summary>The user is already a current member of the chat.</summary>
+        public static readonly Error AlreadyMember = new("Chat.AlreadyMember", "The user is already a member of the chat.", ErrorType.Conflict);
+
+        /// <summary>An administrator tried to remove themselves.</summary>
+        public static readonly Error CannotRemoveSelf = new("Chat.CannotRemoveSelf", "Use leave to exit the chat yourself.", ErrorType.Conflict);
+
+        /// <summary>The role is not a defined <see cref="Enums.ChatMemberRole"/> value.</summary>
+        public static readonly Error RoleNotDefined = new("Chat.RoleNotDefined", "Chat role is not valid.", ErrorType.Validation);
+
+        /// <summary>The only administrator would be demoted.</summary>
+        public static readonly Error LastAdministrator = new("Chat.LastAdministrator", "The chat must keep at least one administrator.", ErrorType.Conflict);
+
+        /// <summary>Notifications of the chat are already off for the member.</summary>
+        public static readonly Error AlreadyMuted = new("Chat.AlreadyMuted", "Notifications are already turned off.", ErrorType.Conflict);
+
+        /// <summary>Notifications of the chat are already on for the member.</summary>
+        public static readonly Error NotMuted = new("Chat.NotMuted", "Notifications are already turned on.", ErrorType.Conflict);
+    }
+
+    /// <summary>Errors related to the <see cref="Entities.ChatMessage"/> aggregate.</summary>
+    public static class ChatMessage
+    {
+        /// <summary>The sender is not a current member of the chat.</summary>
+        public static readonly Error SenderNotMember = new("ChatMessage.SenderNotMember", "Only a member of the chat can send messages.", ErrorType.Forbidden);
+
+        /// <summary>The text exceeds the maximum allowed length.</summary>
+        public static readonly Error TextTooLong = new("ChatMessage.TextTooLong", "Message text exceeds the maximum allowed length.", ErrorType.Validation);
+
+        /// <summary>The message has neither text nor attachments.</summary>
+        public static readonly Error Empty = new("ChatMessage.Empty", "A message needs text or an attachment.", ErrorType.Validation);
+
+        /// <summary>More attachments than allowed were given.</summary>
+        public static readonly Error TooManyAttachments = new("ChatMessage.TooManyAttachments", "A message can have at most 10 attachments.", ErrorType.Validation);
+
+        /// <summary>An attachment identifier is empty or repeated.</summary>
+        public static readonly Error InvalidAttachments = new("ChatMessage.InvalidAttachments", "Attachments must be distinct, non-empty IDs.", ErrorType.Validation);
+
+        /// <summary>Only the sender may delete a message.</summary>
+        public static readonly Error NotSender = new("ChatMessage.NotSender", "Only the sender can delete the message.", ErrorType.Forbidden);
+
+        /// <summary>The message is already deleted.</summary>
+        public static readonly Error AlreadyDeleted = new("ChatMessage.AlreadyDeleted", "The message is already deleted.", ErrorType.Conflict);
+    }
+
     /// <summary>Errors related to the <see cref="Entities.Contract"/> aggregate.</summary>
     public static class Contract
     {
