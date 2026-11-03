@@ -2,3 +2,4 @@
 # This file inherits all other rules from the root .editorconfig.
 [*.cs]
 dotnet_naming_rule.members_pascal_case.severity = none
+dotnet_diagnostic.CA1707.severity = none

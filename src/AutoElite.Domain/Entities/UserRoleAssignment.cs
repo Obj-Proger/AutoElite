@@ -1,4 +1,4 @@
-﻿using AutoElite.Domain.Enums;
+using AutoElite.Domain.Enums;
 
 namespace AutoElite.Domain.Entities;
 

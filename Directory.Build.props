@@ -4,6 +4,24 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <LangVersion>latest</LangVersion>
     <WarningsAsErrors>nullable</WarningsAsErrors>
+  </PropertyGroup>
+
+  <!-- Code analysis on every build: the .NET analyzers at their recommended set, plus the code-style
+       rules that .editorconfig marks as warnings. Locally they stay warnings; in CI (GitHub Actions
+       sets CI=true) every warning is an error, so nothing is merged with one. -->
+  <PropertyGroup>
+    <AnalysisLevel>latest-recommended</AnalysisLevel>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <TreatWarningsAsErrors Condition="'$(CI)' == 'true'">true</TreatWarningsAsErrors>
+
+    <!-- The compiler reports unnecessary usings (IDE0005) only when it builds the XML documentation,
+         which also checks every doc comment that is written. Doc comments are required by the code
+         conventions, not by the compiler, so a missing comment (CS1591) or a parameter left out of
+         one (CS1573) is not a warning. -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);CS1591;CS1573</NoWarn>
+
+    <!-- The default (neutral) resources are English; satellite assemblies hold the other cultures. -->
+    <NeutralLanguage>en</NeutralLanguage>
   </PropertyGroup>
 </Project>

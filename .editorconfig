@@ -28,10 +28,23 @@ csharp_style_namespace_declarations = file_scoped:warning
 csharp_using_directive_placement = outside_namespace:warning
 dotnet_sort_system_directives_first = true
 dotnet_separate_import_directive_groups = false
-dotnet_diagnostic.IDE0005.severity = suggestion
 
 # Formatting violations are reported as warnings
 dotnet_diagnostic.IDE0055.severity = warning
+
+# Unnecessary usings and unused private members
+# (IDE0005 needs the XML documentation build, enabled in Directory.Build.props)
+dotnet_diagnostic.IDE0005.severity = warning
+dotnet_diagnostic.IDE0051.severity = warning
+dotnet_diagnostic.IDE0052.severity = warning
+
+# .NET design-guideline rules written for reusable libraries, not for an application:
+# CA1711 - names ending in Delegate, Collection, Exception... (RequestHandlerDelegate is a delegate)
+# CA1716 - names that are keywords in other .NET languages (Error, Next)
+# CA1000 - static members on generic types (Result<T> and FailureResponseFactory<T> are factories)
+dotnet_diagnostic.CA1711.severity = none
+dotnet_diagnostic.CA1716.severity = none
+dotnet_diagnostic.CA1000.severity = none
 
 # ---------------------------------------------------------------------------
 # Naming styles
