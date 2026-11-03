@@ -528,6 +528,64 @@ public static class DomainErrors
         public static readonly Error ExtraTimeWithoutExtraQuestions = new("TestRules.ExtraTimeWithoutExtraQuestions", "Time can be added per mistake only together with added questions.", ErrorType.Validation);
     }
 
+    /// <summary>Errors related to the <see cref="Entities.TestSession"/> aggregate.</summary>
+    public static class TestSession
+    {
+        /// <summary>The template is no longer used.</summary>
+        public static readonly Error TemplateInactive = new("TestSession.TemplateInactive", "A test cannot be started from an inactive template.", ErrorType.Conflict);
+
+        /// <summary>Only an active contract can start a test.</summary>
+        public static readonly Error ContractNotActive = new("TestSession.ContractNotActive", "Only an active contract can start a test.", ErrorType.Conflict);
+
+        /// <summary>The contract's licence category differs from the template's.</summary>
+        public static readonly Error CategoryMismatch = new("TestSession.CategoryMismatch", "The template is for a different licence category than the contract.", ErrorType.Conflict);
+
+        /// <summary>The exam identifier was provided but is an empty GUID.</summary>
+        public static readonly Error ExamIdEmpty = new("TestSession.ExamIdEmpty", "Exam ID cannot be an empty GUID.", ErrorType.Validation);
+
+        /// <summary>Questions were given for a different number of blocks than the template has.</summary>
+        public static readonly Error BlockCountMismatch = new("TestSession.BlockCountMismatch", "Questions must be given for every block of the template.", ErrorType.Validation);
+
+        /// <summary>A block received a different number of questions than it draws.</summary>
+        public static readonly Error BlockQuestionCountMismatch = new("TestSession.BlockQuestionCountMismatch", "Each block must receive exactly its number of questions.", ErrorType.Validation);
+
+        /// <summary>A different number of added questions was given than the rules require.</summary>
+        public static readonly Error AddOnCountMismatch = new("TestSession.AddOnCountMismatch", "Exactly the number of added questions in the rules must be given.", ErrorType.Validation);
+
+        /// <summary>A question is taken out of use.</summary>
+        public static readonly Error QuestionInactive = new("TestSession.QuestionInactive", "Inactive questions cannot be used in a test.", ErrorType.Validation);
+
+        /// <summary>A question does not apply to the test's licence category.</summary>
+        public static readonly Error QuestionCategoryMismatch = new("TestSession.QuestionCategoryMismatch", "A question does not apply to the licence category of the test.", ErrorType.Validation);
+
+        /// <summary>A question's topic is not one of its block's topics.</summary>
+        public static readonly Error QuestionOutsideBlock = new("TestSession.QuestionOutsideBlock", "A question does not belong to its block.", ErrorType.Validation);
+
+        /// <summary>A question is repeated within the attempt.</summary>
+        public static readonly Error DuplicateQuestion = new("TestSession.DuplicateQuestion", "A question cannot appear twice in one attempt.", ErrorType.Validation);
+
+        /// <summary>The attempt is already finished.</summary>
+        public static readonly Error NotInProgress = new("TestSession.NotInProgress", "The attempt is already finished.", ErrorType.Conflict);
+
+        /// <summary>The deadline has passed.</summary>
+        public static readonly Error TimeExpired = new("TestSession.TimeExpired", "The time for the attempt has run out.", ErrorType.Conflict);
+
+        /// <summary>The deadline has not passed yet.</summary>
+        public static readonly Error TimeNotExpired = new("TestSession.TimeNotExpired", "The attempt still has time.", ErrorType.Conflict);
+
+        /// <summary>The question is not part of this attempt.</summary>
+        public static readonly Error QuestionNotInSession = new("TestSession.QuestionNotInSession", "The question is not part of this attempt.", ErrorType.NotFound);
+
+        /// <summary>The question has already been answered.</summary>
+        public static readonly Error AlreadyAnswered = new("TestSession.AlreadyAnswered", "The question has already been answered.", ErrorType.Conflict);
+
+        /// <summary>The option is not one of the question's options.</summary>
+        public static readonly Error OptionNotInQuestion = new("TestSession.OptionNotInQuestion", "The option does not belong to the question.", ErrorType.Validation);
+
+        /// <summary>No added questions are expected for the block.</summary>
+        public static readonly Error AddOnNotPending = new("TestSession.AddOnNotPending", "No added questions are expected for this block.", ErrorType.Conflict);
+    }
+
     /// <summary>Errors related to the <see cref="Entities.TestTemplate"/> aggregate.</summary>
     public static class TestTemplate
     {
