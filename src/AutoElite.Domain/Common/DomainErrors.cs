@@ -63,6 +63,64 @@ public static class DomainErrors
         public static readonly Error StreetTooLong = new("Address.StreetTooLong", "Street address exceeds the maximum allowed length.", ErrorType.Validation);
     }
 
+    /// <summary>Errors related to the <see cref="Entities.Contract"/> aggregate.</summary>
+    public static class Contract
+    {
+        /// <summary>The contract number is null, empty, or whitespace.</summary>
+        public static readonly Error NumberEmpty = new("Contract.NumberEmpty", "Contract number cannot be empty.", ErrorType.Validation);
+
+        /// <summary>The contract number exceeds the maximum allowed length.</summary>
+        public static readonly Error NumberTooLong = new("Contract.NumberTooLong", "Contract number exceeds the maximum allowed length.", ErrorType.Validation);
+
+        /// <summary>The student's account is deactivated.</summary>
+        public static readonly Error StudentInactive = new("Contract.StudentInactive", "A contract cannot be drawn up for an inactive user.", ErrorType.Conflict);
+
+        /// <summary>The course is no longer offered.</summary>
+        public static readonly Error CourseInactive = new("Contract.CourseInactive", "A contract cannot be drawn up for an inactive course.", ErrorType.Conflict);
+
+        /// <summary>The price is zero or negative.</summary>
+        public static readonly Error PriceNotPositive = new("Contract.PriceNotPositive", "Contract price must be greater than zero.", ErrorType.Validation);
+
+        /// <summary>The branch identifier was provided but is an empty GUID.</summary>
+        public static readonly Error BranchIdEmpty = new("Contract.BranchIdEmpty", "Branch ID cannot be an empty GUID.", ErrorType.Validation);
+
+        /// <summary>The end date is equal to or earlier than the start date.</summary>
+        public static readonly Error EndNotAfterStart = new("Contract.EndNotAfterStart", "End date must be later than start date.", ErrorType.Validation);
+
+        /// <summary>The amount is not in the currency of the contract.</summary>
+        public static readonly Error CurrencyMismatch = new("Contract.CurrencyMismatch", "Amount must be in the currency of the contract.", ErrorType.Validation);
+
+        /// <summary>The payment or refund amount is zero or negative.</summary>
+        public static readonly Error AmountNotPositive = new("Contract.AmountNotPositive", "Amount must be greater than zero.", ErrorType.Validation);
+
+        /// <summary>The refund is larger than the amount paid so far.</summary>
+        public static readonly Error RefundExceedsPaidAmount = new("Contract.RefundExceedsPaidAmount", "Refund cannot exceed the amount paid.", ErrorType.Conflict);
+
+        /// <summary>The lesson length is not positive, exceeds the maximum, or has more than two decimals.</summary>
+        public static readonly Error LessonHoursOutOfRange = new("Contract.LessonHoursOutOfRange", "Lesson hours must be greater than 0 and at most 12, with at most two decimals.", ErrorType.Validation);
+
+        /// <summary>The grade is outside 1..5 or has more than two decimals.</summary>
+        public static readonly Error GradeOutOfRange = new("Contract.GradeOutOfRange", "Grade must be between 1 and 5, with at most two decimals.", ErrorType.Validation);
+
+        /// <summary>There is no recorded theory attendance to take back.</summary>
+        public static readonly Error NoTheoryAttendance = new("Contract.NoTheoryAttendance", "No theory attendance has been recorded.", ErrorType.Conflict);
+
+        /// <summary>No reason was given for the termination.</summary>
+        public static readonly Error TerminationReasonEmpty = new("Contract.TerminationReasonEmpty", "A reason is required to terminate a contract.", ErrorType.Validation);
+
+        /// <summary>The termination reason exceeds the maximum allowed length.</summary>
+        public static readonly Error TerminationReasonTooLong = new("Contract.TerminationReasonTooLong", "Termination reason exceeds the maximum allowed length.", ErrorType.Validation);
+
+        /// <summary>The completion or termination date is earlier than the start date.</summary>
+        public static readonly Error ClosedBeforeStart = new("Contract.ClosedBeforeStart", "A contract cannot be closed before its start date.", ErrorType.Validation);
+
+        /// <summary>The contract cannot be completed while money is owed.</summary>
+        public static readonly Error OutstandingDebt = new("Contract.OutstandingDebt", "A contract with an outstanding debt cannot be completed.", ErrorType.Conflict);
+
+        /// <summary>The operation requires an active contract.</summary>
+        public static readonly Error NotActive = new("Contract.NotActive", "Only an active contract can be changed.", ErrorType.Conflict);
+    }
+
     /// <summary>Errors related to the <see cref="Entities.Course"/> aggregate.</summary>
     public static class Course
     {
