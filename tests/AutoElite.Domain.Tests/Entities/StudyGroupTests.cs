@@ -20,7 +20,7 @@ public class StudyGroupTests
     {
         var student = User.Create(FullName.Create("Ivanov", "Ivan").Value, Email.Create("ivan@example.com").Value, null, null, _now).Value;
 
-        return Contract.Create("AE-1", student, course ?? _course, Money.Create(45000m, _rub).Value, null, _start, _end, _now).Value;
+        return Contract.Create("AE-1", student, course ?? _course, Money.Create(45000m, _rub).Value, Transmission.Manual, null, _start, _end, _now).Value;
     }
 
     private static StudyGroup CreateGroup(int capacity = 20) =>

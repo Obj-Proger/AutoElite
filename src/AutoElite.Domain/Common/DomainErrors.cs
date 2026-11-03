@@ -177,6 +177,12 @@ public static class DomainErrors
 
         /// <summary>The operation requires an active contract.</summary>
         public static readonly Error NotActive = new("Contract.NotActive", "Only an active contract can be changed.", ErrorType.Conflict);
+
+        /// <summary>The transmission is not a defined <see cref="Enums.Transmission"/> value.</summary>
+        public static readonly Error TransmissionNotDefined = new("Contract.TransmissionNotDefined", "Transmission is not valid.", ErrorType.Validation);
+
+        /// <summary>The new transmission is the same as the current one.</summary>
+        public static readonly Error TransmissionUnchanged = new("Contract.TransmissionUnchanged", "The contract already uses this transmission.", ErrorType.Conflict);
     }
 
     /// <summary>Errors related to the <see cref="Entities.Course"/> aggregate.</summary>
@@ -387,6 +393,9 @@ public static class DomainErrors
 
         /// <summary>The rating comment exceeds the maximum allowed length.</summary>
         public static readonly Error RatingCommentTooLong = new("DrivingSlot.RatingCommentTooLong", "Comment exceeds the maximum allowed length.", ErrorType.Validation);
+
+        /// <summary>The vehicle's gearbox differs from the one the contract trains on.</summary>
+        public static readonly Error TransmissionMismatch = new("DrivingSlot.TransmissionMismatch", "The vehicle has a different transmission than the contract.", ErrorType.Conflict);
     }
 
     /// <summary>Errors related to <see cref="ValueObjects.Email"/> validation.</summary>
@@ -1074,6 +1083,9 @@ public static class DomainErrors
 
         /// <summary>The user has no profile photo to remove.</summary>
         public static readonly Error PhotoNotSet = new("User.PhotoNotSet", "User has no profile photo.", ErrorType.Conflict);
+
+        /// <summary>The language is not a defined <see cref="Enums.Language"/> value.</summary>
+        public static readonly Error LanguageNotDefined = new("User.LanguageNotDefined", "Language is not supported.", ErrorType.Validation);
     }
 
     /// <summary>Errors related to the <see cref="Entities.UserRoleAssignment"/> entity.</summary>

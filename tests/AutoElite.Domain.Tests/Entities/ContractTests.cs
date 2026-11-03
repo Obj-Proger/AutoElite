@@ -20,7 +20,7 @@ public class ContractTests
     private static decimal Dec(string value) => decimal.Parse(value, CultureInfo.InvariantCulture);
 
     private static Contract CreateContract(decimal price = 45000m) =>
-        Contract.Create("AE-2026-001", _student, _course, Rub(price), _branchId, _start, _end, _now).Value;
+        Contract.Create("AE-2026-001", _student, _course, Rub(price), Transmission.Manual, _branchId, _start, _end, _now).Value;
 
     private static Contract CreateTerminatedContract()
     {
@@ -33,7 +33,7 @@ public class ContractTests
     [Fact]
     public void Create_ValidData_ReturnsActiveContractWithGivenValues()
     {
-        var result = Contract.Create("  AE-2026-001  ", _student, _course, Rub(40000m), _branchId, _start, _end, _now);
+        var result = Contract.Create("  AE-2026-001  ", _student, _course, Rub(40000m), Transmission.Manual, _branchId, _start, _end, _now);
 
         result.IsSuccess.Should().BeTrue();
         var contract = result.Value;
@@ -69,7 +69,7 @@ public class ContractTests
     [InlineData("   ")]
     public void Create_EmptyNumber_ReturnsNumberEmptyError(string? number)
     {
-        var result = Contract.Create(number, _student, _course, Rub(45000m), null, _start, _end, _now);
+        var result = Contract.Create(number, _student, _course, Rub(45000m), Transmission.Manual, null, _start, _end, _now);
 
         result.IsFailure.Should().BeTrue();
         result.Error.Should().Be(DomainErrors.Contract.NumberEmpty);
@@ -78,7 +78,7 @@ public class ContractTests
     [Fact]
     public void Create_NumberTooLong_ReturnsNumberTooLongError()
     {
-        var result = Contract.Create(new string('1', 51), _student, _course, Rub(45000m), null, _start, _end, _now);
+        var result = Contract.Create(new string('1', 51), _student, _course, Rub(45000m), Transmission.Manual, null, _start, _end, _now);
 
         result.IsFailure.Should().BeTrue();
         result.Error.Should().Be(DomainErrors.Contract.NumberTooLong);
@@ -90,7 +90,7 @@ public class ContractTests
         var student = User.Create(FullName.Create("Petrov", "Petr").Value, Email.Create("petr@example.com").Value, null, null, _now).Value;
         student.Deactivate(_now);
 
-        var result = Contract.Create("AE-1", student, _course, Rub(45000m), null, _start, _end, _now);
+        var result = Contract.Create("AE-1", student, _course, Rub(45000m), Transmission.Manual, null, _start, _end, _now);
 
         result.IsFailure.Should().BeTrue();
         result.Error.Should().Be(DomainErrors.Contract.StudentInactive);
@@ -102,7 +102,7 @@ public class ContractTests
         var course = Course.Create("Category A", LicenseCategory.A, Rub(30000m), 130, 18, null).Value;
         course.Deactivate();
 
-        var result = Contract.Create("AE-1", _student, course, Rub(30000m), null, _start, _end, _now);
+        var result = Contract.Create("AE-1", _student, course, Rub(30000m), Transmission.Manual, null, _start, _end, _now);
 
         result.IsFailure.Should().BeTrue();
         result.Error.Should().Be(DomainErrors.Contract.CourseInactive);
@@ -113,7 +113,7 @@ public class ContractTests
     [InlineData(-1)]
     public void Create_PriceNotPositive_ReturnsPriceNotPositiveError(int amount)
     {
-        var result = Contract.Create("AE-1", _student, _course, Rub(amount), null, _start, _end, _now);
+        var result = Contract.Create("AE-1", _student, _course, Rub(amount), Transmission.Manual, null, _start, _end, _now);
 
         result.IsFailure.Should().BeTrue();
         result.Error.Should().Be(DomainErrors.Contract.PriceNotPositive);
@@ -122,7 +122,7 @@ public class ContractTests
     [Fact]
     public void Create_PriceInOtherCurrencyThanCourse_ReturnsContractInThatCurrency()
     {
-        var result = Contract.Create("AE-1", _student, _course, Money.Create(500m, _usd).Value, null, _start, _end, _now);
+        var result = Contract.Create("AE-1", _student, _course, Money.Create(500m, _usd).Value, Transmission.Manual, null, _start, _end, _now);
 
         result.IsSuccess.Should().BeTrue();
         result.Value.PaidAmount.Should().Be(Money.Zero(_usd));
@@ -131,7 +131,7 @@ public class ContractTests
     [Fact]
     public void Create_EmptyBranchId_ReturnsBranchIdEmptyError()
     {
-        var result = Contract.Create("AE-1", _student, _course, Rub(45000m), Guid.Empty, _start, _end, _now);
+        var result = Contract.Create("AE-1", _student, _course, Rub(45000m), Transmission.Manual, Guid.Empty, _start, _end, _now);
 
         result.IsFailure.Should().BeTrue();
         result.Error.Should().Be(DomainErrors.Contract.BranchIdEmpty);
@@ -142,7 +142,7 @@ public class ContractTests
     [InlineData(-1)]
     public void Create_EndNotAfterStart_ReturnsEndNotAfterStartError(int daysAfterStart)
     {
-        var result = Contract.Create("AE-1", _student, _course, Rub(45000m), null, _start, _start.AddDays(daysAfterStart), _now);
+        var result = Contract.Create("AE-1", _student, _course, Rub(45000m), Transmission.Manual, null, _start, _start.AddDays(daysAfterStart), _now);
 
         result.IsFailure.Should().BeTrue();
         result.Error.Should().Be(DomainErrors.Contract.EndNotAfterStart);
@@ -599,5 +599,54 @@ public class ContractTests
 
         result.IsFailure.Should().BeTrue();
         result.Error.Should().Be(DomainErrors.Contract.NotActive);
+    }
+
+    [Fact]
+    public void Create_ValidData_StoresTransmission()
+    {
+        var result = Contract.Create("AE-1", _student, _course, Rub(45000m), Transmission.Automatic, null, _start, _end, _now);
+
+        result.Value.Transmission.Should().Be(Transmission.Automatic);
+    }
+
+    [Fact]
+    public void Create_UndefinedTransmission_ReturnsTransmissionNotDefinedError()
+    {
+        var result = Contract.Create("AE-1", _student, _course, Rub(45000m), (Transmission)0, null, _start, _end, _now);
+
+        result.IsFailure.Should().BeTrue();
+        result.Error.Should().Be(DomainErrors.Contract.TransmissionNotDefined);
+    }
+
+    [Fact]
+    public void ChangeTransmission_ActiveContract_ChangesTransmission()
+    {
+        var contract = CreateContract();
+
+        var result = contract.ChangeTransmission(Transmission.Automatic);
+
+        result.IsSuccess.Should().BeTrue();
+        contract.Transmission.Should().Be(Transmission.Automatic);
+    }
+
+    [Fact]
+    public void ChangeTransmission_SameTransmission_ReturnsTransmissionUnchangedError()
+    {
+        var contract = CreateContract();
+
+        var result = contract.ChangeTransmission(Transmission.Manual);
+
+        result.Error.Should().Be(DomainErrors.Contract.TransmissionUnchanged);
+    }
+
+    [Fact]
+    public void ChangeTransmission_TerminatedContract_ReturnsNotActiveError()
+    {
+        var contract = CreateTerminatedContract();
+
+        var result = contract.ChangeTransmission(Transmission.Automatic);
+
+        result.Error.Should().Be(DomainErrors.Contract.NotActive);
+        contract.Transmission.Should().Be(Transmission.Manual);
     }
 }

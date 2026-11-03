@@ -123,7 +123,7 @@ public sealed class DrivingSlot : AuditableEntity
     }
 
     /// <summary>Books the slot for the student of a contract and raises <see cref="DrivingLessonBookedDomainEvent"/>.</summary>
-    /// <param name="contract">The student's contract; it must be active and for the vehicle's licence category.</param>
+    /// <param name="contract">The student's contract; it must be active and for the vehicle's licence category and gearbox.</param>
     /// <param name="utcNow">The current UTC time; the lesson must not have started.</param>
     /// <returns>The booking, or a failure if the slot is not available or has started, or the contract does not fit.</returns>
     public Result<DrivingBooking> Book(Contract contract, DateTime utcNow)
@@ -139,6 +139,9 @@ public sealed class DrivingSlot : AuditableEntity
 
         if (contract.Category != Category)
             return Result.Failure<DrivingBooking>(DomainErrors.DrivingSlot.CategoryMismatch);
+
+        if (contract.Transmission != Transmission)
+            return Result.Failure<DrivingBooking>(DomainErrors.DrivingSlot.TransmissionMismatch);
 
         var booking = DrivingBooking.Create(contract.Id, contract.StudentId, utcNow);
         _bookings.Add(booking);

@@ -403,4 +403,61 @@ public class UserTests
 
         result.IsSuccess.Should().BeTrue();
     }
+
+    [Fact]
+    public void Create_WithoutLanguage_UsesRussian()
+    {
+        var user = User.Create(_fullName, _email, null, null, _now).Value;
+
+        user.PreferredLanguage.Should().Be(Language.Russian);
+    }
+
+    [Fact]
+    public void Create_WithLanguage_UsesIt()
+    {
+        var user = User.Create(_fullName, _email, null, null, _now, Language.English).Value;
+
+        user.PreferredLanguage.Should().Be(Language.English);
+    }
+
+    [Fact]
+    public void Create_UndefinedLanguage_ReturnsLanguageNotDefinedError()
+    {
+        var result = User.Create(_fullName, _email, null, null, _now, (Language)9);
+
+        result.IsFailure.Should().BeTrue();
+        result.Error.Should().Be(DomainErrors.User.LanguageNotDefined);
+    }
+
+    [Fact]
+    public void ChangeLanguage_ActiveUser_ChangesLanguage()
+    {
+        var user = CreateUser();
+
+        var result = user.ChangeLanguage(Language.English);
+
+        result.IsSuccess.Should().BeTrue();
+        user.PreferredLanguage.Should().Be(Language.English);
+    }
+
+    [Fact]
+    public void ChangeLanguage_UndefinedLanguage_ReturnsLanguageNotDefinedError()
+    {
+        var user = CreateUser();
+
+        var result = user.ChangeLanguage((Language)9);
+
+        result.Error.Should().Be(DomainErrors.User.LanguageNotDefined);
+        user.PreferredLanguage.Should().Be(Language.Russian);
+    }
+
+    [Fact]
+    public void ChangeLanguage_InactiveUser_ReturnsCannotModifyInactiveError()
+    {
+        var user = CreateInactiveUser();
+
+        var result = user.ChangeLanguage(Language.English);
+
+        result.Error.Should().Be(DomainErrors.User.CannotModifyInactive);
+    }
 }

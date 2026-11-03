@@ -29,7 +29,7 @@ public class DrivingSlotTests
     {
         var student = User.Create(FullName.Create("Ivanov", "Ivan").Value, Email.Create("ivan@example.com").Value, null, null, _now).Value;
 
-        return Contract.Create("AE-1", student, course ?? _course, Money.Create(45000m, _rub).Value, null, _start, _end, _now).Value;
+        return Contract.Create("AE-1", student, course ?? _course, Money.Create(45000m, _rub).Value, Transmission.Manual, null, _start, _end, _now).Value;
     }
 
     private static DrivingSlot OfferSlot() =>
@@ -535,5 +535,16 @@ public class DrivingSlotTests
         var result = CompletedSlot(CreateContract()).Rate(rating, null, _afterLesson);
 
         result.Error.Should().Be(DomainErrors.DrivingSlot.RatingOutOfRange);
+    }
+
+    [Fact]
+    public void Book_ContractForAnotherTransmission_ReturnsTransmissionMismatchError()
+    {
+        var contract = CreateContract();
+        contract.ChangeTransmission(Transmission.Automatic);
+
+        var result = OfferSlot().Book(contract, _now);
+
+        result.Error.Should().Be(DomainErrors.DrivingSlot.TransmissionMismatch);
     }
 }

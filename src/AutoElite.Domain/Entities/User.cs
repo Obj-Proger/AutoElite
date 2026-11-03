@@ -1,3 +1,4 @@
+using AutoElite.Domain.Enums;
 using AutoElite.Domain.Events;
 using AutoElite.Domain.ValueObjects;
 
@@ -40,12 +41,16 @@ public sealed class User : AuditableEntity
     /// </summary>
     public bool IsActive { get; private set; }
 
-    private User(Guid id, FullName fullName, Email email, PhoneNumber? phone, Guid? branchId) : base(id)
+    /// <summary>Gets the language notifications and emails are written in.</summary>
+    public Language PreferredLanguage { get; private set; }
+
+    private User(Guid id, FullName fullName, Email email, PhoneNumber? phone, Guid? branchId, Language preferredLanguage) : base(id)
     {
         FullName = fullName;
         Email = email;
         Phone = phone;
         BranchId = branchId;
+        PreferredLanguage = preferredLanguage;
         IsActive = true;
     }
 
@@ -60,14 +65,20 @@ public sealed class User : AuditableEntity
     /// <param name="phone">The user's validated phone number, if any.</param>
     /// <param name="branchId">The branch to assign the user to, or <see langword="null"/> for none.</param>
     /// <param name="utcNow">The current UTC time, used as the event timestamp.</param>
-    /// <returns>The created user, or a failure if <paramref name="branchId"/> is an empty GUID.</returns>
-    public static Result<User> Create(FullName fullName, Email email, PhoneNumber? phone, Guid? branchId, DateTime utcNow)
+    /// <param name="preferredLanguage">The language for notifications and emails; Russian unless given.</param>
+    /// <returns>The created user, or a failure if <paramref name="branchId"/> is an empty GUID or the language is not defined.</returns>
+    public static Result<User> Create(
+        FullName fullName, Email email, PhoneNumber? phone, Guid? branchId, DateTime utcNow, Language preferredLanguage = Language.Russian)
     {
         var branchIdResult = ValidateBranchId(branchId);
         if (branchIdResult.IsFailure)
             return Result.Failure<User>(branchIdResult.Error);
 
-        var user = new User(Guid.CreateVersion7(), fullName, email, phone, branchId);
+        var languageResult = Guard.DefinedEnum(preferredLanguage, DomainErrors.User.LanguageNotDefined);
+        if (languageResult.IsFailure)
+            return Result.Failure<User>(languageResult.Error);
+
+        var user = new User(Guid.CreateVersion7(), fullName, email, phone, branchId, preferredLanguage);
 
         user.RaiseDomainEvent(new UserRegisteredDomainEvent(user.Id, user.Email.Value, utcNow));
 
@@ -159,6 +170,22 @@ public sealed class User : AuditableEntity
             return Result.Failure(branchIdResult.Error);
 
         BranchId = branchId;
+
+        return Result.Success();
+    }
+
+    /// <summary>Changes the language notifications and emails are written in.</summary>
+    /// <returns>A failure if the user is inactive or the language is not defined.</returns>
+    public Result ChangeLanguage(Language language)
+    {
+        if (!IsActive)
+            return Result.Failure(DomainErrors.User.CannotModifyInactive);
+
+        var languageResult = Guard.DefinedEnum(language, DomainErrors.User.LanguageNotDefined);
+        if (languageResult.IsFailure)
+            return Result.Failure(languageResult.Error);
+
+        PreferredLanguage = language;
 
         return Result.Success();
     }

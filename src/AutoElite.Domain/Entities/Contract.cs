@@ -52,6 +52,9 @@ public sealed class Contract : AuditableEntity
     /// <summary>Gets the licence category of the course, copied when the contract was drawn up.</summary>
     public LicenseCategory Category { get; private set; }
 
+    /// <summary>Gets the gearbox the student trains on; lessons are booked only on vehicles with this gearbox.</summary>
+    public Transmission Transmission { get; private set; }
+
     /// <summary>Gets the identifier of the branch, or <see langword="null"/> if the contract is not tied to one.</summary>
     public Guid? BranchId { get; private set; }
 
@@ -97,13 +100,22 @@ public sealed class Contract : AuditableEntity
     public string? TerminationReason { get; private set; }
 
     private Contract(
-        Guid id, string number, Guid studentId, Course course, Guid? branchId, Money price, DateOnly startDate, DateOnly endDate)
+        Guid id,
+        string number,
+        Guid studentId,
+        Course course,
+        Money price,
+        Transmission transmission,
+        Guid? branchId,
+        DateOnly startDate,
+        DateOnly endDate)
         : base(id)
     {
         Number = number;
         StudentId = studentId;
         CourseId = course.Id;
         Category = course.Category;
+        Transmission = transmission;
         BranchId = branchId;
         Price = price;
         PaidAmount = Money.Zero(price.Currency);
@@ -122,6 +134,7 @@ public sealed class Contract : AuditableEntity
     /// <param name="student">The student. Checking that the user holds the student role is up to the caller.</param>
     /// <param name="course">The course; its identifier and licence category are copied.</param>
     /// <param name="price">The agreed price, usually the course price; must be greater than zero.</param>
+    /// <param name="transmission">The gearbox the student trains on (it determines the licence restriction).</param>
     /// <param name="branchId">The branch, if any.</param>
     /// <param name="startDate">The first day of training.</param>
     /// <param name="endDate">The planned last day of training; must be later than the start.</param>
@@ -132,6 +145,7 @@ public sealed class Contract : AuditableEntity
         User student,
         Course course,
         Money price,
+        Transmission transmission,
         Guid? branchId,
         DateOnly startDate,
         DateOnly endDate,
@@ -150,13 +164,18 @@ public sealed class Contract : AuditableEntity
         if (!price.IsPositive)
             return Result.Failure<Contract>(DomainErrors.Contract.PriceNotPositive);
 
+        var transmissionResult = Guard.DefinedEnum(transmission, DomainErrors.Contract.TransmissionNotDefined);
+        if (transmissionResult.IsFailure)
+            return Result.Failure<Contract>(transmissionResult.Error);
+
         if (branchId is { } branch && branch == Guid.Empty)
             return Result.Failure<Contract>(DomainErrors.Contract.BranchIdEmpty);
 
         if (endDate <= startDate)
             return Result.Failure<Contract>(DomainErrors.Contract.EndNotAfterStart);
 
-        var contract = new Contract(Guid.CreateVersion7(), numberResult.Value, student.Id, course, branchId, price, startDate, endDate);
+        var contract = new Contract(
+            Guid.CreateVersion7(), numberResult.Value, student.Id, course, price, transmission, branchId, startDate, endDate);
         contract.RaiseDomainEvent(new ContractCreatedDomainEvent(contract.Id, student.Id, course.Id, utcNow));
 
         return contract;
@@ -179,6 +198,25 @@ public sealed class Contract : AuditableEntity
             return Result.Failure(DomainErrors.Contract.PriceNotPositive);
 
         Price = price;
+
+        return Result.Success();
+    }
+
+    /// <summary>Changes the gearbox the student trains on, for example when they switch to an automatic.</summary>
+    /// <returns>A failure if the contract is not active, the transmission is not defined, or it is unchanged.</returns>
+    public Result ChangeTransmission(Transmission transmission)
+    {
+        if (Status != ContractStatus.Active)
+            return Result.Failure(DomainErrors.Contract.NotActive);
+
+        var transmissionResult = Guard.DefinedEnum(transmission, DomainErrors.Contract.TransmissionNotDefined);
+        if (transmissionResult.IsFailure)
+            return Result.Failure(transmissionResult.Error);
+
+        if (transmission == Transmission)
+            return Result.Failure(DomainErrors.Contract.TransmissionUnchanged);
+
+        Transmission = transmission;
 
         return Result.Success();
     }

@@ -28,7 +28,7 @@ public class TestSessionTests
         _examTemplate = TestTemplate.Create("Exam", LicenseCategory.B, TestRules.TrafficPoliceExam, blocks, QuestionSource.Official).Value;
 
         var student = User.Create(FullName.Create("Ivanov", "Ivan").Value, Email.Create("ivan@example.com").Value, null, null, _now).Value;
-        _contract = Contract.Create("AE-1", student, _course, Money.Create(45000m, _rub).Value, null, _start, _end, _now).Value;
+        _contract = Contract.Create("AE-1", student, _course, Money.Create(45000m, _rub).Value, Transmission.Manual, null, _start, _end, _now).Value;
     }
 
     private static Question CreateQuestion(Guid topicId, string text, params LicenseCategory[] categories) =>

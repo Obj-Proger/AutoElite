@@ -18,7 +18,7 @@ public class PaymentTests
     {
         var student = User.Create(FullName.Create("Ivanov", "Ivan").Value, Email.Create("ivan@example.com").Value, null, null, _now).Value;
 
-        return Contract.Create("AE-1", student, _course, Rub(45000m), null, _start, _end, _now).Value;
+        return Contract.Create("AE-1", student, _course, Rub(45000m), Transmission.Manual, null, _start, _end, _now).Value;
     }
 
     private static Payment Register(Contract contract, decimal amount = 15000m) =>

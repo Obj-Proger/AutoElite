@@ -31,7 +31,7 @@ public class TheoryLessonTests
     private Contract EnrollStudent()
     {
         var student = User.Create(FullName.Create("Ivanov", "Ivan").Value, Email.Create("ivan@example.com").Value, null, null, _now).Value;
-        var contract = Contract.Create("AE-1", student, _course, Money.Create(45000m, _rub).Value, null, _start, _end, _now).Value;
+        var contract = Contract.Create("AE-1", student, _course, Money.Create(45000m, _rub).Value, Transmission.Manual, null, _start, _end, _now).Value;
         _group.Enroll(contract, _now);
 
         return contract;
