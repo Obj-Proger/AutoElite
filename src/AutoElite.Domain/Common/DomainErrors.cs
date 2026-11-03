@@ -47,6 +47,39 @@ public static class DomainErrors
         public static readonly Error MiddleNameTooLong = new("FullName.MiddleNameTooLong", "Middle name exceeds the maximum allowed length.", ErrorType.Validation);
     }
 
+    /// <summary>Errors related to <see cref="ValueObjects.Currency"/> validation.</summary>
+    public static class Currency
+    {
+        /// <summary>The currency code is null, empty, or whitespace.</summary>
+        public static readonly Error Empty = new("Currency.Empty", "Currency code cannot be empty.", ErrorType.Validation);
+
+        /// <summary>The currency code is not three Latin letters.</summary>
+        public static readonly Error InvalidFormat = new("Currency.InvalidFormat", "Currency code must be a three-letter ISO 4217 code, e.g. RUB.", ErrorType.Validation);
+
+        /// <summary>The currency code is well formed but not in the list of supported currencies.</summary>
+        public static readonly Error NotSupported = new("Currency.NotSupported", "Currency is not supported.", ErrorType.Validation);
+    }
+
+    /// <summary>Errors related to <see cref="ValueObjects.Money"/> validation.</summary>
+    public static class Money
+    {
+        /// <summary>The amount has more decimal places than its currency allows.</summary>
+        public static readonly Error TooManyDecimalPlaces = new("Money.TooManyDecimalPlaces", "Amount has more decimal places than the currency allows.", ErrorType.Validation);
+
+        /// <summary>The absolute amount exceeds the maximum.</summary>
+        public static readonly Error TooLarge = new("Money.TooLarge", "Amount exceeds the maximum allowed value.", ErrorType.Validation);
+    }
+
+    /// <summary>Errors related to <see cref="ValueObjects.TimeInterval"/> validation.</summary>
+    public static class TimeInterval
+    {
+        /// <summary>The start or the end is not a UTC time.</summary>
+        public static readonly Error NotUtc = new("TimeInterval.NotUtc", "Start and end must be UTC times.", ErrorType.Validation);
+
+        /// <summary>The end is equal to or earlier than the start.</summary>
+        public static readonly Error EndNotAfterStart = new("TimeInterval.EndNotAfterStart", "End must be later than start.", ErrorType.Validation);
+    }
+
     /// <summary>Errors related to the <see cref="Entities.User"/> entity.</summary>
     public static class User
     {
