@@ -200,6 +200,58 @@ public static class DomainErrors
         public static readonly Error TooLarge = new("Money.TooLarge", "Amount exceeds the maximum allowed value.", ErrorType.Validation);
     }
 
+    /// <summary>Errors related to the <see cref="Entities.StudyGroup"/> aggregate.</summary>
+    public static class StudyGroup
+    {
+        /// <summary>The group name is null, empty, or whitespace.</summary>
+        public static readonly Error NameEmpty = new("StudyGroup.NameEmpty", "Group name cannot be empty.", ErrorType.Validation);
+
+        /// <summary>The group name exceeds the maximum allowed length.</summary>
+        public static readonly Error NameTooLong = new("StudyGroup.NameTooLong", "Group name exceeds the maximum allowed length.", ErrorType.Validation);
+
+        /// <summary>The course is no longer offered.</summary>
+        public static readonly Error CourseInactive = new("StudyGroup.CourseInactive", "A group cannot be formed for an inactive course.", ErrorType.Conflict);
+
+        /// <summary>The theory instructor identifier is an empty GUID.</summary>
+        public static readonly Error InstructorIdEmpty = new("StudyGroup.InstructorIdEmpty", "Theory instructor ID cannot be an empty GUID.", ErrorType.Validation);
+
+        /// <summary>The branch identifier was provided but is an empty GUID.</summary>
+        public static readonly Error BranchIdEmpty = new("StudyGroup.BranchIdEmpty", "Branch ID cannot be an empty GUID.", ErrorType.Validation);
+
+        /// <summary>The end date is equal to or earlier than the start date.</summary>
+        public static readonly Error EndNotAfterStart = new("StudyGroup.EndNotAfterStart", "End date must be later than start date.", ErrorType.Validation);
+
+        /// <summary>The capacity is below 1 or above the maximum.</summary>
+        public static readonly Error CapacityOutOfRange = new("StudyGroup.CapacityOutOfRange", "Capacity must be between 1 and 100.", ErrorType.Validation);
+
+        /// <summary>The capacity is lower than the number of current members.</summary>
+        public static readonly Error CapacityBelowMemberCount = new("StudyGroup.CapacityBelowMemberCount", "Capacity cannot be lower than the number of current members.", ErrorType.Conflict);
+
+        /// <summary>Only an active contract can be enrolled.</summary>
+        public static readonly Error ContractNotActive = new("StudyGroup.ContractNotActive", "Only an active contract can be enrolled in a group.", ErrorType.Conflict);
+
+        /// <summary>The contract is for a different course than the group.</summary>
+        public static readonly Error CourseMismatch = new("StudyGroup.CourseMismatch", "The contract is for a different course than the group.", ErrorType.Conflict);
+
+        /// <summary>The contract is already a current member of the group.</summary>
+        public static readonly Error AlreadyEnrolled = new("StudyGroup.AlreadyEnrolled", "The student is already a member of the group.", ErrorType.Conflict);
+
+        /// <summary>The group has no free places.</summary>
+        public static readonly Error GroupFull = new("StudyGroup.GroupFull", "The group is full.", ErrorType.Conflict);
+
+        /// <summary>The contract is not a current member of the group.</summary>
+        public static readonly Error NotEnrolled = new("StudyGroup.NotEnrolled", "The student is not a member of the group.", ErrorType.NotFound);
+
+        /// <summary>The group is already active, so activating it again is not a valid transition.</summary>
+        public static readonly Error AlreadyActive = new("StudyGroup.AlreadyActive", "Group is already active.", ErrorType.Conflict);
+
+        /// <summary>The group is already inactive, so deactivating it again is not a valid transition.</summary>
+        public static readonly Error AlreadyInactive = new("StudyGroup.AlreadyInactive", "Group is already inactive.", ErrorType.Conflict);
+
+        /// <summary>The operation modifies an inactive group, which is not allowed.</summary>
+        public static readonly Error CannotModifyInactive = new("StudyGroup.CannotModifyInactive", "An inactive group cannot be modified. Reactivate the group first.", ErrorType.Conflict);
+    }
+
     /// <summary>Errors related to <see cref="ValueObjects.TimeInterval"/> validation.</summary>
     public static class TimeInterval
     {
