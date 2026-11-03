@@ -27,9 +27,6 @@ public sealed class DrivingSlot : AuditableEntity
     /// <summary>The longest slot that can be offered.</summary>
     public static readonly TimeSpan MaxDuration = TimeSpan.FromHours(4);
 
-    /// <summary>A student rating at or below this value notifies the responsible managers.</summary>
-    public const int LowRatingThreshold = 2;
-
     private const int MaxReasonLength = 1000;
     private const int MaxNoteLength = 2000;
     private const int MinRating = 1;
@@ -157,9 +154,15 @@ public sealed class DrivingSlot : AuditableEntity
     /// </summary>
     /// <param name="cancelledByUserId">The student, instructor or staff member cancelling; <see langword="null"/> for the system.</param>
     /// <param name="reason">Why the booking is cancelled. Required.</param>
+    /// <param name="studentCancellationNotice">
+    /// How long before the start the student may still cancel (a school setting); later only staff can cancel.
+    /// </param>
     /// <param name="utcNow">The current UTC time; the lesson must not have started.</param>
-    /// <returns>A failure if there is no active booking, the lesson has started, or an argument is invalid.</returns>
-    public Result CancelBooking(Guid? cancelledByUserId, string? reason, DateTime utcNow)
+    /// <returns>
+    /// A failure if there is no active booking, the lesson has started, the student cancels too late, or an argument
+    /// is invalid.
+    /// </returns>
+    public Result CancelBooking(Guid? cancelledByUserId, string? reason, TimeSpan studentCancellationNotice, DateTime utcNow)
     {
         if (Status != DrivingSlotStatus.Booked)
             return Result.Failure(DomainErrors.DrivingSlot.NotBooked);
@@ -170,6 +173,9 @@ public sealed class DrivingSlot : AuditableEntity
         var argumentsResult = ValidateCancellation(cancelledByUserId, reason);
         if (argumentsResult.IsFailure)
             return argumentsResult;
+
+        if (cancelledByUserId == CurrentBooking!.StudentId && Time.StartUtc - utcNow < studentCancellationNotice)
+            return Result.Failure(DomainErrors.DrivingSlot.TooLateToCancel);
 
         CancelActiveBooking(cancelledByUserId, argumentsResult.Value, utcNow);
         Status = DrivingSlotStatus.Available;
@@ -210,10 +216,16 @@ public sealed class DrivingSlot : AuditableEntity
     /// <param name="actualHours">The actual length of the lesson; the contract checks the range.</param>
     /// <param name="skillGrades">The grades per skill, at most one per skill; may be empty.</param>
     /// <param name="instructorNote">An optional note for the student and the school.</param>
+    /// <param name="qualityWindowSize">The school's quality window, passed to the contract.</param>
     /// <param name="utcNow">The current UTC time; the lesson must have started.</param>
     /// <returns>A failure if there is no active booking, the lesson has not started, or an argument or the contract rejects the change.</returns>
     public Result Complete(
-        Contract contract, decimal actualHours, IReadOnlyCollection<SkillGrade> skillGrades, string? instructorNote, DateTime utcNow)
+        Contract contract,
+        decimal actualHours,
+        IReadOnlyCollection<SkillGrade> skillGrades,
+        string? instructorNote,
+        int qualityWindowSize,
+        DateTime utcNow)
     {
         var bookingResult = GetActiveBookingForLessonOutcome(contract.Id, utcNow);
         if (bookingResult.IsFailure)
@@ -226,7 +238,7 @@ public sealed class DrivingSlot : AuditableEntity
         if (noteResult.IsFailure)
             return Result.Failure(noteResult.Error);
 
-        var contractResult = contract.RecordPracticeLesson(actualHours, DrivingBooking.AverageOf(skillGrades));
+        var contractResult = contract.RecordPracticeLesson(actualHours, DrivingBooking.AverageOf(skillGrades), qualityWindowSize);
         if (contractResult.IsFailure)
             return contractResult;
 
@@ -260,14 +272,15 @@ public sealed class DrivingSlot : AuditableEntity
     }
 
     /// <summary>
-    /// Records the student's rating of a completed lesson. A rating at or below <see cref="LowRatingThreshold"/> raises
-    /// <see cref="LowDrivingLessonRatingDomainEvent"/> so the responsible managers are notified.
+    /// Records the student's rating of a completed lesson. A rating at or below <paramref name="lowRatingThreshold"/>
+    /// raises <see cref="LowDrivingLessonRatingDomainEvent"/> so the responsible managers are notified.
     /// </summary>
     /// <param name="rating">The rating from 1 to 5.</param>
     /// <param name="comment">An optional comment.</param>
+    /// <param name="lowRatingThreshold">The school's threshold for a low rating.</param>
     /// <param name="utcNow">The current UTC time.</param>
     /// <returns>A failure if the lesson was not completed, it was already rated, or an argument is invalid.</returns>
-    public Result Rate(int rating, string? comment, DateTime utcNow)
+    public Result Rate(int rating, string? comment, int lowRatingThreshold, DateTime utcNow)
     {
         var booking = CurrentBooking;
         if (booking is not { Status: DrivingBookingStatus.Completed })
@@ -285,7 +298,7 @@ public sealed class DrivingSlot : AuditableEntity
 
         booking.Rate(rating, commentResult.Value, utcNow);
 
-        if (rating <= LowRatingThreshold)
+        if (rating <= lowRatingThreshold)
             RaiseDomainEvent(new LowDrivingLessonRatingDomainEvent(Id, booking.Id, InstructorId, booking.StudentId, rating, utcNow));
 
         return Result.Success();

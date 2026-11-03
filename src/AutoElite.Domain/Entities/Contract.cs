@@ -22,8 +22,11 @@ namespace AutoElite.Domain.Entities;
 /// </remarks>
 public sealed class Contract : AuditableEntity
 {
-    /// <summary>The number of most recent practice grades the quality score is averaged over.</summary>
-    public const int QualityWindowSize = 10;
+    /// <summary>
+    /// The number of most recent practice grades the contract keeps; the quality score averages the last
+    /// N of them, where N is a school setting from 1 to this value.
+    /// </summary>
+    public const int MaxStoredGrades = 50;
 
     /// <summary>The lowest practice grade.</summary>
     public const decimal MinGrade = 1m;
@@ -79,16 +82,15 @@ public sealed class Contract : AuditableEntity
     /// <summary>Gets the number of theory lessons the student attended.</summary>
     public int AttendedTheoryLessons { get; private set; }
 
-    /// <summary>Gets the most recent practice grades, oldest first, at most <see cref="QualityWindowSize"/>.</summary>
+    /// <summary>Gets the most recent practice grades, oldest first, at most <see cref="MaxStoredGrades"/>.</summary>
     public IReadOnlyList<decimal> RecentGrades => _recentGrades.AsReadOnly();
 
     /// <summary>
-    /// Gets the training quality score: the average of <see cref="RecentGrades"/> rounded to two decimals,
-    /// or <see langword="null"/> before the first graded lesson.
+    /// Gets the training quality score (FR-4.3): the average of the last N grades, where N is the school's quality
+    /// window when the last graded lesson was recorded, rounded to two decimals; <see langword="null"/> before the
+    /// first graded lesson. It is stored so that reports can aggregate it in the database.
     /// </summary>
-    public decimal? QualityScore => _recentGrades.Count == 0
-        ? null
-        : decimal.Round(_recentGrades.Average(), GradeDecimals, MidpointRounding.AwayFromZero);
+    public decimal? QualityScore { get; private set; }
 
     /// <summary>Gets the contract status.</summary>
     public ContractStatus Status { get; private set; }
@@ -266,17 +268,23 @@ public sealed class Contract : AuditableEntity
         return Result.Success();
     }
 
-    /// <summary>Records a completed practical lesson: adds its hours and, if graded, its grade.</summary>
+    /// <summary>
+    /// Records a completed practical lesson: adds its hours and, if graded, its grade, and recalculates the quality score.
+    /// </summary>
     /// <param name="hours">The actual length of the lesson, greater than 0 and at most <see cref="MaxLessonHours"/>, with at most two decimals.</param>
     /// <param name="grade">
     /// The lesson grade (the average of the skill grades), from <see cref="MinGrade"/> to <see cref="MaxGrade"/>
     /// with at most two decimals, or <see langword="null"/> if the lesson was not graded.
     /// </param>
-    /// <returns>A failure if the contract is not active, or the hours or the grade are out of range.</returns>
-    public Result RecordPracticeLesson(decimal hours, decimal? grade)
+    /// <param name="qualityWindowSize">How many of the latest grades the quality score averages, from 1 to <see cref="MaxStoredGrades"/>.</param>
+    /// <returns>A failure if the contract is not active, or the hours, the grade or the window are out of range.</returns>
+    public Result RecordPracticeLesson(decimal hours, decimal? grade, int qualityWindowSize)
     {
         if (Status != ContractStatus.Active)
             return Result.Failure(DomainErrors.Contract.NotActive);
+
+        if (qualityWindowSize is < 1 or > MaxStoredGrades)
+            return Result.Failure(DomainErrors.Contract.QualityWindowOutOfRange);
 
         if (hours <= 0m || hours > MaxLessonHours || decimal.Round(hours, 2) != hours)
             return Result.Failure(DomainErrors.Contract.LessonHoursOutOfRange);
@@ -289,8 +297,11 @@ public sealed class Contract : AuditableEntity
         if (grade is { } recorded)
         {
             _recentGrades.Add(recorded);
-            if (_recentGrades.Count > QualityWindowSize)
+            if (_recentGrades.Count > MaxStoredGrades)
                 _recentGrades.RemoveAt(0);
+
+            QualityScore = decimal.Round(
+                _recentGrades.TakeLast(qualityWindowSize).Average(), GradeDecimals, MidpointRounding.AwayFromZero);
         }
 
         return Result.Success();

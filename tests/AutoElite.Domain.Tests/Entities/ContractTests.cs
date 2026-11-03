@@ -4,6 +4,8 @@ namespace AutoElite.Domain.Tests.Entities;
 
 public class ContractTests
 {
+    private const int QualityWindow = 10;
+
     private static readonly DateTime _now = new(2026, 1, 1, 12, 0, 0, DateTimeKind.Utc);
     private static readonly DateOnly _start = new(2026, 2, 1);
     private static readonly DateOnly _end = new(2026, 5, 31);
@@ -318,7 +320,7 @@ public class ContractTests
     {
         var contract = CreateContract();
 
-        var result = contract.RecordPracticeLesson(1.5m, 4.33m);
+        var result = contract.RecordPracticeLesson(1.5m, 4.33m, QualityWindow);
 
         result.IsSuccess.Should().BeTrue();
         contract.CompletedPracticeHours.Should().Be(1.5m);
@@ -331,7 +333,7 @@ public class ContractTests
     {
         var contract = CreateContract();
 
-        contract.RecordPracticeLesson(2m, null);
+        contract.RecordPracticeLesson(2m, null, QualityWindow);
 
         contract.CompletedPracticeHours.Should().Be(2m);
         contract.QualityScore.Should().BeNull();
@@ -341,27 +343,65 @@ public class ContractTests
     public void RecordPracticeLesson_SeveralLessons_AccumulatesHoursAndAveragesGrades()
     {
         var contract = CreateContract();
-        contract.RecordPracticeLesson(1.5m, 3m);
-        contract.RecordPracticeLesson(1.5m, 4m);
+        contract.RecordPracticeLesson(1.5m, 3m, QualityWindow);
+        contract.RecordPracticeLesson(1.5m, 4m, QualityWindow);
 
-        contract.RecordPracticeLesson(2m, 4m);
+        contract.RecordPracticeLesson(2m, 4m, QualityWindow);
 
         contract.CompletedPracticeHours.Should().Be(5m);
         contract.QualityScore.Should().Be(3.67m);
     }
 
     [Fact]
-    public void RecordPracticeLesson_MoreGradesThanWindow_KeepsOnlyTheMostRecent()
+    public void RecordPracticeLesson_MoreGradesThanWindow_AveragesOnlyTheGradesInTheWindow()
     {
         var contract = CreateContract();
-        contract.RecordPracticeLesson(1m, 1m);
-        for (var lesson = 0; lesson < Contract.QualityWindowSize; lesson++)
-            contract.RecordPracticeLesson(1m, 5m);
+        contract.RecordPracticeLesson(1m, 1m, QualityWindow);
+        for (var lesson = 1; lesson < QualityWindow; lesson++)
+            contract.RecordPracticeLesson(1m, 5m, QualityWindow);
 
-        var score = contract.QualityScore;
+        contract.RecordPracticeLesson(1m, 5m, QualityWindow);
 
-        contract.RecentGrades.Should().HaveCount(10).And.OnlyContain(grade => grade == 5m);
-        score.Should().Be(5m);
+        contract.RecentGrades.Should().HaveCount(11);
+        contract.QualityScore.Should().Be(5m);
+    }
+
+    [Fact]
+    public void RecordPracticeLesson_MoreGradesThanStored_KeepsTheLatestFifty()
+    {
+        var contract = CreateContract();
+        contract.RecordPracticeLesson(1m, 1m, QualityWindow);
+        for (var lesson = 0; lesson < Contract.MaxStoredGrades; lesson++)
+            contract.RecordPracticeLesson(1m, 4m, QualityWindow);
+
+        var grades = contract.RecentGrades;
+
+        grades.Should().HaveCount(Contract.MaxStoredGrades).And.OnlyContain(grade => grade == 4m);
+    }
+
+    [Fact]
+    public void RecordPracticeLesson_LargerWindow_RecalculatesOverMoreGrades()
+    {
+        var contract = CreateContract();
+        contract.RecordPracticeLesson(1m, 2m, 1);
+        contract.RecordPracticeLesson(1m, 4m, 1);
+
+        contract.RecordPracticeLesson(1m, 3m, 3);
+
+        contract.QualityScore.Should().Be(3m);
+    }
+
+    [Theory]
+    [InlineData(0)]
+    [InlineData(51)]
+    public void RecordPracticeLesson_WindowOutOfRange_ReturnsQualityWindowOutOfRangeError(int window)
+    {
+        var contract = CreateContract();
+
+        var result = contract.RecordPracticeLesson(1m, 4m, window);
+
+        result.Error.Should().Be(DomainErrors.Contract.QualityWindowOutOfRange);
+        contract.CompletedPracticeHours.Should().Be(0m);
     }
 
     [Theory]
@@ -373,7 +413,7 @@ public class ContractTests
     {
         var contract = CreateContract();
 
-        var result = contract.RecordPracticeLesson(Dec(hours), null);
+        var result = contract.RecordPracticeLesson(Dec(hours), null, QualityWindow);
 
         result.IsFailure.Should().BeTrue();
         result.Error.Should().Be(DomainErrors.Contract.LessonHoursOutOfRange);
@@ -385,7 +425,7 @@ public class ContractTests
     {
         var contract = CreateContract();
 
-        var result = contract.RecordPracticeLesson(Contract.MaxLessonHours, null);
+        var result = contract.RecordPracticeLesson(Contract.MaxLessonHours, null, QualityWindow);
 
         result.IsSuccess.Should().BeTrue();
     }
@@ -398,7 +438,7 @@ public class ContractTests
     {
         var contract = CreateContract();
 
-        var result = contract.RecordPracticeLesson(1m, Dec(grade));
+        var result = contract.RecordPracticeLesson(1m, Dec(grade), QualityWindow);
 
         result.IsFailure.Should().BeTrue();
         result.Error.Should().Be(DomainErrors.Contract.GradeOutOfRange);
@@ -410,7 +450,7 @@ public class ContractTests
     {
         var contract = CreateTerminatedContract();
 
-        var result = contract.RecordPracticeLesson(1m, 4m);
+        var result = contract.RecordPracticeLesson(1m, 4m, QualityWindow);
 
         result.IsFailure.Should().BeTrue();
         result.Error.Should().Be(DomainErrors.Contract.NotActive);

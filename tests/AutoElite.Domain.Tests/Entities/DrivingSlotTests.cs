@@ -2,6 +2,9 @@ namespace AutoElite.Domain.Tests.Entities;
 
 public class DrivingSlotTests
 {
+    private const int QualityWindow = 10;
+    private const int LowRatingThreshold = 2;
+
     private static readonly DateTime _now = new(2026, 3, 1, 8, 0, 0, DateTimeKind.Utc);
     private static readonly DateTime _lessonStart = new(2026, 3, 5, 10, 0, 0, DateTimeKind.Utc);
     private static readonly DateTime _afterLesson = _lessonStart.AddHours(2);
@@ -14,6 +17,8 @@ public class DrivingSlotTests
         LicensePlate.Create("А123ВС96").Value, "Lada", "Vesta", 2024, LicenseCategory.B, Transmission.Manual, null, _now).Value;
     private static readonly Course _course =
         Course.Create("Category B", LicenseCategory.B, Money.Create(45000m, _rub).Value, 134, 56, null).Value;
+
+    private static readonly TimeSpan _notice = TimeSpan.FromHours(24);
 
     private static readonly SkillGrade[] _grades =
     [
@@ -46,7 +51,7 @@ public class DrivingSlotTests
     private static DrivingSlot CompletedSlot(Contract contract)
     {
         var slot = BookedSlot(contract);
-        slot.Complete(contract, 1.5m, _grades, null, _afterLesson);
+        slot.Complete(contract, 1.5m, _grades, null, QualityWindow, _afterLesson);
 
         return slot;
     }
@@ -201,7 +206,7 @@ public class DrivingSlotTests
         var booking = slot.CurrentBooking!;
         slot.ClearDomainEvents();
 
-        var result = slot.CancelBooking(_studentUserId, "  Feeling unwell  ", _now);
+        var result = slot.CancelBooking(_studentUserId, "  Feeling unwell  ", _notice, _now);
 
         result.IsSuccess.Should().BeTrue();
         slot.Status.Should().Be(DrivingSlotStatus.Available);
@@ -218,7 +223,7 @@ public class DrivingSlotTests
     public void CancelBooking_ThenBookAgain_KeepsCancelledBookingAsHistory()
     {
         var slot = BookedSlot(CreateContract());
-        slot.CancelBooking(_studentUserId, "Feeling unwell", _now);
+        slot.CancelBooking(_studentUserId, "Feeling unwell", _notice, _now);
 
         var result = slot.Book(CreateContract(), _now);
 
@@ -230,7 +235,7 @@ public class DrivingSlotTests
     [Fact]
     public void CancelBooking_AvailableSlot_ReturnsNotBookedError()
     {
-        var result = OfferSlot().CancelBooking(_studentUserId, "Feeling unwell", _now);
+        var result = OfferSlot().CancelBooking(_studentUserId, "Feeling unwell", _notice, _now);
 
         result.Error.Should().Be(DomainErrors.DrivingSlot.NotBooked);
     }
@@ -240,7 +245,7 @@ public class DrivingSlotTests
     {
         var slot = BookedSlot(CreateContract());
 
-        var result = slot.CancelBooking(_studentUserId, "Feeling unwell", _lessonStart);
+        var result = slot.CancelBooking(_studentUserId, "Feeling unwell", _notice, _lessonStart);
 
         result.Error.Should().Be(DomainErrors.DrivingSlot.AlreadyStarted);
         slot.Status.Should().Be(DrivingSlotStatus.Booked);
@@ -253,7 +258,7 @@ public class DrivingSlotTests
     {
         var slot = BookedSlot(CreateContract());
 
-        var result = slot.CancelBooking(_studentUserId, reason, _now);
+        var result = slot.CancelBooking(_studentUserId, reason, _notice, _now);
 
         result.Error.Should().Be(DomainErrors.DrivingSlot.ReasonEmpty);
         slot.Status.Should().Be(DrivingSlotStatus.Booked);
@@ -264,7 +269,7 @@ public class DrivingSlotTests
     {
         var slot = BookedSlot(CreateContract());
 
-        var result = slot.CancelBooking(Guid.Empty, "Feeling unwell", _now);
+        var result = slot.CancelBooking(Guid.Empty, "Feeling unwell", _notice, _now);
 
         result.Error.Should().Be(DomainErrors.DrivingSlot.UserIdEmpty);
     }
@@ -327,7 +332,7 @@ public class DrivingSlotTests
         var slot = BookedSlot(contract);
         slot.ClearDomainEvents();
 
-        var result = slot.Complete(contract, 1.5m, _grades, "  Work on parking  ", _afterLesson);
+        var result = slot.Complete(contract, 1.5m, _grades, "  Work on parking  ", QualityWindow, _afterLesson);
 
         result.IsSuccess.Should().BeTrue();
         slot.Status.Should().Be(DrivingSlotStatus.Completed);
@@ -350,7 +355,7 @@ public class DrivingSlotTests
         var contract = CreateContract();
         var slot = BookedSlot(contract);
 
-        slot.Complete(contract, 2m, [], null, _afterLesson);
+        slot.Complete(contract, 2m, [], null, QualityWindow, _afterLesson);
 
         slot.CurrentBooking!.AverageGrade.Should().BeNull();
         contract.CompletedPracticeHours.Should().Be(2m);
@@ -363,7 +368,7 @@ public class DrivingSlotTests
         var contract = CreateContract();
         var slot = BookedSlot(contract);
 
-        var result = slot.Complete(contract, 1.5m, _grades, null, _lessonStart.AddTicks(-1));
+        var result = slot.Complete(contract, 1.5m, _grades, null, QualityWindow, _lessonStart.AddTicks(-1));
 
         result.Error.Should().Be(DomainErrors.DrivingSlot.NotStarted);
     }
@@ -371,7 +376,7 @@ public class DrivingSlotTests
     [Fact]
     public void Complete_AvailableSlot_ReturnsNotBookedError()
     {
-        var result = OfferSlot().Complete(CreateContract(), 1.5m, _grades, null, _afterLesson);
+        var result = OfferSlot().Complete(CreateContract(), 1.5m, _grades, null, QualityWindow, _afterLesson);
 
         result.Error.Should().Be(DomainErrors.DrivingSlot.NotBooked);
     }
@@ -383,7 +388,7 @@ public class DrivingSlotTests
         var otherContract = CreateContract();
         var slot = BookedSlot(contract);
 
-        var result = slot.Complete(otherContract, 1.5m, _grades, null, _afterLesson);
+        var result = slot.Complete(otherContract, 1.5m, _grades, null, QualityWindow, _afterLesson);
 
         result.Error.Should().Be(DomainErrors.DrivingSlot.ContractMismatch);
         otherContract.CompletedPracticeHours.Should().Be(0m);
@@ -396,7 +401,7 @@ public class DrivingSlotTests
         var slot = BookedSlot(contract);
         SkillGrade[] grades = [SkillGrade.Create(DrivingSkill.Manoeuvring, 3).Value, SkillGrade.Create(DrivingSkill.Manoeuvring, 4).Value];
 
-        var result = slot.Complete(contract, 1.5m, grades, null, _afterLesson);
+        var result = slot.Complete(contract, 1.5m, grades, null, QualityWindow, _afterLesson);
 
         result.Error.Should().Be(DomainErrors.DrivingSlot.DuplicateSkillGrade);
     }
@@ -407,7 +412,7 @@ public class DrivingSlotTests
         var contract = CreateContract();
         var slot = BookedSlot(contract);
 
-        var result = slot.Complete(contract, 0m, _grades, null, _afterLesson);
+        var result = slot.Complete(contract, 0m, _grades, null, QualityWindow, _afterLesson);
 
         result.Error.Should().Be(DomainErrors.Contract.LessonHoursOutOfRange);
         slot.Status.Should().Be(DrivingSlotStatus.Booked);
@@ -421,7 +426,7 @@ public class DrivingSlotTests
         var contract = CreateContract();
         var slot = BookedSlot(contract);
 
-        var result = slot.Complete(contract, 1.5m, _grades, new string('a', 2001), _afterLesson);
+        var result = slot.Complete(contract, 1.5m, _grades, new string('a', 2001), QualityWindow, _afterLesson);
 
         result.Error.Should().Be(DomainErrors.DrivingSlot.NoteTooLong);
         contract.CompletedPracticeHours.Should().Be(0m);
@@ -459,7 +464,7 @@ public class DrivingSlotTests
         var slot = CompletedSlot(CreateContract());
         slot.ClearDomainEvents();
 
-        var result = slot.Rate(5, "  Great lesson  ", _afterLesson);
+        var result = slot.Rate(5, "  Great lesson  ", LowRatingThreshold, _afterLesson);
 
         result.IsSuccess.Should().BeTrue();
         var booking = slot.CurrentBooking!;
@@ -478,7 +483,7 @@ public class DrivingSlotTests
         var slot = CompletedSlot(contract);
         slot.ClearDomainEvents();
 
-        slot.Rate(rating, null, _afterLesson);
+        slot.Rate(rating, null, LowRatingThreshold, _afterLesson);
 
         slot.DomainEvents.Should().ContainSingle().Which.Should().Be(new LowDrivingLessonRatingDomainEvent(
             slot.Id, slot.CurrentBooking!.Id, _instructorId, contract.StudentId, rating, _afterLesson));
@@ -490,7 +495,7 @@ public class DrivingSlotTests
         var slot = CompletedSlot(CreateContract());
         slot.ClearDomainEvents();
 
-        slot.Rate(3, null, _afterLesson);
+        slot.Rate(3, null, LowRatingThreshold, _afterLesson);
 
         slot.DomainEvents.Should().BeEmpty();
     }
@@ -498,7 +503,7 @@ public class DrivingSlotTests
     [Fact]
     public void Rate_LessonNotCompleted_ReturnsLessonNotCompletedError()
     {
-        var result = BookedSlot(CreateContract()).Rate(5, null, _afterLesson);
+        var result = BookedSlot(CreateContract()).Rate(5, null, LowRatingThreshold, _afterLesson);
 
         result.Error.Should().Be(DomainErrors.DrivingSlot.LessonNotCompleted);
     }
@@ -510,7 +515,7 @@ public class DrivingSlotTests
         var slot = BookedSlot(contract);
         slot.MarkNoShow(contract, null, _afterLesson);
 
-        var result = slot.Rate(5, null, _afterLesson);
+        var result = slot.Rate(5, null, LowRatingThreshold, _afterLesson);
 
         result.Error.Should().Be(DomainErrors.DrivingSlot.LessonNotCompleted);
     }
@@ -519,9 +524,9 @@ public class DrivingSlotTests
     public void Rate_AlreadyRated_ReturnsAlreadyRatedError()
     {
         var slot = CompletedSlot(CreateContract());
-        slot.Rate(5, null, _afterLesson);
+        slot.Rate(5, null, LowRatingThreshold, _afterLesson);
 
-        var result = slot.Rate(1, null, _afterLesson);
+        var result = slot.Rate(1, null, LowRatingThreshold, _afterLesson);
 
         result.Error.Should().Be(DomainErrors.DrivingSlot.AlreadyRated);
         slot.CurrentBooking!.StudentRating.Should().Be(5);
@@ -532,7 +537,7 @@ public class DrivingSlotTests
     [InlineData(6)]
     public void Rate_RatingOutOfRange_ReturnsRatingOutOfRangeError(int rating)
     {
-        var result = CompletedSlot(CreateContract()).Rate(rating, null, _afterLesson);
+        var result = CompletedSlot(CreateContract()).Rate(rating, null, LowRatingThreshold, _afterLesson);
 
         result.Error.Should().Be(DomainErrors.DrivingSlot.RatingOutOfRange);
     }
@@ -546,5 +551,50 @@ public class DrivingSlotTests
         var result = OfferSlot().Book(contract, _now);
 
         result.Error.Should().Be(DomainErrors.DrivingSlot.TransmissionMismatch);
+    }
+
+    [Fact]
+    public void CancelBooking_ByStudentWithEnoughNotice_Cancels()
+    {
+        var contract = CreateContract();
+        var slot = BookedSlot(contract);
+
+        var result = slot.CancelBooking(contract.StudentId, "Exam at university", _notice, _lessonStart - _notice);
+
+        result.IsSuccess.Should().BeTrue();
+        slot.Status.Should().Be(DrivingSlotStatus.Available);
+    }
+
+    [Fact]
+    public void CancelBooking_ByStudentTooLate_ReturnsTooLateToCancelError()
+    {
+        var contract = CreateContract();
+        var slot = BookedSlot(contract);
+
+        var result = slot.CancelBooking(contract.StudentId, "Overslept", _notice, _lessonStart - _notice + TimeSpan.FromMinutes(1));
+
+        result.Error.Should().Be(DomainErrors.DrivingSlot.TooLateToCancel);
+        slot.Status.Should().Be(DrivingSlotStatus.Booked);
+    }
+
+    [Fact]
+    public void CancelBooking_ByStaffLate_Cancels()
+    {
+        var slot = BookedSlot(CreateContract());
+
+        var result = slot.CancelBooking(_instructorId, "Vehicle broke down", _notice, _lessonStart.AddMinutes(-10));
+
+        result.IsSuccess.Should().BeTrue();
+    }
+
+    [Fact]
+    public void Rate_CustomThreshold_RaisesLowRatingEventUpToIt()
+    {
+        var slot = CompletedSlot(CreateContract());
+        slot.ClearDomainEvents();
+
+        slot.Rate(3, null, 3, _afterLesson);
+
+        slot.DomainEvents.Should().ContainSingle().Which.Should().BeOfType<LowDrivingLessonRatingDomainEvent>();
     }
 }

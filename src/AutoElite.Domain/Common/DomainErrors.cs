@@ -183,6 +183,9 @@ public static class DomainErrors
 
         /// <summary>The new transmission is the same as the current one.</summary>
         public static readonly Error TransmissionUnchanged = new("Contract.TransmissionUnchanged", "The contract already uses this transmission.", ErrorType.Conflict);
+
+        /// <summary>The quality window is below 1 or above the number of stored grades.</summary>
+        public static readonly Error QualityWindowOutOfRange = new("Contract.QualityWindowOutOfRange", "Quality window must be between 1 and 50 lessons.", ErrorType.Validation);
     }
 
     /// <summary>Errors related to the <see cref="Entities.Course"/> aggregate.</summary>
@@ -396,6 +399,9 @@ public static class DomainErrors
 
         /// <summary>The vehicle's gearbox differs from the one the contract trains on.</summary>
         public static readonly Error TransmissionMismatch = new("DrivingSlot.TransmissionMismatch", "The vehicle has a different transmission than the contract.", ErrorType.Conflict);
+
+        /// <summary>The student cancels later than the school allows; only staff can cancel now.</summary>
+        public static readonly Error TooLateToCancel = new("DrivingSlot.TooLateToCancel", "It is too late to cancel this lesson yourself; contact the instructor or the school.", ErrorType.Conflict);
     }
 
     /// <summary>Errors related to <see cref="ValueObjects.Email"/> validation.</summary>
@@ -736,6 +742,28 @@ public static class DomainErrors
 
         /// <summary>The operation modifies an inactive question, which is not allowed.</summary>
         public static readonly Error CannotModifyInactive = new("Question.CannotModifyInactive", "An inactive question cannot be modified. Reactivate it first.", ErrorType.Conflict);
+    }
+
+    /// <summary>Errors related to the <see cref="Entities.SchoolSettings"/> aggregate.</summary>
+    public static class SchoolSettings
+    {
+        /// <summary>The quality window is below 1 or above the number of grades a contract stores.</summary>
+        public static readonly Error QualityWindowOutOfRange = new("SchoolSettings.QualityWindowOutOfRange", "Quality window must be between 1 and 50 lessons.", ErrorType.Validation);
+
+        /// <summary>The low rating threshold is outside the range from 1 to 4.</summary>
+        public static readonly Error LowRatingThresholdOutOfRange = new("SchoolSettings.LowRatingThresholdOutOfRange", "Low rating threshold must be between 1 and 4.", ErrorType.Validation);
+
+        /// <summary>The student cancellation notice is negative or longer than 72 hours.</summary>
+        public static readonly Error CancellationNoticeOutOfRange = new("SchoolSettings.CancellationNoticeOutOfRange", "Student cancellation notice must be between 0 and 72 hours.", ErrorType.Validation);
+
+        /// <summary>More lesson reminders are configured than allowed.</summary>
+        public static readonly Error TooManyReminders = new("SchoolSettings.TooManyReminders", "At most 3 lesson reminders are allowed.", ErrorType.Validation);
+
+        /// <summary>A lesson reminder is closer than 15 minutes or further than 7 days before the lesson.</summary>
+        public static readonly Error ReminderLeadTimeOutOfRange = new("SchoolSettings.ReminderLeadTimeOutOfRange", "Each lesson reminder must be between 15 minutes and 7 days before the lesson.", ErrorType.Validation);
+
+        /// <summary>The same lesson reminder lead time is configured more than once.</summary>
+        public static readonly Error DuplicateReminder = new("SchoolSettings.DuplicateReminder", "Lesson reminders must not repeat.", ErrorType.Validation);
     }
 
     /// <summary>Errors related to <see cref="ValueObjects.SkillGrade"/> validation.</summary>
