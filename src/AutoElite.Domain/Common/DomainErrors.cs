@@ -5,6 +5,43 @@ namespace AutoElite.Domain.Common;
 /// </summary>
 public static class DomainErrors
 {
+    /// <summary>Errors related to the <see cref="Entities.Document"/> aggregate.</summary>
+    public static class Document
+    {
+        /// <summary>The file name is null, empty, or whitespace.</summary>
+        public static readonly Error FileNameEmpty = new("Document.FileNameEmpty", "File name cannot be empty.", ErrorType.Validation);
+
+        /// <summary>The file name exceeds the maximum allowed length.</summary>
+        public static readonly Error FileNameTooLong = new("Document.FileNameTooLong", "File name exceeds the maximum allowed length.", ErrorType.Validation);
+
+        /// <summary>The file name contains a path or control characters.</summary>
+        public static readonly Error FileNameInvalid = new("Document.FileNameInvalid", "File name must not contain a path or control characters.", ErrorType.Validation);
+
+        /// <summary>The file extension is not in the list of allowed formats.</summary>
+        public static readonly Error FormatNotAllowed = new("Document.FormatNotAllowed", "This file format is not allowed.", ErrorType.Validation);
+
+        /// <summary>The declared content type does not match the file extension.</summary>
+        public static readonly Error ContentTypeMismatch = new("Document.ContentTypeMismatch", "The file type does not match its extension.", ErrorType.Validation);
+
+        /// <summary>The file is empty or larger than 20 MB.</summary>
+        public static readonly Error SizeOutOfRange = new("Document.SizeOutOfRange", "File size must be between 1 byte and 20 MB.", ErrorType.Validation);
+
+        /// <summary>The storage key is null, empty, or whitespace.</summary>
+        public static readonly Error StorageKeyEmpty = new("Document.StorageKeyEmpty", "Storage key cannot be empty.", ErrorType.Validation);
+
+        /// <summary>The storage key exceeds the maximum allowed length.</summary>
+        public static readonly Error StorageKeyTooLong = new("Document.StorageKeyTooLong", "Storage key exceeds the maximum allowed length.", ErrorType.Validation);
+
+        /// <summary>The description exceeds the maximum allowed length.</summary>
+        public static readonly Error DescriptionTooLong = new("Document.DescriptionTooLong", "Description exceeds the maximum allowed length.", ErrorType.Validation);
+
+        /// <summary>The uploader identifier is an empty GUID.</summary>
+        public static readonly Error UploadedByUserIdEmpty = new("Document.UploadedByUserIdEmpty", "User ID cannot be an empty GUID.", ErrorType.Validation);
+
+        /// <summary>Deletion of the document was already requested.</summary>
+        public static readonly Error AlreadyDeleted = new("Document.AlreadyDeleted", "The document is already deleted.", ErrorType.Conflict);
+    }
+
     /// <summary>Errors related to the <see cref="Entities.DrivingSlot"/> aggregate.</summary>
     public static class DrivingSlot
     {
