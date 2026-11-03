@@ -16,7 +16,9 @@ public class LayerDependencyTests
     [InlineData("AutoElite.Infrastructure")]
     [InlineData("AutoElite.API")]
     [InlineData("Microsoft.AspNetCore")]
-    public void Application_DoesNotReferenceOuterLayers(string forbiddenPrefix)
+    [InlineData("Microsoft.EntityFrameworkCore")]
+    [InlineData("Npgsql")]
+    public void Application_DoesNotReferenceOuterLayersOrDataAccess(string forbiddenPrefix)
     {
         var references = Layers.ReferencedAssemblyNames(Layers.Application);
 

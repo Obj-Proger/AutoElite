@@ -16,4 +16,23 @@ public static class ApplicationErrors
     /// <param name="fieldErrors">The failures of the individual fields.</param>
     public static Error ValidationFailed(IReadOnlyList<FieldError> fieldErrors) =>
         Error.Validation(ValidationFailedCode, "One or more validation errors occurred.", fieldErrors);
+
+    /// <summary>
+    /// Creates the error returned when an entity does not exist or is outside the caller's data scope,
+    /// so that callers cannot learn about records they may not see. The code is <c>{Entity}.NotFound</c>.
+    /// </summary>
+    /// <typeparam name="TEntity">The type of the missing entity.</typeparam>
+    public static Error NotFound<TEntity>()
+        where TEntity : BaseEntity =>
+        Error.NotFound($"{typeof(TEntity).Name}.NotFound", $"{typeof(TEntity).Name} was not found.");
+
+    /// <summary>Errors of authentication and authorization.</summary>
+    public static class Auth
+    {
+        /// <summary>The request requires a signed-in user, but the caller is anonymous.</summary>
+        public static readonly Error Unauthenticated = Error.Unauthorized("Auth.Unauthenticated", "You need to sign in.");
+
+        /// <summary>The signed-in user does not have a role that the request requires.</summary>
+        public static readonly Error Forbidden = Error.Forbidden("Auth.Forbidden", "You do not have permission to perform this action.");
+    }
 }

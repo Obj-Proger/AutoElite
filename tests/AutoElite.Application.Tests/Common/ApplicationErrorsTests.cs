@@ -20,4 +20,32 @@ public class ApplicationErrorsTests
     {
         ApplicationErrors.InvalidFieldCode.Should().Be("Validation.Invalid");
     }
+
+    [Fact]
+    public void NotFound_UsesTheEntityNameInCodeAndMessage()
+    {
+        var error = ApplicationErrors.NotFound<TestEntity>();
+
+        error.Code.Should().Be("TestEntity.NotFound");
+        error.Message.Should().Be("TestEntity was not found.");
+        error.Type.Should().Be(ErrorType.NotFound);
+    }
+
+    [Fact]
+    public void Unauthenticated_IsAnUnauthorizedError()
+    {
+        var error = ApplicationErrors.Auth.Unauthenticated;
+
+        error.Code.Should().Be("Auth.Unauthenticated");
+        error.Type.Should().Be(ErrorType.Unauthorized);
+    }
+
+    [Fact]
+    public void Forbidden_IsAForbiddenError()
+    {
+        var error = ApplicationErrors.Auth.Forbidden;
+
+        error.Code.Should().Be("Auth.Forbidden");
+        error.Type.Should().Be(ErrorType.Forbidden);
+    }
 }
