@@ -490,6 +490,19 @@ public static class DomainErrors
         public static readonly Error CannotModifyInactive = new("StudyGroup.CannotModifyInactive", "An inactive group cannot be modified. Reactivate the group first.", ErrorType.Conflict);
     }
 
+    /// <summary>Errors related to <see cref="ValueObjects.TestBlock"/> validation.</summary>
+    public static class TestBlock
+    {
+        /// <summary>The question count is below 1 or above 100.</summary>
+        public static readonly Error QuestionCountOutOfRange = new("TestBlock.QuestionCountOutOfRange", "A block must draw between 1 and 100 questions.", ErrorType.Validation);
+
+        /// <summary>A topic identifier is an empty GUID.</summary>
+        public static readonly Error TopicIdEmpty = new("TestBlock.TopicIdEmpty", "Topic ID cannot be an empty GUID.", ErrorType.Validation);
+
+        /// <summary>The same topic is listed more than once.</summary>
+        public static readonly Error DuplicateTopic = new("TestBlock.DuplicateTopic", "Each topic can be listed only once.", ErrorType.Validation);
+    }
+
     /// <summary>Errors related to <see cref="ValueObjects.TestRules"/> validation.</summary>
     public static class TestRules
     {
@@ -501,6 +514,9 @@ public static class DomainErrors
 
         /// <summary>The allowed mistakes are negative or not fewer than the questions.</summary>
         public static readonly Error MaxMistakesOutOfRange = new("TestRules.MaxMistakesOutOfRange", "Allowed mistakes must be at least 0 and fewer than the questions.", ErrorType.Validation);
+
+        /// <summary>The mistakes allowed per block are negative or more than the mistakes allowed in total.</summary>
+        public static readonly Error MaxMistakesPerBlockOutOfRange = new("TestRules.MaxMistakesPerBlockOutOfRange", "Mistakes allowed per block must be between 0 and the mistakes allowed in total.", ErrorType.Validation);
 
         /// <summary>The questions added per mistake are negative or above 20.</summary>
         public static readonly Error ExtraQuestionsOutOfRange = new("TestRules.ExtraQuestionsOutOfRange", "Questions added per mistake must be between 0 and 20.", ErrorType.Validation);
@@ -524,11 +540,20 @@ public static class DomainErrors
         /// <summary>The category is not a defined <see cref="Enums.LicenseCategory"/> value.</summary>
         public static readonly Error CategoryNotDefined = new("TestTemplate.CategoryNotDefined", "Category is not a valid licence category.", ErrorType.Validation);
 
-        /// <summary>A topic identifier is an empty GUID.</summary>
-        public static readonly Error TopicIdEmpty = new("TestTemplate.TopicIdEmpty", "Topic ID cannot be an empty GUID.", ErrorType.Validation);
+        /// <summary>No block was given.</summary>
+        public static readonly Error NoBlocks = new("TestTemplate.NoBlocks", "A template must have at least one block.", ErrorType.Validation);
 
-        /// <summary>The same topic is listed more than once.</summary>
-        public static readonly Error DuplicateTopic = new("TestTemplate.DuplicateTopic", "Each topic can be listed only once.", ErrorType.Validation);
+        /// <summary>More blocks than allowed were given.</summary>
+        public static readonly Error TooManyBlocks = new("TestTemplate.TooManyBlocks", "A template can have at most 10 blocks.", ErrorType.Validation);
+
+        /// <summary>A block covering all topics is combined with other blocks.</summary>
+        public static readonly Error AllTopicsBlockNotAlone = new("TestTemplate.AllTopicsBlockNotAlone", "A block covering all topics must be the only block.", ErrorType.Validation);
+
+        /// <summary>The same topic belongs to more than one block.</summary>
+        public static readonly Error TopicInSeveralBlocks = new("TestTemplate.TopicInSeveralBlocks", "A topic can belong to only one block.", ErrorType.Validation);
+
+        /// <summary>The blocks together draw a different number of questions than the rules require.</summary>
+        public static readonly Error BlocksDoNotMatchQuestionCount = new("TestTemplate.BlocksDoNotMatchQuestionCount", "The blocks must draw exactly the number of questions in the rules.", ErrorType.Validation);
 
         /// <summary>The source is not a defined <see cref="Enums.QuestionSource"/> value.</summary>
         public static readonly Error SourceNotDefined = new("TestTemplate.SourceNotDefined", "Question source is not valid.", ErrorType.Validation);

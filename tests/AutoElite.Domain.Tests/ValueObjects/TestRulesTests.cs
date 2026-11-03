@@ -3,18 +3,25 @@ namespace AutoElite.Domain.Tests.ValueObjects;
 public class TestRulesTests
 {
     private static Result<TestRules> Create(
-        int questionCount = 20, int timeLimitMinutes = 20, int maxMistakes = 2, int extraQuestions = 5, int extraTimeMinutes = 5) =>
-        TestRules.Create(questionCount, TimeSpan.FromMinutes(timeLimitMinutes), maxMistakes, extraQuestions, TimeSpan.FromMinutes(extraTimeMinutes));
+        int questionCount = 20,
+        int timeLimitMinutes = 20,
+        int maxMistakes = 2,
+        int? maxMistakesPerBlock = 1,
+        int extraQuestions = 5,
+        int extraTimeMinutes = 5) =>
+        TestRules.Create(
+            questionCount, TimeSpan.FromMinutes(timeLimitMinutes), maxMistakes, maxMistakesPerBlock, extraQuestions, TimeSpan.FromMinutes(extraTimeMinutes));
 
     [Fact]
     public void Create_ValidValues_ReturnsRules()
     {
-        var result = Create(questionCount: 40, timeLimitMinutes: 30, maxMistakes: 4, extraQuestions: 10, extraTimeMinutes: 10);
+        var result = Create(questionCount: 40, timeLimitMinutes: 30, maxMistakes: 4, maxMistakesPerBlock: 2, extraQuestions: 10, extraTimeMinutes: 10);
 
         result.IsSuccess.Should().BeTrue();
         result.Value.QuestionCount.Should().Be(40);
         result.Value.TimeLimit.Should().Be(TimeSpan.FromMinutes(30));
         result.Value.MaxMistakes.Should().Be(4);
+        result.Value.MaxMistakesPerBlock.Should().Be(2);
         result.Value.ExtraQuestionsPerMistake.Should().Be(10);
         result.Value.ExtraTimePerMistake.Should().Be(TimeSpan.FromMinutes(10));
         result.Value.HasAddOnQuestions.Should().BeTrue();
@@ -42,7 +49,7 @@ public class TestRulesTests
     [InlineData(101)]
     public void Create_QuestionCountOutOfRange_ReturnsQuestionCountOutOfRangeError(int questionCount)
     {
-        var result = Create(questionCount: questionCount, maxMistakes: 0);
+        var result = Create(questionCount: questionCount, maxMistakes: 0, maxMistakesPerBlock: null);
 
         result.Error.Should().Be(DomainErrors.TestRules.QuestionCountOutOfRange);
     }
@@ -83,6 +90,35 @@ public class TestRulesTests
         var result = Create(maxMistakes: 19);
 
         result.IsSuccess.Should().BeTrue();
+    }
+
+    [Fact]
+    public void Create_WithoutPerBlockLimit_ReturnsRules()
+    {
+        var result = Create(maxMistakesPerBlock: null);
+
+        result.IsSuccess.Should().BeTrue();
+        result.Value.MaxMistakesPerBlock.Should().BeNull();
+    }
+
+    [Theory]
+    [InlineData(0)]
+    [InlineData(2)]
+    public void Create_PerBlockLimitWithinRange_ReturnsRules(int maxMistakesPerBlock)
+    {
+        var result = Create(maxMistakesPerBlock: maxMistakesPerBlock);
+
+        result.IsSuccess.Should().BeTrue();
+    }
+
+    [Theory]
+    [InlineData(-1)]
+    [InlineData(3)]
+    public void Create_PerBlockLimitOutOfRange_ReturnsMaxMistakesPerBlockOutOfRangeError(int maxMistakesPerBlock)
+    {
+        var result = Create(maxMistakesPerBlock: maxMistakesPerBlock);
+
+        result.Error.Should().Be(DomainErrors.TestRules.MaxMistakesPerBlockOutOfRange);
     }
 
     [Theory]
