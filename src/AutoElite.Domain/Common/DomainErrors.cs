@@ -28,6 +28,16 @@ public static class DomainErrors
         public static readonly Error MarkedByUserIdEmpty = new("LessonAttendance.MarkedByUserIdEmpty", "User ID cannot be an empty GUID.", ErrorType.Validation);
     }
 
+    /// <summary>Errors related to <see cref="ValueObjects.LicensePlate"/> validation.</summary>
+    public static class LicensePlate
+    {
+        /// <summary>The plate is null, empty, or whitespace.</summary>
+        public static readonly Error Empty = new("LicensePlate.Empty", "Licence plate cannot be empty.", ErrorType.Validation);
+
+        /// <summary>The plate is not 2 to 15 letters and digits after removing spaces and hyphens.</summary>
+        public static readonly Error InvalidFormat = new("LicensePlate.InvalidFormat", "Licence plate must consist of 2 to 15 letters and digits.", ErrorType.Validation);
+    }
+
     /// <summary>Errors related to the <see cref="Entities.Payment"/> aggregate.</summary>
     public static class Payment
     {
@@ -253,6 +263,37 @@ public static class DomainErrors
         public static readonly Error TooLarge = new("Money.TooLarge", "Amount exceeds the maximum allowed value.", ErrorType.Validation);
     }
 
+    /// <summary>Errors related to the <see cref="Entities.DrivingRoute"/> aggregate.</summary>
+    public static class DrivingRoute
+    {
+        /// <summary>The name is null, empty, or whitespace.</summary>
+        public static readonly Error NameEmpty = new("DrivingRoute.NameEmpty", "Route name cannot be empty.", ErrorType.Validation);
+
+        /// <summary>The name exceeds the maximum allowed length.</summary>
+        public static readonly Error NameTooLong = new("DrivingRoute.NameTooLong", "Route name exceeds the maximum allowed length.", ErrorType.Validation);
+
+        /// <summary>The description is null, empty, or whitespace.</summary>
+        public static readonly Error DescriptionEmpty = new("DrivingRoute.DescriptionEmpty", "Route description cannot be empty.", ErrorType.Validation);
+
+        /// <summary>The description exceeds the maximum allowed length.</summary>
+        public static readonly Error DescriptionTooLong = new("DrivingRoute.DescriptionTooLong", "Route description exceeds the maximum allowed length.", ErrorType.Validation);
+
+        /// <summary>The author identifier is an empty GUID.</summary>
+        public static readonly Error AuthorIdEmpty = new("DrivingRoute.AuthorIdEmpty", "Author ID cannot be an empty GUID.", ErrorType.Validation);
+
+        /// <summary>The training ground identifier was provided but is an empty GUID.</summary>
+        public static readonly Error TrainingGroundIdEmpty = new("DrivingRoute.TrainingGroundIdEmpty", "Training ground ID cannot be an empty GUID.", ErrorType.Validation);
+
+        /// <summary>The route is already active, so activating it again is not a valid transition.</summary>
+        public static readonly Error AlreadyActive = new("DrivingRoute.AlreadyActive", "Route is already active.", ErrorType.Conflict);
+
+        /// <summary>The route is already inactive, so deactivating it again is not a valid transition.</summary>
+        public static readonly Error AlreadyInactive = new("DrivingRoute.AlreadyInactive", "Route is already inactive.", ErrorType.Conflict);
+
+        /// <summary>The operation modifies an inactive route, which is not allowed.</summary>
+        public static readonly Error CannotModifyInactive = new("DrivingRoute.CannotModifyInactive", "An inactive route cannot be modified. Reactivate it first.", ErrorType.Conflict);
+    }
+
     /// <summary>Errors related to the <see cref="Entities.StudyGroup"/> aggregate.</summary>
     public static class StudyGroup
     {
@@ -451,6 +492,31 @@ public static class DomainErrors
         public static readonly Error AuthorIdEmpty = new("LeadNote.AuthorIdEmpty", "Author ID cannot be an empty GUID.", ErrorType.Validation);
     }
 
+    /// <summary>Errors related to the <see cref="Entities.TrainingGround"/> aggregate.</summary>
+    public static class TrainingGround
+    {
+        /// <summary>The name is null, empty, or whitespace.</summary>
+        public static readonly Error NameEmpty = new("TrainingGround.NameEmpty", "Training ground name cannot be empty.", ErrorType.Validation);
+
+        /// <summary>The name exceeds the maximum allowed length.</summary>
+        public static readonly Error NameTooLong = new("TrainingGround.NameTooLong", "Training ground name exceeds the maximum allowed length.", ErrorType.Validation);
+
+        /// <summary>The description exceeds the maximum allowed length.</summary>
+        public static readonly Error DescriptionTooLong = new("TrainingGround.DescriptionTooLong", "Description exceeds the maximum allowed length.", ErrorType.Validation);
+
+        /// <summary>The branch identifier was provided but is an empty GUID.</summary>
+        public static readonly Error BranchIdEmpty = new("TrainingGround.BranchIdEmpty", "Branch ID cannot be an empty GUID.", ErrorType.Validation);
+
+        /// <summary>The training ground is already active, so activating it again is not a valid transition.</summary>
+        public static readonly Error AlreadyActive = new("TrainingGround.AlreadyActive", "Training ground is already active.", ErrorType.Conflict);
+
+        /// <summary>The training ground is already inactive, so deactivating it again is not a valid transition.</summary>
+        public static readonly Error AlreadyInactive = new("TrainingGround.AlreadyInactive", "Training ground is already inactive.", ErrorType.Conflict);
+
+        /// <summary>The operation modifies an inactive training ground, which is not allowed.</summary>
+        public static readonly Error CannotModifyInactive = new("TrainingGround.CannotModifyInactive", "An inactive training ground cannot be modified. Reactivate it first.", ErrorType.Conflict);
+    }
+
     /// <summary>Errors related to the <see cref="Entities.User"/> entity.</summary>
     public static class User
     {
@@ -502,5 +568,39 @@ public static class DomainErrors
 
         /// <summary>The role being taken away belongs to the last active administrator.</summary>
         public static readonly Error LastAdministrator = new("UserRoleAssignment.LastAdministrator", "The school must keep at least one active administrator.", ErrorType.Conflict);
+    }
+
+    /// <summary>Errors related to the <see cref="Entities.Vehicle"/> aggregate.</summary>
+    public static class Vehicle
+    {
+        /// <summary>The make is null, empty, or whitespace.</summary>
+        public static readonly Error MakeEmpty = new("Vehicle.MakeEmpty", "Make cannot be empty.", ErrorType.Validation);
+
+        /// <summary>The make exceeds the maximum allowed length.</summary>
+        public static readonly Error MakeTooLong = new("Vehicle.MakeTooLong", "Make exceeds the maximum allowed length.", ErrorType.Validation);
+
+        /// <summary>The model exceeds the maximum allowed length.</summary>
+        public static readonly Error ModelTooLong = new("Vehicle.ModelTooLong", "Model exceeds the maximum allowed length.", ErrorType.Validation);
+
+        /// <summary>The model year is before 1950 or after next year.</summary>
+        public static readonly Error YearOutOfRange = new("Vehicle.YearOutOfRange", "Model year is out of range.", ErrorType.Validation);
+
+        /// <summary>The category is not a defined <see cref="Enums.LicenseCategory"/> value.</summary>
+        public static readonly Error CategoryNotDefined = new("Vehicle.CategoryNotDefined", "Category is not a valid licence category.", ErrorType.Validation);
+
+        /// <summary>The transmission is not a defined <see cref="Enums.Transmission"/> value.</summary>
+        public static readonly Error TransmissionNotDefined = new("Vehicle.TransmissionNotDefined", "Transmission is not valid.", ErrorType.Validation);
+
+        /// <summary>The branch identifier was provided but is an empty GUID.</summary>
+        public static readonly Error BranchIdEmpty = new("Vehicle.BranchIdEmpty", "Branch ID cannot be an empty GUID.", ErrorType.Validation);
+
+        /// <summary>The vehicle is already active, so activating it again is not a valid transition.</summary>
+        public static readonly Error AlreadyActive = new("Vehicle.AlreadyActive", "Vehicle is already active.", ErrorType.Conflict);
+
+        /// <summary>The vehicle is already inactive, so deactivating it again is not a valid transition.</summary>
+        public static readonly Error AlreadyInactive = new("Vehicle.AlreadyInactive", "Vehicle is already inactive.", ErrorType.Conflict);
+
+        /// <summary>The operation modifies an inactive vehicle, which is not allowed.</summary>
+        public static readonly Error CannotModifyInactive = new("Vehicle.CannotModifyInactive", "An inactive vehicle cannot be modified. Reactivate it first.", ErrorType.Conflict);
     }
 }
