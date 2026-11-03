@@ -78,6 +78,76 @@ public static class DomainErrors
         public static readonly Error RatingCommentTooLong = new("DrivingSlot.RatingCommentTooLong", "Comment exceeds the maximum allowed length.", ErrorType.Validation);
     }
 
+    /// <summary>Errors related to the <see cref="Entities.Exam"/> aggregate.</summary>
+    public static class Exam
+    {
+        /// <summary>The study group is inactive.</summary>
+        public static readonly Error GroupInactive = new("Exam.GroupInactive", "An exam cannot be scheduled for an inactive group.", ErrorType.Conflict);
+
+        /// <summary>The kind is not a defined <see cref="Enums.ExamKind"/> value.</summary>
+        public static readonly Error KindNotDefined = new("Exam.KindNotDefined", "Exam kind is not valid.", ErrorType.Validation);
+
+        /// <summary>A theory exam was scheduled without a test template.</summary>
+        public static readonly Error TemplateRequired = new("Exam.TemplateRequired", "A theory exam requires a test template.", ErrorType.Validation);
+
+        /// <summary>A practical exam was given a test template.</summary>
+        public static readonly Error TemplateNotAllowed = new("Exam.TemplateNotAllowed", "A practical exam does not use a test template.", ErrorType.Validation);
+
+        /// <summary>The test template is no longer used.</summary>
+        public static readonly Error TemplateInactive = new("Exam.TemplateInactive", "An inactive test template cannot be used for an exam.", ErrorType.Conflict);
+
+        /// <summary>The template is for another licence category than the group.</summary>
+        public static readonly Error TemplateCategoryMismatch = new("Exam.TemplateCategoryMismatch", "The test template is for a different licence category than the group.", ErrorType.Conflict);
+
+        /// <summary>The exam would start at or before the current time.</summary>
+        public static readonly Error ScheduledInPast = new("Exam.ScheduledInPast", "An exam must be scheduled in the future.", ErrorType.Validation);
+
+        /// <summary>The exam is cancelled.</summary>
+        public static readonly Error NotScheduled = new("Exam.NotScheduled", "The exam is cancelled.", ErrorType.Conflict);
+
+        /// <summary>The exam already has results, so it took place.</summary>
+        public static readonly Error HasResults = new("Exam.HasResults", "An exam with results cannot be moved or cancelled.", ErrorType.Conflict);
+
+        /// <summary>No reason was given for the cancellation.</summary>
+        public static readonly Error CancellationReasonEmpty = new("Exam.CancellationReasonEmpty", "A reason is required to cancel an exam.", ErrorType.Validation);
+
+        /// <summary>The cancellation reason exceeds the maximum allowed length.</summary>
+        public static readonly Error CancellationReasonTooLong = new("Exam.CancellationReasonTooLong", "Cancellation reason exceeds the maximum allowed length.", ErrorType.Validation);
+
+        /// <summary>The result does not match the kind of the exam.</summary>
+        public static readonly Error WrongKind = new("Exam.WrongKind", "This kind of result cannot be recorded for this exam.", ErrorType.Conflict);
+
+        /// <summary>The test attempt was not started for this exam.</summary>
+        public static readonly Error SessionNotForExam = new("Exam.SessionNotForExam", "The test attempt does not belong to this exam.", ErrorType.Validation);
+
+        /// <summary>The test attempt is still in progress.</summary>
+        public static readonly Error SessionNotFinished = new("Exam.SessionNotFinished", "The test attempt is not finished yet.", ErrorType.Conflict);
+
+        /// <summary>Results can be recorded only once the exam has started.</summary>
+        public static readonly Error NotStarted = new("Exam.NotStarted", "The exam has not started yet.", ErrorType.Conflict);
+
+        /// <summary>The group passed in is not the exam's group.</summary>
+        public static readonly Error GroupMismatch = new("Exam.GroupMismatch", "The group does not belong to the exam.", ErrorType.Validation);
+
+        /// <summary>The contract is not a current member of the exam's group.</summary>
+        public static readonly Error NotGroupMember = new("Exam.NotGroupMember", "The student is not a member of the group.", ErrorType.Conflict);
+
+        /// <summary>The student already has a result; correct it instead.</summary>
+        public static readonly Error AlreadyRecorded = new("Exam.AlreadyRecorded", "The student already has a result for this exam.", ErrorType.Conflict);
+
+        /// <summary>The student has no result to correct.</summary>
+        public static readonly Error ResultNotFound = new("Exam.ResultNotFound", "The student has no result for this exam.", ErrorType.NotFound);
+
+        /// <summary>The score is negative or above the maximum.</summary>
+        public static readonly Error ScoreOutOfRange = new("Exam.ScoreOutOfRange", "Score must be between 0 and 1000.", ErrorType.Validation);
+
+        /// <summary>The comment exceeds the maximum allowed length.</summary>
+        public static readonly Error CommentTooLong = new("Exam.CommentTooLong", "Comment exceeds the maximum allowed length.", ErrorType.Validation);
+
+        /// <summary>The identifier of the user entering the result is an empty GUID.</summary>
+        public static readonly Error UserIdEmpty = new("Exam.UserIdEmpty", "User ID cannot be an empty GUID.", ErrorType.Validation);
+    }
+
     /// <summary>Errors related to <see cref="ValueObjects.Email"/> validation.</summary>
     public static class Email
     {
