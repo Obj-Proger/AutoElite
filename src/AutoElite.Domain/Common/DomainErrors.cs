@@ -47,6 +47,22 @@ public static class DomainErrors
         public static readonly Error MiddleNameTooLong = new("FullName.MiddleNameTooLong", "Middle name exceeds the maximum allowed length.", ErrorType.Validation);
     }
 
+    /// <summary>Errors related to <see cref="ValueObjects.Address"/> validation.</summary>
+    public static class Address
+    {
+        /// <summary>The city is null, empty, or whitespace.</summary>
+        public static readonly Error CityEmpty = new("Address.CityEmpty", "City cannot be empty.", ErrorType.Validation);
+
+        /// <summary>The city exceeds the maximum allowed length.</summary>
+        public static readonly Error CityTooLong = new("Address.CityTooLong", "City exceeds the maximum allowed length.", ErrorType.Validation);
+
+        /// <summary>The street part of the address is null, empty, or whitespace.</summary>
+        public static readonly Error StreetEmpty = new("Address.StreetEmpty", "Street address cannot be empty.", ErrorType.Validation);
+
+        /// <summary>The street part of the address exceeds the maximum allowed length.</summary>
+        public static readonly Error StreetTooLong = new("Address.StreetTooLong", "Street address exceeds the maximum allowed length.", ErrorType.Validation);
+    }
+
     /// <summary>Errors related to <see cref="ValueObjects.Currency"/> validation.</summary>
     public static class Currency
     {
@@ -78,6 +94,31 @@ public static class DomainErrors
 
         /// <summary>The end is equal to or earlier than the start.</summary>
         public static readonly Error EndNotAfterStart = new("TimeInterval.EndNotAfterStart", "End must be later than start.", ErrorType.Validation);
+    }
+
+    /// <summary>Errors related to the <see cref="Entities.Branch"/> entity.</summary>
+    public static class Branch
+    {
+        /// <summary>The branch name is null, empty, or whitespace.</summary>
+        public static readonly Error NameEmpty = new("Branch.NameEmpty", "Branch name cannot be empty.", ErrorType.Validation);
+
+        /// <summary>The branch name exceeds the maximum allowed length.</summary>
+        public static readonly Error NameTooLong = new("Branch.NameTooLong", "Branch name exceeds the maximum allowed length.", ErrorType.Validation);
+
+        /// <summary>The time zone identifier is null, empty, or whitespace.</summary>
+        public static readonly Error TimeZoneEmpty = new("Branch.TimeZoneEmpty", "Time zone cannot be empty.", ErrorType.Validation);
+
+        /// <summary>The time zone identifier is not a known IANA identifier.</summary>
+        public static readonly Error TimeZoneUnknown = new("Branch.TimeZoneUnknown", "Time zone must be a known IANA identifier, e.g. Europe/Moscow.", ErrorType.Validation);
+
+        /// <summary>The branch is already active, so activating it again is not a valid transition.</summary>
+        public static readonly Error AlreadyActive = new("Branch.AlreadyActive", "Branch is already active.", ErrorType.Conflict);
+
+        /// <summary>The branch is already inactive, so deactivating it again is not a valid transition.</summary>
+        public static readonly Error AlreadyInactive = new("Branch.AlreadyInactive", "Branch is already inactive.", ErrorType.Conflict);
+
+        /// <summary>The operation modifies an inactive branch, which is not allowed.</summary>
+        public static readonly Error CannotModifyInactive = new("Branch.CannotModifyInactive", "An inactive branch cannot be modified. Reactivate the branch first.", ErrorType.Conflict);
     }
 
     /// <summary>Errors related to the <see cref="Entities.User"/> entity.</summary>
