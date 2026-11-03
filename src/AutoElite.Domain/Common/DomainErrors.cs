@@ -121,6 +121,71 @@ public static class DomainErrors
         public static readonly Error CannotModifyInactive = new("Branch.CannotModifyInactive", "An inactive branch cannot be modified. Reactivate the branch first.", ErrorType.Conflict);
     }
 
+    /// <summary>Errors related to the <see cref="Entities.Lead"/> aggregate.</summary>
+    public static class Lead
+    {
+        /// <summary>The contact name is null, empty, or whitespace.</summary>
+        public static readonly Error ContactNameEmpty = new("Lead.ContactNameEmpty", "Contact name cannot be empty.", ErrorType.Validation);
+
+        /// <summary>The contact name exceeds the maximum allowed length.</summary>
+        public static readonly Error ContactNameTooLong = new("Lead.ContactNameTooLong", "Contact name exceeds the maximum allowed length.", ErrorType.Validation);
+
+        /// <summary>Neither a phone number nor an email address was given.</summary>
+        public static readonly Error ContactRequired = new("Lead.ContactRequired", "A phone number or an email address is required.", ErrorType.Validation);
+
+        /// <summary>The source is not a defined <see cref="Enums.LeadSource"/> value.</summary>
+        public static readonly Error SourceNotDefined = new("Lead.SourceNotDefined", "Source is not a valid lead source.", ErrorType.Validation);
+
+        /// <summary>The desired category is not a defined <see cref="Enums.LicenseCategory"/> value.</summary>
+        public static readonly Error CategoryNotDefined = new("Lead.CategoryNotDefined", "Desired category is not a valid licence category.", ErrorType.Validation);
+
+        /// <summary>The comment exceeds the maximum allowed length.</summary>
+        public static readonly Error CommentTooLong = new("Lead.CommentTooLong", "Comment exceeds the maximum allowed length.", ErrorType.Validation);
+
+        /// <summary>The branch identifier was provided but is an empty GUID.</summary>
+        public static readonly Error BranchIdEmpty = new("Lead.BranchIdEmpty", "Branch ID cannot be an empty GUID.", ErrorType.Validation);
+
+        /// <summary>The manager identifier is an empty GUID.</summary>
+        public static readonly Error ManagerIdEmpty = new("Lead.ManagerIdEmpty", "Manager ID cannot be an empty GUID.", ErrorType.Validation);
+
+        /// <summary>The contract identifier is an empty GUID.</summary>
+        public static readonly Error ContractIdEmpty = new("Lead.ContractIdEmpty", "Contract ID cannot be an empty GUID.", ErrorType.Validation);
+
+        /// <summary>The identifier of the user making the change was provided but is an empty GUID.</summary>
+        public static readonly Error UserIdEmpty = new("Lead.UserIdEmpty", "User ID cannot be an empty GUID.", ErrorType.Validation);
+
+        /// <summary>No reason was given for losing the lead.</summary>
+        public static readonly Error LostReasonEmpty = new("Lead.LostReasonEmpty", "A reason is required when a lead is lost.", ErrorType.Validation);
+
+        /// <summary>The lost reason exceeds the maximum allowed length.</summary>
+        public static readonly Error LostReasonTooLong = new("Lead.LostReasonTooLong", "Lost reason exceeds the maximum allowed length.", ErrorType.Validation);
+
+        /// <summary>The manager is already responsible for the lead.</summary>
+        public static readonly Error ManagerAlreadyAssigned = new("Lead.ManagerAlreadyAssigned", "This manager is already assigned to the lead.", ErrorType.Conflict);
+
+        /// <summary>The operation requires a new or in-progress lead.</summary>
+        public static readonly Error NotOpen = new("Lead.NotOpen", "Only a new or in-progress lead can be changed.", ErrorType.Conflict);
+
+        /// <summary>Work can be started only on a new lead.</summary>
+        public static readonly Error NotNew = new("Lead.NotNew", "Only a new lead can be taken into work.", ErrorType.Conflict);
+
+        /// <summary>Only a lost lead can be reopened.</summary>
+        public static readonly Error NotLost = new("Lead.NotLost", "Only a lost lead can be reopened.", ErrorType.Conflict);
+    }
+
+    /// <summary>Errors related to <see cref="Entities.LeadNote"/>.</summary>
+    public static class LeadNote
+    {
+        /// <summary>The note text is null, empty, or whitespace.</summary>
+        public static readonly Error TextEmpty = new("LeadNote.TextEmpty", "Note text cannot be empty.", ErrorType.Validation);
+
+        /// <summary>The note text exceeds the maximum allowed length.</summary>
+        public static readonly Error TextTooLong = new("LeadNote.TextTooLong", "Note text exceeds the maximum allowed length.", ErrorType.Validation);
+
+        /// <summary>The author identifier is an empty GUID.</summary>
+        public static readonly Error AuthorIdEmpty = new("LeadNote.AuthorIdEmpty", "Author ID cannot be an empty GUID.", ErrorType.Validation);
+    }
+
     /// <summary>Errors related to the <see cref="Entities.User"/> entity.</summary>
     public static class User
     {
