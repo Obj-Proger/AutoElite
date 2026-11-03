@@ -336,6 +336,67 @@ public static class DomainErrors
         public static readonly Error TooLarge = new("Money.TooLarge", "Amount exceeds the maximum allowed value.", ErrorType.Validation);
     }
 
+    /// <summary>Errors related to the <see cref="Entities.Question"/> aggregate.</summary>
+    public static class Question
+    {
+        /// <summary>The question text is null, empty, or whitespace.</summary>
+        public static readonly Error TextEmpty = new("Question.TextEmpty", "Question text cannot be empty.", ErrorType.Validation);
+
+        /// <summary>The question text exceeds the maximum allowed length.</summary>
+        public static readonly Error TextTooLong = new("Question.TextTooLong", "Question text exceeds the maximum allowed length.", ErrorType.Validation);
+
+        /// <summary>The explanation exceeds the maximum allowed length.</summary>
+        public static readonly Error ExplanationTooLong = new("Question.ExplanationTooLong", "Explanation exceeds the maximum allowed length.", ErrorType.Validation);
+
+        /// <summary>The image key exceeds the maximum allowed length.</summary>
+        public static readonly Error ImageKeyTooLong = new("Question.ImageKeyTooLong", "Image key exceeds the maximum allowed length.", ErrorType.Validation);
+
+        /// <summary>The topic identifier is an empty GUID.</summary>
+        public static readonly Error TopicIdEmpty = new("Question.TopicIdEmpty", "Topic ID cannot be an empty GUID.", ErrorType.Validation);
+
+        /// <summary>No licence category was given.</summary>
+        public static readonly Error NoCategories = new("Question.NoCategories", "A question must apply to at least one licence category.", ErrorType.Validation);
+
+        /// <summary>A category is not a defined <see cref="Enums.LicenseCategory"/> value.</summary>
+        public static readonly Error CategoryNotDefined = new("Question.CategoryNotDefined", "Category is not a valid licence category.", ErrorType.Validation);
+
+        /// <summary>The same category is listed more than once.</summary>
+        public static readonly Error DuplicateCategory = new("Question.DuplicateCategory", "Each category can be listed only once.", ErrorType.Validation);
+
+        /// <summary>The source is not a defined <see cref="Enums.QuestionSource"/> value.</summary>
+        public static readonly Error SourceNotDefined = new("Question.SourceNotDefined", "Question source is not valid.", ErrorType.Validation);
+
+        /// <summary>The external code exceeds the maximum allowed length.</summary>
+        public static readonly Error ExternalCodeTooLong = new("Question.ExternalCodeTooLong", "External code exceeds the maximum allowed length.", ErrorType.Validation);
+
+        /// <summary>Fewer than two answer options were given.</summary>
+        public static readonly Error TooFewOptions = new("Question.TooFewOptions", "A question must have at least 2 answer options.", ErrorType.Validation);
+
+        /// <summary>More than six answer options were given.</summary>
+        public static readonly Error TooManyOptions = new("Question.TooManyOptions", "A question can have at most 6 answer options.", ErrorType.Validation);
+
+        /// <summary>The text of an answer option is null, empty, or whitespace.</summary>
+        public static readonly Error OptionTextEmpty = new("Question.OptionTextEmpty", "Answer option text cannot be empty.", ErrorType.Validation);
+
+        /// <summary>The text of an answer option exceeds the maximum allowed length.</summary>
+        public static readonly Error OptionTextTooLong = new("Question.OptionTextTooLong", "Answer option text exceeds the maximum allowed length.", ErrorType.Validation);
+
+        /// <summary>Two answer options have the same text, ignoring letter case.</summary>
+        public static readonly Error DuplicateOptionText = new("Question.DuplicateOptionText", "Answer options must have different texts.", ErrorType.Validation);
+
+        /// <summary>None or several answer options are marked correct.</summary>
+        public static readonly Error NotExactlyOneCorrectOption = new("Question.NotExactlyOneCorrectOption", "Exactly one answer option must be correct.", ErrorType.Validation);
+
+        /// <summary>The question is already active, so activating it again is not a valid transition.</summary>
+        public static readonly Error AlreadyActive = new("Question.AlreadyActive", "Question is already active.", ErrorType.Conflict);
+
+        /// <summary>The question is already inactive, so deactivating it again is not a valid transition.</summary>
+        public static readonly Error AlreadyInactive = new("Question.AlreadyInactive", "Question is already inactive.", ErrorType.Conflict);
+
+        /// <summary>The operation modifies an inactive question, which is not allowed.</summary>
+        public static readonly Error CannotModifyInactive = new("Question.CannotModifyInactive", "An inactive question cannot be modified. Reactivate it first.", ErrorType.Conflict);
+    }
+
     /// <summary>Errors related to the <see cref="Entities.DrivingRoute"/> aggregate.</summary>
     public static class DrivingRoute
     {
