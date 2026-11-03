@@ -14,10 +14,27 @@ public sealed class Currency : ValueObject
     // ISO 4217 code -> number of minor units (decimal places).
     private static readonly FrozenDictionary<string, int> _minorUnitsByCode = new Dictionary<string, int>
     {
-        ["RUB"] = 2, ["BYN"] = 2, ["KZT"] = 2, ["UZS"] = 2, ["KGS"] = 2, ["TJS"] = 2, ["TMT"] = 2,
-        ["AMD"] = 2, ["AZN"] = 2, ["GEL"] = 2, ["MDL"] = 2, ["UAH"] = 2,
-        ["USD"] = 2, ["EUR"] = 2, ["GBP"] = 2, ["CHF"] = 2, ["CNY"] = 2, ["TRY"] = 2, ["AED"] = 2,
-        ["JPY"] = 0, ["KRW"] = 0
+        ["RUB"] = 2,
+        ["BYN"] = 2,
+        ["KZT"] = 2,
+        ["UZS"] = 2,
+        ["KGS"] = 2,
+        ["TJS"] = 2,
+        ["TMT"] = 2,
+        ["AMD"] = 2,
+        ["AZN"] = 2,
+        ["GEL"] = 2,
+        ["MDL"] = 2,
+        ["UAH"] = 2,
+        ["USD"] = 2,
+        ["EUR"] = 2,
+        ["GBP"] = 2,
+        ["CHF"] = 2,
+        ["CNY"] = 2,
+        ["TRY"] = 2,
+        ["AED"] = 2,
+        ["JPY"] = 0,
+        ["KRW"] = 0
     }.ToFrozenDictionary(StringComparer.Ordinal);
 
     /// <summary>Gets the codes of all supported currencies.</summary>
