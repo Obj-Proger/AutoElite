@@ -12,7 +12,7 @@ namespace AutoElite.Domain.Entities;
 /// is intentionally not part of this entity. It lives in the infrastructure layer and is
 /// linked to this entity by the shared <see cref="BaseEntity.Id"/>. Roles are assigned separately.
 /// </remarks>
-public sealed class User : BaseEntity
+public sealed class User : AuditableEntity
 {
     private const int MaxPhotoUrlLength = 2048;
 
@@ -90,7 +90,30 @@ public sealed class User : BaseEntity
         return Result.Success();
     }
 
-    /// <summary>Sets the location of the user's profile photo.</summary>
+    /// <summary>
+    /// Updates the user's email address and raises <see cref="UserEmailChangedDomainEvent"/>.
+    /// Uniqueness of the address among users is checked by the caller.
+    /// </summary>
+    /// <param name="email">The new validated email address.</param>
+    /// <param name="utcNow">The current UTC time, used as the event timestamp.</param>
+    /// <returns>A failure if the user is inactive or the address is unchanged.</returns>
+    public Result ChangeEmail(Email email, DateTime utcNow)
+    {
+        if (!IsActive)
+            return Result.Failure(DomainErrors.User.CannotModifyInactive);
+
+        if (email == Email)
+            return Result.Failure(DomainErrors.User.EmailUnchanged);
+
+        var previousEmail = Email;
+        Email = email;
+
+        RaiseDomainEvent(new UserEmailChangedDomainEvent(Id, previousEmail.Value, email.Value, utcNow));
+
+        return Result.Success();
+    }
+
+    /// <summary>Sets the location of the user's profile photo. Use <see cref="RemovePhoto"/> to clear it.</summary>
     /// <returns>A failure if the user is inactive, or the URL is empty or too long.</returns>
     public Result UpdatePhotoUrl(string? photoUrl)
     {
@@ -102,6 +125,21 @@ public sealed class User : BaseEntity
             return Result.Failure(photoUrlResult.Error);
 
         PhotoUrl = photoUrlResult.Value;
+
+        return Result.Success();
+    }
+
+    /// <summary>Removes the user's profile photo.</summary>
+    /// <returns>A failure if the user is inactive or has no photo.</returns>
+    public Result RemovePhoto()
+    {
+        if (!IsActive)
+            return Result.Failure(DomainErrors.User.CannotModifyInactive);
+
+        if (PhotoUrl is null)
+            return Result.Failure(DomainErrors.User.PhotoNotSet);
+
+        PhotoUrl = null;
 
         return Result.Success();
     }
@@ -125,14 +163,19 @@ public sealed class User : BaseEntity
         return Result.Success();
     }
 
-    /// <summary>Deactivates the user without deleting any data.</summary>
+    /// <summary>
+    /// Deactivates the user without deleting any data and raises <see cref="UserDeactivatedDomainEvent"/>.
+    /// </summary>
+    /// <param name="utcNow">The current UTC time, used as the event timestamp.</param>
     /// <returns>A failure if the user is already inactive.</returns>
-    public Result Deactivate()
+    public Result Deactivate(DateTime utcNow)
     {
         if (!IsActive)
             return Result.Failure(DomainErrors.User.AlreadyInactive);
 
         IsActive = false;
+
+        RaiseDomainEvent(new UserDeactivatedDomainEvent(Id, utcNow));
 
         return Result.Success();
     }

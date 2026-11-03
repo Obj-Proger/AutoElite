@@ -7,11 +7,12 @@ namespace AutoElite.Domain.Entities;
 /// </summary>
 /// <remarks>
 /// Assignments are immutable: changing a role means removing one assignment and creating another.
-/// Uniqueness of the (user, role) pair, the "at least one administrator" rule, and the active-user
-/// check span multiple records, so they are enforced outside this entity: by the application layer
-/// and by a unique database index.
+/// When and by whom the role was granted is recorded by the audit properties.
+/// Rules that span several records (the user is active, the (user, role) pair is unique, a student is
+/// not an instructor, at least one administrator remains) are defined in
+/// <see cref="Policies.RoleAssignmentPolicy"/>; uniqueness is also enforced by a database index.
 /// </remarks>
-public sealed class UserRoleAssignment : BaseEntity
+public sealed class UserRoleAssignment : AuditableEntity
 {
     /// <summary>Gets the identifier of the user holding the role.</summary>
     public Guid UserId { get; private set; }

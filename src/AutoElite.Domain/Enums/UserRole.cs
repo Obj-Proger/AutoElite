@@ -4,6 +4,8 @@ namespace AutoElite.Domain.Enums;
 /// The set of roles a user account can be assigned within the driving school.
 /// A user may hold multiple roles simultaneously — for example, the same
 /// person can be both a <see cref="DrivingInstructor"/> and a <see cref="TheoryInstructor"/>.
+/// A <see cref="Student"/> cannot hold an instructor role at the same time
+/// (see <see cref="Policies.RoleAssignmentPolicy"/>).
 /// </summary>
 public enum UserRole
 {

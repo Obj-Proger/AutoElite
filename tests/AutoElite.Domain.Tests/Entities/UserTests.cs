@@ -6,10 +6,12 @@ public class UserTests
     private static readonly FullName _fullName = FullName.Create("Ivanov", "Ivan", "Ivanovich").Value;
     private static readonly FullName _otherFullName = FullName.Create("Petrov", "Petr").Value;
     private static readonly Email _email = Email.Create("ivan@example.com").Value;
+    private static readonly Email _otherEmail = Email.Create("petr@example.com").Value;
     private static readonly PhoneNumber _phone = PhoneNumber.Create("+79991234567").Value;
     private static readonly PhoneNumber _otherPhone = PhoneNumber.Create("+79990000000").Value;
     private static readonly Guid _branchId = new("22222222-2222-2222-2222-222222222222");
     private static readonly Guid _otherBranchId = new("33333333-3333-3333-3333-333333333333");
+    private static readonly DateTime _later = new(2026, 1, 2, 9, 30, 0, DateTimeKind.Utc);
 
     private static User CreateUser(PhoneNumber? phone = null, Guid? branchId = null) =>
         User.Create(_fullName, _email, phone, branchId, _now).Value;
@@ -17,7 +19,7 @@ public class UserTests
     private static User CreateInactiveUser()
     {
         var user = CreateUser();
-        user.Deactivate();
+        user.Deactivate(_now);
 
         return user;
     }
@@ -64,6 +66,18 @@ public class UserTests
     }
 
     [Fact]
+    public void Create_ValidData_LeavesAuditDataEmptyUntilSaved()
+    {
+        var user = User.Create(_fullName, _email, null, null, _now).Value;
+
+        user.Should().BeAssignableTo<IAuditable>();
+        user.CreatedAtUtc.Should().Be(default(DateTime));
+        user.CreatedByUserId.Should().BeNull();
+        user.ModifiedAtUtc.Should().BeNull();
+        user.ModifiedByUserId.Should().BeNull();
+    }
+
+    [Fact]
     public void Create_EmptyBranchId_ReturnsBranchIdEmptyError()
     {
         var result = User.Create(_fullName, _email, null, Guid.Empty, _now);
@@ -106,6 +120,64 @@ public class UserTests
         result.Error.Should().Be(DomainErrors.User.CannotModifyInactive);
         user.FullName.Should().Be(_fullName);
         user.Phone.Should().BeNull();
+    }
+
+    [Fact]
+    public void ChangeEmail_NewAddress_ChangesEmail()
+    {
+        var user = CreateUser();
+
+        var result = user.ChangeEmail(_otherEmail, _later);
+
+        result.IsSuccess.Should().BeTrue();
+        user.Email.Should().Be(_otherEmail);
+    }
+
+    [Fact]
+    public void ChangeEmail_NewAddress_RaisesUserEmailChangedEvent()
+    {
+        var user = CreateUser();
+        user.ClearDomainEvents();
+
+        user.ChangeEmail(_otherEmail, _later);
+
+        user.DomainEvents.Should().ContainSingle().Which.Should()
+            .Be(new UserEmailChangedDomainEvent(user.Id, "ivan@example.com", "petr@example.com", _later));
+    }
+
+    [Fact]
+    public void ChangeEmail_SameAddress_ReturnsEmailUnchangedErrorWithoutEvent()
+    {
+        var user = CreateUser();
+        user.ClearDomainEvents();
+
+        var result = user.ChangeEmail(Email.Create("IVAN@example.com").Value, _later);
+
+        result.IsFailure.Should().BeTrue();
+        result.Error.Should().Be(DomainErrors.User.EmailUnchanged);
+        user.DomainEvents.Should().BeEmpty();
+    }
+
+    [Fact]
+    public void ChangeEmail_InactiveUser_ReturnsCannotModifyInactiveErrorAndKeepsEmail()
+    {
+        var user = CreateInactiveUser();
+
+        var result = user.ChangeEmail(_otherEmail, _later);
+
+        result.IsFailure.Should().BeTrue();
+        result.Error.Should().Be(DomainErrors.User.CannotModifyInactive);
+        user.Email.Should().Be(_email);
+    }
+
+    [Fact]
+    public void ChangeEmail_InactiveUserAndSameAddress_ReportsInactiveFirst()
+    {
+        var user = CreateInactiveUser();
+
+        var result = user.ChangeEmail(_email, _later);
+
+        result.Error.Should().Be(DomainErrors.User.CannotModifyInactive);
     }
 
     [Fact]
@@ -181,6 +253,43 @@ public class UserTests
     }
 
     [Fact]
+    public void RemovePhoto_UserWithPhoto_ClearsPhoto()
+    {
+        var user = CreateUser();
+        user.UpdatePhotoUrl("https://example.com/photo.jpg");
+
+        var result = user.RemovePhoto();
+
+        result.IsSuccess.Should().BeTrue();
+        user.PhotoUrl.Should().BeNull();
+    }
+
+    [Fact]
+    public void RemovePhoto_UserWithoutPhoto_ReturnsPhotoNotSetError()
+    {
+        var user = CreateUser();
+
+        var result = user.RemovePhoto();
+
+        result.IsFailure.Should().BeTrue();
+        result.Error.Should().Be(DomainErrors.User.PhotoNotSet);
+    }
+
+    [Fact]
+    public void RemovePhoto_InactiveUserWithPhoto_ReturnsCannotModifyInactiveErrorAndKeepsPhoto()
+    {
+        var user = CreateUser();
+        user.UpdatePhotoUrl("https://example.com/photo.jpg");
+        user.Deactivate(_now);
+
+        var result = user.RemovePhoto();
+
+        result.IsFailure.Should().BeTrue();
+        result.Error.Should().Be(DomainErrors.User.CannotModifyInactive);
+        user.PhotoUrl.Should().Be("https://example.com/photo.jpg");
+    }
+
+    [Fact]
     public void AssignBranch_ValidId_SetsBranch()
     {
         var user = CreateUser(branchId: _branchId);
@@ -231,21 +340,35 @@ public class UserTests
     {
         var user = CreateUser();
 
-        var result = user.Deactivate();
+        var result = user.Deactivate(_now);
 
         result.IsSuccess.Should().BeTrue();
         user.IsActive.Should().BeFalse();
     }
 
     [Fact]
+    public void Deactivate_ActiveUser_RaisesUserDeactivatedEvent()
+    {
+        var user = CreateUser();
+        user.ClearDomainEvents();
+
+        user.Deactivate(_later);
+
+        user.DomainEvents.Should().ContainSingle().Which.Should()
+            .Be(new UserDeactivatedDomainEvent(user.Id, _later));
+    }
+
+    [Fact]
     public void Deactivate_InactiveUser_ReturnsAlreadyInactiveError()
     {
         var user = CreateInactiveUser();
+        user.ClearDomainEvents();
 
-        var result = user.Deactivate();
+        var result = user.Deactivate(_later);
 
         result.IsFailure.Should().BeTrue();
         result.Error.Should().Be(DomainErrors.User.AlreadyInactive);
+        user.DomainEvents.Should().BeEmpty();
     }
 
     [Fact]

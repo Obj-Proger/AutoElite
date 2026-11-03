@@ -67,6 +67,12 @@ public static class DomainErrors
 
         /// <summary>The operation modifies an inactive user, which is not allowed.</summary>
         public static readonly Error CannotModifyInactive = new("User.CannotModifyInactive", "An inactive user cannot be modified. Reactivate the user first.", ErrorType.Conflict);
+
+        /// <summary>The new email address is the same as the current one.</summary>
+        public static readonly Error EmailUnchanged = new("User.EmailUnchanged", "The new email address is the same as the current one.", ErrorType.Conflict);
+
+        /// <summary>The user has no profile photo to remove.</summary>
+        public static readonly Error PhotoNotSet = new("User.PhotoNotSet", "User has no profile photo.", ErrorType.Conflict);
     }
 
     /// <summary>Errors related to the <see cref="Entities.UserRoleAssignment"/> entity.</summary>
@@ -77,5 +83,20 @@ public static class DomainErrors
 
         /// <summary>The role is not a defined <see cref="Enums.UserRole"/> value.</summary>
         public static readonly Error RoleNotDefined = new("UserRoleAssignment.RoleNotDefined", "Role is not a valid user role.", ErrorType.Validation);
+
+        /// <summary>The role is granted to an inactive user.</summary>
+        public static readonly Error UserInactive = new("UserRoleAssignment.UserInactive", "A role cannot be granted to an inactive user.", ErrorType.Conflict);
+
+        /// <summary>The user already holds the role.</summary>
+        public static readonly Error AlreadyAssigned = new("UserRoleAssignment.AlreadyAssigned", "User already holds this role.", ErrorType.Conflict);
+
+        /// <summary>The user does not hold the role being taken away.</summary>
+        public static readonly Error NotAssigned = new("UserRoleAssignment.NotAssigned", "User does not hold this role.", ErrorType.NotFound);
+
+        /// <summary>The role cannot be combined with a role the user already holds.</summary>
+        public static readonly Error IncompatibleRoles = new("UserRoleAssignment.IncompatibleRoles", "A student cannot hold an instructor role at the same time.", ErrorType.Conflict);
+
+        /// <summary>The role being taken away belongs to the last active administrator.</summary>
+        public static readonly Error LastAdministrator = new("UserRoleAssignment.LastAdministrator", "The school must keep at least one active administrator.", ErrorType.Conflict);
     }
 }
