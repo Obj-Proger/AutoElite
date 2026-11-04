@@ -185,10 +185,6 @@ public static class ApplicationErrors
         public static readonly Error DuplicateMark = Error.Validation(
             "TheoryLesson.DuplicateMark", "Each student can appear only once among the marks.");
 
-        /// <summary>A schedule query asks for a period longer than the schedule can read at once.</summary>
-        public static readonly Error PeriodTooLong = Error.Validation(
-            "TheoryLesson.PeriodTooLong", "The schedule period can be at most 92 days long.");
-
         /// <summary>The status filter of the schedule is not a lesson status.</summary>
         public static readonly Error StatusNotDefined = Error.Validation(
             "TheoryLesson.StatusNotDefined", "Lesson status is not valid.");
@@ -219,6 +215,9 @@ public static class ApplicationErrors
         /// <summary>The student already has a driving lesson at that time.</summary>
         public static readonly Error StudentBusy = Error.Conflict(
             "DrivingSlot.StudentBusy", "You already have a driving lesson at this time.");
+
+        /// <summary>The status filter of the driving schedule is not a slot status.</summary>
+        public static readonly Error StatusNotDefined = Error.Validation("DrivingSlot.StatusNotDefined", "Slot status is not valid.");
     }
 
     /// <summary>Errors of the rules in <see cref="Users.PasswordPolicy"/>.</summary>
@@ -242,6 +241,14 @@ public static class ApplicationErrors
         /// <summary>The new password is the same as the current one.</summary>
         public static readonly Error SameAsCurrent = Error.Validation(
             "Password.SameAsCurrent", "The new password must be different from the current one.");
+    }
+
+    /// <summary>Errors of the period of schedule queries.</summary>
+    public static class Schedule
+    {
+        /// <summary>A schedule query asks for a period longer than <see cref="SchedulePeriod.MaxLength"/>.</summary>
+        public static readonly Error PeriodTooLong = Error.Validation(
+            "Schedule.PeriodTooLong", "The schedule period can be at most 92 days long.");
     }
 
     /// <summary>Errors of the page number and size of paged queries.</summary>

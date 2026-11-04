@@ -103,7 +103,7 @@ public class TheoryLessonQueryHandlerTests
     {
         var result = await GetSchedule(new GetTheoryScheduleQuery(_from, _from.AddDays(92).AddTicks(1)), TestData.Administrator());
 
-        result.Error.Should().Be(ApplicationErrors.TheoryLesson.PeriodTooLong);
+        result.Error.Should().Be(ApplicationErrors.Schedule.PeriodTooLong);
         _queries.LastScheduleCall.Should().BeNull();
     }
 
@@ -155,7 +155,7 @@ public class TheoryLessonQueryHandlerTests
         var result = await new GetMyTheoryScheduleQueryHandler(_queries, FakeCurrentUser.SignedIn(UserRole.Student))
             .Handle(new GetMyTheoryScheduleQuery(_from, _from.AddDays(93)), TestContext.Current.CancellationToken);
 
-        result.Error.Should().Be(ApplicationErrors.TheoryLesson.PeriodTooLong);
+        result.Error.Should().Be(ApplicationErrors.Schedule.PeriodTooLong);
         _queries.LastStudentCall.Should().BeNull();
     }
 

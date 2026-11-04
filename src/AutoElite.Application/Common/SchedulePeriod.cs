@@ -1,6 +1,8 @@
-namespace AutoElite.Application.TheoryLessons;
+namespace AutoElite.Application.Common;
 
-/// <summary>The time a schedule query reads, limited so that one call cannot read the whole history.</summary>
+/// <summary>
+/// The time a schedule query of theory or practice reads, limited so that one call cannot read the whole history.
+/// </summary>
 internal static class SchedulePeriod
 {
     /// <summary>The longest period a schedule query can read, enough for a quarter or a calendar month view.</summary>
@@ -17,7 +19,7 @@ internal static class SchedulePeriod
             return periodResult;
 
         return periodResult.Value.Duration > MaxLength
-            ? Result.Failure<TimeInterval>(ApplicationErrors.TheoryLesson.PeriodTooLong)
+            ? Result.Failure<TimeInterval>(ApplicationErrors.Schedule.PeriodTooLong)
             : periodResult;
     }
 }

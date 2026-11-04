@@ -469,6 +469,9 @@
   <data name="DrivingSlot.StartInPast" xml:space="preserve">
     <value>Слот должен начинаться в будущем.</value>
   </data>
+  <data name="DrivingSlot.StatusNotDefined" xml:space="preserve">
+    <value>Недопустимый статус слота.</value>
+  </data>
   <data name="DrivingSlot.StudentBusy" xml:space="preserve">
     <value>У вас уже есть занятие по вождению на это время.</value>
   </data>
@@ -850,6 +853,9 @@
   <data name="Question.TopicIdEmpty" xml:space="preserve">
     <value>Идентификатор темы не может быть пустым.</value>
   </data>
+  <data name="Schedule.PeriodTooLong" xml:space="preserve">
+    <value>Период расписания может длиться не более 92 дней.</value>
+  </data>
   <data name="SchoolSettings.CancellationNoticeOutOfRange" xml:space="preserve">
     <value>Срок отмены занятия студентом должен быть от 0 до 72 часов.</value>
   </data>
@@ -1149,9 +1155,6 @@
   </data>
   <data name="TheoryLesson.NotStarted" xml:space="preserve">
     <value>Занятие ещё не началось.</value>
-  </data>
-  <data name="TheoryLesson.PeriodTooLong" xml:space="preserve">
-    <value>Период расписания может длиться не более 92 дней.</value>
   </data>
   <data name="TheoryLesson.StartInPast" xml:space="preserve">
     <value>Занятие должно начинаться в будущем.</value>
