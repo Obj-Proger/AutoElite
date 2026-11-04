@@ -3,6 +3,7 @@ using AutoElite.Application.Leads.ChangeLeadBranch;
 using AutoElite.Application.Leads.UpdateLeadContact;
 using AutoElite.Domain.Entities;
 using AutoElite.Domain.Enums;
+using AutoElite.Domain.Events;
 
 namespace AutoElite.Application.Tests.Leads;
 
@@ -20,7 +21,7 @@ public class LeadChangeHandlerTests
             .Handle(new ChangeLeadBranchCommand(leadId, branchId), TestContext.Current.CancellationToken);
 
     private Task<Result> AssignManager(Guid leadId, Guid managerId, FakeCurrentUser caller) =>
-        new AssignLeadManagerCommandHandler(_fixture.CreateLeadAccess(caller), _fixture.CreateLeadManagers(), TestData.Clock())
+        new AssignLeadManagerCommandHandler(_fixture.CreateLeadAccess(caller), _fixture.CreateLeadManagers(), caller, TestData.Clock())
             .Handle(new AssignLeadManagerCommand(leadId, managerId), TestContext.Current.CancellationToken);
 
     [Fact]
@@ -99,12 +100,14 @@ public class LeadChangeHandlerTests
         var branch = _fixture.SeedBranch();
         var manager = _fixture.SeedManager(branch.Id);
         var lead = _fixture.SeedLead(branch.Id);
+        var administrator = TestData.Administrator();
 
-        var result = await AssignManager(lead.Id, manager.UserId!.Value, TestData.Administrator());
+        var result = await AssignManager(lead.Id, manager.UserId!.Value, administrator);
 
         result.IsSuccess.Should().BeTrue();
         lead.ManagerId.Should().Be(manager.UserId);
-        lead.DomainEvents.Should().ContainSingle();
+        lead.DomainEvents.Should().ContainSingle().Which.Should().BeOfType<LeadAssignedDomainEvent>()
+            .Which.AssignedByUserId.Should().Be(administrator.UserId);
     }
 
     [Fact]

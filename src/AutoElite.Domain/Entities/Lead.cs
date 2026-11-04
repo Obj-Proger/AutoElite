@@ -165,9 +165,10 @@ public sealed class Lead : AuditableEntity
 
     /// <summary>Makes a manager responsible for the lead and raises <see cref="LeadAssignedDomainEvent"/>.</summary>
     /// <param name="managerId">The manager to assign. Checking that the user is an active manager is up to the caller.</param>
+    /// <param name="assignedByUserId">The user making the assignment, or <see langword="null"/> for the system.</param>
     /// <param name="utcNow">The current UTC time.</param>
-    /// <returns>A failure if the lead is not open, the identifier is empty, or this manager is already assigned.</returns>
-    public Result AssignManager(Guid managerId, DateTime utcNow)
+    /// <returns>A failure if the lead is not open, an identifier is empty, or this manager is already assigned.</returns>
+    public Result AssignManager(Guid managerId, Guid? assignedByUserId, DateTime utcNow)
     {
         if (!IsOpen)
             return Result.Failure(DomainErrors.Lead.NotOpen);
@@ -176,11 +177,15 @@ public sealed class Lead : AuditableEntity
         if (managerResult.IsFailure)
             return Result.Failure(managerResult.Error);
 
+        var actorResult = ValidateOptionalId(assignedByUserId, DomainErrors.Lead.UserIdEmpty);
+        if (actorResult.IsFailure)
+            return actorResult;
+
         if (ManagerId == managerId)
             return Result.Failure(DomainErrors.Lead.ManagerAlreadyAssigned);
 
         ManagerId = managerId;
-        RaiseDomainEvent(new LeadAssignedDomainEvent(Id, managerId, utcNow));
+        RaiseDomainEvent(new LeadAssignedDomainEvent(Id, managerId, assignedByUserId, utcNow));
 
         return Result.Success();
     }

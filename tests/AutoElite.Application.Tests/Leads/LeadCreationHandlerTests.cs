@@ -71,7 +71,8 @@ public class LeadCreationHandlerTests
         lead.BranchId.Should().Be(branch.Id);
         lead.ManagerId.Should().Be(manager.UserId);
         lead.StatusHistory.Single().ChangedByUserId.Should().Be(manager.UserId);
-        lead.DomainEvents.OfType<LeadAssignedDomainEvent>().Should().ContainSingle();
+        lead.DomainEvents.OfType<LeadAssignedDomainEvent>().Should().ContainSingle()
+            .Which.AssignedByUserId.Should().Be(manager.UserId);
     }
 
     [Fact]

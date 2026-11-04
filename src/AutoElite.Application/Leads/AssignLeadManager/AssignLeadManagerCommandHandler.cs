@@ -4,6 +4,7 @@ namespace AutoElite.Application.Leads.AssignLeadManager;
 internal sealed class AssignLeadManagerCommandHandler(
     LeadAccess leadAccess,
     LeadManagers leadManagers,
+    ICurrentUser currentUser,
     TimeProvider timeProvider) : ICommandHandler<AssignLeadManagerCommand>
 {
     /// <inheritdoc />
@@ -18,6 +19,6 @@ internal sealed class AssignLeadManagerCommandHandler(
         if (managerResult.IsFailure)
             return managerResult;
 
-        return lead.AssignManager(command.ManagerId, timeProvider.GetUtcNow().UtcDateTime);
+        return lead.AssignManager(command.ManagerId, currentUser.GetRequiredUserId(), timeProvider.GetUtcNow().UtcDateTime);
     }
 }

@@ -10,4 +10,7 @@ internal sealed class FakeUserRepository : InMemoryRepository<User>, IUserReposi
 
     public Task<User?> GetByEmailAsync(Email email, CancellationToken cancellationToken = default) =>
         Task.FromResult(Items.SingleOrDefault(user => user.Email == email));
+
+    public Task<IReadOnlyList<User>> GetByIdsAsync(IReadOnlyCollection<Guid> ids, CancellationToken cancellationToken = default) =>
+        Task.FromResult<IReadOnlyList<User>>([.. Items.Where(user => ids.Contains(user.Id))]);
 }

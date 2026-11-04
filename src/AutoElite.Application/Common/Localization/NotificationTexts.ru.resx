@@ -13,6 +13,99 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="DrivingBookingCancelled.Body" xml:space="preserve">
+    <value>Занятие по вождению {0:d MMMM 'в' HH:mm} отменено. Причина: {1}</value>
+  </data>
+  <data name="DrivingBookingCancelled.Title" xml:space="preserve">
+    <value>Занятие по вождению отменено</value>
+  </data>
+  <data name="DrivingLessonBooked.Body" xml:space="preserve">
+    <value>Новая запись: {0}, занятие {1:d MMMM 'в' HH:mm}.</value>
+  </data>
+  <data name="DrivingLessonBooked.Title" xml:space="preserve">
+    <value>Новая запись на вождение</value>
+  </data>
+  <data name="EnrolledInGroup.Body" xml:space="preserve">
+    <value>Группа «{0}». Начало занятий — {1:d MMMM yyyy}.</value>
+  </data>
+  <data name="EnrolledInGroup.Title" xml:space="preserve">
+    <value>Вы зачислены в группу</value>
+  </data>
+  <data name="ExamCancelled.Body" xml:space="preserve">
+    <value>{0} группы «{1}» {2:d MMMM 'в' HH:mm} отменён. Причина: {3}</value>
+  </data>
+  <data name="ExamCancelled.Title" xml:space="preserve">
+    <value>Экзамен отменён</value>
+  </data>
+  <data name="ExamFailed.Body" xml:space="preserve">
+    <value>{0} не сдан.</value>
+  </data>
+  <data name="ExamFailed.Title" xml:space="preserve">
+    <value>Экзамен не сдан</value>
+  </data>
+  <data name="ExamKind.Practice" xml:space="preserve">
+    <value>Практический экзамен</value>
+  </data>
+  <data name="ExamKind.Theory" xml:space="preserve">
+    <value>Теоретический экзамен</value>
+  </data>
+  <data name="ExamPassed.Body" xml:space="preserve">
+    <value>{0} сдан. Поздравляем!</value>
+  </data>
+  <data name="ExamPassed.Title" xml:space="preserve">
+    <value>Экзамен сдан</value>
+  </data>
+  <data name="ExamRescheduled.Body" xml:space="preserve">
+    <value>{0} группы «{1}» перенесён на {2:d MMMM 'в' HH:mm}.</value>
+  </data>
+  <data name="ExamRescheduled.Title" xml:space="preserve">
+    <value>Экзамен перенесён</value>
+  </data>
+  <data name="ExamScheduled.Body" xml:space="preserve">
+    <value>{0} группы «{1}» назначен на {2:d MMMM 'в' HH:mm}.</value>
+  </data>
+  <data name="ExamScheduled.Title" xml:space="preserve">
+    <value>Назначен экзамен</value>
+  </data>
+  <data name="LeadAssigned.Body" xml:space="preserve">
+    <value>Теперь вы отвечаете за заявку от {0}.</value>
+  </data>
+  <data name="LeadAssigned.Title" xml:space="preserve">
+    <value>Вам назначена заявка</value>
+  </data>
+  <data name="LeadSource.Advertising" xml:space="preserve">
+    <value>реклама</value>
+  </data>
+  <data name="LeadSource.Other" xml:space="preserve">
+    <value>другое</value>
+  </data>
+  <data name="LeadSource.PhoneCall" xml:space="preserve">
+    <value>звонок</value>
+  </data>
+  <data name="LeadSource.Referral" xml:space="preserve">
+    <value>рекомендация</value>
+  </data>
+  <data name="LeadSource.SocialMedia" xml:space="preserve">
+    <value>соцсети</value>
+  </data>
+  <data name="LeadSource.WalkIn" xml:space="preserve">
+    <value>визит в офис</value>
+  </data>
+  <data name="LeadSource.Website" xml:space="preserve">
+    <value>сайт</value>
+  </data>
+  <data name="LowDrivingLessonRating.Body" xml:space="preserve">
+    <value>Занятие по вождению {2:d MMMM 'в' HH:mm} оценено на {3} из 5. Студент: {0}. Инструктор: {1}.</value>
+  </data>
+  <data name="LowDrivingLessonRating.Title" xml:space="preserve">
+    <value>Низкая оценка занятия</value>
+  </data>
+  <data name="NewLead.Body" xml:space="preserve">
+    <value>Заявка от {0}. Источник: {1}.</value>
+  </data>
+  <data name="NewLead.Title" xml:space="preserve">
+    <value>Новая заявка</value>
+  </data>
   <data name="PaymentConfirmed.Body" xml:space="preserve">
     <value>Ваш платёж на сумму {0:N2} {1} по договору {2} подтверждён.</value>
   </data>
@@ -24,5 +117,23 @@
   </data>
   <data name="PaymentRefunded.Title" xml:space="preserve">
     <value>Платёж возвращён</value>
+  </data>
+  <data name="RateDrivingLesson.Body" xml:space="preserve">
+    <value>Как прошло занятие по вождению {0:d MMMM 'в' HH:mm}? Ваша оценка помогает нам учить лучше.</value>
+  </data>
+  <data name="RateDrivingLesson.Title" xml:space="preserve">
+    <value>Оцените занятие</value>
+  </data>
+  <data name="TheoryLessonCancelled.Body" xml:space="preserve">
+    <value>Занятие группы «{0}» {1:d MMMM 'в' HH:mm} отменено. Причина: {2}</value>
+  </data>
+  <data name="TheoryLessonCancelled.Title" xml:space="preserve">
+    <value>Занятие по теории отменено</value>
+  </data>
+  <data name="TheoryLessonRescheduled.Body" xml:space="preserve">
+    <value>Занятие группы «{0}» перенесено на {1:d MMMM 'в' HH:mm}.</value>
+  </data>
+  <data name="TheoryLessonRescheduled.Title" xml:space="preserve">
+    <value>Занятие по теории перенесено</value>
   </data>
 </root>

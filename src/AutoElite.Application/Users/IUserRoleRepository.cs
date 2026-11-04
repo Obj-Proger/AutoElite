@@ -22,6 +22,16 @@ public interface IUserRoleRepository : IRepository<UserRoleAssignment>
     /// <param name="cancellationToken">A token that signals cancellation of the operation.</param>
     Task<int> CountActiveAdministratorsAsync(CancellationToken cancellationToken = default);
 
+    /// <summary>
+    /// Loads the active users who hold the role and whose data scope includes the branch: those not tied to a branch
+    /// and those of the branch itself. A record not tied to a branch is in every scope, so then every active holder
+    /// is returned.
+    /// </summary>
+    /// <param name="role">The role.</param>
+    /// <param name="branchId">The branch of the record the users are needed for, if any.</param>
+    /// <param name="cancellationToken">A token that signals cancellation of the operation.</param>
+    Task<IReadOnlyList<User>> GetActiveHoldersAsync(UserRole role, Guid? branchId, CancellationToken cancellationToken = default);
+
     /// <summary>Removes an assignment; it is deleted on the next save.</summary>
     /// <param name="assignment">The assignment to remove.</param>
     void Remove(UserRoleAssignment assignment);

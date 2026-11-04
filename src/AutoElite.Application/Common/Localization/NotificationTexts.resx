@@ -13,6 +13,99 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="DrivingBookingCancelled.Body" xml:space="preserve">
+    <value>The driving lesson on {0:MMMM d 'at' h:mm tt} is cancelled. Reason: {1}</value>
+  </data>
+  <data name="DrivingBookingCancelled.Title" xml:space="preserve">
+    <value>Driving lesson cancelled</value>
+  </data>
+  <data name="DrivingLessonBooked.Body" xml:space="preserve">
+    <value>{0} booked the lesson on {1:MMMM d 'at' h:mm tt}.</value>
+  </data>
+  <data name="DrivingLessonBooked.Title" xml:space="preserve">
+    <value>New driving booking</value>
+  </data>
+  <data name="EnrolledInGroup.Body" xml:space="preserve">
+    <value>Group {0}. Classes start on {1:MMMM d, yyyy}.</value>
+  </data>
+  <data name="EnrolledInGroup.Title" xml:space="preserve">
+    <value>You have joined a group</value>
+  </data>
+  <data name="ExamCancelled.Body" xml:space="preserve">
+    <value>{0} for group {1} on {2:MMMM d 'at' h:mm tt} is cancelled. Reason: {3}</value>
+  </data>
+  <data name="ExamCancelled.Title" xml:space="preserve">
+    <value>Exam cancelled</value>
+  </data>
+  <data name="ExamFailed.Body" xml:space="preserve">
+    <value>{0} not passed.</value>
+  </data>
+  <data name="ExamFailed.Title" xml:space="preserve">
+    <value>Exam not passed</value>
+  </data>
+  <data name="ExamKind.Practice" xml:space="preserve">
+    <value>Practical exam</value>
+  </data>
+  <data name="ExamKind.Theory" xml:space="preserve">
+    <value>Theory exam</value>
+  </data>
+  <data name="ExamPassed.Body" xml:space="preserve">
+    <value>{0} passed. Congratulations!</value>
+  </data>
+  <data name="ExamPassed.Title" xml:space="preserve">
+    <value>Exam passed</value>
+  </data>
+  <data name="ExamRescheduled.Body" xml:space="preserve">
+    <value>{0} for group {1} is moved to {2:MMMM d 'at' h:mm tt}.</value>
+  </data>
+  <data name="ExamRescheduled.Title" xml:space="preserve">
+    <value>Exam moved</value>
+  </data>
+  <data name="ExamScheduled.Body" xml:space="preserve">
+    <value>{0} for group {1} is scheduled for {2:MMMM d 'at' h:mm tt}.</value>
+  </data>
+  <data name="ExamScheduled.Title" xml:space="preserve">
+    <value>Exam scheduled</value>
+  </data>
+  <data name="LeadAssigned.Body" xml:space="preserve">
+    <value>You are now responsible for the request from {0}.</value>
+  </data>
+  <data name="LeadAssigned.Title" xml:space="preserve">
+    <value>Lead assigned to you</value>
+  </data>
+  <data name="LeadSource.Advertising" xml:space="preserve">
+    <value>advertising</value>
+  </data>
+  <data name="LeadSource.Other" xml:space="preserve">
+    <value>other</value>
+  </data>
+  <data name="LeadSource.PhoneCall" xml:space="preserve">
+    <value>phone call</value>
+  </data>
+  <data name="LeadSource.Referral" xml:space="preserve">
+    <value>referral</value>
+  </data>
+  <data name="LeadSource.SocialMedia" xml:space="preserve">
+    <value>social media</value>
+  </data>
+  <data name="LeadSource.WalkIn" xml:space="preserve">
+    <value>office visit</value>
+  </data>
+  <data name="LeadSource.Website" xml:space="preserve">
+    <value>website</value>
+  </data>
+  <data name="LowDrivingLessonRating.Body" xml:space="preserve">
+    <value>The driving lesson on {2:MMMM d 'at' h:mm tt} is rated {3} out of 5. Student: {0}. Instructor: {1}.</value>
+  </data>
+  <data name="LowDrivingLessonRating.Title" xml:space="preserve">
+    <value>Low lesson rating</value>
+  </data>
+  <data name="NewLead.Body" xml:space="preserve">
+    <value>A request from {0}. Source: {1}.</value>
+  </data>
+  <data name="NewLead.Title" xml:space="preserve">
+    <value>New lead</value>
+  </data>
   <data name="PaymentConfirmed.Body" xml:space="preserve">
     <value>Your payment of {0:N2} {1} under contract {2} has been confirmed.</value>
   </data>
@@ -24,5 +117,23 @@
   </data>
   <data name="PaymentRefunded.Title" xml:space="preserve">
     <value>Payment refunded</value>
+  </data>
+  <data name="RateDrivingLesson.Body" xml:space="preserve">
+    <value>How was your driving lesson on {0:MMMM d 'at' h:mm tt}? Your rating helps us teach better.</value>
+  </data>
+  <data name="RateDrivingLesson.Title" xml:space="preserve">
+    <value>Rate your lesson</value>
+  </data>
+  <data name="TheoryLessonCancelled.Body" xml:space="preserve">
+    <value>The class of group {0} on {1:MMMM d 'at' h:mm tt} is cancelled. Reason: {2}</value>
+  </data>
+  <data name="TheoryLessonCancelled.Title" xml:space="preserve">
+    <value>Theory class cancelled</value>
+  </data>
+  <data name="TheoryLessonRescheduled.Body" xml:space="preserve">
+    <value>The class of group {0} is moved to {1:MMMM d 'at' h:mm tt}.</value>
+  </data>
+  <data name="TheoryLessonRescheduled.Title" xml:space="preserve">
+    <value>Theory class moved</value>
   </data>
 </root>

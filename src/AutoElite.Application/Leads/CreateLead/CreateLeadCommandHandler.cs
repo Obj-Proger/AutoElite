@@ -46,7 +46,7 @@ internal sealed class CreateLeadCommandHandler(
         var lead = leadResult.Value;
         if (managerId is { } assignedId)
         {
-            var assignResult = lead.AssignManager(assignedId, utcNow);
+            var assignResult = lead.AssignManager(assignedId, currentUser.GetRequiredUserId(), utcNow);
             if (assignResult.IsFailure)
                 return Result.Failure<Guid>(assignResult.Error);
         }

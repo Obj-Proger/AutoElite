@@ -13,4 +13,9 @@ public interface IUserRepository : IRepository<User>
     /// <param name="cancellationToken">A token that signals cancellation of the operation.</param>
     /// <returns>The user, or <see langword="null"/> if no user has the address.</returns>
     Task<User?> GetByEmailAsync(Email email, CancellationToken cancellationToken = default);
+
+    /// <summary>Loads the users with the identifiers, active or not, in one query.</summary>
+    /// <param name="ids">The identifiers; unknown ones are skipped.</param>
+    /// <param name="cancellationToken">A token that signals cancellation of the operation.</param>
+    Task<IReadOnlyList<User>> GetByIdsAsync(IReadOnlyCollection<Guid> ids, CancellationToken cancellationToken = default);
 }

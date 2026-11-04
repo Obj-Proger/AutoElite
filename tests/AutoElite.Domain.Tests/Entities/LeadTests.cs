@@ -252,21 +252,32 @@ public class LeadTests
         var lead = CreateLead();
         lead.ClearDomainEvents();
 
-        var result = lead.AssignManager(_managerId, _later);
+        var result = lead.AssignManager(_managerId, _otherManagerId, _later);
 
         result.IsSuccess.Should().BeTrue();
         lead.ManagerId.Should().Be(_managerId);
         lead.DomainEvents.Should().ContainSingle().Which.Should()
-            .Be(new LeadAssignedDomainEvent(lead.Id, _managerId, _later));
+            .Be(new LeadAssignedDomainEvent(lead.Id, _managerId, _otherManagerId, _later));
+    }
+
+    [Fact]
+    public void AssignManager_EmptyAssigningUser_ReturnsUserIdEmptyErrorAndKeepsTheLead()
+    {
+        var lead = CreateLead();
+
+        var result = lead.AssignManager(_managerId, Guid.Empty, _later);
+
+        result.Error.Should().Be(DomainErrors.Lead.UserIdEmpty);
+        lead.ManagerId.Should().BeNull();
     }
 
     [Fact]
     public void AssignManager_DifferentManager_ReplacesManager()
     {
         var lead = CreateLead();
-        lead.AssignManager(_managerId, _now);
+        lead.AssignManager(_managerId, null, _now);
 
-        var result = lead.AssignManager(_otherManagerId, _later);
+        var result = lead.AssignManager(_otherManagerId, null, _later);
 
         result.IsSuccess.Should().BeTrue();
         lead.ManagerId.Should().Be(_otherManagerId);
@@ -276,9 +287,9 @@ public class LeadTests
     public void AssignManager_SameManager_ReturnsManagerAlreadyAssignedError()
     {
         var lead = CreateLead();
-        lead.AssignManager(_managerId, _now);
+        lead.AssignManager(_managerId, null, _now);
 
-        var result = lead.AssignManager(_managerId, _later);
+        var result = lead.AssignManager(_managerId, null, _later);
 
         result.IsFailure.Should().BeTrue();
         result.Error.Should().Be(DomainErrors.Lead.ManagerAlreadyAssigned);
@@ -289,7 +300,7 @@ public class LeadTests
     {
         var lead = CreateLead();
 
-        var result = lead.AssignManager(Guid.Empty, _later);
+        var result = lead.AssignManager(Guid.Empty, null, _later);
 
         result.IsFailure.Should().BeTrue();
         result.Error.Should().Be(DomainErrors.Lead.ManagerIdEmpty);
@@ -300,7 +311,7 @@ public class LeadTests
     {
         var lead = CreateConvertedLead();
 
-        var result = lead.AssignManager(_managerId, _later);
+        var result = lead.AssignManager(_managerId, null, _later);
 
         result.IsFailure.Should().BeTrue();
         result.Error.Should().Be(DomainErrors.Lead.NotOpen);

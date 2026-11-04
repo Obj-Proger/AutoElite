@@ -9,6 +9,7 @@ using AutoElite.Application.DrivingSlots;
 using AutoElite.Application.Exams;
 using AutoElite.Application.Leads;
 using AutoElite.Application.Notifications;
+using AutoElite.Application.Notifications.DrivingLessons;
 using AutoElite.Application.Payments;
 using AutoElite.Application.Questions;
 using AutoElite.Application.Settings;
@@ -69,7 +70,10 @@ public static class DependencyInjection
         services.AddScoped<ExamAccess>();
         services.AddScoped<ChatAccess>();
         services.AddScoped<ChatUsers>();
+        services.AddScoped<LocalTimes>();
         services.AddScoped<Notifier>();
+        services.AddScoped<GroupNotifier>();
+        services.AddScoped<DrivingLessonReader>();
 
         RegisterOpenGenericImplementations(services, typeof(IRequestHandler<,>));
         RegisterOpenGenericImplementations(services, typeof(IValidator<>));
