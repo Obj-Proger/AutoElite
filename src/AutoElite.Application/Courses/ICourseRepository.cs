@@ -10,4 +10,10 @@ public interface ICourseRepository : IRepository<Course>
     /// <param name="topicId">The identifier of the topic.</param>
     /// <param name="cancellationToken">A token that signals cancellation of the operation.</param>
     Task<bool> IsTopicInUseAsync(Guid topicId, CancellationToken cancellationToken = default);
+
+    /// <summary>Loads the course that has the topic.</summary>
+    /// <param name="topicId">The identifier of the topic.</param>
+    /// <param name="cancellationToken">A token that signals cancellation of the operation.</param>
+    /// <returns>The course, or <see langword="null"/> if no course has the topic.</returns>
+    Task<Course?> GetByTopicAsync(Guid topicId, CancellationToken cancellationToken = default);
 }

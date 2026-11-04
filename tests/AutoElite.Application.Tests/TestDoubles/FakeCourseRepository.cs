@@ -9,4 +9,7 @@ internal sealed class FakeCourseRepository : InMemoryRepository<Course>, ICourse
 
     public Task<bool> IsTopicInUseAsync(Guid topicId, CancellationToken cancellationToken = default) =>
         Task.FromResult(TopicsInUse.Contains(topicId));
+
+    public Task<Course?> GetByTopicAsync(Guid topicId, CancellationToken cancellationToken = default) =>
+        Task.FromResult(Items.SingleOrDefault(course => course.Topics.Any(topic => topic.Id == topicId)));
 }

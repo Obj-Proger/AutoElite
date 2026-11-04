@@ -220,6 +220,18 @@ public static class ApplicationErrors
         public static readonly Error StatusNotDefined = Error.Validation("DrivingSlot.StatusNotDefined", "Slot status is not valid.");
     }
 
+    /// <summary>Errors of the question bank that need more than the question to check.</summary>
+    public static class Question
+    {
+        /// <summary>Another question already has the external code.</summary>
+        public static readonly Error ExternalCodeTaken = Error.Conflict(
+            "Question.ExternalCodeTaken", "Another question already has this external code.");
+
+        /// <summary>Someone other than an administrator writes an official question.</summary>
+        public static readonly Error OfficialAdministratorOnly = Error.Forbidden(
+            "Question.OfficialAdministratorOnly", "Only an administrator can add or change official questions.");
+    }
+
     /// <summary>Errors of the rules in <see cref="Users.PasswordPolicy"/>.</summary>
     public static class Password
     {

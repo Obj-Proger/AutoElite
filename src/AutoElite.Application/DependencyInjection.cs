@@ -7,6 +7,7 @@ using AutoElite.Application.DrivingRoutes;
 using AutoElite.Application.DrivingSlots;
 using AutoElite.Application.Leads;
 using AutoElite.Application.Payments;
+using AutoElite.Application.Questions;
 using AutoElite.Application.Settings;
 using AutoElite.Application.StudyGroups;
 using AutoElite.Application.TheoryLessons;
@@ -55,6 +56,8 @@ public static class DependencyInjection
         services.AddScoped<LessonInstructors>();
         services.AddScoped<DrivingRouteAccess>();
         services.AddScoped<DrivingSlotAccess>();
+        services.AddScoped<QuestionAccess>();
+        services.AddScoped<QuestionContent>();
 
         RegisterOpenGenericImplementations(services, typeof(IRequestHandler<,>));
         RegisterOpenGenericImplementations(services, typeof(IValidator<>));

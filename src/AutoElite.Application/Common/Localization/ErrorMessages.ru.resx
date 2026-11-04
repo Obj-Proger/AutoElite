@@ -814,6 +814,9 @@
   <data name="Question.ExplanationTooLong" xml:space="preserve">
     <value>Пояснение превышает допустимую длину.</value>
   </data>
+  <data name="Question.ExternalCodeTaken" xml:space="preserve">
+    <value>Вопрос с таким внешним кодом уже есть.</value>
+  </data>
   <data name="Question.ExternalCodeTooLong" xml:space="preserve">
     <value>Внешний код превышает допустимую длину.</value>
   </data>
@@ -828,6 +831,9 @@
   </data>
   <data name="Question.NotFound" xml:space="preserve">
     <value>Вопрос не найден.</value>
+  </data>
+  <data name="Question.OfficialAdministratorOnly" xml:space="preserve">
+    <value>Добавлять и изменять официальные вопросы может только администратор.</value>
   </data>
   <data name="Question.OptionTextEmpty" xml:space="preserve">
     <value>Текст варианта ответа не может быть пустым.</value>
