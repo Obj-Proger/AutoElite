@@ -13,6 +13,27 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="EmailChange.Body" xml:space="preserve">
+    <value>Hello, {0}!
+
+You asked to use this address for your AutoElite account. To confirm it, use this link:
+{1}
+
+Until you confirm it, sign in with your current address. If you did not ask for this, ignore this email.</value>
+  </data>
+  <data name="EmailChange.Subject" xml:space="preserve">
+    <value>Confirm your new email address</value>
+  </data>
+  <data name="EmailChanged.Body" xml:space="preserve">
+    <value>Hello, {0}!
+
+The email address of your AutoElite account was changed to {1}. From now on, sign in with the new address.
+
+If you did not make this change, contact the school right away.</value>
+  </data>
+  <data name="EmailChanged.Subject" xml:space="preserve">
+    <value>Your AutoElite email address was changed</value>
+  </data>
   <data name="Invitation.Body" xml:space="preserve">
     <value>Hello, {0}!
 

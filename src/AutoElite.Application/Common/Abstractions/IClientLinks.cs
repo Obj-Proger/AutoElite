@@ -15,4 +15,10 @@ public interface IClientLinks
     /// <param name="userId">The identifier of the user.</param>
     /// <param name="token">The password reset token.</param>
     Uri PasswordReset(Guid userId, string token);
+
+    /// <summary>Builds the link that confirms a new email address of a user.</summary>
+    /// <param name="userId">The identifier of the user.</param>
+    /// <param name="newEmail">The new address, which the token is bound to.</param>
+    /// <param name="token">The email change token.</param>
+    Uri EmailChange(Guid userId, Email newEmail, string token);
 }

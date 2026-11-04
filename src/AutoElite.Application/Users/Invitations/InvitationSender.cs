@@ -12,12 +12,8 @@ internal sealed class InvitationSender(IIdentityService identityService, IClient
     {
         var token = await identityService.GenerateInvitationTokenAsync(user.Id, cancellationToken);
         var link = clientLinks.Invitation(user.Id, token);
-        var culture = user.PreferredLanguage.ToCulture();
 
-        var message = new EmailMessage(
-            user.Email,
-            EmailTexts.Format(EmailTexts.InvitationSubject, culture),
-            EmailTexts.Format(EmailTexts.InvitationBody, culture, user.FullName.FirstName, link));
+        var message = UserEmail.Compose(user, user.Email, EmailTexts.InvitationSubject, EmailTexts.InvitationBody, link);
 
         await emailQueue.EnqueueAsync(message, cancellationToken);
     }

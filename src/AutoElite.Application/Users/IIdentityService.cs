@@ -72,4 +72,24 @@ public interface IIdentityService
     /// <returns><see langword="false"/> if the current password is wrong; nothing is changed then.</returns>
     Task<bool> ChangePasswordAsync(
         Guid userId, string currentPassword, string newPassword, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Generates a single-purpose, time-limited token bound to the new address, which proves that the user can read
+    /// mail sent there.
+    /// </summary>
+    /// <param name="userId">The identifier of the user.</param>
+    /// <param name="newEmail">The address the user wants to use.</param>
+    /// <param name="cancellationToken">A token that signals cancellation of the operation.</param>
+    Task<string> GenerateEmailChangeTokenAsync(Guid userId, Email newEmail, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Checks the token and, if it is valid for the address, makes the address the confirmed sign-in name of the
+    /// account. Changing invalidates every token of the user sent by email.
+    /// </summary>
+    /// <param name="userId">The identifier of the user.</param>
+    /// <param name="newEmail">The address from the confirmation link.</param>
+    /// <param name="token">The token from the confirmation link.</param>
+    /// <param name="cancellationToken">A token that signals cancellation of the operation.</param>
+    /// <returns><see langword="false"/> if the token is wrong, expired or for another address; nothing is changed then.</returns>
+    Task<bool> ChangeEmailAsync(Guid userId, Email newEmail, string token, CancellationToken cancellationToken = default);
 }

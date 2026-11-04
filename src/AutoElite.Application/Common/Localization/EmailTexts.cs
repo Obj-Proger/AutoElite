@@ -21,6 +21,18 @@ internal static class EmailTexts
     /// <summary>The body of the password reset email: <c>{0}</c> is the first name, <c>{1}</c> the link.</summary>
     public const string PasswordResetBody = "PasswordReset.Body";
 
+    /// <summary>The subject of the email that confirms a new address. No placeholders.</summary>
+    public const string EmailChangeSubject = "EmailChange.Subject";
+
+    /// <summary>The body of the email that confirms a new address: <c>{0}</c> is the first name, <c>{1}</c> the link.</summary>
+    public const string EmailChangeBody = "EmailChange.Body";
+
+    /// <summary>The subject of the notice sent to the previous address after a change. No placeholders.</summary>
+    public const string EmailChangedSubject = "EmailChanged.Subject";
+
+    /// <summary>The body of the notice sent to the previous address: <c>{0}</c> is the first name, <c>{1}</c> the new address.</summary>
+    public const string EmailChangedBody = "EmailChanged.Body";
+
     /// <summary>Gets the email text resources.</summary>
     internal static ResourceManager Resources { get; } =
         new("AutoElite.Application.Common.Localization.EmailTexts", typeof(EmailTexts).Assembly);

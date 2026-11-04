@@ -34,12 +34,8 @@ internal sealed class RequestPasswordResetCommandHandler(
     {
         var token = await identityService.GeneratePasswordResetTokenAsync(user.Id, cancellationToken);
         var link = clientLinks.PasswordReset(user.Id, token);
-        var culture = user.PreferredLanguage.ToCulture();
 
-        var message = new EmailMessage(
-            user.Email,
-            EmailTexts.Format(EmailTexts.PasswordResetSubject, culture),
-            EmailTexts.Format(EmailTexts.PasswordResetBody, culture, user.FullName.FirstName, link));
+        var message = UserEmail.Compose(user, user.Email, EmailTexts.PasswordResetSubject, EmailTexts.PasswordResetBody, link);
 
         await emailQueue.EnqueueAsync(message, cancellationToken);
     }

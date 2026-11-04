@@ -79,6 +79,10 @@ public static class ApplicationErrors
         public static readonly Error PasswordResetInvalid = Error.Validation(
             "Account.PasswordResetInvalid", "The password reset link is invalid or has expired. Request a new one.");
 
+        /// <summary>The email confirmation link is wrong, expired or used, or its user is deactivated.</summary>
+        public static readonly Error EmailChangeInvalid = Error.Validation(
+            "Account.EmailChangeInvalid", "The email confirmation link is invalid or has expired. Request the change again.");
+
         /// <summary>The current password given to change it is wrong.</summary>
         public static readonly Error CurrentPasswordWrong = Error.Validation(
             "Account.CurrentPasswordWrong", "The current password is incorrect.");

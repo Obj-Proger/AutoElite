@@ -13,6 +13,27 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="EmailChange.Body" xml:space="preserve">
+    <value>Здравствуйте, {0}!
+
+Вы попросили использовать этот адрес для учётной записи в AutoElite. Чтобы подтвердить его, перейдите по ссылке:
+{1}
+
+Пока адрес не подтверждён, входите с текущим адресом. Если вы этого не запрашивали, просто не обращайте внимания на это письмо.</value>
+  </data>
+  <data name="EmailChange.Subject" xml:space="preserve">
+    <value>Подтвердите новый адрес электронной почты</value>
+  </data>
+  <data name="EmailChanged.Body" xml:space="preserve">
+    <value>Здравствуйте, {0}!
+
+Адрес электронной почты вашей учётной записи в AutoElite изменён на {1}. Теперь входите с новым адресом.
+
+Если вы не меняли адрес, сразу обратитесь в автошколу.</value>
+  </data>
+  <data name="EmailChanged.Subject" xml:space="preserve">
+    <value>Адрес электронной почты в AutoElite изменён</value>
+  </data>
   <data name="Invitation.Body" xml:space="preserve">
     <value>Здравствуйте, {0}!
 

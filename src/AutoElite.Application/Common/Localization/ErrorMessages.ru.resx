@@ -25,6 +25,9 @@
   <data name="Account.DuplicateRoles" xml:space="preserve">
     <value>Каждую роль можно указать только один раз.</value>
   </data>
+  <data name="Account.EmailChangeInvalid" xml:space="preserve">
+    <value>Ссылка для подтверждения адреса недействительна или устарела. Запросите смену адреса ещё раз.</value>
+  </data>
   <data name="Account.EmailNotConfirmed" xml:space="preserve">
     <value>Подтвердите адрес электронной почты, прежде чем войти.</value>
   </data>

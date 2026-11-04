@@ -88,6 +88,27 @@ internal sealed class FakeIdentityService : IIdentityService
         return Task.FromResult(true);
     }
 
+    public Task<string> GenerateEmailChangeTokenAsync(Guid userId, Email newEmail, CancellationToken cancellationToken = default)
+    {
+        var token = $"email-{++_tokenCount}";
+        _accounts[userId].EmailChangeTokens.Add((token, newEmail));
+
+        return Task.FromResult(token);
+    }
+
+    public Task<bool> ChangeEmailAsync(Guid userId, Email newEmail, string token, CancellationToken cancellationToken = default)
+    {
+        var account = _accounts[userId];
+        if (!account.EmailChangeTokens.Contains((token, newEmail)))
+            return Task.FromResult(false);
+
+        account.Email = newEmail;
+        account.EmailConfirmed = true;
+        account.EmailChangeTokens.Clear();
+
+        return Task.FromResult(true);
+    }
+
     /// <summary>Adds an account that exists before the test acts.</summary>
     public void Seed(Guid userId, Email email) => _accounts.Add(userId, new Account(email));
 
@@ -100,7 +121,7 @@ internal sealed class FakeIdentityService : IIdentityService
 
     internal sealed class Account(Email email)
     {
-        public Email Email { get; } = email;
+        public Email Email { get; set; } = email;
 
         public string? Password { get; set; }
 
@@ -111,5 +132,7 @@ internal sealed class FakeIdentityService : IIdentityService
         public List<string> InvitationTokens { get; } = [];
 
         public List<string> ResetTokens { get; } = [];
+
+        public List<(string Token, Email NewEmail)> EmailChangeTokens { get; } = [];
     }
 }

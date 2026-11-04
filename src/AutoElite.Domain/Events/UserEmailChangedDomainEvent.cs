@@ -1,8 +1,8 @@
 namespace AutoElite.Domain.Events;
 
 /// <summary>
-/// Raised when a user's email address changes; the login must follow the new address and the
-/// new address must be confirmed again.
+/// Raised when a user's email address changes. Callers change it only after the new address is
+/// confirmed, so the sign-in name follows it at once; the previous address is told about the change.
 /// </summary>
 /// <param name="UserId">The identifier of the user.</param>
 /// <param name="PreviousEmail">The normalized email address before the change.</param>
