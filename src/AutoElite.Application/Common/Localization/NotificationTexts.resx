@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- English email texts. Placeholders are listed in EmailTexts; every culture must use the same ones. -->
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="PaymentConfirmed.Body" xml:space="preserve">
+    <value>Your payment of {0:N2} {1} under contract {2} has been confirmed.</value>
+  </data>
+  <data name="PaymentConfirmed.Title" xml:space="preserve">
+    <value>Payment received</value>
+  </data>
+  <data name="PaymentRefunded.Body" xml:space="preserve">
+    <value>Your payment of {0:N2} {1} under contract {2} has been refunded.</value>
+  </data>
+  <data name="PaymentRefunded.Title" xml:space="preserve">
+    <value>Payment refunded</value>
+  </data>
+</root>
