@@ -1,4 +1,5 @@
 using AutoElite.Application.Common.Authorization;
+using AutoElite.Application.Common.Events;
 
 namespace AutoElite.Architecture.Tests;
 
@@ -12,6 +13,16 @@ public class ApplicationConventionTests
             .Select(type => type.Name);
 
         violating.Should().BeEmpty("handlers are reached only through the dispatcher");
+    }
+
+    [Fact]
+    public void DomainEventHandlers_AreInternalSealedAndNamedHandler()
+    {
+        var violating = Layers.ClassesImplementing(Layers.Application, typeof(IDomainEventHandler<>))
+            .Where(type => type.IsVisible || !type.IsSealed || !type.Name.EndsWith("Handler", StringComparison.Ordinal))
+            .Select(type => type.Name);
+
+        violating.Should().BeEmpty("event handlers are reached only through the domain event publisher");
     }
 
     [Fact]
