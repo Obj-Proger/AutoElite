@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace AutoElite.Application.Settings.UpdateSchoolSettings;
 
-/// <summary>Checks the currency; the ranges of the other values are the domain's rules.</summary>
+/// <summary>Checks the currency; the time zone and the ranges of the other values are the domain's rules.</summary>
 internal sealed class UpdateSchoolSettingsCommandValidator : AbstractValidator<UpdateSchoolSettingsCommand>
 {
     public UpdateSchoolSettingsCommandValidator()

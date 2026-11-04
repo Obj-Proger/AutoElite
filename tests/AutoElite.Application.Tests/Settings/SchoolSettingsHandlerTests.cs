@@ -9,7 +9,7 @@ public class SchoolSettingsHandlerTests
 {
     private readonly FakeSchoolSettingsRepository _repository = new();
 
-    private static readonly UpdateSchoolSettingsCommand _command = new("KZT", 20, 3, 360, [30, 1440]);
+    private static readonly UpdateSchoolSettingsCommand _command = new("KZT", "Asia/Almaty", 20, 3, 360, [30, 1440]);
 
     private Task<Result<SchoolSettingsDetails>> Get() =>
         new GetSchoolSettingsQueryHandler(new SchoolSettingsProvider(_repository))
@@ -26,6 +26,7 @@ public class SchoolSettingsHandlerTests
 
         var details = result.Value;
         details.DefaultCurrency.Should().Be("RUB");
+        details.TimeZoneId.Should().Be("Europe/Moscow");
         details.QualityWindowSize.Should().Be(10);
         details.LowRatingThreshold.Should().Be(2);
         details.StudentCancellationNoticeMinutes.Should().Be(1440);
@@ -54,6 +55,7 @@ public class SchoolSettingsHandlerTests
         result.IsSuccess.Should().BeTrue();
         var settings = _repository.Settings!;
         settings.DefaultCurrency.Code.Should().Be("KZT");
+        settings.TimeZoneId.Should().Be("Asia/Almaty");
         settings.QualityWindowSize.Should().Be(20);
         settings.LowRatingThreshold.Should().Be(3);
         settings.StudentCancellationNotice.Should().Be(TimeSpan.FromHours(6));
@@ -89,6 +91,14 @@ public class SchoolSettingsHandlerTests
         result.Error.Should().Be(DomainErrors.SchoolSettings.QualityWindowOutOfRange);
         _repository.Settings!.QualityWindowSize.Should().Be(SchoolSettings.DefaultQualityWindowSize);
         _repository.Settings!.DefaultCurrency.Code.Should().Be("RUB");
+    }
+
+    [Fact]
+    public async Task Update_UnknownTimeZone_ReturnsTimeZoneUnknown()
+    {
+        var result = await Update(_command with { TimeZoneId = "Mars/Olympus" });
+
+        result.Error.Should().Be(DomainErrors.SchoolSettings.TimeZoneUnknown);
     }
 
     [Fact]

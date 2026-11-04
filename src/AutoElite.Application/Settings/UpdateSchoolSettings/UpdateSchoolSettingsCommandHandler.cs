@@ -15,6 +15,7 @@ internal sealed class UpdateSchoolSettingsCommandHandler(SchoolSettingsProvider 
 
         return settings.Update(
             currencyResult.Value,
+            command.TimeZoneId,
             command.QualityWindowSize,
             command.LowRatingThreshold,
             TimeSpan.FromMinutes(command.StudentCancellationNoticeMinutes),

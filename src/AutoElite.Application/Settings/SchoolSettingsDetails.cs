@@ -2,12 +2,14 @@ namespace AutoElite.Application.Settings;
 
 /// <summary>The school settings as the settings page shows them. Durations are in whole minutes.</summary>
 /// <param name="DefaultCurrency">The ISO 4217 code of the currency offered by default.</param>
+/// <param name="TimeZoneId">The IANA identifier of the school's time zone.</param>
 /// <param name="QualityWindowSize">How many of the latest practice grades the quality score averages.</param>
 /// <param name="LowRatingThreshold">The rating at or below which a lesson rating notifies the managers.</param>
 /// <param name="StudentCancellationNoticeMinutes">How long before a lesson a student may still cancel it.</param>
 /// <param name="LessonReminderLeadTimeMinutes">How long before a lesson the participants are reminded, longest first.</param>
 public sealed record SchoolSettingsDetails(
     string DefaultCurrency,
+    string TimeZoneId,
     int QualityWindowSize,
     int LowRatingThreshold,
     int StudentCancellationNoticeMinutes,
@@ -21,6 +23,7 @@ public sealed record SchoolSettingsDetails(
 
         return new SchoolSettingsDetails(
             settings.DefaultCurrency.Code,
+            settings.TimeZoneId,
             settings.QualityWindowSize,
             settings.LowRatingThreshold,
             (int)settings.StudentCancellationNotice.TotalMinutes,

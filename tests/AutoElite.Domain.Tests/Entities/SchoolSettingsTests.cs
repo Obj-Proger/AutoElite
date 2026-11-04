@@ -8,12 +8,14 @@ public class SchoolSettingsTests
 
     private static Result Update(
         SchoolSettings settings,
+        string? timeZoneId = "Asia/Yekaterinburg",
         int qualityWindowSize = 10,
         int lowRatingThreshold = 2,
         TimeSpan? studentCancellationNotice = null,
         TimeSpan[]? lessonReminderLeadTimes = null) =>
         settings.Update(
             _kzt,
+            timeZoneId,
             qualityWindowSize,
             lowRatingThreshold,
             studentCancellationNotice ?? TimeSpan.FromHours(12),
@@ -26,6 +28,7 @@ public class SchoolSettingsTests
 
         settings.Id.Should().NotBe(Guid.Empty);
         settings.DefaultCurrency.Should().Be(_rub);
+        settings.TimeZoneId.Should().Be("Europe/Moscow");
         settings.QualityWindowSize.Should().Be(10);
         settings.LowRatingThreshold.Should().Be(2);
         settings.StudentCancellationNotice.Should().Be(TimeSpan.FromHours(24));
@@ -37,10 +40,11 @@ public class SchoolSettingsTests
     {
         var settings = SchoolSettings.CreateDefault(_rub);
 
-        var result = settings.Update(_kzt, 20, 3, TimeSpan.FromHours(6), [TimeSpan.FromMinutes(30)]);
+        var result = settings.Update(_kzt, "Asia/Almaty", 20, 3, TimeSpan.FromHours(6), [TimeSpan.FromMinutes(30)]);
 
         result.IsSuccess.Should().BeTrue();
         settings.DefaultCurrency.Should().Be(_kzt);
+        settings.TimeZoneId.Should().Be("Asia/Almaty");
         settings.QualityWindowSize.Should().Be(20);
         settings.LowRatingThreshold.Should().Be(3);
         settings.StudentCancellationNotice.Should().Be(TimeSpan.FromHours(6));
@@ -66,6 +70,40 @@ public class SchoolSettingsTests
 
         result.IsSuccess.Should().BeTrue();
         settings.LessonReminderLeadTimes.Should().BeEmpty();
+    }
+
+    [Fact]
+    public void Update_TimeZoneWithSpaces_StoresItTrimmed()
+    {
+        var settings = SchoolSettings.CreateDefault(_rub);
+
+        Update(settings, timeZoneId: "  Asia/Yekaterinburg ");
+
+        settings.TimeZoneId.Should().Be("Asia/Yekaterinburg");
+    }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData("   ")]
+    public void Update_EmptyTimeZone_ReturnsTimeZoneEmptyErrorAndKeepsSettings(string? timeZoneId)
+    {
+        var settings = SchoolSettings.CreateDefault(_rub);
+
+        var result = Update(settings, timeZoneId: timeZoneId);
+
+        result.Error.Should().Be(DomainErrors.SchoolSettings.TimeZoneEmpty);
+        settings.TimeZoneId.Should().Be(SchoolSettings.DefaultTimeZoneId);
+        settings.DefaultCurrency.Should().Be(_rub);
+    }
+
+    [Theory]
+    [InlineData("Mars/Olympus")]
+    [InlineData("Russian Standard Time")]
+    public void Update_UnknownOrWindowsTimeZone_ReturnsTimeZoneUnknownError(string timeZoneId)
+    {
+        var result = Update(SchoolSettings.CreateDefault(_rub), timeZoneId: timeZoneId);
+
+        result.Error.Should().Be(DomainErrors.SchoolSettings.TimeZoneUnknown);
     }
 
     [Theory]

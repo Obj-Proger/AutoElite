@@ -18,6 +18,9 @@ public sealed class SchoolSettings : AuditableEntity
     /// <summary>The default rating at or below which a driving lesson rating is considered low.</summary>
     public const int DefaultLowRatingThreshold = 2;
 
+    /// <summary>The time zone of a school that has not chosen one.</summary>
+    public const string DefaultTimeZoneId = "Europe/Moscow";
+
     /// <summary>The most lesson reminders that can be configured.</summary>
     public const int MaxLessonReminders = 3;
 
@@ -45,6 +48,12 @@ public sealed class SchoolSettings : AuditableEntity
     public Currency DefaultCurrency { get; private set; } = null!;
 
     /// <summary>
+    /// Gets the IANA identifier of the school's time zone. Times of records not tied to a branch are shown in it;
+    /// a branch has its own time zone.
+    /// </summary>
+    public string TimeZoneId { get; private set; } = null!;
+
+    /// <summary>
     /// Gets how many of the latest practice grades the contract quality score averages, from 1 to
     /// <see cref="Contract.MaxStoredGrades"/>.
     /// </summary>
@@ -69,12 +78,13 @@ public sealed class SchoolSettings : AuditableEntity
     private SchoolSettings(
         Guid id,
         Currency defaultCurrency,
+        string timeZoneId,
         int qualityWindowSize,
         int lowRatingThreshold,
         TimeSpan studentCancellationNotice,
         IEnumerable<TimeSpan> lessonReminderLeadTimes) : base(id)
     {
-        Apply(defaultCurrency, qualityWindowSize, lowRatingThreshold, studentCancellationNotice, lessonReminderLeadTimes);
+        Apply(defaultCurrency, timeZoneId, qualityWindowSize, lowRatingThreshold, studentCancellationNotice, lessonReminderLeadTimes);
     }
 
     /// <summary>Required by EF Core for entity materialization.</summary>
@@ -84,12 +94,13 @@ public sealed class SchoolSettings : AuditableEntity
 
     /// <summary>Creates the settings with the default values.</summary>
     /// <param name="defaultCurrency">The school's main currency.</param>
-    /// <returns>The settings with the default values and the given currency.</returns>
+    /// <returns>The settings with the default values, <see cref="DefaultTimeZoneId"/> among them, and the currency.</returns>
     public static SchoolSettings CreateDefault(Currency defaultCurrency)
     {
         return new SchoolSettings(
             Guid.CreateVersion7(),
             defaultCurrency,
+            DefaultTimeZoneId,
             DefaultQualityWindowSize,
             DefaultLowRatingThreshold,
             DefaultStudentCancellationNotice,
@@ -98,6 +109,7 @@ public sealed class SchoolSettings : AuditableEntity
 
     /// <summary>Replaces all settings at once. Nothing changes if any value is invalid.</summary>
     /// <param name="defaultCurrency">The currency offered by default; existing amounts keep their currency.</param>
+    /// <param name="timeZoneId">The IANA identifier of the school's time zone, for example <c>Asia/Yekaterinburg</c>.</param>
     /// <param name="qualityWindowSize">The quality window, from 1 to <see cref="Contract.MaxStoredGrades"/>.</param>
     /// <param name="lowRatingThreshold">The low rating threshold, from 1 to 4.</param>
     /// <param name="studentCancellationNotice">The student cancellation notice, from zero to <see cref="MaxStudentCancellationNotice"/>.</param>
@@ -108,11 +120,17 @@ public sealed class SchoolSettings : AuditableEntity
     /// <returns>The first validation failure encountered, or success.</returns>
     public Result Update(
         Currency defaultCurrency,
+        string? timeZoneId,
         int qualityWindowSize,
         int lowRatingThreshold,
         TimeSpan studentCancellationNotice,
         IReadOnlyCollection<TimeSpan> lessonReminderLeadTimes)
     {
+        var timeZoneResult = Guard.IanaTimeZone(
+            timeZoneId, DomainErrors.SchoolSettings.TimeZoneEmpty, DomainErrors.SchoolSettings.TimeZoneUnknown);
+        if (timeZoneResult.IsFailure)
+            return Result.Failure(timeZoneResult.Error);
+
         if (qualityWindowSize is < MinQualityWindowSize or > Contract.MaxStoredGrades)
             return Result.Failure(DomainErrors.SchoolSettings.QualityWindowOutOfRange);
 
@@ -126,7 +144,9 @@ public sealed class SchoolSettings : AuditableEntity
         if (remindersResult.IsFailure)
             return remindersResult;
 
-        Apply(defaultCurrency, qualityWindowSize, lowRatingThreshold, studentCancellationNotice, lessonReminderLeadTimes);
+        Apply(
+            defaultCurrency, timeZoneResult.Value, qualityWindowSize, lowRatingThreshold, studentCancellationNotice,
+            lessonReminderLeadTimes);
 
         return Result.Success();
     }
@@ -147,12 +167,14 @@ public sealed class SchoolSettings : AuditableEntity
 
     private void Apply(
         Currency defaultCurrency,
+        string timeZoneId,
         int qualityWindowSize,
         int lowRatingThreshold,
         TimeSpan studentCancellationNotice,
         IEnumerable<TimeSpan> lessonReminderLeadTimes)
     {
         DefaultCurrency = defaultCurrency;
+        TimeZoneId = timeZoneId;
         QualityWindowSize = qualityWindowSize;
         LowRatingThreshold = lowRatingThreshold;
         StudentCancellationNotice = studentCancellationNotice;

@@ -883,6 +883,12 @@
   <data name="SchoolSettings.ReminderLeadTimeOutOfRange" xml:space="preserve">
     <value>Каждое напоминание должно приходить не раньше чем за 7 дней и не позже чем за 15 минут до занятия.</value>
   </data>
+  <data name="SchoolSettings.TimeZoneEmpty" xml:space="preserve">
+    <value>Часовой пояс не может быть пустым.</value>
+  </data>
+  <data name="SchoolSettings.TimeZoneUnknown" xml:space="preserve">
+    <value>Часовой пояс должен быть известным идентификатором IANA, например Europe/Moscow.</value>
+  </data>
   <data name="SchoolSettings.TooManyReminders" xml:space="preserve">
     <value>Можно настроить не больше 3 напоминаний о занятии.</value>
   </data>

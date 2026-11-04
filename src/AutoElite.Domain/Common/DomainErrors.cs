@@ -764,6 +764,12 @@ public static class DomainErrors
 
         /// <summary>The same lesson reminder lead time is configured more than once.</summary>
         public static readonly Error DuplicateReminder = new("SchoolSettings.DuplicateReminder", "Lesson reminders must not repeat.", ErrorType.Validation);
+
+        /// <summary>The time zone is empty.</summary>
+        public static readonly Error TimeZoneEmpty = new("SchoolSettings.TimeZoneEmpty", "Time zone cannot be empty.", ErrorType.Validation);
+
+        /// <summary>The time zone is not an IANA identifier known to the system.</summary>
+        public static readonly Error TimeZoneUnknown = new("SchoolSettings.TimeZoneUnknown", "Time zone must be a known IANA identifier, e.g. Europe/Moscow.", ErrorType.Validation);
     }
 
     /// <summary>Errors related to <see cref="ValueObjects.SkillGrade"/> validation.</summary>

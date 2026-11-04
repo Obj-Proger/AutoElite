@@ -52,4 +52,21 @@ internal static class Guard
     /// <typeparam name="TEnum">The enum type to validate against.</typeparam>
     public static Result<TEnum> DefinedEnum<TEnum>(TEnum value, Error error) where TEnum : struct, Enum =>
         Enum.IsDefined(value) ? value : Result.Failure<TEnum>(error);
+
+    /// <summary>
+    /// Validates an IANA time zone identifier known to the system time zone database and returns it trimmed.
+    /// Windows identifiers such as <c>Russian Standard Time</c> are rejected so that stored values do not depend on
+    /// the server's platform.
+    /// </summary>
+    public static Result<string> IanaTimeZone(string? timeZoneId, Error emptyError, Error unknownError)
+    {
+        if (string.IsNullOrWhiteSpace(timeZoneId))
+            return Result.Failure<string>(emptyError);
+
+        var trimmed = timeZoneId.Trim();
+
+        return TimeZoneInfo.TryFindSystemTimeZoneById(trimmed, out var timeZone) && timeZone.HasIanaId
+            ? trimmed
+            : Result.Failure<string>(unknownError);
+    }
 }

@@ -116,19 +116,6 @@ public sealed class Branch : AuditableEntity
     private static Result<string> ValidateName(string? name) =>
         Guard.RequiredText(name, MaxNameLength, DomainErrors.Branch.NameEmpty, DomainErrors.Branch.NameTooLong);
 
-    /// <summary>
-    /// Accepts only IANA identifiers known to the system time zone database. Windows identifiers such as
-    /// <c>Russian Standard Time</c> are rejected so that stored values do not depend on the server's platform.
-    /// </summary>
-    private static Result<string> ValidateTimeZoneId(string? timeZoneId)
-    {
-        if (string.IsNullOrWhiteSpace(timeZoneId))
-            return Result.Failure<string>(DomainErrors.Branch.TimeZoneEmpty);
-
-        var trimmed = timeZoneId.Trim();
-
-        return TimeZoneInfo.TryFindSystemTimeZoneById(trimmed, out var timeZone) && timeZone.HasIanaId
-            ? trimmed
-            : Result.Failure<string>(DomainErrors.Branch.TimeZoneUnknown);
-    }
+    private static Result<string> ValidateTimeZoneId(string? timeZoneId) =>
+        Guard.IanaTimeZone(timeZoneId, DomainErrors.Branch.TimeZoneEmpty, DomainErrors.Branch.TimeZoneUnknown);
 }
