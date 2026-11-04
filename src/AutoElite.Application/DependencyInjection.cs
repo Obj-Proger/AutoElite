@@ -1,7 +1,7 @@
 using AutoElite.Application.Common.Behaviors;
 using AutoElite.Application.Common.Events;
 using AutoElite.Application.Common.Localization;
-using AutoElite.Application.Common.Messaging;
+using AutoElite.Application.Users.Invitations;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -25,6 +25,7 @@ public static class DependencyInjection
         services.AddScoped<IDispatcher, Dispatcher>();
         services.AddScoped<IDomainEventPublisher, DomainEventPublisher>();
         services.AddSingleton<IErrorLocalizer, ResourceErrorLocalizer>();
+        services.AddScoped<InvitationSender>();
 
         RegisterOpenGenericImplementations(services, typeof(IRequestHandler<,>));
         RegisterOpenGenericImplementations(services, typeof(IValidator<>));

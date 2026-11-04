@@ -1,5 +1,4 @@
 using System.Reflection;
-using AutoElite.Domain.Enums;
 
 namespace AutoElite.Application.Common.Authorization;
 

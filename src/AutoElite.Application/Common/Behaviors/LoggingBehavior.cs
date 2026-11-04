@@ -1,4 +1,3 @@
-using AutoElite.Application.Common.Messaging;
 using Microsoft.Extensions.Logging;
 
 namespace AutoElite.Application.Common.Behaviors;

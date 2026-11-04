@@ -1,5 +1,4 @@
 using System.Collections.Concurrent;
-using AutoElite.Application.Common.Abstractions;
 using AutoElite.Application.Common.Behaviors;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;

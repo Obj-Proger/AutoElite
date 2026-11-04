@@ -1,5 +1,3 @@
-using AutoElite.Domain.Enums;
-
 namespace AutoElite.Application.Common.Abstractions;
 
 /// <summary>

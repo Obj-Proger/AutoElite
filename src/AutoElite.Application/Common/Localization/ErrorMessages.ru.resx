@@ -13,6 +13,24 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Account.AlreadyActivated" xml:space="preserve">
+    <value>Пользователь уже принял приглашение.</value>
+  </data>
+  <data name="Account.BranchInactive" xml:space="preserve">
+    <value>Нельзя привязать пользователя к деактивированному филиалу.</value>
+  </data>
+  <data name="Account.DuplicateRoles" xml:space="preserve">
+    <value>Каждую роль можно указать только один раз.</value>
+  </data>
+  <data name="Account.EmailTaken" xml:space="preserve">
+    <value>Пользователь с таким адресом электронной почты уже существует.</value>
+  </data>
+  <data name="Account.ManagerInvitesOnlyStudents" xml:space="preserve">
+    <value>Менеджер может приглашать только студентов.</value>
+  </data>
+  <data name="Account.RolesEmpty" xml:space="preserve">
+    <value>Нужно указать хотя бы одну роль.</value>
+  </data>
   <data name="Address.CityEmpty" xml:space="preserve">
     <value>Город не может быть пустым.</value>
   </data>

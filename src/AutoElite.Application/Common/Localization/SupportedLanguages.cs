@@ -1,5 +1,4 @@
 using System.Globalization;
-using AutoElite.Domain.Enums;
 
 namespace AutoElite.Application.Common.Localization;
 

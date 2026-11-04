@@ -1,6 +1,3 @@
-using AutoElite.Application.Common.Abstractions;
-using AutoElite.Domain.Enums;
-
 namespace AutoElite.Application.Common.Authorization;
 
 /// <summary>

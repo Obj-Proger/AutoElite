@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- Russian email texts. Placeholders must match the English texts. -->
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Invitation.Subject" xml:space="preserve">
+    <value>Ваша учётная запись в AutoElite</value>
+  </data>
+  <data name="Invitation.Body" xml:space="preserve">
+    <value>Здравствуйте, {0}!
+
+Для вас создана учётная запись в системе автошколы AutoElite. Чтобы войти, задайте пароль по ссылке:
+{1}
+
+Ссылка действует ограниченное время. Если срок истёк, попросите автошколу отправить приглашение ещё раз. Если вы не ждали этого письма, просто не обращайте на него внимания.</value>
+  </data>
+</root>

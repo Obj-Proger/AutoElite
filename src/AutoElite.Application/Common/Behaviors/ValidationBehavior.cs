@@ -1,4 +1,3 @@
-using AutoElite.Application.Common.Messaging;
 using FluentValidation;
 
 namespace AutoElite.Application.Common.Behaviors;
