@@ -96,6 +96,13 @@ public static class ApplicationErrors
             "Account.CurrentPasswordWrong", "The current password is incorrect.");
     }
 
+    /// <summary>Errors of branches that need more than one branch to check.</summary>
+    public static class Branch
+    {
+        /// <summary>Another branch already has the name.</summary>
+        public static readonly Error NameTaken = Error.Conflict("Branch.NameTaken", "A branch with this name already exists.");
+    }
+
     /// <summary>Errors of the rules in <see cref="Users.PasswordPolicy"/>.</summary>
     public static class Password
     {

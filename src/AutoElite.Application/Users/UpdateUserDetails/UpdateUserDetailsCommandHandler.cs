@@ -14,7 +14,7 @@ internal sealed class UpdateUserDetailsCommandHandler(ManagedUsers managedUsers)
         if (fullNameResult.IsFailure)
             return Result.Failure(fullNameResult.Error);
 
-        var phoneResult = PersonDetails.CreateOptionalPhone(command.Phone);
+        var phoneResult = ContactDetails.CreateOptionalPhone(command.Phone);
         if (phoneResult.IsFailure)
             return Result.Failure(phoneResult.Error);
 

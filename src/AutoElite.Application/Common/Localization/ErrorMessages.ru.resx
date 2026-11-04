@@ -97,6 +97,9 @@
   <data name="Branch.NameEmpty" xml:space="preserve">
     <value>Название филиала не может быть пустым.</value>
   </data>
+  <data name="Branch.NameTaken" xml:space="preserve">
+    <value>Филиал с таким названием уже существует.</value>
+  </data>
   <data name="Branch.NameTooLong" xml:space="preserve">
     <value>Название филиала превышает допустимую длину.</value>
   </data>

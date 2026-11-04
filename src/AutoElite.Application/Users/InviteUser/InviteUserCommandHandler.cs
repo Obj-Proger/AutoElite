@@ -55,7 +55,7 @@ internal sealed class InviteUserCommandHandler(
         if (emailResult.IsFailure)
             return Result.Failure<User>(emailResult.Error);
 
-        var phoneResult = PersonDetails.CreateOptionalPhone(command.Phone);
+        var phoneResult = ContactDetails.CreateOptionalPhone(command.Phone);
         if (phoneResult.IsFailure)
             return Result.Failure<User>(phoneResult.Error);
 
