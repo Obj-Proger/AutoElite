@@ -103,6 +103,17 @@ public static class ApplicationErrors
             "Branch.Inactive", "The branch is inactive, so nothing new can be tied to it.");
     }
 
+    /// <summary>Errors of contracts that need more than the contract to check.</summary>
+    public static class Contract
+    {
+        /// <summary>Another contract already has the number.</summary>
+        public static readonly Error NumberTaken = Error.Conflict("Contract.NumberTaken", "A contract with this number already exists.");
+
+        /// <summary>The user chosen as the student does not hold the student role.</summary>
+        public static readonly Error NotAStudent = Error.Validation(
+            "Contract.NotAStudent", "A contract can be drawn up only for a user with the student role.");
+    }
+
     /// <summary>Errors of courses that need more than the course to check.</summary>
     public static class Course
     {

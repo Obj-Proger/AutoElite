@@ -1,3 +1,4 @@
+using AutoElite.Application.Users;
 using AutoElite.Application.Users.InviteUser;
 using AutoElite.Domain.Entities;
 using AutoElite.Domain.Enums;
@@ -13,7 +14,7 @@ public class InviteUserCommandHandlerTests
     private readonly FakeIdentityService _identity = new();
 
     private Task<Result<Guid>> Handle(InviteUserCommand command, FakeCurrentUser currentUser) =>
-        new InviteUserCommandHandler(_users, _roles, _branches, _identity, currentUser, TestData.Clock())
+        new InviteUserCommandHandler(new UserRegistration(_users, _roles, _identity, TestData.Clock()), _branches, currentUser)
             .Handle(command, TestContext.Current.CancellationToken);
 
     private static InviteUserCommand Command(Guid? branchId = null, params UserRole[] roles)

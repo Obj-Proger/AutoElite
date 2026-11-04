@@ -1,6 +1,7 @@
 using AutoElite.Application.Common.Behaviors;
 using AutoElite.Application.Common.Events;
 using AutoElite.Application.Common.Localization;
+using AutoElite.Application.Contracts;
 using AutoElite.Application.Courses;
 using AutoElite.Application.Leads;
 using AutoElite.Application.Settings;
@@ -33,10 +34,13 @@ public static class DependencyInjection
         services.AddScoped<InvitationSender>();
         services.AddScoped<SessionIssuer>();
         services.AddScoped<ManagedUsers>();
+        services.AddScoped<UserRegistration>();
         services.AddScoped<SchoolSettingsProvider>();
         services.AddScoped<CoursePrice>();
         services.AddScoped<LeadAccess>();
         services.AddScoped<LeadManagers>();
+        services.AddScoped<ContractStudents>();
+        services.AddScoped<ContractFactory>();
 
         RegisterOpenGenericImplementations(services, typeof(IRequestHandler<,>));
         RegisterOpenGenericImplementations(services, typeof(IValidator<>));

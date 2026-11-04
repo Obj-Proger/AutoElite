@@ -217,6 +217,9 @@
   <data name="Contract.NoTheoryAttendance" xml:space="preserve">
     <value>Посещаемость теоретических занятий ещё не отмечена.</value>
   </data>
+  <data name="Contract.NotAStudent" xml:space="preserve">
+    <value>Договор можно оформить только на пользователя с ролью студента.</value>
+  </data>
   <data name="Contract.NotActive" xml:space="preserve">
     <value>Изменить можно только действующий договор.</value>
   </data>
@@ -225,6 +228,9 @@
   </data>
   <data name="Contract.NumberEmpty" xml:space="preserve">
     <value>Номер договора не может быть пустым.</value>
+  </data>
+  <data name="Contract.NumberTaken" xml:space="preserve">
+    <value>Договор с таким номером уже существует.</value>
   </data>
   <data name="Contract.NumberTooLong" xml:space="preserve">
     <value>Номер договора превышает допустимую длину.</value>
