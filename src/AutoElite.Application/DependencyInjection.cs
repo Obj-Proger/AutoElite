@@ -1,6 +1,7 @@
 using AutoElite.Application.Common.Behaviors;
 using AutoElite.Application.Common.Events;
 using AutoElite.Application.Common.Localization;
+using AutoElite.Application.Settings;
 using AutoElite.Application.Users;
 using AutoElite.Application.Users.Authentication;
 using AutoElite.Application.Users.Invitations;
@@ -30,6 +31,7 @@ public static class DependencyInjection
         services.AddScoped<InvitationSender>();
         services.AddScoped<SessionIssuer>();
         services.AddScoped<ManagedUsers>();
+        services.AddScoped<SchoolSettingsProvider>();
 
         RegisterOpenGenericImplementations(services, typeof(IRequestHandler<,>));
         RegisterOpenGenericImplementations(services, typeof(IValidator<>));
