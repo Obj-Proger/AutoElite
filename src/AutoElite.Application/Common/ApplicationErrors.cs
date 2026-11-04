@@ -74,6 +74,14 @@ public static class ApplicationErrors
         /// <summary>The refresh token is unknown, expired, revoked or used, or its user is deactivated.</summary>
         public static readonly Error RefreshTokenInvalid = Error.Unauthorized(
             "Account.RefreshTokenInvalid", "Your session has expired. Sign in again.");
+
+        /// <summary>The password reset link is wrong, expired or already used, or its user is deactivated.</summary>
+        public static readonly Error PasswordResetInvalid = Error.Validation(
+            "Account.PasswordResetInvalid", "The password reset link is invalid or has expired. Request a new one.");
+
+        /// <summary>The current password given to change it is wrong.</summary>
+        public static readonly Error CurrentPasswordWrong = Error.Validation(
+            "Account.CurrentPasswordWrong", "The current password is incorrect.");
     }
 
     /// <summary>Errors of the rules in <see cref="Users.PasswordPolicy"/>.</summary>
@@ -93,6 +101,10 @@ public static class ApplicationErrors
 
         /// <summary>The password has no digit.</summary>
         public static readonly Error DigitRequired = Error.Validation("Password.DigitRequired", "Password must contain a digit.");
+
+        /// <summary>The new password is the same as the current one.</summary>
+        public static readonly Error SameAsCurrent = Error.Validation(
+            "Password.SameAsCurrent", "The new password must be different from the current one.");
     }
 
     /// <summary>Errors of the page number and size of paged queries.</summary>

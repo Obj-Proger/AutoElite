@@ -19,6 +19,9 @@
   <data name="Account.BranchInactive" xml:space="preserve">
     <value>Нельзя привязать пользователя к деактивированному филиалу.</value>
   </data>
+  <data name="Account.CurrentPasswordWrong" xml:space="preserve">
+    <value>Текущий пароль указан неверно.</value>
+  </data>
   <data name="Account.DuplicateRoles" xml:space="preserve">
     <value>Каждую роль можно указать только один раз.</value>
   </data>
@@ -39,6 +42,9 @@
   </data>
   <data name="Account.ManagerInvitesOnlyStudents" xml:space="preserve">
     <value>Менеджер может приглашать только студентов.</value>
+  </data>
+  <data name="Account.PasswordResetInvalid" xml:space="preserve">
+    <value>Ссылка для сброса пароля недействительна или устарела. Запросите новую.</value>
   </data>
   <data name="Account.RefreshTokenInvalid" xml:space="preserve">
     <value>Сеанс истёк. Войдите снова.</value>
@@ -672,6 +678,9 @@
   </data>
   <data name="Password.LetterRequired" xml:space="preserve">
     <value>Пароль должен содержать букву.</value>
+  </data>
+  <data name="Password.SameAsCurrent" xml:space="preserve">
+    <value>Новый пароль должен отличаться от текущего.</value>
   </data>
   <data name="Password.TooLong" xml:space="preserve">
     <value>Пароль должен содержать не больше 128 символов.</value>

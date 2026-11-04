@@ -55,6 +55,39 @@ internal sealed class FakeIdentityService : IIdentityService
         return Task.FromResult(result);
     }
 
+    public Task<string> GeneratePasswordResetTokenAsync(Guid userId, CancellationToken cancellationToken = default)
+    {
+        var token = $"reset-{++_tokenCount}";
+        _accounts[userId].ResetTokens.Add(token);
+
+        return Task.FromResult(token);
+    }
+
+    public Task<bool> ResetPasswordAsync(Guid userId, string token, string newPassword, CancellationToken cancellationToken = default)
+    {
+        var account = _accounts[userId];
+        if (!account.ResetTokens.Contains(token))
+            return Task.FromResult(false);
+
+        account.Password = newPassword;
+        account.EmailConfirmed = true;
+        account.ResetTokens.Clear();
+
+        return Task.FromResult(true);
+    }
+
+    public Task<bool> ChangePasswordAsync(
+        Guid userId, string currentPassword, string newPassword, CancellationToken cancellationToken = default)
+    {
+        var account = _accounts[userId];
+        if (account.Password != currentPassword)
+            return Task.FromResult(false);
+
+        account.Password = newPassword;
+
+        return Task.FromResult(true);
+    }
+
     /// <summary>Adds an account that exists before the test acts.</summary>
     public void Seed(Guid userId, Email email) => _accounts.Add(userId, new Account(email));
 
@@ -76,5 +109,7 @@ internal sealed class FakeIdentityService : IIdentityService
         public bool IsLockedOut { get; set; }
 
         public List<string> InvitationTokens { get; } = [];
+
+        public List<string> ResetTokens { get; } = [];
     }
 }

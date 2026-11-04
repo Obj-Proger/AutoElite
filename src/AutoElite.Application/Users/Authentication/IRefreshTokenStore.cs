@@ -29,4 +29,10 @@ public interface IRefreshTokenStore
     /// <param name="utcNow">The current UTC time.</param>
     /// <param name="cancellationToken">A token that signals cancellation of the operation.</param>
     Task RevokeAsync(string token, DateTime utcNow, CancellationToken cancellationToken = default);
+
+    /// <summary>Revokes every token of the user, which ends all of the user's sessions.</summary>
+    /// <param name="userId">The identifier of the user.</param>
+    /// <param name="utcNow">The current UTC time.</param>
+    /// <param name="cancellationToken">A token that signals cancellation of the operation.</param>
+    Task RevokeAllAsync(Guid userId, DateTime utcNow, CancellationToken cancellationToken = default);
 }

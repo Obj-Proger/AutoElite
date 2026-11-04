@@ -10,4 +10,9 @@ public interface IClientLinks
     /// <param name="userId">The identifier of the invited user.</param>
     /// <param name="token">The invitation token.</param>
     Uri Invitation(Guid userId, string token);
+
+    /// <summary>Builds the link to the page where a user sets a new password after forgetting the old one.</summary>
+    /// <param name="userId">The identifier of the user.</param>
+    /// <param name="token">The password reset token.</param>
+    Uri PasswordReset(Guid userId, string token);
 }

@@ -13,9 +13,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Invitation.Subject" xml:space="preserve">
-    <value>Ваша учётная запись в AutoElite</value>
-  </data>
   <data name="Invitation.Body" xml:space="preserve">
     <value>Здравствуйте, {0}!
 
@@ -23,5 +20,19 @@
 {1}
 
 Ссылка действует ограниченное время. Если срок истёк, попросите автошколу отправить приглашение ещё раз. Если вы не ждали этого письма, просто не обращайте на него внимания.</value>
+  </data>
+  <data name="Invitation.Subject" xml:space="preserve">
+    <value>Ваша учётная запись в AutoElite</value>
+  </data>
+  <data name="PasswordReset.Body" xml:space="preserve">
+    <value>Здравствуйте, {0}!
+
+Мы получили запрос на сброс пароля вашей учётной записи в AutoElite. Чтобы задать новый пароль, перейдите по ссылке:
+{1}
+
+Ссылка действует ограниченное время. Если вы не запрашивали сброс пароля, просто не обращайте внимания на это письмо: пароль останется прежним.</value>
+  </data>
+  <data name="PasswordReset.Subject" xml:space="preserve">
+    <value>Сброс пароля в AutoElite</value>
   </data>
 </root>

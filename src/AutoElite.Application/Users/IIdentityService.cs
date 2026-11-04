@@ -47,4 +47,29 @@ public interface IIdentityService
     /// <param name="password">The password entered by the user.</param>
     /// <param name="cancellationToken">A token that signals cancellation of the operation.</param>
     Task<PasswordCheckResult> CheckPasswordAsync(Guid userId, string password, CancellationToken cancellationToken = default);
+
+    /// <summary>Generates a single-purpose, time-limited token that lets the user set a new password.</summary>
+    /// <param name="userId">The identifier of a user who has set a password.</param>
+    /// <param name="cancellationToken">A token that signals cancellation of the operation.</param>
+    Task<string> GeneratePasswordResetTokenAsync(Guid userId, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Checks the reset token and, if it is valid, replaces the password. The link was emailed to the user, so the
+    /// email address is confirmed as well. Resetting invalidates every reset token of the user.
+    /// </summary>
+    /// <param name="userId">The identifier of the user.</param>
+    /// <param name="token">The token from the reset link.</param>
+    /// <param name="newPassword">A password that follows <see cref="PasswordPolicy"/>.</param>
+    /// <param name="cancellationToken">A token that signals cancellation of the operation.</param>
+    /// <returns><see langword="false"/> if the token is wrong or expired; nothing is changed then.</returns>
+    Task<bool> ResetPasswordAsync(Guid userId, string token, string newPassword, CancellationToken cancellationToken = default);
+
+    /// <summary>Replaces the password of a signed-in user who knows the current one.</summary>
+    /// <param name="userId">The identifier of the user.</param>
+    /// <param name="currentPassword">The current password.</param>
+    /// <param name="newPassword">A password that follows <see cref="PasswordPolicy"/>.</param>
+    /// <param name="cancellationToken">A token that signals cancellation of the operation.</param>
+    /// <returns><see langword="false"/> if the current password is wrong; nothing is changed then.</returns>
+    Task<bool> ChangePasswordAsync(
+        Guid userId, string currentPassword, string newPassword, CancellationToken cancellationToken = default);
 }

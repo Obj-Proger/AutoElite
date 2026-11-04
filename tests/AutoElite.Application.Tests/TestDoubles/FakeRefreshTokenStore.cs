@@ -44,6 +44,14 @@ internal sealed class FakeRefreshTokenStore : IRefreshTokenStore
         return Task.CompletedTask;
     }
 
+    public Task RevokeAllAsync(Guid userId, DateTime utcNow, CancellationToken cancellationToken = default)
+    {
+        foreach (var stored in _tokens.Values.Where(stored => stored.UserId == userId))
+            stored.IsRevoked = true;
+
+        return Task.CompletedTask;
+    }
+
     internal sealed class StoredToken(Guid userId, DateTime expiresAtUtc)
     {
         public Guid UserId { get; } = userId;

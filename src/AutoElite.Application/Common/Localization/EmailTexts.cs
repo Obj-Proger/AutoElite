@@ -15,6 +15,12 @@ internal static class EmailTexts
     /// <summary>The body of the invitation email: <c>{0}</c> is the first name, <c>{1}</c> the link.</summary>
     public const string InvitationBody = "Invitation.Body";
 
+    /// <summary>The subject of the password reset email. No placeholders.</summary>
+    public const string PasswordResetSubject = "PasswordReset.Subject";
+
+    /// <summary>The body of the password reset email: <c>{0}</c> is the first name, <c>{1}</c> the link.</summary>
+    public const string PasswordResetBody = "PasswordReset.Body";
+
     /// <summary>Gets the email text resources.</summary>
     internal static ResourceManager Resources { get; } =
         new("AutoElite.Application.Common.Localization.EmailTexts", typeof(EmailTexts).Assembly);

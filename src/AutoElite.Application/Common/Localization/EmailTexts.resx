@@ -13,9 +13,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Invitation.Subject" xml:space="preserve">
-    <value>Your AutoElite account</value>
-  </data>
   <data name="Invitation.Body" xml:space="preserve">
     <value>Hello, {0}!
 
@@ -23,5 +20,19 @@ An account has been created for you in the AutoElite driving school system. To s
 {1}
 
 The link is valid for a limited time. If it has expired, ask the school to send the invitation again. If you did not expect this email, simply ignore it.</value>
+  </data>
+  <data name="Invitation.Subject" xml:space="preserve">
+    <value>Your AutoElite account</value>
+  </data>
+  <data name="PasswordReset.Body" xml:space="preserve">
+    <value>Hello, {0}!
+
+We received a request to reset the password of your AutoElite account. To set a new password, use this link:
+{1}
+
+The link is valid for a limited time. If you did not ask to reset your password, ignore this email: your password stays the same.</value>
+  </data>
+  <data name="PasswordReset.Subject" xml:space="preserve">
+    <value>Resetting your AutoElite password</value>
   </data>
 </root>
