@@ -29,4 +29,17 @@ public static class RuleBuilderExtensions
                 });
             }
         });
+
+    /// <summary>Reports the code and message of an application or domain error when the rule fails.</summary>
+    /// <typeparam name="T">The type of the validated object.</typeparam>
+    /// <typeparam name="TProperty">The type of the validated property.</typeparam>
+    /// <param name="rule">The rule to describe.</param>
+    /// <param name="error">The error whose code and message the failure carries.</param>
+    public static IRuleBuilderOptions<T, TProperty> WithError<T, TProperty>(this IRuleBuilderOptions<T, TProperty> rule, Error error)
+    {
+        ArgumentNullException.ThrowIfNull(rule);
+        ArgumentNullException.ThrowIfNull(error);
+
+        return rule.WithErrorCode(error.Code).WithMessage(error.Message);
+    }
 }

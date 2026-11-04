@@ -26,6 +26,18 @@ public static class ApplicationErrors
         where TEntity : BaseEntity =>
         Error.NotFound($"{typeof(TEntity).Name}.NotFound", $"{typeof(TEntity).Name} was not found.");
 
+    /// <summary>Errors of the page number and size of paged queries.</summary>
+    public static class Paging
+    {
+        /// <summary>The page number is below 1 or above <see cref="Pagination.PageRequest.MaxPage"/>.</summary>
+        public static readonly Error PageOutOfRange = Error.Validation(
+            "Paging.PageOutOfRange", "Page must be between 1 and 100000.");
+
+        /// <summary>The page size is below 1 or above <see cref="Pagination.PageRequest.MaxPageSize"/>.</summary>
+        public static readonly Error PageSizeOutOfRange = Error.Validation(
+            "Paging.PageSizeOutOfRange", "Page size must be between 1 and 100.");
+    }
+
     /// <summary>Errors of saving changes.</summary>
     public static class Concurrency
     {

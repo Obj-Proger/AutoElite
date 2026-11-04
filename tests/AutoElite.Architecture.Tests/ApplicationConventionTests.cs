@@ -1,5 +1,6 @@
 using AutoElite.Application.Common.Authorization;
 using AutoElite.Application.Common.Events;
+using AutoElite.Application.Common.Pagination;
 
 namespace AutoElite.Architecture.Tests;
 
@@ -66,6 +67,24 @@ public class ApplicationConventionTests
             .Select(type => type.Name);
 
         contradictory.Should().BeEmpty("a request is either open to anonymous callers or restricted to roles");
+    }
+
+    [Fact]
+    public void PagedQueries_HaveAPagedQueryValidator()
+    {
+        var validatedQueries = Layers.Application.GetTypes()
+            .Select(type => type.BaseType)
+            .OfType<Type>()
+            .Where(baseType => baseType.IsGenericType && baseType.GetGenericTypeDefinition() == typeof(PagedQueryValidator<>))
+            .Select(baseType => baseType.GetGenericArguments()[0])
+            .ToHashSet();
+
+        var unvalidated = Layers.Application.GetTypes()
+            .Where(type => type is { IsClass: true, IsAbstract: false } && typeof(IPagedQuery).IsAssignableFrom(type))
+            .Where(type => !validatedQueries.Contains(type))
+            .Select(type => type.Name);
+
+        unvalidated.Should().BeEmpty("the page number and size come from the client and must be checked");
     }
 
     private static bool Implements(Type type, Type openGenericInterface) =>

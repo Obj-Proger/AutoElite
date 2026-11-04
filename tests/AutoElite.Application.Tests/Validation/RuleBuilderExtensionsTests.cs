@@ -36,4 +36,18 @@ public class RuleBuilderExtensionsTests
         failure.ErrorCode.Should().Be(DomainErrors.Email.InvalidFormat.Code);
         failure.ErrorMessage.Should().Be(DomainErrors.Email.InvalidFormat.Message);
     }
+
+    [Fact]
+    public void WithError_FailedRule_ReportsTheErrorCodeAndMessage()
+    {
+        var error = Error.Validation("Test.NumberNegative", "Number cannot be negative.");
+        var validator = new InlineValidator<TestCommand>();
+        validator.RuleFor(command => command.Number).GreaterThanOrEqualTo(0).WithError(error);
+
+        var result = validator.Validate(new TestCommand("name", -1));
+
+        var failure = result.Errors.Should().ContainSingle().Which;
+        failure.ErrorCode.Should().Be(error.Code);
+        failure.ErrorMessage.Should().Be(error.Message);
+    }
 }
