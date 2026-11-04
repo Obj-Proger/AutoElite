@@ -250,6 +250,9 @@
   <data name="Contract.RefundExceedsPaidAmount" xml:space="preserve">
     <value>Сумма возврата не может превышать оплаченную сумму.</value>
   </data>
+  <data name="Contract.StatusNotDefined" xml:space="preserve">
+    <value>Недопустимый статус договора.</value>
+  </data>
   <data name="Contract.StudentInactive" xml:space="preserve">
     <value>Нельзя оформить договор на деактивированного пользователя.</value>
   </data>
