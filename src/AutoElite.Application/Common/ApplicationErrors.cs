@@ -26,6 +26,14 @@ public static class ApplicationErrors
         where TEntity : BaseEntity =>
         Error.NotFound($"{typeof(TEntity).Name}.NotFound", $"{typeof(TEntity).Name} was not found.");
 
+    /// <summary>Errors of saving changes.</summary>
+    public static class Concurrency
+    {
+        /// <summary>Another request changed a record after this request loaded it.</summary>
+        public static readonly Error Conflict = Error.Conflict(
+            "Concurrency.Conflict", "The data was changed by someone else. Reload it and try again.");
+    }
+
     /// <summary>Errors of authentication and authorization.</summary>
     public static class Auth
     {

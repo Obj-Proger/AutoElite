@@ -5,12 +5,15 @@ namespace AutoElite.Application.Tests;
 
 public class PipelineIntegrationTests
 {
-    private static (IDispatcher Dispatcher, CallJournal Journal) CreateDispatcher(FakeCurrentUser? currentUser = null)
+    private readonly FakeUnitOfWork _unitOfWork = new();
+
+    private (IDispatcher Dispatcher, CallJournal Journal) CreateDispatcher(FakeCurrentUser? currentUser = null)
     {
         var journal = new CallJournal();
         var services = new ServiceCollection();
         services.AddSingleton(journal);
         services.AddSingleton<ICurrentUser>(currentUser ?? FakeCurrentUser.SignedIn(UserRole.Student));
+        services.AddSingleton<IUnitOfWork>(_unitOfWork);
         services.AddSingleton(typeof(ILogger<>), typeof(ListLogger<>));
         services.AddApplication();
         services.AddScoped<IRequestHandler<TestCommand, Result>, TestCommandHandler>();
@@ -30,6 +33,7 @@ public class PipelineIntegrationTests
 
         result.IsSuccess.Should().BeTrue();
         journal.Entries.Should().Equal("handler");
+        _unitOfWork.SaveCount.Should().Be(1);
     }
 
     [Fact]
@@ -43,6 +47,7 @@ public class PipelineIntegrationTests
         result.Error.Code.Should().Be("Validation.Failed");
         result.Error.FieldErrors.Should().Equal(new FieldError("Name", "Test.NameEmpty", "Name is required."));
         journal.Entries.Should().BeEmpty();
+        _unitOfWork.SaveCount.Should().Be(0);
     }
 
     [Fact]

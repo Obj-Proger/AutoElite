@@ -48,4 +48,13 @@ public class ApplicationErrorsTests
         error.Code.Should().Be("Auth.Forbidden");
         error.Type.Should().Be(ErrorType.Forbidden);
     }
+
+    [Fact]
+    public void ConcurrencyConflict_IsAConflictError()
+    {
+        var error = ApplicationErrors.Concurrency.Conflict;
+
+        error.Code.Should().Be("Concurrency.Conflict");
+        error.Type.Should().Be(ErrorType.Conflict);
+    }
 }
