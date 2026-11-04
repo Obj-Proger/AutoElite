@@ -23,9 +23,8 @@ internal sealed class DomainEventPublisher(
             (DomainEventHandlerWrapperBase)Activator.CreateInstance(typeof(DomainEventHandlerWrapper<>).MakeGenericType(type))!);
 
         var handledCount = await wrapper.Handle(domainEvent, serviceProvider, cancellationToken);
-        if (handledCount == 0)
-            return;
 
+        // Saved even without handlers, because the processed mark of the outbox message rides on the same transaction.
         await unitOfWork.SaveChangesAsync(cancellationToken);
         Log.PublishedDomainEvent(logger, eventType.Name, handledCount);
     }

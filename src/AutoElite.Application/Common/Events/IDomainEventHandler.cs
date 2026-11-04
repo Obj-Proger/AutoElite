@@ -5,9 +5,12 @@ namespace AutoElite.Application.Common.Events;
 /// notifications. An event type may have any number of handlers.
 /// </summary>
 /// <remarks>
-/// Events are stored in the transactional outbox and delivered at least once: if any handler throws, the event is
-/// delivered again to all of its handlers later. Handlers therefore must not have side effects outside the database
-/// that cannot be repeated; such work (an email, a push message) is scheduled as a separate job instead.
+/// Events are stored in the transactional outbox and delivered at least once. The database changes of all handlers of
+/// an event are committed together with the processed mark of its outbox message (see <see cref="IDomainEventPublisher"/>),
+/// so they are applied exactly once; if any handler throws, nothing is committed and the event is delivered again to
+/// all of its handlers later. A handler therefore changes only the database and never calls outside services
+/// directly; work such as an email goes through a queue that joins the unit of work (<see cref="IEmailQueue"/>).
+/// Handlers still tolerate a state that has moved on since the event, for example a record that no longer exists.
 /// </remarks>
 /// <typeparam name="TEvent">The type of the domain event.</typeparam>
 public interface IDomainEventHandler<TEvent>

@@ -49,14 +49,14 @@ public class DomainEventPublisherTests
     }
 
     [Fact]
-    public async Task PublishAsync_EventWithoutHandlers_DoesNotSave()
+    public async Task PublishAsync_EventWithoutHandlers_StillSavesSoTheOutboxMarkIsCommitted()
     {
         var publisher = CreatePublisher(typeof(FirstTestEventHandler));
 
         await publisher.PublishAsync(new UnhandledDomainEvent(_now), TestContext.Current.CancellationToken);
 
         _journal.Entries.Should().BeEmpty();
-        _unitOfWork.SaveCount.Should().Be(0);
+        _unitOfWork.SaveCount.Should().Be(1);
     }
 
     [Fact]
