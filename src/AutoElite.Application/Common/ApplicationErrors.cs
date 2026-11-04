@@ -232,6 +232,18 @@ public static class ApplicationErrors
             "Question.OfficialAdministratorOnly", "Only an administrator can add or change official questions.");
     }
 
+    /// <summary>Errors of test attempts that need more than the attempt to check.</summary>
+    public static class TestSession
+    {
+        /// <summary>The contract already has an attempt in progress.</summary>
+        public static readonly Error AlreadyInProgress = Error.Conflict(
+            "TestSession.AlreadyInProgress", "Finish the test in progress before starting a new one.");
+
+        /// <summary>The bank does not have enough active questions for a block or for the questions added for a mistake.</summary>
+        public static readonly Error NotEnoughQuestions = Error.Conflict(
+            "TestSession.NotEnoughQuestions", "The question bank does not have enough active questions for this test.");
+    }
+
     /// <summary>Errors of the rules in <see cref="Users.PasswordPolicy"/>.</summary>
     public static class Password
     {

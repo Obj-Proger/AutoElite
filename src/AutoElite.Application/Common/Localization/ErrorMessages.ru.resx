@@ -1030,6 +1030,9 @@
   <data name="TestSession.AlreadyAnswered" xml:space="preserve">
     <value>На вопрос уже дан ответ.</value>
   </data>
+  <data name="TestSession.AlreadyInProgress" xml:space="preserve">
+    <value>Завершите начатый тест, прежде чем начинать новый.</value>
+  </data>
   <data name="TestSession.BlockCountMismatch" xml:space="preserve">
     <value>Вопросы нужно передать для каждого блока шаблона.</value>
   </data>
@@ -1047,6 +1050,9 @@
   </data>
   <data name="TestSession.ExamIdEmpty" xml:space="preserve">
     <value>Идентификатор экзамена не может быть пустым.</value>
+  </data>
+  <data name="TestSession.NotEnoughQuestions" xml:space="preserve">
+    <value>В банке недостаточно действующих вопросов для этого теста.</value>
   </data>
   <data name="TestSession.NotFound" xml:space="preserve">
     <value>Попытка теста не найдена.</value>
