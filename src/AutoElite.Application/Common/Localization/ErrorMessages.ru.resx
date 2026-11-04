@@ -628,6 +628,9 @@
   <data name="Lead.SourceNotDefined" xml:space="preserve">
     <value>Недопустимый источник лида.</value>
   </data>
+  <data name="Lead.StatusNotDefined" xml:space="preserve">
+    <value>Недопустимый статус лида.</value>
+  </data>
   <data name="Lead.UserIdEmpty" xml:space="preserve">
     <value>Идентификатор пользователя не может быть пустым.</value>
   </data>

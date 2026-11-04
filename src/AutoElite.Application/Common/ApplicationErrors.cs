@@ -121,6 +121,9 @@ public static class ApplicationErrors
         /// <summary>The manager works for another branch than the lead's.</summary>
         public static readonly Error ManagerOfAnotherBranch = Error.Conflict(
             "Lead.ManagerOfAnotherBranch", "The manager works for another branch than the lead.");
+
+        /// <summary>The status filter of the lead list is not a lead status.</summary>
+        public static readonly Error StatusNotDefined = Error.Validation("Lead.StatusNotDefined", "Lead status is not valid.");
     }
 
     /// <summary>Errors of the rules in <see cref="Users.PasswordPolicy"/>.</summary>
