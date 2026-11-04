@@ -160,6 +160,17 @@ public static class ApplicationErrors
             "StudyGroup.ContractOfAnotherBranch", "The contract belongs to another branch than the group.");
     }
 
+    /// <summary>Errors of payment queries.</summary>
+    public static class Payment
+    {
+        /// <summary>The end of the report period is before its start.</summary>
+        public static readonly Error PeriodInvalid = Error.Validation(
+            "Payment.PeriodInvalid", "The end of the period cannot be before its start.");
+
+        /// <summary>The status filter of the payment report is not a payment status.</summary>
+        public static readonly Error StatusNotDefined = Error.Validation("Payment.StatusNotDefined", "Payment status is not valid.");
+    }
+
     /// <summary>Errors of the rules in <see cref="Users.PasswordPolicy"/>.</summary>
     public static class Password
     {

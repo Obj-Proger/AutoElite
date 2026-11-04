@@ -754,6 +754,9 @@
   <data name="Payment.NotRegistered" xml:space="preserve">
     <value>Подтвердить, отменить или изменить можно только зарегистрированный платёж.</value>
   </data>
+  <data name="Payment.PeriodInvalid" xml:space="preserve">
+    <value>Конец периода не может быть раньше его начала.</value>
+  </data>
   <data name="Payment.PurposeEmpty" xml:space="preserve">
     <value>Назначение платежа не может быть пустым.</value>
   </data>
@@ -765,6 +768,9 @@
   </data>
   <data name="Payment.ReasonTooLong" xml:space="preserve">
     <value>Причина превышает допустимую длину.</value>
+  </data>
+  <data name="Payment.StatusNotDefined" xml:space="preserve">
+    <value>Недопустимый статус платежа.</value>
   </data>
   <data name="Payment.UserIdEmpty" xml:space="preserve">
     <value>Идентификатор пользователя не может быть пустым.</value>
