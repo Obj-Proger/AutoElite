@@ -1,6 +1,7 @@
 using AutoElite.Application.Common.Behaviors;
 using AutoElite.Application.Common.Events;
 using AutoElite.Application.Common.Localization;
+using AutoElite.Application.Users;
 using AutoElite.Application.Users.Authentication;
 using AutoElite.Application.Users.Invitations;
 using FluentValidation;
@@ -28,6 +29,7 @@ public static class DependencyInjection
         services.AddSingleton<IErrorLocalizer, ResourceErrorLocalizer>();
         services.AddScoped<InvitationSender>();
         services.AddScoped<SessionIssuer>();
+        services.AddScoped<ManagedUsers>();
 
         RegisterOpenGenericImplementations(services, typeof(IRequestHandler<,>));
         RegisterOpenGenericImplementations(services, typeof(IValidator<>));

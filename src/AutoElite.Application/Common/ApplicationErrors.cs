@@ -39,6 +39,14 @@ public static class ApplicationErrors
         public static readonly Error ManagerInvitesOnlyStudents = Error.Forbidden(
             "Account.ManagerInvitesOnlyStudents", "Managers can invite only students.");
 
+        /// <summary>A manager tries to act on a user who holds a staff role.</summary>
+        public static readonly Error ManagerManagesOnlyStudents = Error.Forbidden(
+            "Account.ManagerManagesOnlyStudents", "Managers can manage only students.");
+
+        /// <summary>A user tries to deactivate their own account.</summary>
+        public static readonly Error CannotDeactivateSelf = Error.Conflict(
+            "Account.CannotDeactivateSelf", "You cannot deactivate your own account.");
+
         /// <summary>The user would be tied to an inactive branch.</summary>
         public static readonly Error BranchInactive = Error.Conflict(
             "Account.BranchInactive", "Users cannot be assigned to an inactive branch.");

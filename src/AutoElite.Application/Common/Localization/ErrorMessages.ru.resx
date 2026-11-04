@@ -19,6 +19,9 @@
   <data name="Account.BranchInactive" xml:space="preserve">
     <value>Нельзя привязать пользователя к деактивированному филиалу.</value>
   </data>
+  <data name="Account.CannotDeactivateSelf" xml:space="preserve">
+    <value>Нельзя деактивировать собственную учётную запись.</value>
+  </data>
   <data name="Account.CurrentPasswordWrong" xml:space="preserve">
     <value>Текущий пароль указан неверно.</value>
   </data>
@@ -45,6 +48,9 @@
   </data>
   <data name="Account.ManagerInvitesOnlyStudents" xml:space="preserve">
     <value>Менеджер может приглашать только студентов.</value>
+  </data>
+  <data name="Account.ManagerManagesOnlyStudents" xml:space="preserve">
+    <value>Менеджер может управлять только студентами.</value>
   </data>
   <data name="Account.PasswordResetInvalid" xml:space="preserve">
     <value>Ссылка для сброса пароля недействительна или устарела. Запросите новую.</value>

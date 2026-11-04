@@ -16,4 +16,6 @@ internal class InMemoryRepository<TAggregate> : IRepository<TAggregate>
         Task.FromResult(_items.SingleOrDefault(item => item.Id == id));
 
     public void Add(TAggregate aggregate) => _items.Add(aggregate);
+
+    public void Remove(TAggregate aggregate) => _items.Remove(aggregate);
 }

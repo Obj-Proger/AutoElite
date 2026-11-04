@@ -15,7 +15,7 @@ internal sealed class UpdateMyProfileCommandHandler(IUserRepository userReposito
         if (fullNameResult.IsFailure)
             return Result.Failure(fullNameResult.Error);
 
-        var phoneResult = CreateOptionalPhone(command.Phone);
+        var phoneResult = PersonDetails.CreateOptionalPhone(command.Phone);
         if (phoneResult.IsFailure)
             return Result.Failure(phoneResult.Error);
 
@@ -24,17 +24,5 @@ internal sealed class UpdateMyProfileCommandHandler(IUserRepository userReposito
             return profileResult;
 
         return user.ChangeLanguage(command.PreferredLanguage);
-    }
-
-    private static Result<PhoneNumber?> CreateOptionalPhone(string? phone)
-    {
-        if (string.IsNullOrWhiteSpace(phone))
-            return Result.Success<PhoneNumber?>(null);
-
-        var phoneResult = PhoneNumber.Create(phone);
-
-        return phoneResult.IsSuccess
-            ? Result.Success<PhoneNumber?>(phoneResult.Value)
-            : Result.Failure<PhoneNumber?>(phoneResult.Error);
     }
 }

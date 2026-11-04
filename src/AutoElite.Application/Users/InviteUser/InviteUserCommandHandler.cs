@@ -23,7 +23,7 @@ internal sealed class InviteUserCommandHandler(
 
         var scope = DataScope.For(currentUser);
         var branchId = command.BranchId ?? scope.BranchId;
-        var branchResult = await CheckBranchAsync(branchId, scope, cancellationToken);
+        var branchResult = await UserBranches.CheckAsync(branchRepository, branchId, scope, cancellationToken);
         if (branchResult.IsFailure)
             return Result.Failure<Guid>(branchResult.Error);
 
@@ -45,18 +45,6 @@ internal sealed class InviteUserCommandHandler(
         return user.Id;
     }
 
-    private async Task<Result> CheckBranchAsync(Guid? branchId, DataScope scope, CancellationToken cancellationToken)
-    {
-        if (branchId is not { } id)
-            return Result.Success();
-
-        var branch = scope.Includes(id) ? await branchRepository.GetByIdAsync(id, cancellationToken) : null;
-        if (branch is null)
-            return Result.Failure(ApplicationErrors.NotFound<Branch>());
-
-        return branch.IsActive ? Result.Success() : Result.Failure(ApplicationErrors.Account.BranchInactive);
-    }
-
     private async Task<Result<User>> CreateUserAsync(InviteUserCommand command, Guid? branchId, CancellationToken cancellationToken)
     {
         var fullNameResult = FullName.Create(command.LastName, command.FirstName, command.MiddleName);
@@ -67,15 +55,9 @@ internal sealed class InviteUserCommandHandler(
         if (emailResult.IsFailure)
             return Result.Failure<User>(emailResult.Error);
 
-        PhoneNumber? phone = null;
-        if (!string.IsNullOrWhiteSpace(command.Phone))
-        {
-            var phoneResult = PhoneNumber.Create(command.Phone);
-            if (phoneResult.IsFailure)
-                return Result.Failure<User>(phoneResult.Error);
-
-            phone = phoneResult.Value;
-        }
+        var phoneResult = PersonDetails.CreateOptionalPhone(command.Phone);
+        if (phoneResult.IsFailure)
+            return Result.Failure<User>(phoneResult.Error);
 
         if (await userRepository.EmailExistsAsync(emailResult.Value, cancellationToken))
             return Result.Failure<User>(ApplicationErrors.Account.EmailTaken);
@@ -83,7 +65,7 @@ internal sealed class InviteUserCommandHandler(
         return User.Create(
             fullNameResult.Value,
             emailResult.Value,
-            phone,
+            phoneResult.Value,
             branchId,
             timeProvider.GetUtcNow().UtcDateTime,
             command.PreferredLanguage);
