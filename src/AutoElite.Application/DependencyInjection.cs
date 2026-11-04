@@ -1,3 +1,4 @@
+using AutoElite.Application.Chats;
 using AutoElite.Application.Common.Behaviors;
 using AutoElite.Application.Common.Events;
 using AutoElite.Application.Common.Localization;
@@ -65,6 +66,7 @@ public static class DependencyInjection
         services.AddScoped<SessionQuestions>();
         services.AddScoped<TestAttempts>();
         services.AddScoped<ExamAccess>();
+        services.AddScoped<ChatAccess>();
 
         RegisterOpenGenericImplementations(services, typeof(IRequestHandler<,>));
         RegisterOpenGenericImplementations(services, typeof(IValidator<>));
