@@ -12,6 +12,9 @@ public sealed record PageRequest
     /// <summary>The largest page number a client may ask for, which keeps <see cref="Skip"/> within range.</summary>
     public const int MaxPage = 100_000;
 
+    /// <summary>The longest search text a paged list accepts.</summary>
+    public const int MaxSearchLength = 200;
+
     /// <summary>Initializes a new page request.</summary>
     /// <param name="page">The page number, from 1 to <see cref="MaxPage"/>.</param>
     /// <param name="pageSize">The number of items per page, from 1 to <see cref="MaxPageSize"/>.</param>

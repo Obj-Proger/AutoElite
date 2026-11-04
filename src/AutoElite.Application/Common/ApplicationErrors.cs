@@ -129,6 +129,10 @@ public static class ApplicationErrors
         /// <summary>The page size is below 1 or above <see cref="Pagination.PageRequest.MaxPageSize"/>.</summary>
         public static readonly Error PageSizeOutOfRange = Error.Validation(
             "Paging.PageSizeOutOfRange", "Page size must be between 1 and 100.");
+
+        /// <summary>The search text of a list is longer than <see cref="Pagination.PageRequest.MaxSearchLength"/>.</summary>
+        public static readonly Error SearchTooLong = Error.Validation(
+            "Paging.SearchTooLong", "Search text must be at most 200 characters long.");
     }
 
     /// <summary>Errors of saving changes.</summary>

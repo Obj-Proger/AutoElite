@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using AutoElite.Application.Common.Validation;
 using FluentValidation;
 
@@ -21,5 +22,14 @@ public abstract class PagedQueryValidator<TQuery> : AbstractValidator<TQuery>
         RuleFor(query => query.PageSize)
             .InclusiveBetween(1, PageRequest.MaxPageSize)
             .WithError(ApplicationErrors.Paging.PageSizeOutOfRange);
+    }
+
+    /// <summary>Adds the rule for the optional search text of a list: at most <see cref="PageRequest.MaxSearchLength"/> characters.</summary>
+    /// <param name="search">The search text property.</param>
+    protected void RuleForSearch(Expression<Func<TQuery, string?>> search)
+    {
+        RuleFor(search)
+            .Must(text => text is null || text.Trim().Length <= PageRequest.MaxSearchLength)
+            .WithError(ApplicationErrors.Paging.SearchTooLong);
     }
 }

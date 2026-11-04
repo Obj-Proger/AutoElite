@@ -679,6 +679,9 @@
   <data name="Paging.PageSizeOutOfRange" xml:space="preserve">
     <value>Размер страницы должен быть от 1 до 100.</value>
   </data>
+  <data name="Paging.SearchTooLong" xml:space="preserve">
+    <value>Текст поиска должен содержать не больше 200 символов.</value>
+  </data>
   <data name="Password.DigitRequired" xml:space="preserve">
     <value>Пароль должен содержать цифру.</value>
   </data>
