@@ -469,6 +469,12 @@
   <data name="DrivingSlot.StartInPast" xml:space="preserve">
     <value>Слот должен начинаться в будущем.</value>
   </data>
+  <data name="DrivingSlot.StudentBusy" xml:space="preserve">
+    <value>У вас уже есть занятие по вождению на это время.</value>
+  </data>
+  <data name="DrivingSlot.TimeConflict" xml:space="preserve">
+    <value>У инструктора или автомобиля уже есть слот на это время.</value>
+  </data>
   <data name="DrivingSlot.TooLateToCancel" xml:space="preserve">
     <value>Отменить это занятие самостоятельно уже нельзя. Обратитесь к инструктору или в автошколу.</value>
   </data>

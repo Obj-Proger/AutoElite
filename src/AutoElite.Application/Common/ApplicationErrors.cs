@@ -209,6 +209,18 @@ public static class ApplicationErrors
             "DrivingRoute.TrainingGroundInactive", "A route can start only from a training ground in use.");
     }
 
+    /// <summary>Errors of driving slots that need more than the slot to check.</summary>
+    public static class DrivingSlot
+    {
+        /// <summary>The instructor or the vehicle already has a slot at that time.</summary>
+        public static readonly Error TimeConflict = Error.Conflict(
+            "DrivingSlot.TimeConflict", "The instructor or the vehicle already has a slot at this time.");
+
+        /// <summary>The student already has a driving lesson at that time.</summary>
+        public static readonly Error StudentBusy = Error.Conflict(
+            "DrivingSlot.StudentBusy", "You already have a driving lesson at this time.");
+    }
+
     /// <summary>Errors of the rules in <see cref="Users.PasswordPolicy"/>.</summary>
     public static class Password
     {
