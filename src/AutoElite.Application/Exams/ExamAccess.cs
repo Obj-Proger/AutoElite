@@ -25,4 +25,26 @@ internal sealed class ExamAccess(IRepository<Exam> examRepository, IStudyGroupRe
             ? new ExamWithGroup(exam, group)
             : Result.Failure<ExamWithGroup>(ApplicationErrors.NotFound<Exam>());
     }
+
+    /// <summary>
+    /// Loads the exam and its group for recording or correcting results. The results of a practice exam are recorded by
+    /// the driving instructors who see the branch of the group; the results of a theory exam come from the attempts and
+    /// are corrected by the responsible instructor of the group.
+    /// </summary>
+    /// <param name="examId">The identifier of the exam.</param>
+    /// <param name="cancellationToken">A token that signals cancellation of the operation.</param>
+    public async Task<Result<ExamWithGroup>> LoadForResultsAsync(Guid examId, CancellationToken cancellationToken)
+    {
+        var exam = await examRepository.GetByIdAsync(examId, cancellationToken);
+        var group = exam is null ? null : await groupRepository.GetByIdAsync(exam.GroupId, cancellationToken);
+        if (exam is null || group is null || !MayRecord(exam, group))
+            return Result.Failure<ExamWithGroup>(ApplicationErrors.NotFound<Exam>());
+
+        return new ExamWithGroup(exam, group);
+    }
+
+    private bool MayRecord(Exam exam, StudyGroup group) =>
+        exam.Kind == ExamKind.Practice
+            ? currentUser.IsInRole(UserRole.DrivingInstructor) && DataScope.For(currentUser).Includes(group.BranchId)
+            : currentUser.IsInRole(UserRole.TheoryInstructor) && group.TheoryInstructorId == currentUser.UserId;
 }

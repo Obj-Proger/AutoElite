@@ -244,6 +244,14 @@ public static class ApplicationErrors
             "TestSession.NotEnoughQuestions", "The question bank does not have enough active questions for this test.");
     }
 
+    /// <summary>Errors of exams that need more than the exam to check.</summary>
+    public static class Exam
+    {
+        /// <summary>The contract already has an attempt at the theory exam.</summary>
+        public static readonly Error AttemptAlreadyTaken = Error.Conflict(
+            "Exam.AttemptAlreadyTaken", "The exam has already been taken on this contract.");
+    }
+
     /// <summary>Errors of the rules in <see cref="Users.PasswordPolicy"/>.</summary>
     public static class Password
     {

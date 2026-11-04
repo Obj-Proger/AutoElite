@@ -2,16 +2,12 @@ using AutoElite.Application.Contracts;
 
 namespace AutoElite.Application.TestSessions.StartTest;
 
-/// <summary>
-/// Closes an attempt of the contract whose time has run out, draws the questions and starts the new attempt.
-/// </summary>
+/// <summary>Checks that the contract is the caller's, loads the template and starts the attempt.</summary>
 internal sealed class StartTestCommandHandler(
-    ITestSessionRepository sessionRepository,
     IContractRepository contractRepository,
     IRepository<TestTemplate> templateRepository,
-    SessionQuestions sessionQuestions,
-    ICurrentUser currentUser,
-    TimeProvider timeProvider) : ICommandHandler<StartTestCommand, Guid>
+    TestAttempts testAttempts,
+    ICurrentUser currentUser) : ICommandHandler<StartTestCommand, Guid>
 {
     /// <inheritdoc />
     public async Task<Result<Guid>> Handle(StartTestCommand command, CancellationToken cancellationToken)
@@ -24,26 +20,6 @@ internal sealed class StartTestCommandHandler(
         if (template is null)
             return Result.Failure<Guid>(ApplicationErrors.NotFound<TestTemplate>());
 
-        var utcNow = timeProvider.GetUtcNow().UtcDateTime;
-        var unfinished = await sessionRepository.GetInProgressOfContractAsync(contract.Id, cancellationToken);
-        if (unfinished is not null)
-        {
-            if (utcNow < unfinished.DeadlineUtc)
-                return Result.Failure<Guid>(ApplicationErrors.TestSession.AlreadyInProgress);
-
-            unfinished.Expire(utcNow);
-        }
-
-        var questionsResult = await sessionQuestions.DrawBlocksAsync(template, cancellationToken);
-        if (questionsResult.IsFailure)
-            return Result.Failure<Guid>(questionsResult.Error);
-
-        var sessionResult = TestSession.Start(contract, template, questionsResult.Value, null, utcNow);
-        if (sessionResult.IsFailure)
-            return Result.Failure<Guid>(sessionResult.Error);
-
-        sessionRepository.Add(sessionResult.Value);
-
-        return sessionResult.Value.Id;
+        return await testAttempts.StartAsync(contract, template, null, cancellationToken);
     }
 }

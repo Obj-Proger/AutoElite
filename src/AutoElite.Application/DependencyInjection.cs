@@ -63,6 +63,7 @@ public static class DependencyInjection
         services.AddScoped<QuestionContent>();
         services.AddScoped<TestTemplateContent>();
         services.AddScoped<SessionQuestions>();
+        services.AddScoped<TestAttempts>();
         services.AddScoped<ExamAccess>();
 
         RegisterOpenGenericImplementations(services, typeof(IRequestHandler<,>));

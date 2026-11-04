@@ -7,4 +7,10 @@ public interface ITestSessionRepository : IRepository<TestSession>
     /// <param name="contractId">The identifier of the contract.</param>
     /// <param name="cancellationToken">A token that signals cancellation of the operation.</param>
     Task<TestSession?> GetInProgressOfContractAsync(Guid contractId, CancellationToken cancellationToken = default);
+
+    /// <summary>Determines whether the contract already has an attempt of the exam, finished or not.</summary>
+    /// <param name="examId">The identifier of the exam.</param>
+    /// <param name="contractId">The identifier of the contract.</param>
+    /// <param name="cancellationToken">A token that signals cancellation of the operation.</param>
+    Task<bool> ExistsForExamAsync(Guid examId, Guid contractId, CancellationToken cancellationToken = default);
 }

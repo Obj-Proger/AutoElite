@@ -511,6 +511,9 @@
   <data name="Exam.AlreadyRecorded" xml:space="preserve">
     <value>У студента уже есть результат этого экзамена.</value>
   </data>
+  <data name="Exam.AttemptAlreadyTaken" xml:space="preserve">
+    <value>По этому договору экзамен уже сдавался.</value>
+  </data>
   <data name="Exam.CancellationReasonEmpty" xml:space="preserve">
     <value>Для отмены экзамена нужно указать причину.</value>
   </data>

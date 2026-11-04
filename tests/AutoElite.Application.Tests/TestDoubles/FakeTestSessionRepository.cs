@@ -9,4 +9,7 @@ internal sealed class FakeTestSessionRepository : InMemoryRepository<TestSession
     public Task<TestSession?> GetInProgressOfContractAsync(Guid contractId, CancellationToken cancellationToken = default) =>
         Task.FromResult(Items.SingleOrDefault(session =>
             session.ContractId == contractId && session.Status == TestSessionStatus.InProgress));
+
+    public Task<bool> ExistsForExamAsync(Guid examId, Guid contractId, CancellationToken cancellationToken = default) =>
+        Task.FromResult(Items.Any(session => session.ExamId == examId && session.ContractId == contractId));
 }

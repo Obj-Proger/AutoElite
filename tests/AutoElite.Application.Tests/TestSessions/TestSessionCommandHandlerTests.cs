@@ -56,8 +56,9 @@ public class TestSessionCommandHandlerTests
 
     private Task<Result<Guid>> Start(FakeCurrentUser? caller = null, DateTime? now = null) =>
         new StartTestCommandHandler(
-                _sessions, _contracts, _templates, Questions(), caller ?? _student,
-                new FixedTimeProvider(new DateTimeOffset(now ?? TestData.Now)))
+                _contracts, _templates,
+                new TestAttempts(_sessions, Questions(), new FixedTimeProvider(new DateTimeOffset(now ?? TestData.Now))),
+                caller ?? _student)
             .Handle(new StartTestCommand(_contract.Id, _template.Id), TestContext.Current.CancellationToken);
 
     private Task<Result<TestSessionStatus>> Answer(TestSession session, SessionQuestion question, bool correctly, DateTime? now = null)
