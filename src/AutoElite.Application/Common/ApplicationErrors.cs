@@ -184,6 +184,14 @@ public static class ApplicationErrors
         /// <summary>A contract is marked more than once in one command.</summary>
         public static readonly Error DuplicateMark = Error.Validation(
             "TheoryLesson.DuplicateMark", "Each student can appear only once among the marks.");
+
+        /// <summary>A schedule query asks for a period longer than the schedule can read at once.</summary>
+        public static readonly Error PeriodTooLong = Error.Validation(
+            "TheoryLesson.PeriodTooLong", "The schedule period can be at most 92 days long.");
+
+        /// <summary>The status filter of the schedule is not a lesson status.</summary>
+        public static readonly Error StatusNotDefined = Error.Validation(
+            "TheoryLesson.StatusNotDefined", "Lesson status is not valid.");
     }
 
     /// <summary>Errors of the rules in <see cref="Users.PasswordPolicy"/>.</summary>

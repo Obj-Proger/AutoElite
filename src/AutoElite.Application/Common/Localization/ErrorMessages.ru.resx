@@ -1141,8 +1141,14 @@
   <data name="TheoryLesson.NotStarted" xml:space="preserve">
     <value>Занятие ещё не началось.</value>
   </data>
+  <data name="TheoryLesson.PeriodTooLong" xml:space="preserve">
+    <value>Период расписания может длиться не более 92 дней.</value>
+  </data>
   <data name="TheoryLesson.StartInPast" xml:space="preserve">
     <value>Занятие должно начинаться в будущем.</value>
+  </data>
+  <data name="TheoryLesson.StatusNotDefined" xml:space="preserve">
+    <value>Недопустимый статус занятия.</value>
   </data>
   <data name="TheoryLesson.TimeConflict" xml:space="preserve">
     <value>У группы или преподавателя уже есть занятие в это время.</value>

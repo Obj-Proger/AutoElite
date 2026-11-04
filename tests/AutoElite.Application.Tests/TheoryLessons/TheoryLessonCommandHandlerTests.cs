@@ -107,6 +107,23 @@ public class TheoryLessonCommandHandlerTests
     }
 
     [Fact]
+    public async Task Reschedule_LessonGivenByASubstitute_TheResponsibleInstructorMovesIt()
+    {
+        var lesson = _fixture.SeedLesson();
+        var substitute = _fixture.SeedInstructor("substitute@example.com");
+        lesson.ChangeInstructor(substitute.UserId!.Value);
+        var newStart = _start.AddDays(1);
+
+        var result = await new RescheduleTheoryLessonCommandHandler(
+                _fixture.CreateLessonAccess(_fixture.Instructor), _fixture.Lessons, TestData.Clock())
+            .Handle(new RescheduleTheoryLessonCommand(lesson.Id, newStart, newStart.AddHours(2)), TestContext.Current.CancellationToken);
+
+        result.IsSuccess.Should().BeTrue();
+        lesson.Time.StartUtc.Should().Be(newStart);
+        lesson.InstructorId.Should().Be(substitute.UserId.Value);
+    }
+
+    [Fact]
     public async Task ChangeInstructor_FreeSubstitute_HandsOverTheLesson()
     {
         var lesson = _fixture.SeedLesson();
@@ -152,5 +169,19 @@ public class TheoryLessonCommandHandlerTests
         result.IsSuccess.Should().BeTrue();
         lesson.Status.Should().Be(TheoryLessonStatus.Cancelled);
         lesson.CancellationReason.Should().Be("Instructor is ill");
+    }
+
+    [Fact]
+    public async Task Cancel_BySubstituteGivingTheLesson_CancelsIt()
+    {
+        var lesson = _fixture.SeedLesson();
+        var substitute = _fixture.SeedInstructor("substitute@example.com");
+        lesson.ChangeInstructor(substitute.UserId!.Value);
+
+        var result = await new CancelTheoryLessonCommandHandler(_fixture.CreateLessonAccess(substitute), TestData.Clock())
+            .Handle(new CancelTheoryLessonCommand(lesson.Id, "Group is on an excursion"), TestContext.Current.CancellationToken);
+
+        result.IsSuccess.Should().BeTrue();
+        lesson.Status.Should().Be(TheoryLessonStatus.Cancelled);
     }
 }
