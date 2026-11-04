@@ -292,6 +292,9 @@
   <data name="Course.PriceNotPositive" xml:space="preserve">
     <value>Стоимость курса должна быть больше нуля.</value>
   </data>
+  <data name="Course.TopicInUse" xml:space="preserve">
+    <value>Тема используется в вопросах, занятиях или шаблонах тестов, её нельзя удалить.</value>
+  </data>
   <data name="Course.TopicNotFound" xml:space="preserve">
     <value>Тема не найдена в курсе.</value>
   </data>

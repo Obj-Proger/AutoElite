@@ -103,6 +103,14 @@ public static class ApplicationErrors
         public static readonly Error NameTaken = Error.Conflict("Branch.NameTaken", "A branch with this name already exists.");
     }
 
+    /// <summary>Errors of courses that need more than the course to check.</summary>
+    public static class Course
+    {
+        /// <summary>Questions, theory lessons or test templates refer to the topic.</summary>
+        public static readonly Error TopicInUse = Error.Conflict(
+            "Course.TopicInUse", "The topic is used by questions, lessons or test templates and cannot be removed.");
+    }
+
     /// <summary>Errors of the rules in <see cref="Users.PasswordPolicy"/>.</summary>
     public static class Password
     {

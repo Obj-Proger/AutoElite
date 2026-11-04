@@ -20,6 +20,9 @@ internal static class TestData
     public static Branch NewBranch(string name = "Central") =>
         Branch.Create(name, Address.Create("Yekaterinburg", "Lenina 1").Value, null, "Asia/Yekaterinburg").Value;
 
+    public static Course NewCourse(string name = "Category B") =>
+        Course.Create(name, LicenseCategory.B, Money.Create(45000m, Currency.Create("RUB").Value).Value, 134, 56, null).Value;
+
     public static FakeCurrentUser Administrator() => FakeCurrentUser.SignedIn(UserRole.Administrator);
 
     public static FakeCurrentUser Manager(Guid? branchId) => new()
