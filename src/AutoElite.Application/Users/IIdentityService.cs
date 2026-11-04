@@ -25,4 +25,15 @@ public interface IIdentityService
     /// <param name="userId">The identifier of a user who has not accepted the invitation yet.</param>
     /// <param name="cancellationToken">A token that signals cancellation of the operation.</param>
     Task<string> GenerateInvitationTokenAsync(Guid userId, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Checks the invitation token and, if it is valid, sets the first password and confirms the email address.
+    /// Accepting invalidates every invitation token of the user.
+    /// </summary>
+    /// <param name="userId">The identifier of a user who has not accepted the invitation yet.</param>
+    /// <param name="token">The token from the invitation link.</param>
+    /// <param name="password">A password that follows <see cref="PasswordPolicy"/>.</param>
+    /// <param name="cancellationToken">A token that signals cancellation of the operation.</param>
+    /// <returns><see langword="false"/> if the token is wrong or expired; nothing is changed then.</returns>
+    Task<bool> AcceptInvitationAsync(Guid userId, string token, string password, CancellationToken cancellationToken = default);
 }

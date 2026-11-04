@@ -25,6 +25,9 @@
   <data name="Account.EmailTaken" xml:space="preserve">
     <value>Пользователь с таким адресом электронной почты уже существует.</value>
   </data>
+  <data name="Account.InvitationInvalid" xml:space="preserve">
+    <value>Ссылка-приглашение недействительна или устарела. Попросите автошколу отправить новую.</value>
+  </data>
   <data name="Account.ManagerInvitesOnlyStudents" xml:space="preserve">
     <value>Менеджер может приглашать только студентов.</value>
   </data>
@@ -645,6 +648,21 @@
   </data>
   <data name="Paging.PageSizeOutOfRange" xml:space="preserve">
     <value>Размер страницы должен быть от 1 до 100.</value>
+  </data>
+  <data name="Password.DigitRequired" xml:space="preserve">
+    <value>Пароль должен содержать цифру.</value>
+  </data>
+  <data name="Password.Empty" xml:space="preserve">
+    <value>Пароль не может быть пустым.</value>
+  </data>
+  <data name="Password.LetterRequired" xml:space="preserve">
+    <value>Пароль должен содержать букву.</value>
+  </data>
+  <data name="Password.TooLong" xml:space="preserve">
+    <value>Пароль должен содержать не больше 128 символов.</value>
+  </data>
+  <data name="Password.TooShort" xml:space="preserve">
+    <value>Пароль должен содержать не меньше 8 символов.</value>
   </data>
   <data name="Payment.AmountNotPositive" xml:space="preserve">
     <value>Сумма платежа должна быть больше нуля.</value>

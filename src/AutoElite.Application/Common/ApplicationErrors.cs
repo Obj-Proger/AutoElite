@@ -50,6 +50,29 @@ public static class ApplicationErrors
         /// <summary>The user has already accepted the invitation and set a password.</summary>
         public static readonly Error AlreadyActivated = Error.Conflict(
             "Account.AlreadyActivated", "The user has already accepted the invitation.");
+
+        /// <summary>The invitation link is wrong, expired or already used, or its user cannot be invited.</summary>
+        public static readonly Error InvitationInvalid = Error.Validation(
+            "Account.InvitationInvalid", "The invitation link is invalid or has expired. Ask the school for a new one.");
+    }
+
+    /// <summary>Errors of the rules in <see cref="Users.PasswordPolicy"/>.</summary>
+    public static class Password
+    {
+        /// <summary>The password is empty.</summary>
+        public static readonly Error Empty = Error.Validation("Password.Empty", "Password cannot be empty.");
+
+        /// <summary>The password is shorter than the minimum length.</summary>
+        public static readonly Error TooShort = Error.Validation("Password.TooShort", "Password must be at least 8 characters long.");
+
+        /// <summary>The password is longer than the maximum length.</summary>
+        public static readonly Error TooLong = Error.Validation("Password.TooLong", "Password must be at most 128 characters long.");
+
+        /// <summary>The password has no letter.</summary>
+        public static readonly Error LetterRequired = Error.Validation("Password.LetterRequired", "Password must contain a letter.");
+
+        /// <summary>The password has no digit.</summary>
+        public static readonly Error DigitRequired = Error.Validation("Password.DigitRequired", "Password must contain a digit.");
     }
 
     /// <summary>Errors of the page number and size of paged queries.</summary>

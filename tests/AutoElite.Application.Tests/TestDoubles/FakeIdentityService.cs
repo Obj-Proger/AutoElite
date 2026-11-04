@@ -27,6 +27,19 @@ internal sealed class FakeIdentityService : IIdentityService
         return Task.FromResult(token);
     }
 
+    public Task<bool> AcceptInvitationAsync(Guid userId, string token, string password, CancellationToken cancellationToken = default)
+    {
+        var account = _accounts[userId];
+        if (!account.InvitationTokens.Contains(token))
+            return Task.FromResult(false);
+
+        account.Password = password;
+        account.EmailConfirmed = true;
+        account.InvitationTokens.Clear();
+
+        return Task.FromResult(true);
+    }
+
     /// <summary>Adds an account that exists before the test acts.</summary>
     public void Seed(Guid userId, Email email) => _accounts.Add(userId, new Account(email));
 
@@ -38,6 +51,8 @@ internal sealed class FakeIdentityService : IIdentityService
         public Email Email { get; } = email;
 
         public string? Password { get; set; }
+
+        public bool EmailConfirmed { get; set; }
 
         public List<string> InvitationTokens { get; } = [];
     }
