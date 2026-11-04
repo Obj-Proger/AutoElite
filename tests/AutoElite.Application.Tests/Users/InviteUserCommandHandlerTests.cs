@@ -8,7 +8,7 @@ namespace AutoElite.Application.Tests.Users;
 public class InviteUserCommandHandlerTests
 {
     private readonly FakeUserRepository _users = new();
-    private readonly InMemoryRepository<UserRoleAssignment> _roles = new();
+    private readonly FakeUserRoleRepository _roles = new();
     private readonly InMemoryRepository<Branch> _branches = new();
     private readonly FakeIdentityService _identity = new();
 

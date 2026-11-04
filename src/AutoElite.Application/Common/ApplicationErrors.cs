@@ -54,6 +54,26 @@ public static class ApplicationErrors
         /// <summary>The invitation link is wrong, expired or already used, or its user cannot be invited.</summary>
         public static readonly Error InvitationInvalid = Error.Validation(
             "Account.InvitationInvalid", "The invitation link is invalid or has expired. Ask the school for a new one.");
+
+        /// <summary>No user has the email address, or the password is wrong.</summary>
+        public static readonly Error InvalidCredentials = Error.Unauthorized(
+            "Account.InvalidCredentials", "Email or password is incorrect.");
+
+        /// <summary>Sign-in is blocked for a while after too many wrong passwords.</summary>
+        public static readonly Error LockedOut = Error.Forbidden(
+            "Account.LockedOut", "Too many failed sign-in attempts. Try again later.");
+
+        /// <summary>The password is correct, but the email address is not confirmed.</summary>
+        public static readonly Error EmailNotConfirmed = Error.Forbidden(
+            "Account.EmailNotConfirmed", "Confirm your email address before signing in.");
+
+        /// <summary>The password is correct, but the user is deactivated.</summary>
+        public static readonly Error UserDeactivated = Error.Forbidden(
+            "Account.UserDeactivated", "Your account is deactivated. Contact the school.");
+
+        /// <summary>The refresh token is unknown, expired, revoked or used, or its user is deactivated.</summary>
+        public static readonly Error RefreshTokenInvalid = Error.Unauthorized(
+            "Account.RefreshTokenInvalid", "Your session has expired. Sign in again.");
     }
 
     /// <summary>Errors of the rules in <see cref="Users.PasswordPolicy"/>.</summary>

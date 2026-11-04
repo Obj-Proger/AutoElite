@@ -8,7 +8,7 @@ namespace AutoElite.Application.Users.InviteUser;
 /// </summary>
 internal sealed class InviteUserCommandHandler(
     IUserRepository userRepository,
-    IRepository<UserRoleAssignment> roleAssignmentRepository,
+    IUserRoleRepository roleAssignmentRepository,
     IRepository<Branch> branchRepository,
     IIdentityService identityService,
     ICurrentUser currentUser,

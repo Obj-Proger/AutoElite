@@ -22,17 +22,32 @@
   <data name="Account.DuplicateRoles" xml:space="preserve">
     <value>Каждую роль можно указать только один раз.</value>
   </data>
+  <data name="Account.EmailNotConfirmed" xml:space="preserve">
+    <value>Подтвердите адрес электронной почты, прежде чем войти.</value>
+  </data>
   <data name="Account.EmailTaken" xml:space="preserve">
     <value>Пользователь с таким адресом электронной почты уже существует.</value>
+  </data>
+  <data name="Account.InvalidCredentials" xml:space="preserve">
+    <value>Неверный адрес электронной почты или пароль.</value>
   </data>
   <data name="Account.InvitationInvalid" xml:space="preserve">
     <value>Ссылка-приглашение недействительна или устарела. Попросите автошколу отправить новую.</value>
   </data>
+  <data name="Account.LockedOut" xml:space="preserve">
+    <value>Слишком много неудачных попыток входа. Попробуйте позже.</value>
+  </data>
   <data name="Account.ManagerInvitesOnlyStudents" xml:space="preserve">
     <value>Менеджер может приглашать только студентов.</value>
   </data>
+  <data name="Account.RefreshTokenInvalid" xml:space="preserve">
+    <value>Сеанс истёк. Войдите снова.</value>
+  </data>
   <data name="Account.RolesEmpty" xml:space="preserve">
     <value>Нужно указать хотя бы одну роль.</value>
+  </data>
+  <data name="Account.UserDeactivated" xml:space="preserve">
+    <value>Ваша учётная запись деактивирована. Обратитесь в автошколу.</value>
   </data>
   <data name="Address.CityEmpty" xml:space="preserve">
     <value>Город не может быть пустым.</value>

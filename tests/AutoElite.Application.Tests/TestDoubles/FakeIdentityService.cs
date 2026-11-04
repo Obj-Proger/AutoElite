@@ -1,4 +1,5 @@
 using AutoElite.Application.Users;
+using AutoElite.Application.Users.Authentication;
 
 namespace AutoElite.Application.Tests.TestDoubles;
 
@@ -40,11 +41,29 @@ internal sealed class FakeIdentityService : IIdentityService
         return Task.FromResult(true);
     }
 
+    public Task<PasswordCheckResult> CheckPasswordAsync(Guid userId, string password, CancellationToken cancellationToken = default)
+    {
+        var account = _accounts[userId];
+        var result = account switch
+        {
+            { IsLockedOut: true } => PasswordCheckResult.LockedOut,
+            _ when account.Password is null || account.Password != password => PasswordCheckResult.WrongPassword,
+            { EmailConfirmed: false } => PasswordCheckResult.EmailNotConfirmed,
+            _ => PasswordCheckResult.Succeeded
+        };
+
+        return Task.FromResult(result);
+    }
+
     /// <summary>Adds an account that exists before the test acts.</summary>
     public void Seed(Guid userId, Email email) => _accounts.Add(userId, new Account(email));
 
     /// <summary>Marks the account as activated, as if the user had accepted the invitation.</summary>
-    public void Activate(Guid userId, string password) => _accounts[userId].Password = password;
+    public void Activate(Guid userId, string password)
+    {
+        _accounts[userId].Password = password;
+        _accounts[userId].EmailConfirmed = true;
+    }
 
     internal sealed class Account(Email email)
     {
@@ -53,6 +72,8 @@ internal sealed class FakeIdentityService : IIdentityService
         public string? Password { get; set; }
 
         public bool EmailConfirmed { get; set; }
+
+        public bool IsLockedOut { get; set; }
 
         public List<string> InvitationTokens { get; } = [];
     }

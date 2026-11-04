@@ -1,3 +1,5 @@
+using AutoElite.Application.Users.Authentication;
+
 namespace AutoElite.Application.Users;
 
 /// <summary>
@@ -36,4 +38,13 @@ public interface IIdentityService
     /// <param name="cancellationToken">A token that signals cancellation of the operation.</param>
     /// <returns><see langword="false"/> if the token is wrong or expired; nothing is changed then.</returns>
     Task<bool> AcceptInvitationAsync(Guid userId, string token, string password, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Checks the password at sign-in. Wrong passwords are counted, and too many in a row lock the account for a while;
+    /// the implementation saves the count at once, so it holds even though the sign-in fails.
+    /// </summary>
+    /// <param name="userId">The identifier of the user.</param>
+    /// <param name="password">The password entered by the user.</param>
+    /// <param name="cancellationToken">A token that signals cancellation of the operation.</param>
+    Task<PasswordCheckResult> CheckPasswordAsync(Guid userId, string password, CancellationToken cancellationToken = default);
 }
