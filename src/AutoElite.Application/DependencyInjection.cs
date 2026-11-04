@@ -67,6 +67,7 @@ public static class DependencyInjection
         services.AddScoped<TestAttempts>();
         services.AddScoped<ExamAccess>();
         services.AddScoped<ChatAccess>();
+        services.AddScoped<ChatUsers>();
 
         RegisterOpenGenericImplementations(services, typeof(IRequestHandler<,>));
         RegisterOpenGenericImplementations(services, typeof(IValidator<>));

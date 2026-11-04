@@ -7,4 +7,7 @@ internal sealed class FakeChatRepository : InMemoryRepository<Chat>, IChatReposi
 {
     public Task<Chat?> GetDirectAsync(string directKey, CancellationToken cancellationToken = default) =>
         Task.FromResult(Items.SingleOrDefault(chat => chat.DirectKey == directKey));
+
+    public Task<Chat?> GetOfStudyGroupAsync(Guid studyGroupId, CancellationToken cancellationToken = default) =>
+        Task.FromResult(Items.SingleOrDefault(chat => chat.StudyGroupId == studyGroupId));
 }
