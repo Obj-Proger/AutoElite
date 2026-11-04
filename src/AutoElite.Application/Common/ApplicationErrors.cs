@@ -194,6 +194,13 @@ public static class ApplicationErrors
             "TheoryLesson.StatusNotDefined", "Lesson status is not valid.");
     }
 
+    /// <summary>Errors of the fleet that need more than the vehicle to check.</summary>
+    public static class Vehicle
+    {
+        /// <summary>Another vehicle already has the licence plate.</summary>
+        public static readonly Error PlateTaken = Error.Conflict("Vehicle.PlateTaken", "Another vehicle already has this licence plate.");
+    }
+
     /// <summary>Errors of the rules in <see cref="Users.PasswordPolicy"/>.</summary>
     public static class Password
     {

@@ -1270,6 +1270,9 @@
   <data name="Vehicle.NotFound" xml:space="preserve">
     <value>Автомобиль не найден.</value>
   </data>
+  <data name="Vehicle.PlateTaken" xml:space="preserve">
+    <value>Автомобиль с таким госномером уже есть.</value>
+  </data>
   <data name="Vehicle.TransmissionNotDefined" xml:space="preserve">
     <value>Недопустимый тип коробки передач.</value>
   </data>
