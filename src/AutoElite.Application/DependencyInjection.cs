@@ -7,6 +7,7 @@ using AutoElite.Application.Leads;
 using AutoElite.Application.Payments;
 using AutoElite.Application.Settings;
 using AutoElite.Application.StudyGroups;
+using AutoElite.Application.TheoryLessons;
 using AutoElite.Application.Users;
 using AutoElite.Application.Users.Authentication;
 using AutoElite.Application.Users.Invitations;
@@ -48,6 +49,8 @@ public static class DependencyInjection
         services.AddScoped<PaymentAccess>();
         services.AddScoped<StudyGroupAccess>();
         services.AddScoped<GroupInstructors>();
+        services.AddScoped<TheoryLessonAccess>();
+        services.AddScoped<LessonInstructors>();
 
         RegisterOpenGenericImplementations(services, typeof(IRequestHandler<,>));
         RegisterOpenGenericImplementations(services, typeof(IValidator<>));

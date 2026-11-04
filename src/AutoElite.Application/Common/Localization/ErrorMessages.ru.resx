@@ -1108,6 +1108,9 @@
   <data name="TheoryLesson.CourseMismatch" xml:space="preserve">
     <value>Курс не относится к этой группе.</value>
   </data>
+  <data name="TheoryLesson.DuplicateMark" xml:space="preserve">
+    <value>Каждый студент может встречаться в отметках только один раз.</value>
+  </data>
   <data name="TheoryLesson.DurationTooLong" xml:space="preserve">
     <value>Занятие не может длиться дольше 8 часов.</value>
   </data>
@@ -1123,6 +1126,9 @@
   <data name="TheoryLesson.LessonCancelled" xml:space="preserve">
     <value>Занятие отменено.</value>
   </data>
+  <data name="TheoryLesson.MarksEmpty" xml:space="preserve">
+    <value>Нужна хотя бы одна отметка посещаемости.</value>
+  </data>
   <data name="TheoryLesson.NotFound" xml:space="preserve">
     <value>Теоретическое занятие не найдено.</value>
   </data>
@@ -1137,6 +1143,9 @@
   </data>
   <data name="TheoryLesson.StartInPast" xml:space="preserve">
     <value>Занятие должно начинаться в будущем.</value>
+  </data>
+  <data name="TheoryLesson.TimeConflict" xml:space="preserve">
+    <value>У группы или преподавателя уже есть занятие в это время.</value>
   </data>
   <data name="TheoryLesson.TopicNotInCourse" xml:space="preserve">
     <value>Тема не входит в курс группы.</value>

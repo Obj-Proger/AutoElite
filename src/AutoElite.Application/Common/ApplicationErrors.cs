@@ -171,6 +171,21 @@ public static class ApplicationErrors
         public static readonly Error StatusNotDefined = Error.Validation("Payment.StatusNotDefined", "Payment status is not valid.");
     }
 
+    /// <summary>Errors of theory lessons that need more than the lesson to check.</summary>
+    public static class TheoryLesson
+    {
+        /// <summary>The group or the instructor already has a lesson at that time.</summary>
+        public static readonly Error TimeConflict = Error.Conflict(
+            "TheoryLesson.TimeConflict", "The group or the instructor already has a lesson at this time.");
+
+        /// <summary>An attendance command carries no marks.</summary>
+        public static readonly Error MarksEmpty = Error.Validation("TheoryLesson.MarksEmpty", "At least one attendance mark is required.");
+
+        /// <summary>A contract is marked more than once in one command.</summary>
+        public static readonly Error DuplicateMark = Error.Validation(
+            "TheoryLesson.DuplicateMark", "Each student can appear only once among the marks.");
+    }
+
     /// <summary>Errors of the rules in <see cref="Users.PasswordPolicy"/>.</summary>
     public static class Password
     {

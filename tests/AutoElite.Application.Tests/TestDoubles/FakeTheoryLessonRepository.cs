@@ -1,0 +1,16 @@
+using AutoElite.Application.TheoryLessons;
+using AutoElite.Domain.Entities;
+using AutoElite.Domain.Enums;
+
+namespace AutoElite.Application.Tests.TestDoubles;
+
+internal sealed class FakeTheoryLessonRepository : InMemoryRepository<TheoryLesson>, ITheoryLessonRepository
+{
+    public Task<bool> HasOverlapAsync(
+        Guid groupId, Guid instructorId, TimeInterval time, Guid? exceptLessonId = null, CancellationToken cancellationToken = default) =>
+        Task.FromResult(Items.Any(lesson =>
+            lesson.Id != exceptLessonId
+            && lesson.Status != TheoryLessonStatus.Cancelled
+            && (lesson.GroupId == groupId || lesson.InstructorId == instructorId)
+            && lesson.Time.Overlaps(time)));
+}
