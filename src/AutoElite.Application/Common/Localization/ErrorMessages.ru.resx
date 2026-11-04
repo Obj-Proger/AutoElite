@@ -403,6 +403,9 @@
   <data name="DrivingRoute.TrainingGroundIdEmpty" xml:space="preserve">
     <value>Идентификатор площадки не может быть пустым.</value>
   </data>
+  <data name="DrivingRoute.TrainingGroundInactive" xml:space="preserve">
+    <value>Маршрут может начинаться только с действующей площадки.</value>
+  </data>
   <data name="DrivingSlot.AlreadyRated" xml:space="preserve">
     <value>Занятие уже оценено.</value>
   </data>

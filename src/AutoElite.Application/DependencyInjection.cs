@@ -3,6 +3,7 @@ using AutoElite.Application.Common.Events;
 using AutoElite.Application.Common.Localization;
 using AutoElite.Application.Contracts;
 using AutoElite.Application.Courses;
+using AutoElite.Application.DrivingRoutes;
 using AutoElite.Application.Leads;
 using AutoElite.Application.Payments;
 using AutoElite.Application.Settings;
@@ -51,6 +52,7 @@ public static class DependencyInjection
         services.AddScoped<GroupInstructors>();
         services.AddScoped<TheoryLessonAccess>();
         services.AddScoped<LessonInstructors>();
+        services.AddScoped<DrivingRouteAccess>();
 
         RegisterOpenGenericImplementations(services, typeof(IRequestHandler<,>));
         RegisterOpenGenericImplementations(services, typeof(IValidator<>));

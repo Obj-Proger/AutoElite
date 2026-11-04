@@ -201,6 +201,14 @@ public static class ApplicationErrors
         public static readonly Error PlateTaken = Error.Conflict("Vehicle.PlateTaken", "Another vehicle already has this licence plate.");
     }
 
+    /// <summary>Errors of driving routes that need more than the route to check.</summary>
+    public static class DrivingRoute
+    {
+        /// <summary>The route would start from a training ground that is no longer used.</summary>
+        public static readonly Error TrainingGroundInactive = Error.Conflict(
+            "DrivingRoute.TrainingGroundInactive", "A route can start only from a training ground in use.");
+    }
+
     /// <summary>Errors of the rules in <see cref="Users.PasswordPolicy"/>.</summary>
     public static class Password
     {
