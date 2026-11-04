@@ -5,6 +5,7 @@ using AutoElite.Application.Contracts;
 using AutoElite.Application.Courses;
 using AutoElite.Application.Leads;
 using AutoElite.Application.Settings;
+using AutoElite.Application.StudyGroups;
 using AutoElite.Application.Users;
 using AutoElite.Application.Users.Authentication;
 using AutoElite.Application.Users.Invitations;
@@ -35,6 +36,7 @@ public static class DependencyInjection
         services.AddScoped<SessionIssuer>();
         services.AddScoped<ManagedUsers>();
         services.AddScoped<UserRegistration>();
+        services.AddScoped<StaffMembers>();
         services.AddScoped<SchoolSettingsProvider>();
         services.AddScoped<CoursePrice>();
         services.AddScoped<LeadAccess>();
@@ -42,6 +44,8 @@ public static class DependencyInjection
         services.AddScoped<ContractStudents>();
         services.AddScoped<ContractFactory>();
         services.AddScoped<ContractAccess>();
+        services.AddScoped<StudyGroupAccess>();
+        services.AddScoped<GroupInstructors>();
 
         RegisterOpenGenericImplementations(services, typeof(IRequestHandler<,>));
         RegisterOpenGenericImplementations(services, typeof(IValidator<>));

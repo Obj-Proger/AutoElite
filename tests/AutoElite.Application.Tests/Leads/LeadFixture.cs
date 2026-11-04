@@ -1,4 +1,5 @@
 using AutoElite.Application.Leads;
+using AutoElite.Application.Users;
 using AutoElite.Domain.Entities;
 using AutoElite.Domain.Enums;
 
@@ -20,7 +21,7 @@ internal sealed class LeadFixture
 
     public FakeUserRoleRepository Roles { get; }
 
-    public LeadManagers CreateLeadManagers() => new(Users, Roles);
+    public LeadManagers CreateLeadManagers() => new(new StaffMembers(Users, Roles));
 
     public LeadAccess CreateLeadAccess(FakeCurrentUser caller) => new(Leads, caller);
 

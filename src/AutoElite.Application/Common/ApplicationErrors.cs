@@ -144,6 +144,22 @@ public static class ApplicationErrors
         public static readonly Error StatusNotDefined = Error.Validation("Lead.StatusNotDefined", "Lead status is not valid.");
     }
 
+    /// <summary>Errors of study groups that need more than the group to check.</summary>
+    public static class StudyGroup
+    {
+        /// <summary>The user chosen as the responsible instructor is not an active theory instructor.</summary>
+        public static readonly Error NotATheoryInstructor = Error.Validation(
+            "StudyGroup.NotATheoryInstructor", "The responsible instructor must be an active theory instructor.");
+
+        /// <summary>The instructor works for another branch than the group's.</summary>
+        public static readonly Error InstructorOfAnotherBranch = Error.Conflict(
+            "StudyGroup.InstructorOfAnotherBranch", "The instructor works for another branch than the group.");
+
+        /// <summary>The contract and the group are tied to different branches.</summary>
+        public static readonly Error ContractOfAnotherBranch = Error.Conflict(
+            "StudyGroup.ContractOfAnotherBranch", "The contract belongs to another branch than the group.");
+    }
+
     /// <summary>Errors of the rules in <see cref="Users.PasswordPolicy"/>.</summary>
     public static class Password
     {

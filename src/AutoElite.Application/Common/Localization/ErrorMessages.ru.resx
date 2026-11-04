@@ -928,6 +928,9 @@
   <data name="StudyGroup.ContractNotActive" xml:space="preserve">
     <value>Зачислить в группу можно только по действующему договору.</value>
   </data>
+  <data name="StudyGroup.ContractOfAnotherBranch" xml:space="preserve">
+    <value>Договор относится к другому филиалу, чем группа.</value>
+  </data>
   <data name="StudyGroup.CourseInactive" xml:space="preserve">
     <value>Нельзя сформировать группу по неактивному курсу.</value>
   </data>
@@ -943,11 +946,17 @@
   <data name="StudyGroup.InstructorIdEmpty" xml:space="preserve">
     <value>Идентификатор преподавателя теории не может быть пустым.</value>
   </data>
+  <data name="StudyGroup.InstructorOfAnotherBranch" xml:space="preserve">
+    <value>Преподаватель работает в другом филиале, чем группа.</value>
+  </data>
   <data name="StudyGroup.NameEmpty" xml:space="preserve">
     <value>Название группы не может быть пустым.</value>
   </data>
   <data name="StudyGroup.NameTooLong" xml:space="preserve">
     <value>Название группы превышает допустимую длину.</value>
+  </data>
+  <data name="StudyGroup.NotATheoryInstructor" xml:space="preserve">
+    <value>Ответственным может быть только активный преподаватель теории.</value>
   </data>
   <data name="StudyGroup.NotEnrolled" xml:space="preserve">
     <value>Студент не состоит в группе.</value>
