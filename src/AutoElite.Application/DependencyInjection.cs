@@ -1,5 +1,6 @@
 using AutoElite.Application.Common.Behaviors;
 using AutoElite.Application.Common.Events;
+using AutoElite.Application.Common.Localization;
 using AutoElite.Application.Common.Messaging;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,7 +12,7 @@ namespace AutoElite.Application;
 public static class DependencyInjection
 {
     /// <summary>
-    /// Registers the dispatcher, the domain event publisher, all request handlers, domain event handlers
+    /// Registers the dispatcher, the domain event publisher, the error localizer, all request handlers, domain event handlers
     /// and validators found in this assembly,
     /// and the pipeline behaviors in execution order: logging, authorization, validation, then the unit of work.
     /// The host must register <see cref="Common.Abstractions.ICurrentUser"/> and <see cref="Common.Abstractions.IUnitOfWork"/>.
@@ -23,6 +24,7 @@ public static class DependencyInjection
         services.TryAddSingleton(TimeProvider.System);
         services.AddScoped<IDispatcher, Dispatcher>();
         services.AddScoped<IDomainEventPublisher, DomainEventPublisher>();
+        services.AddSingleton<IErrorLocalizer, ResourceErrorLocalizer>();
 
         RegisterOpenGenericImplementations(services, typeof(IRequestHandler<,>));
         RegisterOpenGenericImplementations(services, typeof(IValidator<>));

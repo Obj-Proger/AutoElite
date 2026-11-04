@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- English messages that differ from the message in code, keyed by error code. Other codes fall back to Error.Message. -->
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AnswerOption.NotFound" xml:space="preserve">
+    <value>Answer option was not found.</value>
+  </data>
+  <data name="Branch.NotFound" xml:space="preserve">
+    <value>Branch was not found.</value>
+  </data>
+  <data name="Chat.NotFound" xml:space="preserve">
+    <value>Chat was not found.</value>
+  </data>
+  <data name="ChatMember.NotFound" xml:space="preserve">
+    <value>Chat member was not found.</value>
+  </data>
+  <data name="ChatMessage.NotFound" xml:space="preserve">
+    <value>Chat message was not found.</value>
+  </data>
+  <data name="Contract.NotFound" xml:space="preserve">
+    <value>Contract was not found.</value>
+  </data>
+  <data name="Course.NotFound" xml:space="preserve">
+    <value>Course was not found.</value>
+  </data>
+  <data name="CourseTopic.NotFound" xml:space="preserve">
+    <value>Course topic was not found.</value>
+  </data>
+  <data name="Document.NotFound" xml:space="preserve">
+    <value>Document was not found.</value>
+  </data>
+  <data name="DrivingBooking.NotFound" xml:space="preserve">
+    <value>Driving lesson booking was not found.</value>
+  </data>
+  <data name="DrivingRoute.NotFound" xml:space="preserve">
+    <value>Driving route was not found.</value>
+  </data>
+  <data name="DrivingSlot.NotFound" xml:space="preserve">
+    <value>Driving slot was not found.</value>
+  </data>
+  <data name="Exam.NotFound" xml:space="preserve">
+    <value>Exam was not found.</value>
+  </data>
+  <data name="ExamResult.NotFound" xml:space="preserve">
+    <value>Exam result was not found.</value>
+  </data>
+  <data name="GroupEnrollment.NotFound" xml:space="preserve">
+    <value>Group enrollment was not found.</value>
+  </data>
+  <data name="Lead.NotFound" xml:space="preserve">
+    <value>Lead was not found.</value>
+  </data>
+  <data name="LeadNote.NotFound" xml:space="preserve">
+    <value>Lead note was not found.</value>
+  </data>
+  <data name="LeadStatusChange.NotFound" xml:space="preserve">
+    <value>Lead status change was not found.</value>
+  </data>
+  <data name="LessonAttendance.NotFound" xml:space="preserve">
+    <value>Attendance mark was not found.</value>
+  </data>
+  <data name="Notification.NotFound" xml:space="preserve">
+    <value>Notification was not found.</value>
+  </data>
+  <data name="Payment.NotFound" xml:space="preserve">
+    <value>Payment was not found.</value>
+  </data>
+  <data name="Question.NotFound" xml:space="preserve">
+    <value>Question was not found.</value>
+  </data>
+  <data name="SchoolSettings.NotFound" xml:space="preserve">
+    <value>School settings were not found.</value>
+  </data>
+  <data name="SessionQuestion.NotFound" xml:space="preserve">
+    <value>Test attempt question was not found.</value>
+  </data>
+  <data name="StaffTask.NotFound" xml:space="preserve">
+    <value>Staff task was not found.</value>
+  </data>
+  <data name="StudyGroup.NotFound" xml:space="preserve">
+    <value>Study group was not found.</value>
+  </data>
+  <data name="TestSession.NotFound" xml:space="preserve">
+    <value>Test attempt was not found.</value>
+  </data>
+  <data name="TestTemplate.NotFound" xml:space="preserve">
+    <value>Test template was not found.</value>
+  </data>
+  <data name="TheoryLesson.NotFound" xml:space="preserve">
+    <value>Theory lesson was not found.</value>
+  </data>
+  <data name="TrainingGround.NotFound" xml:space="preserve">
+    <value>Training ground was not found.</value>
+  </data>
+  <data name="User.NotFound" xml:space="preserve">
+    <value>User was not found.</value>
+  </data>
+  <data name="UserRoleAssignment.NotFound" xml:space="preserve">
+    <value>User role was not found.</value>
+  </data>
+  <data name="Vehicle.NotFound" xml:space="preserve">
+    <value>Vehicle was not found.</value>
+  </data>
+</root>

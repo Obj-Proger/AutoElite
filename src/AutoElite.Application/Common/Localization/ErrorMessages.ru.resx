@@ -1,0 +1,1150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- Russian error messages, keyed by error code. Every domain and application error must have one; tests check it. -->
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Address.CityEmpty" xml:space="preserve">
+    <value>Город не может быть пустым.</value>
+  </data>
+  <data name="Address.CityTooLong" xml:space="preserve">
+    <value>Название города превышает допустимую длину.</value>
+  </data>
+  <data name="Address.StreetEmpty" xml:space="preserve">
+    <value>Адрес не может быть пустым.</value>
+  </data>
+  <data name="Address.StreetTooLong" xml:space="preserve">
+    <value>Адрес превышает допустимую длину.</value>
+  </data>
+  <data name="AnswerOption.NotFound" xml:space="preserve">
+    <value>Вариант ответа не найден.</value>
+  </data>
+  <data name="Auth.Forbidden" xml:space="preserve">
+    <value>У вас нет прав на это действие.</value>
+  </data>
+  <data name="Auth.Unauthenticated" xml:space="preserve">
+    <value>Необходимо войти в систему.</value>
+  </data>
+  <data name="Branch.AlreadyActive" xml:space="preserve">
+    <value>Филиал уже активен.</value>
+  </data>
+  <data name="Branch.AlreadyInactive" xml:space="preserve">
+    <value>Филиал уже деактивирован.</value>
+  </data>
+  <data name="Branch.CannotModifyInactive" xml:space="preserve">
+    <value>Деактивированный филиал нельзя изменить. Сначала активируйте его.</value>
+  </data>
+  <data name="Branch.NameEmpty" xml:space="preserve">
+    <value>Название филиала не может быть пустым.</value>
+  </data>
+  <data name="Branch.NameTooLong" xml:space="preserve">
+    <value>Название филиала превышает допустимую длину.</value>
+  </data>
+  <data name="Branch.NotFound" xml:space="preserve">
+    <value>Филиал не найден.</value>
+  </data>
+  <data name="Branch.TimeZoneEmpty" xml:space="preserve">
+    <value>Часовой пояс не может быть пустым.</value>
+  </data>
+  <data name="Branch.TimeZoneUnknown" xml:space="preserve">
+    <value>Часовой пояс должен быть известным идентификатором IANA, например Europe/Moscow.</value>
+  </data>
+  <data name="Chat.AlreadyMember" xml:space="preserve">
+    <value>Пользователь уже является участником чата.</value>
+  </data>
+  <data name="Chat.AlreadyMuted" xml:space="preserve">
+    <value>Уведомления уже выключены.</value>
+  </data>
+  <data name="Chat.CannotRemoveSelf" xml:space="preserve">
+    <value>Чтобы выйти из чата самому, используйте выход из чата.</value>
+  </data>
+  <data name="Chat.DirectChatWithSelf" xml:space="preserve">
+    <value>Для личного чата нужны два разных пользователя.</value>
+  </data>
+  <data name="Chat.DuplicateMember" xml:space="preserve">
+    <value>Каждого участника можно указать только один раз.</value>
+  </data>
+  <data name="Chat.LastAdministrator" xml:space="preserve">
+    <value>В чате должен остаться хотя бы один администратор.</value>
+  </data>
+  <data name="Chat.NotAdministrator" xml:space="preserve">
+    <value>Это может сделать только администратор чата.</value>
+  </data>
+  <data name="Chat.NotFound" xml:space="preserve">
+    <value>Чат не найден.</value>
+  </data>
+  <data name="Chat.NotGroupChat" xml:space="preserve">
+    <value>Это действие доступно только в групповых чатах.</value>
+  </data>
+  <data name="Chat.NotMember" xml:space="preserve">
+    <value>Пользователь не является участником чата.</value>
+  </data>
+  <data name="Chat.NotMuted" xml:space="preserve">
+    <value>Уведомления уже включены.</value>
+  </data>
+  <data name="Chat.RoleNotDefined" xml:space="preserve">
+    <value>Недопустимая роль в чате.</value>
+  </data>
+  <data name="Chat.StudyGroupIdEmpty" xml:space="preserve">
+    <value>Идентификатор учебной группы не может быть пустым.</value>
+  </data>
+  <data name="Chat.TitleEmpty" xml:space="preserve">
+    <value>Название чата не может быть пустым.</value>
+  </data>
+  <data name="Chat.TitleTooLong" xml:space="preserve">
+    <value>Название чата превышает допустимую длину.</value>
+  </data>
+  <data name="Chat.UserIdEmpty" xml:space="preserve">
+    <value>Идентификатор пользователя не может быть пустым.</value>
+  </data>
+  <data name="ChatMember.NotFound" xml:space="preserve">
+    <value>Участник чата не найден.</value>
+  </data>
+  <data name="ChatMessage.AlreadyDeleted" xml:space="preserve">
+    <value>Сообщение уже удалено.</value>
+  </data>
+  <data name="ChatMessage.Empty" xml:space="preserve">
+    <value>Сообщение должно содержать текст или вложение.</value>
+  </data>
+  <data name="ChatMessage.InvalidAttachments" xml:space="preserve">
+    <value>Вложения должны быть разными и иметь непустые идентификаторы.</value>
+  </data>
+  <data name="ChatMessage.NotFound" xml:space="preserve">
+    <value>Сообщение не найдено.</value>
+  </data>
+  <data name="ChatMessage.NotSender" xml:space="preserve">
+    <value>Удалить сообщение может только отправитель.</value>
+  </data>
+  <data name="ChatMessage.SenderNotMember" xml:space="preserve">
+    <value>Отправлять сообщения может только участник чата.</value>
+  </data>
+  <data name="ChatMessage.TextTooLong" xml:space="preserve">
+    <value>Текст сообщения превышает допустимую длину.</value>
+  </data>
+  <data name="ChatMessage.TooManyAttachments" xml:space="preserve">
+    <value>В сообщении может быть не больше 10 вложений.</value>
+  </data>
+  <data name="Concurrency.Conflict" xml:space="preserve">
+    <value>Данные изменил кто-то другой. Обновите их и повторите попытку.</value>
+  </data>
+  <data name="Contract.AmountNotPositive" xml:space="preserve">
+    <value>Сумма должна быть больше нуля.</value>
+  </data>
+  <data name="Contract.BranchIdEmpty" xml:space="preserve">
+    <value>Идентификатор филиала не может быть пустым.</value>
+  </data>
+  <data name="Contract.ClosedBeforeStart" xml:space="preserve">
+    <value>Договор нельзя закрыть до даты его начала.</value>
+  </data>
+  <data name="Contract.CourseInactive" xml:space="preserve">
+    <value>Нельзя оформить договор на неактивный курс.</value>
+  </data>
+  <data name="Contract.CurrencyMismatch" xml:space="preserve">
+    <value>Сумма должна быть в валюте договора.</value>
+  </data>
+  <data name="Contract.EndNotAfterStart" xml:space="preserve">
+    <value>Дата окончания должна быть позже даты начала.</value>
+  </data>
+  <data name="Contract.GradeOutOfRange" xml:space="preserve">
+    <value>Оценка должна быть от 1 до 5, не более двух знаков после запятой.</value>
+  </data>
+  <data name="Contract.LessonHoursOutOfRange" xml:space="preserve">
+    <value>Длительность занятия должна быть больше 0 и не больше 12 часов, не более двух знаков после запятой.</value>
+  </data>
+  <data name="Contract.NoTheoryAttendance" xml:space="preserve">
+    <value>Посещаемость теоретических занятий ещё не отмечена.</value>
+  </data>
+  <data name="Contract.NotActive" xml:space="preserve">
+    <value>Изменить можно только действующий договор.</value>
+  </data>
+  <data name="Contract.NotFound" xml:space="preserve">
+    <value>Договор не найден.</value>
+  </data>
+  <data name="Contract.NumberEmpty" xml:space="preserve">
+    <value>Номер договора не может быть пустым.</value>
+  </data>
+  <data name="Contract.NumberTooLong" xml:space="preserve">
+    <value>Номер договора превышает допустимую длину.</value>
+  </data>
+  <data name="Contract.OutstandingDebt" xml:space="preserve">
+    <value>Договор с задолженностью нельзя завершить.</value>
+  </data>
+  <data name="Contract.PriceNotPositive" xml:space="preserve">
+    <value>Стоимость договора должна быть больше нуля.</value>
+  </data>
+  <data name="Contract.QualityWindowOutOfRange" xml:space="preserve">
+    <value>Окно оценки качества должно быть от 1 до 50 занятий.</value>
+  </data>
+  <data name="Contract.RefundExceedsPaidAmount" xml:space="preserve">
+    <value>Сумма возврата не может превышать оплаченную сумму.</value>
+  </data>
+  <data name="Contract.StudentInactive" xml:space="preserve">
+    <value>Нельзя оформить договор на деактивированного пользователя.</value>
+  </data>
+  <data name="Contract.TerminationReasonEmpty" xml:space="preserve">
+    <value>Для расторжения договора нужно указать причину.</value>
+  </data>
+  <data name="Contract.TerminationReasonTooLong" xml:space="preserve">
+    <value>Причина расторжения превышает допустимую длину.</value>
+  </data>
+  <data name="Contract.TransmissionNotDefined" xml:space="preserve">
+    <value>Недопустимый тип коробки передач.</value>
+  </data>
+  <data name="Contract.TransmissionUnchanged" xml:space="preserve">
+    <value>В договоре уже указана эта коробка передач.</value>
+  </data>
+  <data name="Course.AlreadyActive" xml:space="preserve">
+    <value>Курс уже активен.</value>
+  </data>
+  <data name="Course.AlreadyInactive" xml:space="preserve">
+    <value>Курс уже деактивирован.</value>
+  </data>
+  <data name="Course.CannotModifyInactive" xml:space="preserve">
+    <value>Деактивированный курс нельзя изменить. Сначала активируйте его.</value>
+  </data>
+  <data name="Course.CategoryNotDefined" xml:space="preserve">
+    <value>Недопустимая категория прав.</value>
+  </data>
+  <data name="Course.DescriptionTooLong" xml:space="preserve">
+    <value>Описание превышает допустимую длину.</value>
+  </data>
+  <data name="Course.DuplicateTopicTitle" xml:space="preserve">
+    <value>В курсе уже есть тема с таким названием.</value>
+  </data>
+  <data name="Course.HoursOutOfRange" xml:space="preserve">
+    <value>Часы теории и практики должны быть от 0 до 1000.</value>
+  </data>
+  <data name="Course.NameEmpty" xml:space="preserve">
+    <value>Название курса не может быть пустым.</value>
+  </data>
+  <data name="Course.NameTooLong" xml:space="preserve">
+    <value>Название курса превышает допустимую длину.</value>
+  </data>
+  <data name="Course.NoHours" xml:space="preserve">
+    <value>В курсе должны быть часы теории или практики.</value>
+  </data>
+  <data name="Course.NotFound" xml:space="preserve">
+    <value>Курс не найден.</value>
+  </data>
+  <data name="Course.PriceNotPositive" xml:space="preserve">
+    <value>Стоимость курса должна быть больше нуля.</value>
+  </data>
+  <data name="Course.TopicNotFound" xml:space="preserve">
+    <value>Тема не найдена в курсе.</value>
+  </data>
+  <data name="Course.TopicPositionOutOfRange" xml:space="preserve">
+    <value>Позиция темы вне допустимого диапазона.</value>
+  </data>
+  <data name="CourseTopic.DescriptionTooLong" xml:space="preserve">
+    <value>Описание темы превышает допустимую длину.</value>
+  </data>
+  <data name="CourseTopic.NotFound" xml:space="preserve">
+    <value>Тема курса не найдена.</value>
+  </data>
+  <data name="CourseTopic.TitleEmpty" xml:space="preserve">
+    <value>Название темы не может быть пустым.</value>
+  </data>
+  <data name="CourseTopic.TitleTooLong" xml:space="preserve">
+    <value>Название темы превышает допустимую длину.</value>
+  </data>
+  <data name="Currency.Empty" xml:space="preserve">
+    <value>Код валюты не может быть пустым.</value>
+  </data>
+  <data name="Currency.InvalidFormat" xml:space="preserve">
+    <value>Код валюты должен состоять из трёх букв по ISO 4217, например RUB.</value>
+  </data>
+  <data name="Currency.NotSupported" xml:space="preserve">
+    <value>Валюта не поддерживается.</value>
+  </data>
+  <data name="Document.AlreadyDeleted" xml:space="preserve">
+    <value>Документ уже удалён.</value>
+  </data>
+  <data name="Document.ContentTypeMismatch" xml:space="preserve">
+    <value>Тип файла не соответствует его расширению.</value>
+  </data>
+  <data name="Document.DescriptionTooLong" xml:space="preserve">
+    <value>Описание превышает допустимую длину.</value>
+  </data>
+  <data name="Document.FileNameEmpty" xml:space="preserve">
+    <value>Имя файла не может быть пустым.</value>
+  </data>
+  <data name="Document.FileNameInvalid" xml:space="preserve">
+    <value>Имя файла не должно содержать путь или управляющие символы.</value>
+  </data>
+  <data name="Document.FileNameTooLong" xml:space="preserve">
+    <value>Имя файла превышает допустимую длину.</value>
+  </data>
+  <data name="Document.FormatNotAllowed" xml:space="preserve">
+    <value>Этот формат файла не разрешён.</value>
+  </data>
+  <data name="Document.NotFound" xml:space="preserve">
+    <value>Документ не найден.</value>
+  </data>
+  <data name="Document.SizeOutOfRange" xml:space="preserve">
+    <value>Размер файла должен быть от 1 байта до 20 МБ.</value>
+  </data>
+  <data name="Document.StorageKeyEmpty" xml:space="preserve">
+    <value>Ключ хранилища не может быть пустым.</value>
+  </data>
+  <data name="Document.StorageKeyTooLong" xml:space="preserve">
+    <value>Ключ хранилища превышает допустимую длину.</value>
+  </data>
+  <data name="Document.UploadedByUserIdEmpty" xml:space="preserve">
+    <value>Идентификатор пользователя не может быть пустым.</value>
+  </data>
+  <data name="DrivingBooking.NotFound" xml:space="preserve">
+    <value>Запись на занятие не найдена.</value>
+  </data>
+  <data name="DrivingRoute.AlreadyActive" xml:space="preserve">
+    <value>Маршрут уже активен.</value>
+  </data>
+  <data name="DrivingRoute.AlreadyInactive" xml:space="preserve">
+    <value>Маршрут уже деактивирован.</value>
+  </data>
+  <data name="DrivingRoute.AuthorIdEmpty" xml:space="preserve">
+    <value>Идентификатор автора не может быть пустым.</value>
+  </data>
+  <data name="DrivingRoute.CannotModifyInactive" xml:space="preserve">
+    <value>Деактивированный маршрут нельзя изменить. Сначала активируйте его.</value>
+  </data>
+  <data name="DrivingRoute.DescriptionEmpty" xml:space="preserve">
+    <value>Описание маршрута не может быть пустым.</value>
+  </data>
+  <data name="DrivingRoute.DescriptionTooLong" xml:space="preserve">
+    <value>Описание маршрута превышает допустимую длину.</value>
+  </data>
+  <data name="DrivingRoute.NameEmpty" xml:space="preserve">
+    <value>Название маршрута не может быть пустым.</value>
+  </data>
+  <data name="DrivingRoute.NameTooLong" xml:space="preserve">
+    <value>Название маршрута превышает допустимую длину.</value>
+  </data>
+  <data name="DrivingRoute.NotFound" xml:space="preserve">
+    <value>Маршрут не найден.</value>
+  </data>
+  <data name="DrivingRoute.TrainingGroundIdEmpty" xml:space="preserve">
+    <value>Идентификатор площадки не может быть пустым.</value>
+  </data>
+  <data name="DrivingSlot.AlreadyRated" xml:space="preserve">
+    <value>Занятие уже оценено.</value>
+  </data>
+  <data name="DrivingSlot.AlreadyStarted" xml:space="preserve">
+    <value>Занятие уже началось.</value>
+  </data>
+  <data name="DrivingSlot.CategoryMismatch" xml:space="preserve">
+    <value>Автомобиль предназначен для другой категории прав, чем указана в договоре.</value>
+  </data>
+  <data name="DrivingSlot.ContractMismatch" xml:space="preserve">
+    <value>Договор не относится к этой записи.</value>
+  </data>
+  <data name="DrivingSlot.ContractNotActive" xml:space="preserve">
+    <value>Записаться на занятие можно только по действующему договору.</value>
+  </data>
+  <data name="DrivingSlot.DuplicateSkillGrade" xml:space="preserve">
+    <value>Каждый навык можно оценить только один раз.</value>
+  </data>
+  <data name="DrivingSlot.DurationTooLong" xml:space="preserve">
+    <value>Слот не может длиться дольше 4 часов.</value>
+  </data>
+  <data name="DrivingSlot.InstructorIdEmpty" xml:space="preserve">
+    <value>Идентификатор инструктора не может быть пустым.</value>
+  </data>
+  <data name="DrivingSlot.LessonNotCompleted" xml:space="preserve">
+    <value>Оценить можно только проведённое занятие.</value>
+  </data>
+  <data name="DrivingSlot.NotAvailable" xml:space="preserve">
+    <value>Слот недоступен для записи.</value>
+  </data>
+  <data name="DrivingSlot.NotBooked" xml:space="preserve">
+    <value>На слот нет действующей записи.</value>
+  </data>
+  <data name="DrivingSlot.NotFound" xml:space="preserve">
+    <value>Слот вождения не найден.</value>
+  </data>
+  <data name="DrivingSlot.NotOpen" xml:space="preserve">
+    <value>Снять можно только свободный или занятый слот.</value>
+  </data>
+  <data name="DrivingSlot.NotStarted" xml:space="preserve">
+    <value>Занятие ещё не началось.</value>
+  </data>
+  <data name="DrivingSlot.NoteTooLong" xml:space="preserve">
+    <value>Заметка превышает допустимую длину.</value>
+  </data>
+  <data name="DrivingSlot.RatingCommentTooLong" xml:space="preserve">
+    <value>Комментарий превышает допустимую длину.</value>
+  </data>
+  <data name="DrivingSlot.RatingOutOfRange" xml:space="preserve">
+    <value>Оценка должна быть от 1 до 5.</value>
+  </data>
+  <data name="DrivingSlot.ReasonEmpty" xml:space="preserve">
+    <value>Нужно указать причину.</value>
+  </data>
+  <data name="DrivingSlot.ReasonTooLong" xml:space="preserve">
+    <value>Причина превышает допустимую длину.</value>
+  </data>
+  <data name="DrivingSlot.RouteInactive" xml:space="preserve">
+    <value>Для слота нельзя использовать деактивированный маршрут.</value>
+  </data>
+  <data name="DrivingSlot.StartInPast" xml:space="preserve">
+    <value>Слот должен начинаться в будущем.</value>
+  </data>
+  <data name="DrivingSlot.TooLateToCancel" xml:space="preserve">
+    <value>Отменить это занятие самостоятельно уже нельзя. Обратитесь к инструктору или в автошколу.</value>
+  </data>
+  <data name="DrivingSlot.TrainingGroundInactive" xml:space="preserve">
+    <value>Для слота нельзя использовать деактивированную площадку.</value>
+  </data>
+  <data name="DrivingSlot.TransmissionMismatch" xml:space="preserve">
+    <value>У автомобиля другая коробка передач, чем указана в договоре.</value>
+  </data>
+  <data name="DrivingSlot.UserIdEmpty" xml:space="preserve">
+    <value>Идентификатор пользователя не может быть пустым.</value>
+  </data>
+  <data name="DrivingSlot.VehicleInactive" xml:space="preserve">
+    <value>Для слота нельзя использовать деактивированный автомобиль.</value>
+  </data>
+  <data name="Email.Empty" xml:space="preserve">
+    <value>Адрес электронной почты не может быть пустым.</value>
+  </data>
+  <data name="Email.InvalidFormat" xml:space="preserve">
+    <value>Неверный формат адреса электронной почты.</value>
+  </data>
+  <data name="Email.TooLong" xml:space="preserve">
+    <value>Адрес электронной почты превышает допустимую длину.</value>
+  </data>
+  <data name="EntityReference.IdEmpty" xml:space="preserve">
+    <value>Идентификатор объекта не может быть пустым.</value>
+  </data>
+  <data name="EntityReference.KindNotDefined" xml:space="preserve">
+    <value>Недопустимый тип объекта.</value>
+  </data>
+  <data name="Exam.AlreadyRecorded" xml:space="preserve">
+    <value>У студента уже есть результат этого экзамена.</value>
+  </data>
+  <data name="Exam.CancellationReasonEmpty" xml:space="preserve">
+    <value>Для отмены экзамена нужно указать причину.</value>
+  </data>
+  <data name="Exam.CancellationReasonTooLong" xml:space="preserve">
+    <value>Причина отмены превышает допустимую длину.</value>
+  </data>
+  <data name="Exam.CommentTooLong" xml:space="preserve">
+    <value>Комментарий превышает допустимую длину.</value>
+  </data>
+  <data name="Exam.GroupInactive" xml:space="preserve">
+    <value>Нельзя назначить экзамен деактивированной группе.</value>
+  </data>
+  <data name="Exam.GroupMismatch" xml:space="preserve">
+    <value>Группа не относится к этому экзамену.</value>
+  </data>
+  <data name="Exam.HasResults" xml:space="preserve">
+    <value>Экзамен с результатами нельзя перенести или отменить.</value>
+  </data>
+  <data name="Exam.KindNotDefined" xml:space="preserve">
+    <value>Недопустимый вид экзамена.</value>
+  </data>
+  <data name="Exam.NotFound" xml:space="preserve">
+    <value>Экзамен не найден.</value>
+  </data>
+  <data name="Exam.NotGroupMember" xml:space="preserve">
+    <value>Студент не состоит в группе.</value>
+  </data>
+  <data name="Exam.NotScheduled" xml:space="preserve">
+    <value>Экзамен отменён.</value>
+  </data>
+  <data name="Exam.NotStarted" xml:space="preserve">
+    <value>Экзамен ещё не начался.</value>
+  </data>
+  <data name="Exam.ResultNotFound" xml:space="preserve">
+    <value>У студента нет результата этого экзамена.</value>
+  </data>
+  <data name="Exam.ScheduledInPast" xml:space="preserve">
+    <value>Экзамен должен быть назначен на будущее время.</value>
+  </data>
+  <data name="Exam.ScoreOutOfRange" xml:space="preserve">
+    <value>Балл должен быть от 0 до 1000.</value>
+  </data>
+  <data name="Exam.SessionNotFinished" xml:space="preserve">
+    <value>Попытка теста ещё не завершена.</value>
+  </data>
+  <data name="Exam.SessionNotForExam" xml:space="preserve">
+    <value>Попытка теста не относится к этому экзамену.</value>
+  </data>
+  <data name="Exam.TemplateCategoryMismatch" xml:space="preserve">
+    <value>Шаблон теста предназначен для другой категории прав, чем у группы.</value>
+  </data>
+  <data name="Exam.TemplateInactive" xml:space="preserve">
+    <value>Для экзамена нельзя использовать неактивный шаблон теста.</value>
+  </data>
+  <data name="Exam.TemplateNotAllowed" xml:space="preserve">
+    <value>Для практического экзамена шаблон теста не используется.</value>
+  </data>
+  <data name="Exam.TemplateRequired" xml:space="preserve">
+    <value>Для теоретического экзамена нужен шаблон теста.</value>
+  </data>
+  <data name="Exam.UserIdEmpty" xml:space="preserve">
+    <value>Идентификатор пользователя не может быть пустым.</value>
+  </data>
+  <data name="Exam.WrongKind" xml:space="preserve">
+    <value>Для этого экзамена нельзя записать результат такого вида.</value>
+  </data>
+  <data name="ExamResult.NotFound" xml:space="preserve">
+    <value>Результат экзамена не найден.</value>
+  </data>
+  <data name="FullName.FirstNameEmpty" xml:space="preserve">
+    <value>Имя не может быть пустым.</value>
+  </data>
+  <data name="FullName.FirstNameTooLong" xml:space="preserve">
+    <value>Имя превышает допустимую длину.</value>
+  </data>
+  <data name="FullName.LastNameEmpty" xml:space="preserve">
+    <value>Фамилия не может быть пустой.</value>
+  </data>
+  <data name="FullName.LastNameTooLong" xml:space="preserve">
+    <value>Фамилия превышает допустимую длину.</value>
+  </data>
+  <data name="FullName.MiddleNameTooLong" xml:space="preserve">
+    <value>Отчество превышает допустимую длину.</value>
+  </data>
+  <data name="GroupEnrollment.NotFound" xml:space="preserve">
+    <value>Зачисление в группу не найдено.</value>
+  </data>
+  <data name="Lead.BranchIdEmpty" xml:space="preserve">
+    <value>Идентификатор филиала не может быть пустым.</value>
+  </data>
+  <data name="Lead.CategoryNotDefined" xml:space="preserve">
+    <value>Недопустимая желаемая категория прав.</value>
+  </data>
+  <data name="Lead.CommentTooLong" xml:space="preserve">
+    <value>Комментарий превышает допустимую длину.</value>
+  </data>
+  <data name="Lead.ContactNameEmpty" xml:space="preserve">
+    <value>Имя контакта не может быть пустым.</value>
+  </data>
+  <data name="Lead.ContactNameTooLong" xml:space="preserve">
+    <value>Имя контакта превышает допустимую длину.</value>
+  </data>
+  <data name="Lead.ContactRequired" xml:space="preserve">
+    <value>Нужно указать телефон или адрес электронной почты.</value>
+  </data>
+  <data name="Lead.ContractIdEmpty" xml:space="preserve">
+    <value>Идентификатор договора не может быть пустым.</value>
+  </data>
+  <data name="Lead.LostReasonEmpty" xml:space="preserve">
+    <value>Для потерянного лида нужно указать причину.</value>
+  </data>
+  <data name="Lead.LostReasonTooLong" xml:space="preserve">
+    <value>Причина потери превышает допустимую длину.</value>
+  </data>
+  <data name="Lead.ManagerAlreadyAssigned" xml:space="preserve">
+    <value>Этот менеджер уже назначен на лид.</value>
+  </data>
+  <data name="Lead.ManagerIdEmpty" xml:space="preserve">
+    <value>Идентификатор менеджера не может быть пустым.</value>
+  </data>
+  <data name="Lead.NotFound" xml:space="preserve">
+    <value>Лид не найден.</value>
+  </data>
+  <data name="Lead.NotLost" xml:space="preserve">
+    <value>Вернуть в работу можно только потерянный лид.</value>
+  </data>
+  <data name="Lead.NotNew" xml:space="preserve">
+    <value>Взять в работу можно только новый лид.</value>
+  </data>
+  <data name="Lead.NotOpen" xml:space="preserve">
+    <value>Изменить можно только новый лид или лид в работе.</value>
+  </data>
+  <data name="Lead.SourceNotDefined" xml:space="preserve">
+    <value>Недопустимый источник лида.</value>
+  </data>
+  <data name="Lead.UserIdEmpty" xml:space="preserve">
+    <value>Идентификатор пользователя не может быть пустым.</value>
+  </data>
+  <data name="LeadNote.AuthorIdEmpty" xml:space="preserve">
+    <value>Идентификатор автора не может быть пустым.</value>
+  </data>
+  <data name="LeadNote.NotFound" xml:space="preserve">
+    <value>Заметка к лиду не найдена.</value>
+  </data>
+  <data name="LeadNote.TextEmpty" xml:space="preserve">
+    <value>Текст заметки не может быть пустым.</value>
+  </data>
+  <data name="LeadNote.TextTooLong" xml:space="preserve">
+    <value>Текст заметки превышает допустимую длину.</value>
+  </data>
+  <data name="LeadStatusChange.NotFound" xml:space="preserve">
+    <value>Изменение статуса лида не найдено.</value>
+  </data>
+  <data name="LessonAttendance.CommentTooLong" xml:space="preserve">
+    <value>Комментарий превышает допустимую длину.</value>
+  </data>
+  <data name="LessonAttendance.MarkedByUserIdEmpty" xml:space="preserve">
+    <value>Идентификатор пользователя не может быть пустым.</value>
+  </data>
+  <data name="LessonAttendance.NotFound" xml:space="preserve">
+    <value>Отметка посещаемости не найдена.</value>
+  </data>
+  <data name="LicensePlate.Empty" xml:space="preserve">
+    <value>Госномер не может быть пустым.</value>
+  </data>
+  <data name="LicensePlate.InvalidFormat" xml:space="preserve">
+    <value>Госномер должен состоять из 2–15 букв и цифр.</value>
+  </data>
+  <data name="Money.TooLarge" xml:space="preserve">
+    <value>Сумма превышает максимально допустимое значение.</value>
+  </data>
+  <data name="Money.TooManyDecimalPlaces" xml:space="preserve">
+    <value>В сумме больше знаков после запятой, чем допускает валюта.</value>
+  </data>
+  <data name="Notification.BodyTooLong" xml:space="preserve">
+    <value>Текст уведомления превышает допустимую длину.</value>
+  </data>
+  <data name="Notification.NotFound" xml:space="preserve">
+    <value>Уведомление не найдено.</value>
+  </data>
+  <data name="Notification.RecipientIdEmpty" xml:space="preserve">
+    <value>Идентификатор получателя не может быть пустым.</value>
+  </data>
+  <data name="Notification.TitleEmpty" xml:space="preserve">
+    <value>Заголовок уведомления не может быть пустым.</value>
+  </data>
+  <data name="Notification.TitleTooLong" xml:space="preserve">
+    <value>Заголовок уведомления превышает допустимую длину.</value>
+  </data>
+  <data name="Notification.TypeNotDefined" xml:space="preserve">
+    <value>Недопустимый тип уведомления.</value>
+  </data>
+  <data name="Paging.PageOutOfRange" xml:space="preserve">
+    <value>Номер страницы должен быть от 1 до 100000.</value>
+  </data>
+  <data name="Paging.PageSizeOutOfRange" xml:space="preserve">
+    <value>Размер страницы должен быть от 1 до 100.</value>
+  </data>
+  <data name="Payment.AmountNotPositive" xml:space="preserve">
+    <value>Сумма платежа должна быть больше нуля.</value>
+  </data>
+  <data name="Payment.ContractMismatch" xml:space="preserve">
+    <value>Платёж относится к другому договору.</value>
+  </data>
+  <data name="Payment.CurrencyMismatch" xml:space="preserve">
+    <value>Платёж должен быть в валюте договора.</value>
+  </data>
+  <data name="Payment.ExternalReferenceEmpty" xml:space="preserve">
+    <value>Внешний номер платежа не может быть пустым.</value>
+  </data>
+  <data name="Payment.ExternalReferenceTooLong" xml:space="preserve">
+    <value>Внешний номер платежа превышает допустимую длину.</value>
+  </data>
+  <data name="Payment.MethodNotDefined" xml:space="preserve">
+    <value>Недопустимый способ оплаты.</value>
+  </data>
+  <data name="Payment.NotConfirmed" xml:space="preserve">
+    <value>Вернуть можно только подтверждённый платёж.</value>
+  </data>
+  <data name="Payment.NotFound" xml:space="preserve">
+    <value>Платёж не найден.</value>
+  </data>
+  <data name="Payment.NotRegistered" xml:space="preserve">
+    <value>Подтвердить, отменить или изменить можно только зарегистрированный платёж.</value>
+  </data>
+  <data name="Payment.PurposeEmpty" xml:space="preserve">
+    <value>Назначение платежа не может быть пустым.</value>
+  </data>
+  <data name="Payment.PurposeTooLong" xml:space="preserve">
+    <value>Назначение платежа превышает допустимую длину.</value>
+  </data>
+  <data name="Payment.ReasonEmpty" xml:space="preserve">
+    <value>Нужно указать причину.</value>
+  </data>
+  <data name="Payment.ReasonTooLong" xml:space="preserve">
+    <value>Причина превышает допустимую длину.</value>
+  </data>
+  <data name="Payment.UserIdEmpty" xml:space="preserve">
+    <value>Идентификатор пользователя не может быть пустым.</value>
+  </data>
+  <data name="PhoneNumber.Empty" xml:space="preserve">
+    <value>Номер телефона не может быть пустым.</value>
+  </data>
+  <data name="PhoneNumber.InvalidFormat" xml:space="preserve">
+    <value>Номер телефона должен быть в международном формате E.164, например +79991234567.</value>
+  </data>
+  <data name="Question.AlreadyActive" xml:space="preserve">
+    <value>Вопрос уже активен.</value>
+  </data>
+  <data name="Question.AlreadyInactive" xml:space="preserve">
+    <value>Вопрос уже деактивирован.</value>
+  </data>
+  <data name="Question.CannotModifyInactive" xml:space="preserve">
+    <value>Деактивированный вопрос нельзя изменить. Сначала активируйте его.</value>
+  </data>
+  <data name="Question.CategoryNotDefined" xml:space="preserve">
+    <value>Недопустимая категория прав.</value>
+  </data>
+  <data name="Question.DuplicateCategory" xml:space="preserve">
+    <value>Каждую категорию можно указать только один раз.</value>
+  </data>
+  <data name="Question.DuplicateOptionText" xml:space="preserve">
+    <value>Тексты вариантов ответа должны различаться.</value>
+  </data>
+  <data name="Question.ExplanationTooLong" xml:space="preserve">
+    <value>Пояснение превышает допустимую длину.</value>
+  </data>
+  <data name="Question.ExternalCodeTooLong" xml:space="preserve">
+    <value>Внешний код превышает допустимую длину.</value>
+  </data>
+  <data name="Question.ImageKeyTooLong" xml:space="preserve">
+    <value>Ключ изображения превышает допустимую длину.</value>
+  </data>
+  <data name="Question.NoCategories" xml:space="preserve">
+    <value>Вопрос должен относиться хотя бы к одной категории прав.</value>
+  </data>
+  <data name="Question.NotExactlyOneCorrectOption" xml:space="preserve">
+    <value>Правильным должен быть ровно один вариант ответа.</value>
+  </data>
+  <data name="Question.NotFound" xml:space="preserve">
+    <value>Вопрос не найден.</value>
+  </data>
+  <data name="Question.OptionTextEmpty" xml:space="preserve">
+    <value>Текст варианта ответа не может быть пустым.</value>
+  </data>
+  <data name="Question.OptionTextTooLong" xml:space="preserve">
+    <value>Текст варианта ответа превышает допустимую длину.</value>
+  </data>
+  <data name="Question.SourceNotDefined" xml:space="preserve">
+    <value>Недопустимый источник вопроса.</value>
+  </data>
+  <data name="Question.TextEmpty" xml:space="preserve">
+    <value>Текст вопроса не может быть пустым.</value>
+  </data>
+  <data name="Question.TextTooLong" xml:space="preserve">
+    <value>Текст вопроса превышает допустимую длину.</value>
+  </data>
+  <data name="Question.TooFewOptions" xml:space="preserve">
+    <value>У вопроса должно быть не меньше 2 вариантов ответа.</value>
+  </data>
+  <data name="Question.TooManyOptions" xml:space="preserve">
+    <value>У вопроса может быть не больше 6 вариантов ответа.</value>
+  </data>
+  <data name="Question.TopicIdEmpty" xml:space="preserve">
+    <value>Идентификатор темы не может быть пустым.</value>
+  </data>
+  <data name="SchoolSettings.CancellationNoticeOutOfRange" xml:space="preserve">
+    <value>Срок отмены занятия студентом должен быть от 0 до 72 часов.</value>
+  </data>
+  <data name="SchoolSettings.DuplicateReminder" xml:space="preserve">
+    <value>Напоминания о занятии не должны повторяться.</value>
+  </data>
+  <data name="SchoolSettings.LowRatingThresholdOutOfRange" xml:space="preserve">
+    <value>Порог низкой оценки должен быть от 1 до 4.</value>
+  </data>
+  <data name="SchoolSettings.NotFound" xml:space="preserve">
+    <value>Настройки автошколы не найдены.</value>
+  </data>
+  <data name="SchoolSettings.QualityWindowOutOfRange" xml:space="preserve">
+    <value>Окно оценки качества должно быть от 1 до 50 занятий.</value>
+  </data>
+  <data name="SchoolSettings.ReminderLeadTimeOutOfRange" xml:space="preserve">
+    <value>Каждое напоминание должно приходить не раньше чем за 7 дней и не позже чем за 15 минут до занятия.</value>
+  </data>
+  <data name="SchoolSettings.TooManyReminders" xml:space="preserve">
+    <value>Можно настроить не больше 3 напоминаний о занятии.</value>
+  </data>
+  <data name="SessionQuestion.NotFound" xml:space="preserve">
+    <value>Вопрос попытки не найден.</value>
+  </data>
+  <data name="SkillGrade.GradeOutOfRange" xml:space="preserve">
+    <value>Оценка навыка должна быть от 1 до 5.</value>
+  </data>
+  <data name="SkillGrade.SkillNotDefined" xml:space="preserve">
+    <value>Недопустимый навык.</value>
+  </data>
+  <data name="StaffTask.AlreadyAssigned" xml:space="preserve">
+    <value>Задача уже назначена этому сотруднику.</value>
+  </data>
+  <data name="StaffTask.AlreadyDone" xml:space="preserve">
+    <value>Задача уже выполнена.</value>
+  </data>
+  <data name="StaffTask.AssigneeIdEmpty" xml:space="preserve">
+    <value>Идентификатор исполнителя не может быть пустым.</value>
+  </data>
+  <data name="StaffTask.DescriptionTooLong" xml:space="preserve">
+    <value>Описание задачи превышает допустимую длину.</value>
+  </data>
+  <data name="StaffTask.DueInPast" xml:space="preserve">
+    <value>Срок должен быть в будущем.</value>
+  </data>
+  <data name="StaffTask.NotDone" xml:space="preserve">
+    <value>Вернуть в работу можно только выполненную задачу.</value>
+  </data>
+  <data name="StaffTask.NotFound" xml:space="preserve">
+    <value>Задача не найдена.</value>
+  </data>
+  <data name="StaffTask.NotNew" xml:space="preserve">
+    <value>Начать можно только новую задачу.</value>
+  </data>
+  <data name="StaffTask.NotOverdue" xml:space="preserve">
+    <value>Задача не просрочена.</value>
+  </data>
+  <data name="StaffTask.OverdueAlreadyNotified" xml:space="preserve">
+    <value>Напоминание о просрочке уже отправлено.</value>
+  </data>
+  <data name="StaffTask.RecurrenceNotDefined" xml:space="preserve">
+    <value>Недопустимая периодичность.</value>
+  </data>
+  <data name="StaffTask.TitleEmpty" xml:space="preserve">
+    <value>Название задачи не может быть пустым.</value>
+  </data>
+  <data name="StaffTask.TitleTooLong" xml:space="preserve">
+    <value>Название задачи превышает допустимую длину.</value>
+  </data>
+  <data name="StudyGroup.AlreadyActive" xml:space="preserve">
+    <value>Группа уже активна.</value>
+  </data>
+  <data name="StudyGroup.AlreadyEnrolled" xml:space="preserve">
+    <value>Студент уже состоит в группе.</value>
+  </data>
+  <data name="StudyGroup.AlreadyInactive" xml:space="preserve">
+    <value>Группа уже деактивирована.</value>
+  </data>
+  <data name="StudyGroup.BranchIdEmpty" xml:space="preserve">
+    <value>Идентификатор филиала не может быть пустым.</value>
+  </data>
+  <data name="StudyGroup.CannotModifyInactive" xml:space="preserve">
+    <value>Деактивированную группу нельзя изменить. Сначала активируйте её.</value>
+  </data>
+  <data name="StudyGroup.CapacityBelowMemberCount" xml:space="preserve">
+    <value>Вместимость не может быть меньше текущего числа участников.</value>
+  </data>
+  <data name="StudyGroup.CapacityOutOfRange" xml:space="preserve">
+    <value>Вместимость группы должна быть от 1 до 100.</value>
+  </data>
+  <data name="StudyGroup.ContractNotActive" xml:space="preserve">
+    <value>Зачислить в группу можно только по действующему договору.</value>
+  </data>
+  <data name="StudyGroup.CourseInactive" xml:space="preserve">
+    <value>Нельзя сформировать группу по неактивному курсу.</value>
+  </data>
+  <data name="StudyGroup.CourseMismatch" xml:space="preserve">
+    <value>Договор оформлен на другой курс, чем у группы.</value>
+  </data>
+  <data name="StudyGroup.EndNotAfterStart" xml:space="preserve">
+    <value>Дата окончания должна быть позже даты начала.</value>
+  </data>
+  <data name="StudyGroup.GroupFull" xml:space="preserve">
+    <value>В группе нет свободных мест.</value>
+  </data>
+  <data name="StudyGroup.InstructorIdEmpty" xml:space="preserve">
+    <value>Идентификатор преподавателя теории не может быть пустым.</value>
+  </data>
+  <data name="StudyGroup.NameEmpty" xml:space="preserve">
+    <value>Название группы не может быть пустым.</value>
+  </data>
+  <data name="StudyGroup.NameTooLong" xml:space="preserve">
+    <value>Название группы превышает допустимую длину.</value>
+  </data>
+  <data name="StudyGroup.NotEnrolled" xml:space="preserve">
+    <value>Студент не состоит в группе.</value>
+  </data>
+  <data name="StudyGroup.NotFound" xml:space="preserve">
+    <value>Учебная группа не найдена.</value>
+  </data>
+  <data name="TestBlock.DuplicateTopic" xml:space="preserve">
+    <value>Каждую тему можно указать только один раз.</value>
+  </data>
+  <data name="TestBlock.QuestionCountOutOfRange" xml:space="preserve">
+    <value>Блок должен содержать от 1 до 100 вопросов.</value>
+  </data>
+  <data name="TestBlock.TopicIdEmpty" xml:space="preserve">
+    <value>Идентификатор темы не может быть пустым.</value>
+  </data>
+  <data name="TestRules.ExtraQuestionsOutOfRange" xml:space="preserve">
+    <value>Число дополнительных вопросов за ошибку должно быть от 0 до 20.</value>
+  </data>
+  <data name="TestRules.ExtraTimeOutOfRange" xml:space="preserve">
+    <value>Дополнительное время за ошибку должно быть от 0 до 30 минут.</value>
+  </data>
+  <data name="TestRules.ExtraTimeWithoutExtraQuestions" xml:space="preserve">
+    <value>Дополнительное время за ошибку можно дать только вместе с дополнительными вопросами.</value>
+  </data>
+  <data name="TestRules.MaxMistakesOutOfRange" xml:space="preserve">
+    <value>Допустимое число ошибок должно быть не меньше 0 и меньше числа вопросов.</value>
+  </data>
+  <data name="TestRules.MaxMistakesPerBlockOutOfRange" xml:space="preserve">
+    <value>Допустимое число ошибок в блоке должно быть от 0 до общего допустимого числа ошибок.</value>
+  </data>
+  <data name="TestRules.QuestionCountOutOfRange" xml:space="preserve">
+    <value>Число вопросов должно быть от 1 до 100.</value>
+  </data>
+  <data name="TestRules.TimeLimitOutOfRange" xml:space="preserve">
+    <value>Ограничение времени должно быть от 1 минуты до 3 часов.</value>
+  </data>
+  <data name="TestSession.AddOnCountMismatch" xml:space="preserve">
+    <value>Нужно передать ровно столько дополнительных вопросов, сколько задано в правилах.</value>
+  </data>
+  <data name="TestSession.AddOnNotPending" xml:space="preserve">
+    <value>Для этого блока дополнительные вопросы не ожидаются.</value>
+  </data>
+  <data name="TestSession.AlreadyAnswered" xml:space="preserve">
+    <value>На вопрос уже дан ответ.</value>
+  </data>
+  <data name="TestSession.BlockCountMismatch" xml:space="preserve">
+    <value>Вопросы нужно передать для каждого блока шаблона.</value>
+  </data>
+  <data name="TestSession.BlockQuestionCountMismatch" xml:space="preserve">
+    <value>Каждый блок должен получить ровно своё число вопросов.</value>
+  </data>
+  <data name="TestSession.CategoryMismatch" xml:space="preserve">
+    <value>Шаблон предназначен для другой категории прав, чем указана в договоре.</value>
+  </data>
+  <data name="TestSession.ContractNotActive" xml:space="preserve">
+    <value>Начать тест можно только по действующему договору.</value>
+  </data>
+  <data name="TestSession.DuplicateQuestion" xml:space="preserve">
+    <value>Вопрос не может повторяться в одной попытке.</value>
+  </data>
+  <data name="TestSession.ExamIdEmpty" xml:space="preserve">
+    <value>Идентификатор экзамена не может быть пустым.</value>
+  </data>
+  <data name="TestSession.NotFound" xml:space="preserve">
+    <value>Попытка теста не найдена.</value>
+  </data>
+  <data name="TestSession.NotInProgress" xml:space="preserve">
+    <value>Попытка уже завершена.</value>
+  </data>
+  <data name="TestSession.OptionNotInQuestion" xml:space="preserve">
+    <value>Вариант ответа не относится к этому вопросу.</value>
+  </data>
+  <data name="TestSession.QuestionCategoryMismatch" xml:space="preserve">
+    <value>Вопрос не относится к категории прав этого теста.</value>
+  </data>
+  <data name="TestSession.QuestionInactive" xml:space="preserve">
+    <value>В тесте нельзя использовать деактивированные вопросы.</value>
+  </data>
+  <data name="TestSession.QuestionNotInSession" xml:space="preserve">
+    <value>Вопрос не входит в эту попытку.</value>
+  </data>
+  <data name="TestSession.QuestionOutsideBlock" xml:space="preserve">
+    <value>Вопрос не относится к своему блоку.</value>
+  </data>
+  <data name="TestSession.TemplateInactive" xml:space="preserve">
+    <value>Нельзя начать тест по неактивному шаблону.</value>
+  </data>
+  <data name="TestSession.TimeExpired" xml:space="preserve">
+    <value>Время на попытку истекло.</value>
+  </data>
+  <data name="TestSession.TimeNotExpired" xml:space="preserve">
+    <value>Время на попытку ещё не истекло.</value>
+  </data>
+  <data name="TestTemplate.AllTopicsBlockNotAlone" xml:space="preserve">
+    <value>Блок по всем темам должен быть единственным.</value>
+  </data>
+  <data name="TestTemplate.AlreadyActive" xml:space="preserve">
+    <value>Шаблон уже активен.</value>
+  </data>
+  <data name="TestTemplate.AlreadyInactive" xml:space="preserve">
+    <value>Шаблон уже деактивирован.</value>
+  </data>
+  <data name="TestTemplate.BlocksDoNotMatchQuestionCount" xml:space="preserve">
+    <value>Блоки должны содержать ровно столько вопросов, сколько задано в правилах.</value>
+  </data>
+  <data name="TestTemplate.CannotModifyInactive" xml:space="preserve">
+    <value>Деактивированный шаблон нельзя изменить. Сначала активируйте его.</value>
+  </data>
+  <data name="TestTemplate.CategoryNotDefined" xml:space="preserve">
+    <value>Недопустимая категория прав.</value>
+  </data>
+  <data name="TestTemplate.NameEmpty" xml:space="preserve">
+    <value>Название шаблона не может быть пустым.</value>
+  </data>
+  <data name="TestTemplate.NameTooLong" xml:space="preserve">
+    <value>Название шаблона превышает допустимую длину.</value>
+  </data>
+  <data name="TestTemplate.NoBlocks" xml:space="preserve">
+    <value>В шаблоне должен быть хотя бы один блок.</value>
+  </data>
+  <data name="TestTemplate.NotFound" xml:space="preserve">
+    <value>Шаблон теста не найден.</value>
+  </data>
+  <data name="TestTemplate.SourceNotDefined" xml:space="preserve">
+    <value>Недопустимый источник вопросов.</value>
+  </data>
+  <data name="TestTemplate.TooManyBlocks" xml:space="preserve">
+    <value>В шаблоне может быть не больше 10 блоков.</value>
+  </data>
+  <data name="TestTemplate.TopicInSeveralBlocks" xml:space="preserve">
+    <value>Тема может входить только в один блок.</value>
+  </data>
+  <data name="TheoryLesson.AttendanceAlreadyMarked" xml:space="preserve">
+    <value>На занятии уже отмечена посещаемость.</value>
+  </data>
+  <data name="TheoryLesson.CancellationReasonEmpty" xml:space="preserve">
+    <value>Для отмены занятия нужно указать причину.</value>
+  </data>
+  <data name="TheoryLesson.CancellationReasonTooLong" xml:space="preserve">
+    <value>Причина отмены превышает допустимую длину.</value>
+  </data>
+  <data name="TheoryLesson.CourseMismatch" xml:space="preserve">
+    <value>Курс не относится к этой группе.</value>
+  </data>
+  <data name="TheoryLesson.DurationTooLong" xml:space="preserve">
+    <value>Занятие не может длиться дольше 8 часов.</value>
+  </data>
+  <data name="TheoryLesson.GroupInactive" xml:space="preserve">
+    <value>Нельзя назначить занятия деактивированной группе.</value>
+  </data>
+  <data name="TheoryLesson.GroupMismatch" xml:space="preserve">
+    <value>Группа не относится к этому занятию.</value>
+  </data>
+  <data name="TheoryLesson.InstructorIdEmpty" xml:space="preserve">
+    <value>Идентификатор преподавателя не может быть пустым.</value>
+  </data>
+  <data name="TheoryLesson.LessonCancelled" xml:space="preserve">
+    <value>Занятие отменено.</value>
+  </data>
+  <data name="TheoryLesson.NotFound" xml:space="preserve">
+    <value>Теоретическое занятие не найдено.</value>
+  </data>
+  <data name="TheoryLesson.NotGroupMember" xml:space="preserve">
+    <value>Студент не состоит в группе.</value>
+  </data>
+  <data name="TheoryLesson.NotScheduled" xml:space="preserve">
+    <value>Изменить или отменить можно только запланированное занятие.</value>
+  </data>
+  <data name="TheoryLesson.NotStarted" xml:space="preserve">
+    <value>Занятие ещё не началось.</value>
+  </data>
+  <data name="TheoryLesson.StartInPast" xml:space="preserve">
+    <value>Занятие должно начинаться в будущем.</value>
+  </data>
+  <data name="TheoryLesson.TopicNotInCourse" xml:space="preserve">
+    <value>Тема не входит в курс группы.</value>
+  </data>
+  <data name="TimeInterval.EndNotAfterStart" xml:space="preserve">
+    <value>Окончание должно быть позже начала.</value>
+  </data>
+  <data name="TimeInterval.NotUtc" xml:space="preserve">
+    <value>Начало и окончание должны быть указаны в UTC.</value>
+  </data>
+  <data name="TrainingGround.AlreadyActive" xml:space="preserve">
+    <value>Площадка уже активна.</value>
+  </data>
+  <data name="TrainingGround.AlreadyInactive" xml:space="preserve">
+    <value>Площадка уже деактивирована.</value>
+  </data>
+  <data name="TrainingGround.BranchIdEmpty" xml:space="preserve">
+    <value>Идентификатор филиала не может быть пустым.</value>
+  </data>
+  <data name="TrainingGround.CannotModifyInactive" xml:space="preserve">
+    <value>Деактивированную площадку нельзя изменить. Сначала активируйте её.</value>
+  </data>
+  <data name="TrainingGround.DescriptionTooLong" xml:space="preserve">
+    <value>Описание превышает допустимую длину.</value>
+  </data>
+  <data name="TrainingGround.NameEmpty" xml:space="preserve">
+    <value>Название площадки не может быть пустым.</value>
+  </data>
+  <data name="TrainingGround.NameTooLong" xml:space="preserve">
+    <value>Название площадки превышает допустимую длину.</value>
+  </data>
+  <data name="TrainingGround.NotFound" xml:space="preserve">
+    <value>Площадка не найдена.</value>
+  </data>
+  <data name="User.AlreadyActive" xml:space="preserve">
+    <value>Пользователь уже активен.</value>
+  </data>
+  <data name="User.AlreadyInactive" xml:space="preserve">
+    <value>Пользователь уже деактивирован.</value>
+  </data>
+  <data name="User.BranchIdEmpty" xml:space="preserve">
+    <value>Идентификатор филиала не может быть пустым.</value>
+  </data>
+  <data name="User.CannotModifyInactive" xml:space="preserve">
+    <value>Деактивированного пользователя нельзя изменить. Сначала активируйте его.</value>
+  </data>
+  <data name="User.EmailUnchanged" xml:space="preserve">
+    <value>Новый адрес электронной почты совпадает с текущим.</value>
+  </data>
+  <data name="User.LanguageNotDefined" xml:space="preserve">
+    <value>Язык не поддерживается.</value>
+  </data>
+  <data name="User.NotFound" xml:space="preserve">
+    <value>Пользователь не найден.</value>
+  </data>
+  <data name="User.PhotoNotSet" xml:space="preserve">
+    <value>У пользователя нет фотографии профиля.</value>
+  </data>
+  <data name="User.PhotoUrlEmpty" xml:space="preserve">
+    <value>Адрес фотографии не может быть пустым.</value>
+  </data>
+  <data name="User.PhotoUrlTooLong" xml:space="preserve">
+    <value>Адрес фотографии превышает допустимую длину.</value>
+  </data>
+  <data name="UserRoleAssignment.AlreadyAssigned" xml:space="preserve">
+    <value>У пользователя уже есть эта роль.</value>
+  </data>
+  <data name="UserRoleAssignment.IncompatibleRoles" xml:space="preserve">
+    <value>Студент не может одновременно быть инструктором или преподавателем.</value>
+  </data>
+  <data name="UserRoleAssignment.LastAdministrator" xml:space="preserve">
+    <value>В автошколе должен остаться хотя бы один активный администратор.</value>
+  </data>
+  <data name="UserRoleAssignment.NotAssigned" xml:space="preserve">
+    <value>У пользователя нет этой роли.</value>
+  </data>
+  <data name="UserRoleAssignment.NotFound" xml:space="preserve">
+    <value>Роль пользователя не найдена.</value>
+  </data>
+  <data name="UserRoleAssignment.RoleNotDefined" xml:space="preserve">
+    <value>Недопустимая роль пользователя.</value>
+  </data>
+  <data name="UserRoleAssignment.UserIdEmpty" xml:space="preserve">
+    <value>Идентификатор пользователя не может быть пустым.</value>
+  </data>
+  <data name="UserRoleAssignment.UserInactive" xml:space="preserve">
+    <value>Нельзя выдать роль деактивированному пользователю.</value>
+  </data>
+  <data name="Validation.Failed" xml:space="preserve">
+    <value>Одна или несколько ошибок проверки данных.</value>
+  </data>
+  <data name="Vehicle.AlreadyActive" xml:space="preserve">
+    <value>Автомобиль уже активен.</value>
+  </data>
+  <data name="Vehicle.AlreadyInactive" xml:space="preserve">
+    <value>Автомобиль уже деактивирован.</value>
+  </data>
+  <data name="Vehicle.BranchIdEmpty" xml:space="preserve">
+    <value>Идентификатор филиала не может быть пустым.</value>
+  </data>
+  <data name="Vehicle.CannotModifyInactive" xml:space="preserve">
+    <value>Деактивированный автомобиль нельзя изменить. Сначала активируйте его.</value>
+  </data>
+  <data name="Vehicle.CategoryNotDefined" xml:space="preserve">
+    <value>Недопустимая категория прав.</value>
+  </data>
+  <data name="Vehicle.MakeEmpty" xml:space="preserve">
+    <value>Марка не может быть пустой.</value>
+  </data>
+  <data name="Vehicle.MakeTooLong" xml:space="preserve">
+    <value>Марка превышает допустимую длину.</value>
+  </data>
+  <data name="Vehicle.ModelTooLong" xml:space="preserve">
+    <value>Модель превышает допустимую длину.</value>
+  </data>
+  <data name="Vehicle.NotFound" xml:space="preserve">
+    <value>Автомобиль не найден.</value>
+  </data>
+  <data name="Vehicle.TransmissionNotDefined" xml:space="preserve">
+    <value>Недопустимый тип коробки передач.</value>
+  </data>
+  <data name="Vehicle.YearOutOfRange" xml:space="preserve">
+    <value>Год выпуска вне допустимого диапазона.</value>
+  </data>
+</root>

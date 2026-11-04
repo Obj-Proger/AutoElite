@@ -6,5 +6,8 @@ namespace AutoElite.Domain.Common;
 /// Machine-readable identifier of the failure, following the convention <c>Concept.ErrorName</c>.
 /// Clients use it to choose a localized message.
 /// </param>
-/// <param name="Message">Human-readable description of the failure in English, intended for developers.</param>
+/// <param name="Message">
+/// Human-readable description of the failure, in English in code; outer layers translate it by
+/// <paramref name="Code"/> into the user's language.
+/// </param>
 public sealed record FieldError(string Field, string Code, string Message);
