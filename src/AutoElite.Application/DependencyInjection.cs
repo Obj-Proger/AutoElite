@@ -4,6 +4,7 @@ using AutoElite.Application.Common.Localization;
 using AutoElite.Application.Contracts;
 using AutoElite.Application.Courses;
 using AutoElite.Application.Leads;
+using AutoElite.Application.Payments;
 using AutoElite.Application.Settings;
 using AutoElite.Application.StudyGroups;
 using AutoElite.Application.Users;
@@ -44,6 +45,7 @@ public static class DependencyInjection
         services.AddScoped<ContractStudents>();
         services.AddScoped<ContractFactory>();
         services.AddScoped<ContractAccess>();
+        services.AddScoped<PaymentAccess>();
         services.AddScoped<StudyGroupAccess>();
         services.AddScoped<GroupInstructors>();
 
