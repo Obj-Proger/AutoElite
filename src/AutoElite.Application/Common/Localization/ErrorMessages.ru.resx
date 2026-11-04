@@ -199,6 +199,9 @@
   <data name="Contract.ClosedBeforeStart" xml:space="preserve">
     <value>Договор нельзя закрыть до даты его начала.</value>
   </data>
+  <data name="Contract.ClosedInFuture" xml:space="preserve">
+    <value>Договор нельзя закрыть будущей датой.</value>
+  </data>
   <data name="Contract.CourseInactive" xml:space="preserve">
     <value>Нельзя оформить договор на неактивный курс.</value>
   </data>

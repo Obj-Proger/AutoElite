@@ -41,6 +41,7 @@ public static class DependencyInjection
         services.AddScoped<LeadManagers>();
         services.AddScoped<ContractStudents>();
         services.AddScoped<ContractFactory>();
+        services.AddScoped<ContractAccess>();
 
         RegisterOpenGenericImplementations(services, typeof(IRequestHandler<,>));
         RegisterOpenGenericImplementations(services, typeof(IValidator<>));

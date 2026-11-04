@@ -112,6 +112,10 @@ public static class ApplicationErrors
         /// <summary>The user chosen as the student does not hold the student role.</summary>
         public static readonly Error NotAStudent = Error.Validation(
             "Contract.NotAStudent", "A contract can be drawn up only for a user with the student role.");
+
+        /// <summary>The day a contract would be completed or terminated on is in the future.</summary>
+        public static readonly Error ClosedInFuture = Error.Validation(
+            "Contract.ClosedInFuture", "A contract cannot be closed on a future day.");
     }
 
     /// <summary>Errors of courses that need more than the course to check.</summary>
