@@ -5,6 +5,7 @@ using AutoElite.Application.Contracts;
 using AutoElite.Application.Courses;
 using AutoElite.Application.DrivingRoutes;
 using AutoElite.Application.DrivingSlots;
+using AutoElite.Application.Exams;
 using AutoElite.Application.Leads;
 using AutoElite.Application.Payments;
 using AutoElite.Application.Questions;
@@ -62,6 +63,7 @@ public static class DependencyInjection
         services.AddScoped<QuestionContent>();
         services.AddScoped<TestTemplateContent>();
         services.AddScoped<SessionQuestions>();
+        services.AddScoped<ExamAccess>();
 
         RegisterOpenGenericImplementations(services, typeof(IRequestHandler<,>));
         RegisterOpenGenericImplementations(services, typeof(IValidator<>));
