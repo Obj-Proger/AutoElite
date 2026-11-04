@@ -13,7 +13,7 @@ internal sealed class ChangeUserBranchCommandHandler(
         if (managedResult.IsFailure)
             return Result.Failure(managedResult.Error);
 
-        var branchResult = await UserBranches.CheckAsync(
+        var branchResult = await BranchChecks.CheckAsync(
             branchRepository, command.BranchId, DataScope.For(currentUser), cancellationToken);
         if (branchResult.IsFailure)
             return branchResult;

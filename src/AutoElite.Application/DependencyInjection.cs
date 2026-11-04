@@ -2,6 +2,7 @@ using AutoElite.Application.Common.Behaviors;
 using AutoElite.Application.Common.Events;
 using AutoElite.Application.Common.Localization;
 using AutoElite.Application.Courses;
+using AutoElite.Application.Leads;
 using AutoElite.Application.Settings;
 using AutoElite.Application.Users;
 using AutoElite.Application.Users.Authentication;
@@ -34,6 +35,8 @@ public static class DependencyInjection
         services.AddScoped<ManagedUsers>();
         services.AddScoped<SchoolSettingsProvider>();
         services.AddScoped<CoursePrice>();
+        services.AddScoped<LeadAccess>();
+        services.AddScoped<LeadManagers>();
 
         RegisterOpenGenericImplementations(services, typeof(IRequestHandler<,>));
         RegisterOpenGenericImplementations(services, typeof(IValidator<>));

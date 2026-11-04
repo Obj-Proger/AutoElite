@@ -23,7 +23,7 @@ internal sealed class InviteUserCommandHandler(
 
         var scope = DataScope.For(currentUser);
         var branchId = command.BranchId ?? scope.BranchId;
-        var branchResult = await UserBranches.CheckAsync(branchRepository, branchId, scope, cancellationToken);
+        var branchResult = await BranchChecks.CheckAsync(branchRepository, branchId, scope, cancellationToken);
         if (branchResult.IsFailure)
             return Result.Failure<Guid>(branchResult.Error);
 

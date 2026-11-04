@@ -1,7 +1,7 @@
-namespace AutoElite.Application.Users;
+namespace AutoElite.Application.Common;
 
-/// <summary>Checks the branch a user is tied to.</summary>
-internal static class UserBranches
+/// <summary>Checks the branch that a user, a lead or another record is tied to.</summary>
+internal static class BranchChecks
 {
     /// <summary>
     /// Checks that the branch, if any, exists inside the caller's scope and is active. A branch outside the scope is
@@ -21,6 +21,6 @@ internal static class UserBranches
         if (branch is null)
             return Result.Failure(ApplicationErrors.NotFound<Branch>());
 
-        return branch.IsActive ? Result.Success() : Result.Failure(ApplicationErrors.Account.BranchInactive);
+        return branch.IsActive ? Result.Success() : Result.Failure(ApplicationErrors.Branch.Inactive);
     }
 }

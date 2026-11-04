@@ -54,7 +54,7 @@ public class UserDetailsCommandHandlerTests
 
         var result = await ChangeBranch(user.Id, branch.Id, caller);
 
-        result.Error.Should().Be(ApplicationErrors.Account.BranchInactive);
+        result.Error.Should().Be(ApplicationErrors.Branch.Inactive);
         user.BranchId.Should().BeNull();
     }
 

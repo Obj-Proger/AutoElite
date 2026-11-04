@@ -119,7 +119,7 @@ public class InviteUserCommandHandlerTests
 
         var result = await Handle(Command(branch.Id), TestData.Administrator());
 
-        result.Error.Should().Be(ApplicationErrors.Account.BranchInactive);
+        result.Error.Should().Be(ApplicationErrors.Branch.Inactive);
     }
 
     [Fact]

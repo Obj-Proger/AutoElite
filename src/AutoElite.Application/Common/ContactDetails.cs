@@ -17,4 +17,17 @@ internal static class ContactDetails
             ? Result.Success<PhoneNumber?>(phoneResult.Value)
             : Result.Failure<PhoneNumber?>(phoneResult.Error);
     }
+
+    /// <summary>Creates an email address, treating an empty value as no address.</summary>
+    /// <param name="email">The email address from the request.</param>
+    /// <returns>The address, <see langword="null"/> for an empty value, or the validation failure.</returns>
+    public static Result<Email?> CreateOptionalEmail(string? email)
+    {
+        if (string.IsNullOrWhiteSpace(email))
+            return Result.Success<Email?>(null);
+
+        var emailResult = Email.Create(email);
+
+        return emailResult.IsSuccess ? Result.Success<Email?>(emailResult.Value) : Result.Failure<Email?>(emailResult.Error);
+    }
 }

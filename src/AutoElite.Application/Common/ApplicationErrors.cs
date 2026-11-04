@@ -47,10 +47,6 @@ public static class ApplicationErrors
         public static readonly Error CannotDeactivateSelf = Error.Conflict(
             "Account.CannotDeactivateSelf", "You cannot deactivate your own account.");
 
-        /// <summary>The user would be tied to an inactive branch.</summary>
-        public static readonly Error BranchInactive = Error.Conflict(
-            "Account.BranchInactive", "Users cannot be assigned to an inactive branch.");
-
         /// <summary>Another user already has the email address.</summary>
         public static readonly Error EmailTaken = Error.Conflict(
             "Account.EmailTaken", "A user with this email address already exists.");
@@ -101,6 +97,10 @@ public static class ApplicationErrors
     {
         /// <summary>Another branch already has the name.</summary>
         public static readonly Error NameTaken = Error.Conflict("Branch.NameTaken", "A branch with this name already exists.");
+
+        /// <summary>A record would be tied to an inactive branch.</summary>
+        public static readonly Error Inactive = Error.Conflict(
+            "Branch.Inactive", "The branch is inactive, so nothing new can be tied to it.");
     }
 
     /// <summary>Errors of courses that need more than the course to check.</summary>
@@ -109,6 +109,18 @@ public static class ApplicationErrors
         /// <summary>Questions, theory lessons or test templates refer to the topic.</summary>
         public static readonly Error TopicInUse = Error.Conflict(
             "Course.TopicInUse", "The topic is used by questions, lessons or test templates and cannot be removed.");
+    }
+
+    /// <summary>Errors of leads that need more than the lead to check.</summary>
+    public static class Lead
+    {
+        /// <summary>The user chosen as the responsible manager is not an active manager.</summary>
+        public static readonly Error NotAManager = Error.Validation(
+            "Lead.NotAManager", "The responsible person must be an active manager.");
+
+        /// <summary>The manager works for another branch than the lead's.</summary>
+        public static readonly Error ManagerOfAnotherBranch = Error.Conflict(
+            "Lead.ManagerOfAnotherBranch", "The manager works for another branch than the lead.");
     }
 
     /// <summary>Errors of the rules in <see cref="Users.PasswordPolicy"/>.</summary>

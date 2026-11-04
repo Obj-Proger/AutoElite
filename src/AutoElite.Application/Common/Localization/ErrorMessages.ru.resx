@@ -16,9 +16,6 @@
   <data name="Account.AlreadyActivated" xml:space="preserve">
     <value>Пользователь уже принял приглашение.</value>
   </data>
-  <data name="Account.BranchInactive" xml:space="preserve">
-    <value>Нельзя привязать пользователя к деактивированному филиалу.</value>
-  </data>
   <data name="Account.CannotDeactivateSelf" xml:space="preserve">
     <value>Нельзя деактивировать собственную учётную запись.</value>
   </data>
@@ -93,6 +90,9 @@
   </data>
   <data name="Branch.CannotModifyInactive" xml:space="preserve">
     <value>Деактивированный филиал нельзя изменить. Сначала активируйте его.</value>
+  </data>
+  <data name="Branch.Inactive" xml:space="preserve">
+    <value>Филиал деактивирован, к нему нельзя привязать ничего нового.</value>
   </data>
   <data name="Branch.NameEmpty" xml:space="preserve">
     <value>Название филиала не может быть пустым.</value>
@@ -606,6 +606,12 @@
   </data>
   <data name="Lead.ManagerIdEmpty" xml:space="preserve">
     <value>Идентификатор менеджера не может быть пустым.</value>
+  </data>
+  <data name="Lead.ManagerOfAnotherBranch" xml:space="preserve">
+    <value>Менеджер работает в другом филиале, чем лид.</value>
+  </data>
+  <data name="Lead.NotAManager" xml:space="preserve">
+    <value>Ответственным может быть только активный менеджер.</value>
   </data>
   <data name="Lead.NotFound" xml:space="preserve">
     <value>Лид не найден.</value>
