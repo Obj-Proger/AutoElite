@@ -118,6 +118,12 @@
   <data name="Chat.AlreadyMuted" xml:space="preserve">
     <value>Уведомления уже выключены.</value>
   </data>
+  <data name="Chat.AttachmentAlreadySent" xml:space="preserve">
+    <value>Этот документ уже отправлен в другом сообщении.</value>
+  </data>
+  <data name="Chat.AttachmentInvalid" xml:space="preserve">
+    <value>Вложениями могут быть только документы, которые вы прикрепили к этому чату.</value>
+  </data>
   <data name="Chat.CannotRemoveSelf" xml:space="preserve">
     <value>Чтобы выйти из чата самому, используйте выход из чата.</value>
   </data>
@@ -369,6 +375,9 @@
   </data>
   <data name="Document.OwnerNotFound" xml:space="preserve">
     <value>Запись не найдена.</value>
+  </data>
+  <data name="Document.SentInMessage" xml:space="preserve">
+    <value>Документ отправлен в сообщении; удалите сообщение.</value>
   </data>
   <data name="Document.SizeOutOfRange" xml:space="preserve">
     <value>Размер файла должен быть от 1 байта до 20 МБ.</value>

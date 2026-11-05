@@ -129,6 +129,18 @@ public static class ApplicationErrors
             "Course.TopicInUse", "The topic is used by questions, lessons or test templates and cannot be removed.");
     }
 
+    /// <summary>Errors of chats.</summary>
+    public static class Chat
+    {
+        /// <summary>An attachment is not a document the sender attached to this chat.</summary>
+        public static readonly Error AttachmentInvalid = Error.Validation(
+            "Chat.AttachmentInvalid", "Attachments must be documents you attached to this chat.");
+
+        /// <summary>An attachment was already sent with another message.</summary>
+        public static readonly Error AttachmentAlreadySent = Error.Conflict(
+            "Chat.AttachmentAlreadySent", "The document was already sent with another message.");
+    }
+
     /// <summary>Errors of documents.</summary>
     public static class Document
     {
@@ -142,6 +154,10 @@ public static class ApplicationErrors
 
         /// <summary>The record does not exist or the caller may not see its documents.</summary>
         public static readonly Error OwnerNotFound = Error.NotFound("Document.OwnerNotFound", "The record was not found.");
+
+        /// <summary>The document is an attachment of a chat message, which is deleted together with the message.</summary>
+        public static readonly Error SentInMessage = Error.Conflict(
+            "Document.SentInMessage", "The document was sent in a message; delete the message instead.");
 
         /// <summary>No file content was given.</summary>
         public static readonly Error ContentMissing = Error.Validation("Document.ContentMissing", "The file content is missing.");

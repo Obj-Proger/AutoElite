@@ -10,6 +10,11 @@ internal sealed class DocumentFixture
 {
     public static readonly Guid BranchId = Guid.CreateVersion7();
 
+    public DocumentFixture()
+    {
+        Chats = new FakeChatRepository { Messages = Messages };
+    }
+
     public InMemoryRepository<Lead> Leads { get; } = new();
 
     public FakeContractRepository Contracts { get; } = new();
@@ -24,7 +29,9 @@ internal sealed class DocumentFixture
 
     public FakeCourseRepository Courses { get; } = new();
 
-    public FakeChatRepository Chats { get; } = new();
+    public InMemoryRepository<ChatMessage> Messages { get; } = new();
+
+    public FakeChatRepository Chats { get; }
 
     public InMemoryRepository<StaffTask> Tasks { get; } = new();
 

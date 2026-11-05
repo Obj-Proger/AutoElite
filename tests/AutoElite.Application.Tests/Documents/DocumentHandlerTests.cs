@@ -28,7 +28,7 @@ public class DocumentHandlerTests
     }
 
     private Task<Result> Delete(Document document, FakeCurrentUser caller) =>
-        new DeleteDocumentCommandHandler(_fixture.CreateAccess(caller), _fixture.Documents, TestData.Clock())
+        new DeleteDocumentCommandHandler(_fixture.CreateAccess(caller), _fixture.Documents, _fixture.Chats, TestData.Clock())
             .Handle(new DeleteDocumentCommand(document.Id), TestContext.Current.CancellationToken);
 
     private FakeCurrentUser StudentCaller() => DocumentFixture.Caller(_student.Id, UserRole.Student);
@@ -130,6 +130,19 @@ public class DocumentHandlerTests
         result.IsSuccess.Should().BeTrue();
         _fixture.Documents.Items.Should().BeEmpty();
         document.DomainEvents.OfType<DocumentDeletedDomainEvent>().Should().ContainSingle();
+    }
+
+    [Fact]
+    public async Task Delete_AttachmentSentInAMessage_ReturnsSentInMessage()
+    {
+        var chat = _fixture.SeedChat(_student.Id, Guid.CreateVersion7());
+        var document = _fixture.SeedDocument(EntityReference.Create(EntityKind.Chat, chat.Id).Value, _student.Id);
+        _fixture.Messages.Seed(ChatMessage.Send(chat, _student.Id, null, [document.Id], TestData.Now).Value);
+
+        var result = await Delete(document, StudentCaller());
+
+        result.Error.Should().Be(ApplicationErrors.Document.SentInMessage);
+        _fixture.Documents.Items.Should().ContainSingle();
     }
 
     [Fact]

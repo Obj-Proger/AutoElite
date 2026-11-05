@@ -2,6 +2,7 @@ using AutoElite.Application.Chats;
 using AutoElite.Application.Chats.DeleteChatMessage;
 using AutoElite.Application.Chats.MarkChatRead;
 using AutoElite.Application.Chats.MuteChat;
+using AutoElite.Application.Chats.OpenDirectChat;
 using AutoElite.Application.Chats.SendChatMessage;
 using AutoElite.Application.Chats.SendDirectMessage;
 using AutoElite.Domain.Entities;
@@ -12,8 +13,9 @@ namespace AutoElite.Application.Tests.Chats;
 
 public class ChatMessagingHandlerTests
 {
-    private readonly FakeChatRepository _chats = new();
     private readonly InMemoryRepository<ChatMessage> _messages = new();
+    private readonly FakeChatRepository _chats;
+    private readonly FakeDocumentRepository _documents = new();
     private readonly FakeUserRepository _users = new();
     private readonly FakeNotificationRepository _notifications = new();
     private readonly User _sender = TestData.NewUser("sender@example.com");
@@ -21,6 +23,7 @@ public class ChatMessagingHandlerTests
 
     public ChatMessagingHandlerTests()
     {
+        _chats = new FakeChatRepository { Messages = _messages };
         _users.Seed(_sender);
         _users.Seed(_recipient);
     }
@@ -29,9 +32,34 @@ public class ChatMessagingHandlerTests
 
     private ChatAccess Access(FakeCurrentUser caller) => new(_chats, caller);
 
-    private Task<Result<Guid>> SendDirect(string text, User? recipient = null, User? sender = null) =>
-        new SendDirectMessageCommandHandler(_chats, _messages, _users, SignedIn(sender ?? _sender), TestData.Clock())
+    private ChatAttachments Attachments() => new(_documents, _chats);
+
+    private Task<Result<Guid>> SendDirect(string text, User? recipient = null, User? sender = null)
+    {
+        var caller = SignedIn(sender ?? _sender);
+
+        return new SendDirectMessageCommandHandler(new DirectChats(_chats, _users, caller), _messages, caller, TestData.Clock())
             .Handle(new SendDirectMessageCommand((recipient ?? _recipient).Id, text), TestContext.Current.CancellationToken);
+    }
+
+    private Task<Result<Guid>> SendToChat(Chat chat, FakeCurrentUser caller, string? text, params Guid[] attachmentIds) =>
+        new SendChatMessageCommandHandler(Access(caller), Attachments(), _messages, caller, TestData.Clock())
+            .Handle(new SendChatMessageCommand(chat.Id, text, attachmentIds), TestContext.Current.CancellationToken);
+
+    private Task<Result> DeleteMessage(Guid messageId, FakeCurrentUser caller) =>
+        new DeleteChatMessageCommandHandler(_messages, Access(caller), Attachments(), caller, TestData.Clock())
+            .Handle(new DeleteChatMessageCommand(messageId), TestContext.Current.CancellationToken);
+
+    private Document SeedAttachment(Chat chat, User uploadedBy)
+    {
+        var owner = EntityReference.Create(EntityKind.Chat, chat.Id).Value;
+        var document = Document.Attach(
+                owner, "route.png", "image/png", 10, $"documents/{Guid.CreateVersion7():N}", null, uploadedBy.Id, TestData.Now)
+            .Value;
+        _documents.Seed(document);
+
+        return document;
+    }
 
     private Chat SeedGroupChat(params User[] members)
     {
@@ -101,8 +129,7 @@ public class ChatMessagingHandlerTests
         var chat = SeedGroupChat(_recipient);
         var caller = SignedIn(_recipient);
 
-        var result = await new SendChatMessageCommandHandler(Access(caller), _messages, caller, TestData.Clock())
-            .Handle(new SendChatMessageCommand(chat.Id, "On my way"), TestContext.Current.CancellationToken);
+        var result = await SendToChat(chat, caller, "On my way");
 
         result.IsSuccess.Should().BeTrue();
         _messages.Items.Should().ContainSingle().Which.SenderId.Should().Be(_recipient.Id);
@@ -114,10 +141,96 @@ public class ChatMessagingHandlerTests
         var chat = SeedGroupChat();
         var stranger = SignedIn(TestData.NewUser("stranger@example.com"));
 
-        var result = await new SendChatMessageCommandHandler(Access(stranger), _messages, stranger, TestData.Clock())
-            .Handle(new SendChatMessageCommand(chat.Id, "Hi"), TestContext.Current.CancellationToken);
+        var result = await SendToChat(chat, stranger, "Hi");
 
         result.Error.Should().Be(ApplicationErrors.NotFound<Chat>());
+    }
+
+    [Fact]
+    public async Task SendToChat_OwnDocumentsOfTheChat_AttachesThem()
+    {
+        var chat = SeedGroupChat(_recipient);
+        var photo = SeedAttachment(chat, _recipient);
+
+        var result = await SendToChat(chat, SignedIn(_recipient), null, photo.Id);
+
+        result.IsSuccess.Should().BeTrue();
+        _messages.Items.Single().AttachmentIds.Should().Equal(photo.Id);
+    }
+
+    [Fact]
+    public async Task SendToChat_DocumentOfAnotherChat_ReturnsAttachmentInvalid()
+    {
+        var chat = SeedGroupChat(_recipient);
+        var otherChat = SeedGroupChat(_recipient);
+        var photo = SeedAttachment(otherChat, _recipient);
+
+        var result = await SendToChat(chat, SignedIn(_recipient), null, photo.Id);
+
+        result.Error.Should().Be(ApplicationErrors.Chat.AttachmentInvalid);
+        _messages.Items.Should().BeEmpty();
+    }
+
+    [Fact]
+    public async Task SendToChat_DocumentAttachedBySomeoneElse_ReturnsAttachmentInvalid()
+    {
+        var chat = SeedGroupChat(_recipient);
+        var photo = SeedAttachment(chat, _sender);
+
+        var result = await SendToChat(chat, SignedIn(_recipient), null, photo.Id);
+
+        result.Error.Should().Be(ApplicationErrors.Chat.AttachmentInvalid);
+    }
+
+    [Fact]
+    public async Task SendToChat_UnknownDocument_ReturnsAttachmentInvalid()
+    {
+        var chat = SeedGroupChat(_recipient);
+
+        var result = await SendToChat(chat, SignedIn(_recipient), "See", Guid.CreateVersion7());
+
+        result.Error.Should().Be(ApplicationErrors.Chat.AttachmentInvalid);
+    }
+
+    [Fact]
+    public async Task SendToChat_DocumentSentBefore_ReturnsAttachmentAlreadySent()
+    {
+        var chat = SeedGroupChat(_recipient);
+        var caller = SignedIn(_recipient);
+        var photo = SeedAttachment(chat, _recipient);
+        (await SendToChat(chat, caller, null, photo.Id)).IsSuccess.Should().BeTrue();
+
+        var result = await SendToChat(chat, caller, "Again", photo.Id);
+
+        result.Error.Should().Be(ApplicationErrors.Chat.AttachmentAlreadySent);
+    }
+
+    [Fact]
+    public async Task Delete_MessageWithAttachments_DeletesTheDocuments()
+    {
+        var chat = SeedGroupChat(_recipient);
+        var caller = SignedIn(_recipient);
+        var photo = SeedAttachment(chat, _recipient);
+        var messageId = (await SendToChat(chat, caller, null, photo.Id)).Value;
+
+        var result = await DeleteMessage(messageId, caller);
+
+        result.IsSuccess.Should().BeTrue();
+        _documents.Items.Should().BeEmpty();
+        photo.DomainEvents.OfType<DocumentDeletedDomainEvent>().Should().ContainSingle();
+    }
+
+    [Fact]
+    public async Task OpenDirectChat_CreatesTheChatOnceAndReturnsItAfterwards()
+    {
+        var caller = SignedIn(_sender);
+        var handler = new OpenDirectChatCommandHandler(new DirectChats(_chats, _users, caller), TestData.Clock());
+
+        var first = await handler.Handle(new OpenDirectChatCommand(_recipient.Id), TestContext.Current.CancellationToken);
+        var second = await handler.Handle(new OpenDirectChatCommand(_recipient.Id), TestContext.Current.CancellationToken);
+
+        first.Value.Should().Be(second.Value);
+        _chats.Items.Should().ContainSingle().Which.Id.Should().Be(first.Value);
     }
 
     [Fact]
@@ -127,8 +240,7 @@ public class ChatMessagingHandlerTests
         var message = _messages.Items.Single();
         var caller = SignedIn(_sender);
 
-        var result = await new DeleteChatMessageCommandHandler(_messages, Access(caller), caller, TestData.Clock())
-            .Handle(new DeleteChatMessageCommand(messageId), TestContext.Current.CancellationToken);
+        var result = await DeleteMessage(messageId, caller);
 
         result.IsSuccess.Should().BeTrue();
         message.IsDeleted.Should().BeTrue();
@@ -141,8 +253,7 @@ public class ChatMessagingHandlerTests
         var messageId = (await SendDirect("Mine")).Value;
         var caller = SignedIn(_recipient);
 
-        var result = await new DeleteChatMessageCommandHandler(_messages, Access(caller), caller, TestData.Clock())
-            .Handle(new DeleteChatMessageCommand(messageId), TestContext.Current.CancellationToken);
+        var result = await DeleteMessage(messageId, caller);
 
         result.Error.Should().Be(DomainErrors.ChatMessage.NotSender);
     }
@@ -153,8 +264,7 @@ public class ChatMessagingHandlerTests
         var messageId = (await SendDirect("Private")).Value;
         var stranger = SignedIn(TestData.NewUser("stranger@example.com"));
 
-        var result = await new DeleteChatMessageCommandHandler(_messages, Access(stranger), stranger, TestData.Clock())
-            .Handle(new DeleteChatMessageCommand(messageId), TestContext.Current.CancellationToken);
+        var result = await DeleteMessage(messageId, stranger);
 
         result.Error.Should().Be(ApplicationErrors.NotFound<ChatMessage>());
     }

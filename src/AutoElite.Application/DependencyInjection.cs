@@ -73,6 +73,8 @@ public static class DependencyInjection
         services.AddScoped<ExamAccess>();
         services.AddScoped<ChatAccess>();
         services.AddScoped<ChatUsers>();
+        services.AddScoped<ChatAttachments>();
+        services.AddScoped<DirectChats>();
         services.AddScoped<LocalTimes>();
         services.AddScoped<Notifier>();
         services.AddScoped<GroupNotifier>();
