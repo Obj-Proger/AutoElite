@@ -51,6 +51,9 @@ public enum NotificationType
     /// <summary>The recipient joined a study group.</summary>
     EnrolledInGroup = 16,
 
+    /// <summary>A reminder of an upcoming exam.</summary>
+    ExamReminder = 17,
+
     /// <summary>Anything else.</summary>
     Other = 99
 }

@@ -61,6 +61,12 @@
   <data name="ExamPassed.Title" xml:space="preserve">
     <value>Экзамен сдан</value>
   </data>
+  <data name="ExamReminder.Body" xml:space="preserve">
+    <value>{0} группы «{1}» — {2:d MMMM 'в' HH:mm}.</value>
+  </data>
+  <data name="ExamReminder.Title" xml:space="preserve">
+    <value>Напоминание об экзамене</value>
+  </data>
   <data name="ExamRescheduled.Body" xml:space="preserve">
     <value>{0} группы «{1}» перенесён на {2:d MMMM 'в' HH:mm}.</value>
   </data>

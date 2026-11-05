@@ -84,6 +84,12 @@ internal static class NotificationTexts
     public const string TheoryLessonReminder = "TheoryLessonReminder";
 
     /// <summary>
+    /// A reminder of an exam: <c>{0}</c> is the kind, a <see cref="Term(ExamKind)"/>, <c>{1}</c> the group, <c>{2}</c>
+    /// the local time.
+    /// </summary>
+    public const string ExamReminder = "ExamReminder";
+
+    /// <summary>
     /// New messages arrived in a direct chat: <c>{0}</c> is the sender. One unread notification stands for all new
     /// messages of the chat.
     /// </summary>

@@ -1,13 +1,13 @@
 using System.Reflection;
 using AutoElite.Application.Common.Authorization;
-using AutoElite.Application.Notifications.SendLessonReminders;
+using AutoElite.Application.Notifications.SendReminders;
 using AutoElite.Application.Settings;
 using AutoElite.Domain.Entities;
 using AutoElite.Domain.Enums;
 
 namespace AutoElite.Application.Tests.Notifications;
 
-public class SendLessonRemindersTests
+public class SendRemindersTests
 {
     private static readonly DateTime _now = TestData.Now;
 
@@ -18,11 +18,12 @@ public class SendLessonRemindersTests
     private readonly FakeDrivingSlotRepository _slots = new();
     private readonly FakeTheoryLessonRepository _lessons = new();
     private readonly FakeStudyGroupRepository _groups = new();
+    private readonly FakeExamRepository _exams = new();
     private readonly User _student;
     private readonly User _instructor;
     private readonly Contract _contract;
 
-    public SendLessonRemindersTests()
+    public SendRemindersTests()
     {
         _student = _fixture.SeedUser("student@example.com");
         _instructor = _fixture.SeedUser("instructor@example.com", language: Language.English);
@@ -30,10 +31,11 @@ public class SendLessonRemindersTests
     }
 
     private Task<Result> Run(DateTime? utcNow = null) =>
-        new SendLessonRemindersCommandHandler(
-                new SchoolSettingsProvider(_fixture.Settings), _slots, _lessons, _fixture.Contracts, _groups, _fixture.Notifications,
-                _fixture.CreateLocalTimes(), _fixture.CreateNotifier(), new FixedTimeProvider(new DateTimeOffset(utcNow ?? _now)))
-            .Handle(new SendLessonRemindersCommand(), TestContext.Current.CancellationToken);
+        new SendRemindersCommandHandler(
+                new SchoolSettingsProvider(_fixture.Settings), _slots, _lessons, _exams, _fixture.Contracts, _groups,
+                _fixture.Notifications, _fixture.CreateLocalTimes(), _fixture.CreateNotifier(),
+                new FixedTimeProvider(new DateTimeOffset(utcNow ?? _now)))
+            .Handle(new SendRemindersCommand(), TestContext.Current.CancellationToken);
 
     /// <summary>Seeds a driving lesson booked at <paramref name="bookedAtUtc"/>; reminders are 24 and 2 hours ahead.</summary>
     private DrivingSlot SeedBookedSlot(DateTime startUtc, DateTime bookedAtUtc)
@@ -53,7 +55,7 @@ public class SendLessonRemindersTests
     [Fact]
     public void Command_IsReservedForTheSystem()
     {
-        typeof(SendLessonRemindersCommand).GetCustomAttribute<SystemRequestAttribute>().Should().NotBeNull();
+        typeof(SendRemindersCommand).GetCustomAttribute<SystemRequestAttribute>().Should().NotBeNull();
     }
 
     [Fact]
@@ -138,6 +140,47 @@ public class SendLessonRemindersTests
         settings.Update(settings.DefaultCurrency, settings.TimeZoneId, 10, 2, TimeSpan.FromHours(24), []).IsSuccess.Should().BeTrue();
         _fixture.Settings.Settings = settings;
         SeedBookedSlot(_dayAheadStart, _now.AddHours(-2));
+
+        await Run();
+
+        _fixture.Notifications.Items.Should().BeEmpty();
+    }
+
+    [Fact]
+    public async Task Exam_RemindsTheStudentsAndTheResponsibleInstructorOnce()
+    {
+        var course = TestData.NewCourse();
+        var group = StudyGroup.Create(
+                "B-12", course, _instructor.Id, _fixture.Branch.Id, new DateOnly(2026, 2, 1), new DateOnly(2026, 6, 30), 20)
+            .Value;
+        _groups.Seed(group);
+        group.Enroll(_fixture.SeedContract(_student, _fixture.Branch.Id, course), _now.AddDays(-1)).IsSuccess.Should().BeTrue();
+        var exam = Exam.Schedule(group, ExamKind.Practice, null, _dayAheadStart, _now.AddDays(-1)).Value;
+        _exams.Seed(exam);
+
+        await Run();
+        await Run(_now.AddMinutes(5));
+
+        _fixture.Notifications.Items.Select(notification => notification.RecipientId)
+            .Should().BeEquivalentTo<Guid>([_student.Id, _instructor.Id]);
+        var reminder = _fixture.Of(_student.Id).Single();
+        reminder.Type.Should().Be(NotificationType.ExamReminder);
+        reminder.Title.Should().Be("Напоминание об экзамене");
+        reminder.Body.Should().Be("Практический экзамен группы «B-12» — 2 марта в 12:50.");
+        reminder.Subject.Should().Be(EntityReference.Create(EntityKind.Exam, exam.Id).Value);
+    }
+
+    [Fact]
+    public async Task Exam_Cancelled_RemindsNobody()
+    {
+        var course = TestData.NewCourse();
+        var group = StudyGroup.Create(
+                "B-12", course, _instructor.Id, _fixture.Branch.Id, new DateOnly(2026, 2, 1), new DateOnly(2026, 6, 30), 20)
+            .Value;
+        _groups.Seed(group);
+        var exam = Exam.Schedule(group, ExamKind.Practice, null, _dayAheadStart, _now.AddDays(-1)).Value;
+        exam.Cancel("Examiner unavailable", _now.AddHours(-1)).IsSuccess.Should().BeTrue();
+        _exams.Seed(exam);
 
         await Run();
 
