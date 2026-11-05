@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- English report texts. Placeholders are listed in ReportTexts; every culture must use the same ones. -->
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Branch" xml:space="preserve">
+    <value>Branch: {0}</value>
+  </data>
+  <data name="Column.Active" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="Column.AverageQuality" xml:space="preserve">
+    <value>Average quality</value>
+  </data>
+  <data name="Column.AverageRating" xml:space="preserve">
+    <value>Average rating</value>
+  </data>
+  <data name="Column.Cancellations" xml:space="preserve">
+    <value>Cancellations</value>
+  </data>
+  <data name="Column.Completed" xml:space="preserve">
+    <value>Completed</value>
+  </data>
+  <data name="Column.CompletionRate" xml:space="preserve">
+    <value>Completion rate</value>
+  </data>
+  <data name="Column.Contracts" xml:space="preserve">
+    <value>Contracts</value>
+  </data>
+  <data name="Column.Conversion" xml:space="preserve">
+    <value>Conversion</value>
+  </data>
+  <data name="Column.Converted" xml:space="preserve">
+    <value>Converted</value>
+  </data>
+  <data name="Column.Currency" xml:space="preserve">
+    <value>Currency</value>
+  </data>
+  <data name="Column.DrivingHours" xml:space="preserve">
+    <value>Driving hours</value>
+  </data>
+  <data name="Column.DrivingLessons" xml:space="preserve">
+    <value>Driving lessons</value>
+  </data>
+  <data name="Column.Instructor" xml:space="preserve">
+    <value>Instructor</value>
+  </data>
+  <data name="Column.Leads" xml:space="preserve">
+    <value>Leads</value>
+  </data>
+  <data name="Column.Month" xml:space="preserve">
+    <value>Month</value>
+  </data>
+  <data name="Column.Net" xml:space="preserve">
+    <value>Net</value>
+  </data>
+  <data name="Column.NoShows" xml:space="preserve">
+    <value>No-shows</value>
+  </data>
+  <data name="Column.Received" xml:space="preserve">
+    <value>Received</value>
+  </data>
+  <data name="Column.Refunded" xml:space="preserve">
+    <value>Refunded</value>
+  </data>
+  <data name="Column.Source" xml:space="preserve">
+    <value>Source</value>
+  </data>
+  <data name="Column.StaffMember" xml:space="preserve">
+    <value>Staff member</value>
+  </data>
+  <data name="Column.Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="Column.TasksCompleted" xml:space="preserve">
+    <value>Completed</value>
+  </data>
+  <data name="Column.TasksOverdue" xml:space="preserve">
+    <value>Overdue</value>
+  </data>
+  <data name="Column.TasksSet" xml:space="preserve">
+    <value>Tasks set</value>
+  </data>
+  <data name="Column.Terminated" xml:space="preserve">
+    <value>Terminated</value>
+  </data>
+  <data name="Column.TheoryHours" xml:space="preserve">
+    <value>Theory hours</value>
+  </data>
+  <data name="Column.TheoryLessons" xml:space="preserve">
+    <value>Theory lessons</value>
+  </data>
+  <data name="ContractSummary.Title" xml:space="preserve">
+    <value>Contracts</value>
+  </data>
+  <data name="CreatedAt" xml:space="preserve">
+    <value>Created: {0:d MMMM yyyy, HH:mm}</value>
+  </data>
+  <data name="InstructorWorkload.Title" xml:space="preserve">
+    <value>Instructor workload</value>
+  </data>
+  <data name="LeadSource.Advertising" xml:space="preserve">
+    <value>Advertising</value>
+  </data>
+  <data name="LeadSource.Other" xml:space="preserve">
+    <value>Other</value>
+  </data>
+  <data name="LeadSource.PhoneCall" xml:space="preserve">
+    <value>Phone call</value>
+  </data>
+  <data name="LeadSource.Referral" xml:space="preserve">
+    <value>Referral</value>
+  </data>
+  <data name="LeadSource.SocialMedia" xml:space="preserve">
+    <value>Social media</value>
+  </data>
+  <data name="LeadSource.WalkIn" xml:space="preserve">
+    <value>Office visit</value>
+  </data>
+  <data name="LeadSource.Website" xml:space="preserve">
+    <value>Website</value>
+  </data>
+  <data name="LeadStatistics.Title" xml:space="preserve">
+    <value>Leads and conversion</value>
+  </data>
+  <data name="LeadStatus.Converted" xml:space="preserve">
+    <value>Converted</value>
+  </data>
+  <data name="LeadStatus.InProgress" xml:space="preserve">
+    <value>In progress</value>
+  </data>
+  <data name="LeadStatus.Lost" xml:space="preserve">
+    <value>Lost</value>
+  </data>
+  <data name="LeadStatus.New" xml:space="preserve">
+    <value>New</value>
+  </data>
+  <data name="Period" xml:space="preserve">
+    <value>Period: {0:d MMMM yyyy} – {1:d MMMM yyyy}</value>
+  </data>
+  <data name="Revenue.Title" xml:space="preserve">
+    <value>Revenue by month</value>
+  </data>
+  <data name="StaffActivity.Title" xml:space="preserve">
+    <value>Staff activity</value>
+  </data>
+  <data name="Table.BySource" xml:space="preserve">
+    <value>By source</value>
+  </data>
+  <data name="Table.ByStatus" xml:space="preserve">
+    <value>By status</value>
+  </data>
+  <data name="Table.Summary" xml:space="preserve">
+    <value>Summary</value>
+  </data>
+  <data name="WholeSchool" xml:space="preserve">
+    <value>All branches</value>
+  </data>
+</root>

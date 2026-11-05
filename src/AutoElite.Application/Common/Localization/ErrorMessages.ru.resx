@@ -892,6 +892,12 @@
   <data name="Report.CourseIdEmpty" xml:space="preserve">
     <value>Идентификатор курса не может быть пустым GUID.</value>
   </data>
+  <data name="Report.FormatNotDefined" xml:space="preserve">
+    <value>Недопустимый формат отчёта.</value>
+  </data>
+  <data name="Report.KindNotDefined" xml:space="preserve">
+    <value>Недопустимый вид отчёта.</value>
+  </data>
   <data name="Report.PeriodInvalid" xml:space="preserve">
     <value>Последний день периода не может быть раньше первого.</value>
   </data>

@@ -145,6 +145,12 @@ public static class ApplicationErrors
 
         /// <summary>The course filter is an empty GUID.</summary>
         public static readonly Error CourseIdEmpty = Error.Validation("Report.CourseIdEmpty", "Course ID cannot be an empty GUID.");
+
+        /// <summary>The report to export is not a <see cref="Analytics.ReportKind"/>.</summary>
+        public static readonly Error KindNotDefined = Error.Validation("Report.KindNotDefined", "Report kind is not valid.");
+
+        /// <summary>The file format is not a <see cref="Analytics.ReportFormat"/>.</summary>
+        public static readonly Error FormatNotDefined = Error.Validation("Report.FormatNotDefined", "Report format is not valid.");
     }
 
     /// <summary>Errors of chats.</summary>

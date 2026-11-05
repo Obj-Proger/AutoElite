@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- Russian report texts. Placeholders are listed in ReportTexts; every culture must use the same ones. -->
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Branch" xml:space="preserve">
+    <value>Филиал: {0}</value>
+  </data>
+  <data name="Column.Active" xml:space="preserve">
+    <value>Активные</value>
+  </data>
+  <data name="Column.AverageQuality" xml:space="preserve">
+    <value>Средний показатель качества</value>
+  </data>
+  <data name="Column.AverageRating" xml:space="preserve">
+    <value>Средняя оценка</value>
+  </data>
+  <data name="Column.Cancellations" xml:space="preserve">
+    <value>Отмены</value>
+  </data>
+  <data name="Column.Completed" xml:space="preserve">
+    <value>Завершённые</value>
+  </data>
+  <data name="Column.CompletionRate" xml:space="preserve">
+    <value>Доля завершения</value>
+  </data>
+  <data name="Column.Contracts" xml:space="preserve">
+    <value>Договоры</value>
+  </data>
+  <data name="Column.Conversion" xml:space="preserve">
+    <value>Конверсия</value>
+  </data>
+  <data name="Column.Converted" xml:space="preserve">
+    <value>Конвертировано</value>
+  </data>
+  <data name="Column.Currency" xml:space="preserve">
+    <value>Валюта</value>
+  </data>
+  <data name="Column.DrivingHours" xml:space="preserve">
+    <value>Часы вождения</value>
+  </data>
+  <data name="Column.DrivingLessons" xml:space="preserve">
+    <value>Занятия по вождению</value>
+  </data>
+  <data name="Column.Instructor" xml:space="preserve">
+    <value>Инструктор</value>
+  </data>
+  <data name="Column.Leads" xml:space="preserve">
+    <value>Заявки</value>
+  </data>
+  <data name="Column.Month" xml:space="preserve">
+    <value>Месяц</value>
+  </data>
+  <data name="Column.Net" xml:space="preserve">
+    <value>Итого</value>
+  </data>
+  <data name="Column.NoShows" xml:space="preserve">
+    <value>Неявки</value>
+  </data>
+  <data name="Column.Received" xml:space="preserve">
+    <value>Поступило</value>
+  </data>
+  <data name="Column.Refunded" xml:space="preserve">
+    <value>Возвращено</value>
+  </data>
+  <data name="Column.Source" xml:space="preserve">
+    <value>Источник</value>
+  </data>
+  <data name="Column.StaffMember" xml:space="preserve">
+    <value>Сотрудник</value>
+  </data>
+  <data name="Column.Status" xml:space="preserve">
+    <value>Статус</value>
+  </data>
+  <data name="Column.TasksCompleted" xml:space="preserve">
+    <value>Выполнено</value>
+  </data>
+  <data name="Column.TasksOverdue" xml:space="preserve">
+    <value>Просрочено</value>
+  </data>
+  <data name="Column.TasksSet" xml:space="preserve">
+    <value>Поставлено задач</value>
+  </data>
+  <data name="Column.Terminated" xml:space="preserve">
+    <value>Расторгнутые</value>
+  </data>
+  <data name="Column.TheoryHours" xml:space="preserve">
+    <value>Часы теории</value>
+  </data>
+  <data name="Column.TheoryLessons" xml:space="preserve">
+    <value>Занятия по теории</value>
+  </data>
+  <data name="ContractSummary.Title" xml:space="preserve">
+    <value>Договоры</value>
+  </data>
+  <data name="CreatedAt" xml:space="preserve">
+    <value>Сформирован: {0:d MMMM yyyy, HH:mm}</value>
+  </data>
+  <data name="InstructorWorkload.Title" xml:space="preserve">
+    <value>Загрузка инструкторов</value>
+  </data>
+  <data name="LeadSource.Advertising" xml:space="preserve">
+    <value>Реклама</value>
+  </data>
+  <data name="LeadSource.Other" xml:space="preserve">
+    <value>Другое</value>
+  </data>
+  <data name="LeadSource.PhoneCall" xml:space="preserve">
+    <value>Звонок</value>
+  </data>
+  <data name="LeadSource.Referral" xml:space="preserve">
+    <value>Рекомендация</value>
+  </data>
+  <data name="LeadSource.SocialMedia" xml:space="preserve">
+    <value>Соцсети</value>
+  </data>
+  <data name="LeadSource.WalkIn" xml:space="preserve">
+    <value>Визит в офис</value>
+  </data>
+  <data name="LeadSource.Website" xml:space="preserve">
+    <value>Сайт</value>
+  </data>
+  <data name="LeadStatistics.Title" xml:space="preserve">
+    <value>Заявки и конверсия</value>
+  </data>
+  <data name="LeadStatus.Converted" xml:space="preserve">
+    <value>Конвертирована</value>
+  </data>
+  <data name="LeadStatus.InProgress" xml:space="preserve">
+    <value>В работе</value>
+  </data>
+  <data name="LeadStatus.Lost" xml:space="preserve">
+    <value>Отказ</value>
+  </data>
+  <data name="LeadStatus.New" xml:space="preserve">
+    <value>Новая</value>
+  </data>
+  <data name="Period" xml:space="preserve">
+    <value>Период: {0:d MMMM yyyy} – {1:d MMMM yyyy}</value>
+  </data>
+  <data name="Revenue.Title" xml:space="preserve">
+    <value>Выручка по месяцам</value>
+  </data>
+  <data name="StaffActivity.Title" xml:space="preserve">
+    <value>Активность персонала</value>
+  </data>
+  <data name="Table.BySource" xml:space="preserve">
+    <value>По источникам</value>
+  </data>
+  <data name="Table.ByStatus" xml:space="preserve">
+    <value>По статусам</value>
+  </data>
+  <data name="Table.Summary" xml:space="preserve">
+    <value>Итого</value>
+  </data>
+  <data name="WholeSchool" xml:space="preserve">
+    <value>Все филиалы</value>
+  </data>
+</root>
