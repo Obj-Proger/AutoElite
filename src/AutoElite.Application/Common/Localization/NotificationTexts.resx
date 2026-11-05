@@ -100,6 +100,18 @@
   <data name="LowDrivingLessonRating.Title" xml:space="preserve">
     <value>Low lesson rating</value>
   </data>
+  <data name="NewDirectMessages.Body" xml:space="preserve">
+    <value>{0} sent you new messages.</value>
+  </data>
+  <data name="NewDirectMessages.Title" xml:space="preserve">
+    <value>New messages</value>
+  </data>
+  <data name="NewGroupMessages.Body" xml:space="preserve">
+    <value>New messages in the chat {0}.</value>
+  </data>
+  <data name="NewGroupMessages.Title" xml:space="preserve">
+    <value>New messages</value>
+  </data>
   <data name="NewLead.Body" xml:space="preserve">
     <value>A request from {0}. Source: {1}.</value>
   </data>

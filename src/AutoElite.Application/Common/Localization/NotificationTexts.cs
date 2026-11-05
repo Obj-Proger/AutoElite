@@ -78,6 +78,18 @@ internal static class NotificationTexts
     public const string EnrolledInGroup = "EnrolledInGroup";
 
     /// <summary>
+    /// New messages arrived in a direct chat: <c>{0}</c> is the sender. One unread notification stands for all new
+    /// messages of the chat.
+    /// </summary>
+    public const string NewDirectMessages = "NewDirectMessages";
+
+    /// <summary>
+    /// New messages arrived in a group chat: <c>{0}</c> is the chat title. One unread notification stands for all new
+    /// messages of the chat.
+    /// </summary>
+    public const string NewGroupMessages = "NewGroupMessages";
+
+    /// <summary>
     /// A payment of the student is confirmed: <c>{0}</c> is the amount, <c>{1}</c> the currency, <c>{2}</c> the
     /// contract number.
     /// </summary>

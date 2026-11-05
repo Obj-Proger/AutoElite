@@ -15,6 +15,7 @@ public class ChatMessagingHandlerTests
     private readonly FakeChatRepository _chats = new();
     private readonly InMemoryRepository<ChatMessage> _messages = new();
     private readonly FakeUserRepository _users = new();
+    private readonly FakeNotificationRepository _notifications = new();
     private readonly User _sender = TestData.NewUser("sender@example.com");
     private readonly User _recipient = TestData.NewUser("recipient@example.com");
 
@@ -164,11 +165,40 @@ public class ChatMessagingHandlerTests
         var chat = SeedGroupChat(_recipient);
         var caller = SignedIn(_recipient);
 
-        var result = await new MarkChatReadCommandHandler(Access(caller), caller, TestData.Clock())
-            .Handle(new MarkChatReadCommand(chat.Id, TestData.Now.AddDays(1)), TestContext.Current.CancellationToken);
+        var result = await MarkRead(chat, caller, TestData.Now.AddDays(1));
 
         result.IsSuccess.Should().BeTrue();
         chat.CurrentMembers.Single(member => member.UserId == _recipient.Id).LastReadAtUtc.Should().Be(TestData.Now);
+    }
+
+    [Fact]
+    public async Task MarkRead_MarksTheMessageNotificationsOfTheChatUpToTheReadTime()
+    {
+        var chat = SeedGroupChat(_recipient);
+        var caller = SignedIn(_recipient);
+        var aboutChat = EntityReference.Create(EntityKind.Chat, chat.Id).Value;
+        var read = SeedNotification(aboutChat, TestData.Now.AddMinutes(-10));
+        var later = SeedNotification(aboutChat, TestData.Now.AddMinutes(-1));
+        var aboutOtherChat = EntityReference.Create(EntityKind.Chat, Guid.CreateVersion7()).Value;
+        var otherChat = SeedNotification(aboutOtherChat, TestData.Now.AddMinutes(-10));
+
+        await MarkRead(chat, caller, TestData.Now.AddMinutes(-5));
+
+        read.IsRead.Should().BeTrue();
+        later.IsRead.Should().BeFalse();
+        otherChat.IsRead.Should().BeFalse();
+    }
+
+    private Task<Result> MarkRead(Chat chat, FakeCurrentUser caller, DateTime readUpToUtc) =>
+        new MarkChatReadCommandHandler(Access(caller), _notifications, caller, TestData.Clock())
+            .Handle(new MarkChatReadCommand(chat.Id, readUpToUtc), TestContext.Current.CancellationToken);
+
+    private Notification SeedNotification(EntityReference subject, DateTime createdAtUtc)
+    {
+        var notification = Notification.Create(_recipient.Id, NotificationType.NewMessage, "New", null, subject, createdAtUtc).Value;
+        _notifications.Seed(notification);
+
+        return notification;
     }
 
     [Fact]
