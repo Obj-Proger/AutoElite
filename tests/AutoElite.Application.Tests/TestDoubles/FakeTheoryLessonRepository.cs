@@ -13,4 +13,11 @@ internal sealed class FakeTheoryLessonRepository : InMemoryRepository<TheoryLess
             && lesson.Status != TheoryLessonStatus.Cancelled
             && (lesson.GroupId == groupId || lesson.InstructorId == instructorId)
             && lesson.Time.Overlaps(time)));
+
+    public Task<IReadOnlyList<TheoryLesson>> GetScheduledStartingBetweenAsync(
+        DateTime afterUtc, DateTime untilUtc, CancellationToken cancellationToken = default) =>
+        Task.FromResult<IReadOnlyList<TheoryLesson>>([
+            .. Items.Where(lesson =>
+                lesson.Status == TheoryLessonStatus.Scheduled && lesson.Time.StartUtc > afterUtc && lesson.Time.StartUtc <= untilUtc)
+        ]);
 }

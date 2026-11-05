@@ -25,6 +25,12 @@
   <data name="DrivingLessonBooked.Title" xml:space="preserve">
     <value>Новая запись на вождение</value>
   </data>
+  <data name="DrivingLessonReminder.Body" xml:space="preserve">
+    <value>Занятие по вождению {0:d MMMM 'в' HH:mm}.</value>
+  </data>
+  <data name="DrivingLessonReminder.Title" xml:space="preserve">
+    <value>Напоминание о занятии</value>
+  </data>
   <data name="EnrolledInGroup.Body" xml:space="preserve">
     <value>Группа «{0}». Начало занятий — {1:d MMMM yyyy}.</value>
   </data>
@@ -141,6 +147,12 @@
   </data>
   <data name="TheoryLessonCancelled.Title" xml:space="preserve">
     <value>Занятие по теории отменено</value>
+  </data>
+  <data name="TheoryLessonReminder.Body" xml:space="preserve">
+    <value>Занятие группы «{0}» {1:d MMMM 'в' HH:mm}.</value>
+  </data>
+  <data name="TheoryLessonReminder.Title" xml:space="preserve">
+    <value>Напоминание о занятии</value>
   </data>
   <data name="TheoryLessonRescheduled.Body" xml:space="preserve">
     <value>Занятие группы «{0}» перенесено на {1:d MMMM 'в' HH:mm}.</value>

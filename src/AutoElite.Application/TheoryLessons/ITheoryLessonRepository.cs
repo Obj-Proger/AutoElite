@@ -14,4 +14,11 @@ public interface ITheoryLessonRepository : IRepository<TheoryLesson>
     /// <param name="cancellationToken">A token that signals cancellation of the operation.</param>
     Task<bool> HasOverlapAsync(
         Guid groupId, Guid instructorId, TimeInterval time, Guid? exceptLessonId = null, CancellationToken cancellationToken = default);
+
+    /// <summary>Loads the scheduled lessons that start after one UTC time and no later than another.</summary>
+    /// <param name="afterUtc">Only lessons that start later than this UTC time.</param>
+    /// <param name="untilUtc">Only lessons that start no later than this UTC time.</param>
+    /// <param name="cancellationToken">A token that signals cancellation of the operation.</param>
+    Task<IReadOnlyList<TheoryLesson>> GetScheduledStartingBetweenAsync(
+        DateTime afterUtc, DateTime untilUtc, CancellationToken cancellationToken = default);
 }

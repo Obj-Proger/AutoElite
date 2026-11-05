@@ -23,6 +23,20 @@ public interface INotificationRepository : IRepository<Notification>
     Task<int> MarkReadAboutAsync(
         Guid recipientId, EntityReference subject, DateTime createdUpToUtc, DateTime utcNow, CancellationToken cancellationToken = default);
 
+    /// <summary>
+    /// Lists the notifications of the type, read or not, about any of the records that were created at or after a
+    /// time.
+    /// </summary>
+    /// <param name="type">The type of the notifications.</param>
+    /// <param name="subjects">The records the notifications are about.</param>
+    /// <param name="createdSinceUtc">The earliest creation time.</param>
+    /// <param name="cancellationToken">A token that signals cancellation of the operation.</param>
+    Task<IReadOnlyList<SentNotification>> GetSentSinceAsync(
+        NotificationType type,
+        IReadOnlyCollection<EntityReference> subjects,
+        DateTime createdSinceUtc,
+        CancellationToken cancellationToken = default);
+
     /// <summary>Finds which of the users still have an unread notification of the type about the record.</summary>
     /// <param name="recipientIds">The users to check.</param>
     /// <param name="type">The type of the notification.</param>

@@ -25,6 +25,12 @@
   <data name="DrivingLessonBooked.Title" xml:space="preserve">
     <value>New driving booking</value>
   </data>
+  <data name="DrivingLessonReminder.Body" xml:space="preserve">
+    <value>Your driving lesson is on {0:MMMM d 'at' h:mm tt}.</value>
+  </data>
+  <data name="DrivingLessonReminder.Title" xml:space="preserve">
+    <value>Lesson reminder</value>
+  </data>
   <data name="EnrolledInGroup.Body" xml:space="preserve">
     <value>Group {0}. Classes start on {1:MMMM d, yyyy}.</value>
   </data>
@@ -141,6 +147,12 @@
   </data>
   <data name="TheoryLessonCancelled.Title" xml:space="preserve">
     <value>Theory class cancelled</value>
+  </data>
+  <data name="TheoryLessonReminder.Body" xml:space="preserve">
+    <value>The class of group {0} is on {1:MMMM d 'at' h:mm tt}.</value>
+  </data>
+  <data name="TheoryLessonReminder.Title" xml:space="preserve">
+    <value>Lesson reminder</value>
   </data>
   <data name="TheoryLessonRescheduled.Body" xml:space="preserve">
     <value>The class of group {0} is moved to {1:MMMM d 'at' h:mm tt}.</value>

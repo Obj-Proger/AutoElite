@@ -77,6 +77,12 @@ internal static class NotificationTexts
     /// <summary>The student joined a study group: <c>{0}</c> is the group, <c>{1}</c> the start date.</summary>
     public const string EnrolledInGroup = "EnrolledInGroup";
 
+    /// <summary>A reminder of the recipient's driving lesson: <c>{0}</c> is the local start.</summary>
+    public const string DrivingLessonReminder = "DrivingLessonReminder";
+
+    /// <summary>A reminder of a theory lesson: <c>{0}</c> is the group, <c>{1}</c> the local start.</summary>
+    public const string TheoryLessonReminder = "TheoryLessonReminder";
+
     /// <summary>
     /// New messages arrived in a direct chat: <c>{0}</c> is the sender. One unread notification stands for all new
     /// messages of the chat.

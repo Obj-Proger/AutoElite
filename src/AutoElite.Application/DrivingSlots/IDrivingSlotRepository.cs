@@ -30,4 +30,11 @@ public interface IDrivingSlotRepository : IRepository<DrivingSlot>
     /// <param name="cancellationToken">A token that signals cancellation of the operation.</param>
     Task<IReadOnlyList<DrivingSlot>> GetBookedForContractAfterAsync(
         Guid contractId, DateTime afterUtc, CancellationToken cancellationToken = default);
+
+    /// <summary>Loads the booked slots whose lessons start after one UTC time and no later than another.</summary>
+    /// <param name="afterUtc">Only lessons that start later than this UTC time.</param>
+    /// <param name="untilUtc">Only lessons that start no later than this UTC time.</param>
+    /// <param name="cancellationToken">A token that signals cancellation of the operation.</param>
+    Task<IReadOnlyList<DrivingSlot>> GetBookedStartingBetweenAsync(
+        DateTime afterUtc, DateTime untilUtc, CancellationToken cancellationToken = default);
 }

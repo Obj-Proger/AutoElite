@@ -26,6 +26,18 @@ internal sealed class FakeNotificationRepository : InMemoryRepository<Notificati
         return Task.FromResult(unread.Count);
     }
 
+    public Task<IReadOnlyList<SentNotification>> GetSentSinceAsync(
+        NotificationType type,
+        IReadOnlyCollection<EntityReference> subjects,
+        DateTime createdSinceUtc,
+        CancellationToken cancellationToken = default) =>
+        Task.FromResult<IReadOnlyList<SentNotification>>([
+            .. Items
+                .Where(notification => notification.Type == type && notification.Subject is { } subject && subjects.Contains(subject)
+                    && notification.CreatedAtUtc >= createdSinceUtc)
+                .Select(notification => new SentNotification(notification.RecipientId, notification.Subject!, notification.CreatedAtUtc))
+        ]);
+
     public Task<IReadOnlySet<Guid>> GetRecipientsWithUnreadAsync(
         IReadOnlyCollection<Guid> recipientIds,
         NotificationType type,

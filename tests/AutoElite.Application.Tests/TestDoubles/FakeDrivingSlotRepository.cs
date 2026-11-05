@@ -27,4 +27,11 @@ internal sealed class FakeDrivingSlotRepository : InMemoryRepository<DrivingSlot
             .. Items.Where(slot =>
                 slot.Status == DrivingSlotStatus.Booked && slot.CurrentBooking!.ContractId == contractId && slot.Time.StartUtc > afterUtc)
         ]);
+
+    public Task<IReadOnlyList<DrivingSlot>> GetBookedStartingBetweenAsync(
+        DateTime afterUtc, DateTime untilUtc, CancellationToken cancellationToken = default) =>
+        Task.FromResult<IReadOnlyList<DrivingSlot>>([
+            .. Items.Where(slot =>
+                slot.Status == DrivingSlotStatus.Booked && slot.Time.StartUtc > afterUtc && slot.Time.StartUtc <= untilUtc)
+        ]);
 }
