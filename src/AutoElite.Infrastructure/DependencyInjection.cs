@@ -1,5 +1,6 @@
 using AutoElite.Application.Branches;
 using AutoElite.Application.Settings;
+using AutoElite.Application.Users;
 using AutoElite.Infrastructure.Persistence;
 using AutoElite.Infrastructure.Persistence.Interceptors;
 using AutoElite.Infrastructure.Persistence.Queries;
@@ -41,6 +42,8 @@ public static class DependencyInjection
         services.AddScoped<IBranchRepository, BranchRepository>();
         services.AddScoped<IBranchQueries, BranchQueries>();
         services.AddScoped<ISchoolSettingsRepository, SchoolSettingsRepository>();
+        services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IUserRoleRepository, UserRoleRepository>();
 
         return services;
     }

@@ -29,6 +29,7 @@ public sealed class AutoEliteDbContext(DbContextOptions<AutoEliteDbContext> opti
             configurationBuilder.Properties(enumType).HaveConversion<string>().HaveMaxLength(EnumMaxLength);
 
         configurationBuilder.Properties<Currency>().HaveConversion<CurrencyConverter>().HaveMaxLength(Currency.CodeLength);
+        configurationBuilder.Properties<Email>().HaveConversion<EmailConverter>().HaveMaxLength(Email.MaxLength);
         configurationBuilder.Properties<PhoneNumber>().HaveConversion<PhoneNumberConverter>().HaveMaxLength(PhoneNumber.MaxLength);
     }
 

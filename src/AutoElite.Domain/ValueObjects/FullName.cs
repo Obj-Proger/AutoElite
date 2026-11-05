@@ -5,7 +5,8 @@ namespace AutoElite.Domain.ValueObjects;
 /// </summary>
 public sealed class FullName : ValueObject
 {
-    private const int MaxNamePartLength = 100;
+    /// <summary>The longest last, first or middle name.</summary>
+    public const int MaxNamePartLength = 100;
 
     /// <summary>Gets the last name.</summary>
     public string LastName { get; }

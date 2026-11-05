@@ -5,6 +5,9 @@ namespace AutoElite.Domain.ValueObjects;
 /// <summary>A validated email address.</summary>
 public sealed partial class Email : ValueObject
 {
+    /// <summary>The longest address: the RFC 5321 limit of a mailbox.</summary>
+    public const int MaxLength = 320;
+
     [GeneratedRegex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$")]
     private static partial Regex Pattern();
 
@@ -24,7 +27,7 @@ public sealed partial class Email : ValueObject
 
         var trimmed = rawValue.Trim();
 
-        if (trimmed.Length > 320) // RFC 5321 maximum mailbox length
+        if (trimmed.Length > MaxLength)
             return Result.Failure<Email>(DomainErrors.Email.TooLong);
 
         if (!Pattern().IsMatch(trimmed))

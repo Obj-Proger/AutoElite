@@ -8,6 +8,11 @@ namespace AutoElite.Infrastructure.Persistence;
 /// exclusion constraint means another request saved a conflicting record at the same time, after the application had
 /// checked that there was none, for example a branch with the same name. Both are reported as a concurrency conflict,
 /// so the client reloads and retries, and the retry gets the proper error from the application's own check.
+/// <para>
+/// A repository that must lock rows until the request ends, such as the count of administrators, opens a transaction
+/// first (<see cref="Transactions.BeginIfNoneAsync"/>); the save then commits it. If the request fails, nothing is
+/// saved and the transaction is rolled back when the context is disposed.
+/// </para>
 /// </remarks>
 internal sealed class UnitOfWork(AutoEliteDbContext dbContext) : IUnitOfWork
 {
@@ -17,6 +22,9 @@ internal sealed class UnitOfWork(AutoEliteDbContext dbContext) : IUnitOfWork
         try
         {
             await dbContext.SaveChangesAsync(cancellationToken);
+
+            if (dbContext.Database.CurrentTransaction is { } transaction)
+                await transaction.CommitAsync(cancellationToken);
         }
         catch (DbUpdateConcurrencyException exception)
         {

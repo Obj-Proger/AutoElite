@@ -12,3 +12,8 @@ internal sealed class CurrencyConverter() : ValueConverter<Currency, string>(
 internal sealed class PhoneNumberConverter() : ValueConverter<PhoneNumber, string>(
     phone => phone.Value,
     value => PhoneNumber.Create(value).Value);
+
+/// <summary>Stores an <see cref="Email"/> in its normalized, lower-case form.</summary>
+internal sealed class EmailConverter() : ValueConverter<Email, string>(
+    email => email.Value,
+    value => Email.Create(value).Value);
