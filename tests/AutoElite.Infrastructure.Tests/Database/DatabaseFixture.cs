@@ -6,8 +6,9 @@ using Microsoft.Extensions.DependencyInjection;
 namespace AutoElite.Infrastructure.Tests.Database;
 
 /// <summary>
-/// A database of its own for one test class, with the schema of the model; dropped when the class has run. Tests of a
-/// class share it, so each test uses records of its own and does not count on the others being absent.
+/// A database of its own for one test class, with the schema of the model and the database objects the model does
+/// not describe; dropped when the class has run. Tests of a class share it, so each test uses records of its own and
+/// does not count on the others being absent.
 /// </summary>
 public sealed class DatabaseFixture : IAsyncLifetime
 {
@@ -52,6 +53,7 @@ public sealed class DatabaseFixture : IAsyncLifetime
 
         await using var context = CreateContext();
         await context.Database.EnsureCreatedAsync(TestContext.Current.CancellationToken);
+        await DatabaseObjects.CreateAsync(context, TestContext.Current.CancellationToken);
     }
 
     /// <inheritdoc />

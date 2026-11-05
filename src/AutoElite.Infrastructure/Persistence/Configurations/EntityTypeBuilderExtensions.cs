@@ -83,6 +83,17 @@ internal static class EntityTypeBuilderExtensions
     /// <summary>The decimals of an amount; currencies without minor units store zeros there.</summary>
     public const int MoneyScale = 2;
 
+    /// <summary>
+    /// Maps a <see cref="TimeInterval"/> to the columns <c>start_utc</c> and <c>end_utc</c>, the names the exclusion
+    /// constraints and indexes use.
+    /// </summary>
+    /// <param name="time">The builder of the complex property.</param>
+    public static void MapTime(this ComplexPropertyBuilder<TimeInterval> time)
+    {
+        time.Property(value => value.StartUtc).HasColumnName("start_utc");
+        time.Property(value => value.EndUtc).HasColumnName("end_utc");
+    }
+
     /// <summary>Maps an <see cref="Address"/> to the columns <c>{prefix}_city</c> and <c>{prefix}_street</c>.</summary>
     /// <param name="address">The builder of the complex property.</param>
     public static void MapAddress(this ComplexPropertyBuilder<Address> address)

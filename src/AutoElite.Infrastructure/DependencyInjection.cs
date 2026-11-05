@@ -4,6 +4,7 @@ using AutoElite.Application.Courses;
 using AutoElite.Application.Leads;
 using AutoElite.Application.Settings;
 using AutoElite.Application.StudyGroups;
+using AutoElite.Application.TheoryLessons;
 using AutoElite.Application.Users;
 using AutoElite.Application.Users.Authentication;
 using AutoElite.Infrastructure.Authentication;
@@ -74,6 +75,9 @@ public static class DependencyInjection
         services.AddScoped<IStudyGroupRepository, StudyGroupRepository>();
         services.AddScoped<IRepository<StudyGroup>>(provider => provider.GetRequiredService<IStudyGroupRepository>());
         services.AddScoped<IStudyGroupQueries, StudyGroupQueries>();
+        services.AddScoped<ITheoryLessonRepository, TheoryLessonRepository>();
+        services.AddScoped<IRepository<TheoryLesson>>(provider => provider.GetRequiredService<ITheoryLessonRepository>());
+        services.AddScoped<ITheoryLessonQueries, TheoryLessonQueries>();
 
         AddAccounts(services);
         AddSessions(services, configuration);

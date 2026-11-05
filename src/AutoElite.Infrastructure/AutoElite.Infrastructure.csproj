@@ -29,6 +29,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <!-- Database objects EF Core does not model, such as exclusion constraints; see Persistence/DatabaseObjects.cs. -->
+    <EmbeddedResource Include="Persistence\Sql\*.sql" LogicalName="Sql/%(Filename)%(Extension)" />
+  </ItemGroup>
+
+  <ItemGroup>
     <InternalsVisibleTo Include="AutoElite.Infrastructure.Tests" />
   </ItemGroup>
 

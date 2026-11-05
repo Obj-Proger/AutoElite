@@ -23,7 +23,8 @@ public sealed class TheoryLesson : AuditableEntity
     /// <summary>The longest lesson that can be scheduled.</summary>
     public static readonly TimeSpan MaxDuration = TimeSpan.FromHours(8);
 
-    private const int MaxCancellationReasonLength = 1000;
+    /// <summary>The longest reason of a cancellation.</summary>
+    public const int MaxCancellationReasonLength = 1000;
 
     private readonly List<LessonAttendance> _attendance = [];
 

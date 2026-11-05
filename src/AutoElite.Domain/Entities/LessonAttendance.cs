@@ -3,7 +3,8 @@ namespace AutoElite.Domain.Entities;
 /// <summary>The attendance mark of one student at a <see cref="TheoryLesson"/>. Part of the lesson aggregate.</summary>
 public sealed class LessonAttendance : BaseEntity
 {
-    private const int MaxCommentLength = 500;
+    /// <summary>The longest comment of an attendance mark.</summary>
+    public const int MaxCommentLength = 500;
 
     /// <summary>Gets the identifier of the student's contract.</summary>
     public Guid ContractId { get; private set; }

@@ -15,11 +15,11 @@ internal sealed class CourseRepository(AutoEliteDbContext dbContext) : Repositor
 
     /// <inheritdoc />
     /// <remarks>
-    /// Each record that refers to topics is checked here once its table is mapped: questions, theory lessons and the
-    /// blocks of test templates.
+    /// Each record that refers to topics is checked here once its table is mapped: theory lessons so far; questions and
+    /// the blocks of test templates follow with their modules.
     /// </remarks>
     public Task<bool> IsTopicInUseAsync(Guid topicId, CancellationToken cancellationToken = default) =>
-        Task.FromResult(false);
+        DbContext.Set<TheoryLesson>().AnyAsync(lesson => lesson.TopicId == topicId, cancellationToken);
 
     private IQueryable<Course> WithTopics() => Aggregates.Include(course => course.Topics.OrderBy(topic => topic.Position));
 }

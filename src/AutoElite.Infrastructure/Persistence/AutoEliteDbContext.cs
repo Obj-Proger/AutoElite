@@ -59,6 +59,9 @@ public sealed class AutoEliteDbContext(DbContextOptions<AutoEliteDbContext> opti
         if (builder.Model.FindEntityType(typeof(IdentityUserPasskey<Guid>)) is not null)
             builder.Entity<IdentityUserPasskey<Guid>>().ToTable("user_account_passkeys");
 
+        // Exclusion constraints over a column and a time range (Persistence/Sql) need equality on ordinary columns in a
+        // GiST index.
+        builder.HasPostgresExtension("btree_gist");
         builder.HasCollation(CaseInsensitiveCollation, locale: "und-u-ks-level2", provider: "icu", deterministic: false);
         builder.ApplyConfigurationsFromAssembly(typeof(AutoEliteDbContext).Assembly);
     }
