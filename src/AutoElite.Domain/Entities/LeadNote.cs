@@ -3,7 +3,8 @@ namespace AutoElite.Domain.Entities;
 /// <summary>A note written by a staff member about a <see cref="Lead"/>. Part of the lead aggregate.</summary>
 public sealed class LeadNote : BaseEntity
 {
-    private const int MaxTextLength = 4000;
+    /// <summary>The longest note.</summary>
+    public const int MaxTextLength = 4000;
 
     /// <summary>Gets the text of the note.</summary>
     public string Text { get; private set; } = null!;

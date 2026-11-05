@@ -21,9 +21,14 @@ namespace AutoElite.Domain.Entities;
 /// </remarks>
 public sealed class Lead : AuditableEntity
 {
-    private const int MaxContactNameLength = 200;
-    private const int MaxCommentLength = 2000;
-    private const int MaxLostReasonLength = 500;
+    /// <summary>The longest contact name.</summary>
+    public const int MaxContactNameLength = 200;
+
+    /// <summary>The longest comment.</summary>
+    public const int MaxCommentLength = 2000;
+
+    /// <summary>The longest reason a lead was lost.</summary>
+    public const int MaxLostReasonLength = 500;
 
     private readonly List<LeadNote> _notes = [];
     private readonly List<LeadStatusChange> _statusHistory = [];

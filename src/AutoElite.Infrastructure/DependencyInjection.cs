@@ -1,4 +1,5 @@
 using AutoElite.Application.Branches;
+using AutoElite.Application.Leads;
 using AutoElite.Application.Settings;
 using AutoElite.Application.Users;
 using AutoElite.Application.Users.Authentication;
@@ -54,6 +55,8 @@ public static class DependencyInjection
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IUserRoleRepository, UserRoleRepository>();
         services.AddScoped<IUserQueries, UserQueries>();
+        services.AddScoped<IRepository<Lead>, LeadRepository>();
+        services.AddScoped<ILeadQueries, LeadQueries>();
 
         AddAccounts(services);
         AddSessions(services, configuration);

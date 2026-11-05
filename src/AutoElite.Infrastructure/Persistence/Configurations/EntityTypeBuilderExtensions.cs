@@ -43,6 +43,24 @@ internal static class EntityTypeBuilderExtensions
             .ValueGeneratedOnAddOrUpdate()
             .IsConcurrencyToken();
 
+    /// <summary>
+    /// Maps a child entity of an aggregate: the key the domain generates and the foreign key to the root, named
+    /// <paramref name="rootKey"/>, which is a shadow property because the child does not know its root.
+    /// </summary>
+    /// <param name="builder">The builder of the child entity.</param>
+    /// <param name="tableName">The name of the table.</param>
+    /// <param name="rootKey">The name of the foreign key to the root, such as <c>LeadId</c>.</param>
+    /// <typeparam name="TChild">The type of the child entity.</typeparam>
+    public static void ConfigureChild<TChild>(this EntityTypeBuilder<TChild> builder, string tableName, string rootKey)
+        where TChild : BaseEntity
+    {
+        builder.ToTable(tableName);
+        builder.HasKey(entity => entity.Id);
+        builder.Property(entity => entity.Id).ValueGeneratedNever();
+        builder.Property<Guid>(rootKey);
+        builder.Ignore(entity => entity.DomainEvents);
+    }
+
     /// <summary>Maps an <see cref="Address"/> to the columns <c>{prefix}_city</c> and <c>{prefix}_street</c>.</summary>
     /// <param name="address">The builder of the complex property.</param>
     public static void MapAddress(this ComplexPropertyBuilder<Address> address)
