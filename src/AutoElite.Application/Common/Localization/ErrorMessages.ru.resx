@@ -337,6 +337,12 @@
   <data name="Document.AlreadyDeleted" xml:space="preserve">
     <value>Документ уже удалён.</value>
   </data>
+  <data name="Document.ContentMismatch" xml:space="preserve">
+    <value>Содержимое файла не соответствует его типу или размеру.</value>
+  </data>
+  <data name="Document.ContentMissing" xml:space="preserve">
+    <value>Не передано содержимое файла.</value>
+  </data>
   <data name="Document.ContentTypeMismatch" xml:space="preserve">
     <value>Тип файла не соответствует его расширению.</value>
   </data>
@@ -357,6 +363,12 @@
   </data>
   <data name="Document.NotFound" xml:space="preserve">
     <value>Документ не найден.</value>
+  </data>
+  <data name="Document.OwnerKindNotSupported" xml:space="preserve">
+    <value>К записям этого типа нельзя прикреплять документы.</value>
+  </data>
+  <data name="Document.OwnerNotFound" xml:space="preserve">
+    <value>Запись не найдена.</value>
   </data>
   <data name="Document.SizeOutOfRange" xml:space="preserve">
     <value>Размер файла должен быть от 1 байта до 20 МБ.</value>

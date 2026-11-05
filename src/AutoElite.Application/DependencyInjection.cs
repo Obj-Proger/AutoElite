@@ -4,6 +4,7 @@ using AutoElite.Application.Common.Events;
 using AutoElite.Application.Common.Localization;
 using AutoElite.Application.Contracts;
 using AutoElite.Application.Courses;
+using AutoElite.Application.Documents;
 using AutoElite.Application.DrivingRoutes;
 using AutoElite.Application.DrivingSlots;
 using AutoElite.Application.Exams;
@@ -80,6 +81,8 @@ public static class DependencyInjection
         services.AddScoped<TaskAssignees>();
         services.AddScoped<TaskSubjects>();
         services.AddScoped<StaffTaskNotices>();
+        services.AddScoped<DocumentOwners>();
+        services.AddScoped<DocumentAccess>();
 
         RegisterOpenGenericImplementations(services, typeof(IRequestHandler<,>));
         RegisterOpenGenericImplementations(services, typeof(IValidator<>));

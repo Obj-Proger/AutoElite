@@ -129,6 +129,24 @@ public static class ApplicationErrors
             "Course.TopicInUse", "The topic is used by questions, lessons or test templates and cannot be removed.");
     }
 
+    /// <summary>Errors of documents.</summary>
+    public static class Document
+    {
+        /// <summary>The file content is not as long as declared, or its signature does not match its type.</summary>
+        public static readonly Error ContentMismatch = Error.Validation(
+            "Document.ContentMismatch", "The file content does not match its type or size.");
+
+        /// <summary>Documents cannot be attached to records of this kind.</summary>
+        public static readonly Error OwnerKindNotSupported = Error.Validation(
+            "Document.OwnerKindNotSupported", "Documents cannot be attached to records of this kind.");
+
+        /// <summary>The record does not exist or the caller may not see its documents.</summary>
+        public static readonly Error OwnerNotFound = Error.NotFound("Document.OwnerNotFound", "The record was not found.");
+
+        /// <summary>No file content was given.</summary>
+        public static readonly Error ContentMissing = Error.Validation("Document.ContentMissing", "The file content is missing.");
+    }
+
     /// <summary>Errors of staff tasks.</summary>
     public static class StaffTask
     {

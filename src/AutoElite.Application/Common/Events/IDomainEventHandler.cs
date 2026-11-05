@@ -8,8 +8,9 @@ namespace AutoElite.Application.Common.Events;
 /// Events are stored in the transactional outbox and delivered at least once. The database changes of all handlers of
 /// an event are committed together with the processed mark of its outbox message (see <see cref="IDomainEventPublisher"/>),
 /// so they are applied exactly once; if any handler throws, nothing is committed and the event is delivered again to
-/// all of its handlers later. A handler therefore changes only the database and never calls outside services
-/// directly; work such as an email goes through a queue that joins the unit of work (<see cref="IEmailQueue"/>).
+/// all of its handlers later. A handler therefore changes only the database and does not call outside services
+/// directly; work such as an email goes through a queue that joins the unit of work (<see cref="IEmailQueue"/>). The
+/// one exception is an action that is harmless to repeat, such as deleting a stored file.
 /// Handlers still tolerate a state that has moved on since the event, for example a record that no longer exists.
 /// </remarks>
 /// <typeparam name="TEvent">The type of the domain event.</typeparam>
