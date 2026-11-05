@@ -1,5 +1,7 @@
 using AutoElite.Infrastructure.Persistence.Interceptors;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace AutoElite.Infrastructure.Tests.Database;
 
@@ -20,6 +22,28 @@ public sealed class DatabaseFixture : IAsyncLifetime
                 _connectionString,
                 new AuditInterceptor(currentUser ?? TestCurrentUser.System, timeProvider ?? TimeProvider.System))
             .Options);
+
+    /// <summary>
+    /// Builds the services of the infrastructure on the database, as a host would, for tests of components that are
+    /// resolved rather than constructed, such as the identity service.
+    /// </summary>
+    /// <param name="currentUser">The user of every request; the system by default.</param>
+    public ServiceProvider CreateServices(ICurrentUser? currentUser = null)
+    {
+        var configuration = new ConfigurationBuilder()
+            .AddInMemoryCollection(new Dictionary<string, string?>
+            {
+                [$"ConnectionStrings:{DependencyInjection.ConnectionStringName}"] = _connectionString
+            })
+            .Build();
+        var services = new ServiceCollection();
+        services.AddLogging();
+        services.AddSingleton<ICurrentUser>(currentUser ?? TestCurrentUser.System);
+        services.AddSingleton(TimeProvider.System);
+        services.AddInfrastructure(configuration);
+
+        return services.BuildServiceProvider(new ServiceProviderOptions { ValidateScopes = true, ValidateOnBuild = true });
+    }
 
     /// <inheritdoc />
     public async ValueTask InitializeAsync()
