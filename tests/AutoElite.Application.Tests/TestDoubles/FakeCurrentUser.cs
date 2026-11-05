@@ -11,7 +11,11 @@ internal sealed class FakeCurrentUser : ICurrentUser
 
     public IReadOnlySet<UserRole> Roles { get; init; } = new HashSet<UserRole>();
 
+    public bool IsSystem { get; init; }
+
     public static FakeCurrentUser Anonymous() => new();
+
+    public static FakeCurrentUser System() => new() { IsSystem = true };
 
     public static FakeCurrentUser SignedIn(params UserRole[] roles) =>
         new() { UserId = Guid.CreateVersion7(), Roles = roles.ToHashSet() };

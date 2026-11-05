@@ -2,7 +2,8 @@ namespace AutoElite.Application.Common.Behaviors;
 
 /// <summary>
 /// Rejects a request before validation if the caller is anonymous and the request is not open to anonymous callers,
-/// or if the caller lacks every role the request requires. Requests are closed by default.
+/// if the caller lacks every role the request requires, or if the request is reserved for the system and the caller
+/// is a person. Requests are closed by default.
 /// </summary>
 internal sealed class AuthorizationBehavior<TRequest, TResponse>(ICurrentUser currentUser)
     : IPipelineBehavior<TRequest, TResponse>
@@ -14,6 +15,16 @@ internal sealed class AuthorizationBehavior<TRequest, TResponse>(ICurrentUser cu
     /// <inheritdoc />
     public Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
     {
+        if (_requirement.SystemOnly)
+        {
+            if (currentUser.IsSystem)
+                return next();
+
+            var error = currentUser.IsAuthenticated() ? ApplicationErrors.Auth.Forbidden : ApplicationErrors.Auth.Unauthenticated;
+
+            return Task.FromResult(FailureResponseFactory<TResponse>.Create(error));
+        }
+
         if (_requirement.AllowsAnonymous)
             return next();
 

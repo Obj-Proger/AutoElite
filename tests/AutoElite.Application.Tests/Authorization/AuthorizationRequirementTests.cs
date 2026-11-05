@@ -12,6 +12,25 @@ public class AuthorizationRequirementTests
 
         requirement.AllowsAnonymous.Should().BeFalse();
         requirement.Roles.Should().BeEmpty();
+        requirement.SystemOnly.Should().BeFalse();
+    }
+
+    [Fact]
+    public void For_SystemRequest_IsSystemOnly()
+    {
+        var requirement = AuthorizationRequirement.For(typeof(SystemCommand));
+
+        requirement.SystemOnly.Should().BeTrue();
+        requirement.AllowsAnonymous.Should().BeFalse();
+        requirement.Roles.Should().BeEmpty();
+    }
+
+    [Fact]
+    public void For_SystemRequestWithRoles_Throws()
+    {
+        var act = () => AuthorizationRequirement.For(typeof(SystemAndRolesCommand));
+
+        act.Should().Throw<InvalidOperationException>().WithMessage("*SystemAndRolesCommand*");
     }
 
     [Fact]

@@ -59,14 +59,18 @@ public class ApplicationConventionTests
     }
 
     [Fact]
-    public void Requests_DoNotBothAllowAnonymousCallersAndRequireRoles()
+    public void Requests_HaveAtMostOneAuthorizationAttribute()
     {
         var contradictory = Layers.ClassesImplementing(Layers.Application, typeof(IRequest<>))
-            .Where(type => type.GetCustomAttribute<AllowAnonymousRequestAttribute>() is not null
-                && type.GetCustomAttribute<RequireRolesAttribute>() is not null)
+            .Where(type => new[]
+                {
+                    type.GetCustomAttribute<AllowAnonymousRequestAttribute>() is not null,
+                    type.GetCustomAttribute<RequireRolesAttribute>() is not null,
+                    type.GetCustomAttribute<SystemRequestAttribute>() is not null
+                }.Count(marked => marked) > 1)
             .Select(type => type.Name);
 
-        contradictory.Should().BeEmpty("a request is either open to anonymous callers or restricted to roles");
+        contradictory.Should().BeEmpty("a request is open to anonymous callers, restricted to roles or reserved for the system");
     }
 
     [Fact]

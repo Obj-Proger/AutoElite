@@ -2,7 +2,8 @@ namespace AutoElite.Application.Common.Abstractions;
 
 /// <summary>
 /// The user on whose behalf the current request runs. The API layer implements it from the access token;
-/// background jobs use an anonymous or a system implementation.
+/// background jobs use the system implementation, which sends only requests marked with
+/// <see cref="SystemRequestAttribute"/>.
 /// </summary>
 public interface ICurrentUser
 {
@@ -17,4 +18,10 @@ public interface ICurrentUser
 
     /// <summary>Gets the roles of the signed-in user; empty for an anonymous caller.</summary>
     IReadOnlySet<UserRole> Roles { get; }
+
+    /// <summary>
+    /// Gets a value indicating whether the request is sent by the system itself, such as a scheduled job, rather than
+    /// by a person. The system has no user identifier and no roles.
+    /// </summary>
+    bool IsSystem { get; }
 }

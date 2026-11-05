@@ -20,6 +20,42 @@ public class AuthorizationBehaviorTests
             .Handle(request, () => Next(Result.Success()), CancellationToken.None);
 
     [Fact]
+    public async Task Handle_SystemRequestFromTheSystem_CallsNext()
+    {
+        var result = await Handle(new SystemCommand(), FakeCurrentUser.System());
+
+        result.IsSuccess.Should().BeTrue();
+        _nextCalled.Should().BeTrue();
+    }
+
+    [Fact]
+    public async Task Handle_SystemRequestFromAnAdministrator_ReturnsForbiddenAndSkipsNext()
+    {
+        var result = await Handle(new SystemCommand(), FakeCurrentUser.SignedIn(UserRole.Administrator));
+
+        result.Error.Should().Be(ApplicationErrors.Auth.Forbidden);
+        _nextCalled.Should().BeFalse();
+    }
+
+    [Fact]
+    public async Task Handle_SystemRequestFromAnonymousCaller_ReturnsUnauthenticated()
+    {
+        var result = await Handle(new SystemCommand(), FakeCurrentUser.Anonymous());
+
+        result.Error.Should().Be(ApplicationErrors.Auth.Unauthenticated);
+        _nextCalled.Should().BeFalse();
+    }
+
+    [Fact]
+    public async Task Handle_UnmarkedRequestFromTheSystem_ReturnsUnauthenticated()
+    {
+        var result = await Handle(new TestCommand("name"), FakeCurrentUser.System());
+
+        result.Error.Should().Be(ApplicationErrors.Auth.Unauthenticated);
+        _nextCalled.Should().BeFalse();
+    }
+
+    [Fact]
     public async Task Handle_UnmarkedRequestFromAnonymousCaller_ReturnsUnauthenticatedAndSkipsNext()
     {
         var result = await Handle(new TestCommand("name"), FakeCurrentUser.Anonymous());
