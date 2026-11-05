@@ -1,6 +1,7 @@
 using AutoElite.Application.Chats;
 using AutoElite.Application.Contracts;
 using AutoElite.Application.Courses;
+using AutoElite.Application.Questions;
 using AutoElite.Application.StaffTasks;
 using AutoElite.Application.StudyGroups;
 using AutoElite.Application.TheoryLessons;
@@ -43,6 +44,13 @@ namespace AutoElite.Application.Documents;
 /// <description>Administrators manage; theory instructors contribute; everyone signed in reads.</description>
 /// </item>
 /// <item><term>Chat</term><description>Its current members contribute.</description></item>
+/// <item>
+/// <term>Question</term>
+/// <description>
+/// Administrators manage; theory instructors manage the school's own questions; everyone signed in reads, since tests
+/// show the illustrations.
+/// </description>
+/// </item>
 /// <item><term>Staff task</term><description>Whoever manages the task manages; its assignee contributes.</description></item>
 /// </list>
 /// Documents cannot be attached to other kinds of records.
@@ -56,6 +64,7 @@ internal sealed class DocumentOwners(
     ITheoryLessonRepository lessonRepository,
     ICourseRepository courseRepository,
     IChatRepository chatRepository,
+    IQuestionRepository questionRepository,
     StaffTaskAccess taskAccess,
     ICurrentUser currentUser)
 {
@@ -63,7 +72,7 @@ internal sealed class DocumentOwners(
     public static IReadOnlySet<EntityKind> SupportedKinds { get; } = new HashSet<EntityKind>
     {
         EntityKind.Lead, EntityKind.Contract, EntityKind.User, EntityKind.Vehicle, EntityKind.StudyGroup,
-        EntityKind.TheoryLesson, EntityKind.CourseTopic, EntityKind.Chat, EntityKind.StaffTask
+        EntityKind.TheoryLesson, EntityKind.CourseTopic, EntityKind.Chat, EntityKind.StaffTask, EntityKind.Question
     };
 
     private DataScope Scope => DataScope.For(currentUser);
@@ -88,6 +97,7 @@ internal sealed class DocumentOwners(
             EntityKind.CourseTopic => ForTopicAsync(owner.Id, cancellationToken),
             EntityKind.Chat => ForChatAsync(owner.Id, cancellationToken),
             EntityKind.StaffTask => ForTaskAsync(owner.Id, cancellationToken),
+            EntityKind.Question => ForQuestionAsync(owner.Id, cancellationToken),
             _ => Task.FromResult(DocumentAccessLevel.None)
         };
 
@@ -189,6 +199,18 @@ internal sealed class DocumentOwners(
         return (await taskAccess.LoadForWorkAsync(taskId, cancellationToken)).IsSuccess
             ? DocumentAccessLevel.Contribute
             : DocumentAccessLevel.None;
+    }
+
+    private async Task<DocumentAccessLevel> ForQuestionAsync(Guid questionId, CancellationToken cancellationToken)
+    {
+        var question = await questionRepository.GetByIdAsync(questionId, cancellationToken);
+        if (question is null)
+            return DocumentAccessLevel.None;
+
+        var manages = IsAdministrator
+            || (question.Source == QuestionSource.School && currentUser.IsInRole(UserRole.TheoryInstructor));
+
+        return manages ? DocumentAccessLevel.Manage : DocumentAccessLevel.Read;
     }
 
     private bool ManagesBranch(Guid? branchId) => IsAdministrator || (IsManager && Scope.Includes(branchId));

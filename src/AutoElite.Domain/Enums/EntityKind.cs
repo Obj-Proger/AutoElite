@@ -49,5 +49,8 @@ public enum EntityKind
     ChatMessage = 15,
 
     /// <summary>A staff task.</summary>
-    StaffTask = 16
+    StaffTask = 16,
+
+    /// <summary>A question of the test bank.</summary>
+    Question = 17
 }

@@ -25,8 +25,8 @@ public sealed class SessionQuestion : BaseEntity
     /// <summary>Gets the question text.</summary>
     public string Text { get; private set; } = null!;
 
-    /// <summary>Gets the location of the illustration in file storage, if any.</summary>
-    public string? ImageKey { get; private set; }
+    /// <summary>Gets the document with the illustration as it was when the question was drawn, if any.</summary>
+    public Guid? ImageDocumentId { get; private set; }
 
     /// <summary>Gets the explanation of the correct answer, if any. Shown only after the attempt.</summary>
     public string? Explanation { get; private set; }
@@ -56,7 +56,7 @@ public sealed class SessionQuestion : BaseEntity
         BlockNumber = blockNumber;
         IsAddOn = isAddOn;
         Text = question.Text;
-        ImageKey = question.ImageKey;
+        ImageDocumentId = question.ImageDocumentId;
         Explanation = question.Explanation;
         CorrectOptionId = question.CorrectOption.Id;
         _options.AddRange(question.Options.Select(SessionAnswerOption.CopyOf));

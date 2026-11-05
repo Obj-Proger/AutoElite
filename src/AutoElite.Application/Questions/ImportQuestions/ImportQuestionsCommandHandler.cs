@@ -97,13 +97,13 @@ internal sealed class ImportQuestionsCommandHandler(
                 return Result.Failure<bool>(ApplicationErrors.Question.ImportSourceMismatch);
 
             var updateResult = question.UpdateContent(
-                row.Text, row.Explanation, question.ImageKey, command.TopicId, categoriesResult.Value, code, drafts);
+                row.Text, row.Explanation, command.TopicId, categoriesResult.Value, code, drafts);
 
             return updateResult.IsFailure ? Result.Failure<bool>(updateResult.Error) : true;
         }
 
         var createResult = Question.Create(
-            row.Text, row.Explanation, null, command.TopicId, categoriesResult.Value, command.Source, code, drafts);
+            row.Text, row.Explanation, command.TopicId, categoriesResult.Value, command.Source, code, drafts);
         if (createResult.IsFailure)
             return Result.Failure<bool>(createResult.Error);
 

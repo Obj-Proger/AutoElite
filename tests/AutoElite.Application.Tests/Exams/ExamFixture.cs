@@ -29,7 +29,7 @@ internal sealed class ExamFixture
         for (var index = 0; index < 3; index++)
         {
             Picker.Bank.Add(Question.Create(
-                    $"Question {index}", null, null, topicId, [LicenseCategory.B], QuestionSource.School, null,
+                    $"Question {index}", null, topicId, [LicenseCategory.B], QuestionSource.School, null,
                     [new AnswerOptionDraft("Right", true), new AnswerOptionDraft("Wrong", false)])
                 .Value);
         }

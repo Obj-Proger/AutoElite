@@ -8,8 +8,6 @@ internal sealed class SetMyPhotoCommandHandler(
     IDocumentRepository documentRepository,
     ICurrentUser currentUser) : ICommandHandler<SetMyPhotoCommand>
 {
-    private static readonly HashSet<string> _imageTypes = ["image/jpeg", "image/png", "image/webp"];
-
     /// <inheritdoc />
     public async Task<Result> Handle(SetMyPhotoCommand command, CancellationToken cancellationToken)
     {
@@ -21,8 +19,8 @@ internal sealed class SetMyPhotoCommandHandler(
         if (document is null || document.Owner != EntityReference.Create(EntityKind.User, user.Id).Value)
             return Result.Failure(ApplicationErrors.NotFound<Document>());
 
-        if (!_imageTypes.Contains(document.ContentType))
-            return Result.Failure(ApplicationErrors.Document.PhotoNotAnImage);
+        if (!DocumentImages.IsImage(document))
+            return Result.Failure(ApplicationErrors.Document.ImageRequired);
 
         return user.SetPhoto(document.Id);
     }

@@ -25,7 +25,7 @@ public class ExamTests
         var rules = TestRules.Create(3, TimeSpan.FromMinutes(5), 1, null, 0, TimeSpan.Zero).Value;
         _template = TestTemplate.Create("Final test", LicenseCategory.B, rules, [TestBlock.Create(3, []).Value], null).Value;
         _questions = [.. Enumerable.Range(1, 3).Select(number => Question.Create(
-            $"Question {number}", null, null, _topicId, [LicenseCategory.B], QuestionSource.School, null,
+            $"Question {number}", null, _topicId, [LicenseCategory.B], QuestionSource.School, null,
             [new("Right", true), new("Wrong", false)]).Value)];
     }
 

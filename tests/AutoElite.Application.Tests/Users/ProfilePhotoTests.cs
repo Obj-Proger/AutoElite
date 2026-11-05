@@ -57,13 +57,13 @@ public class ProfilePhotoTests
     }
 
     [Fact]
-    public async Task SetPhoto_Pdf_ReturnsPhotoNotAnImage()
+    public async Task SetPhoto_Pdf_ReturnsImageRequired()
     {
         var scan = SeedDocument(_user.Id, "passport.pdf", "application/pdf");
 
         var result = await SetPhoto(scan);
 
-        result.Error.Should().Be(ApplicationErrors.Document.PhotoNotAnImage);
+        result.Error.Should().Be(ApplicationErrors.Document.ImageRequired);
     }
 
     [Fact]

@@ -35,12 +35,15 @@ internal sealed class DocumentFixture
 
     public InMemoryRepository<StaffTask> Tasks { get; } = new();
 
+    public FakeQuestionRepository Questions { get; } = new();
+
     public FakeDocumentRepository Documents { get; } = new();
 
     public FakeFileStorage Storage { get; } = new();
 
     public DocumentOwners CreateOwners(FakeCurrentUser caller) =>
-        new(Leads, Contracts, Users, Vehicles, Groups, Lessons, Courses, Chats, new StaffTaskAccess(Tasks, Users, caller), caller);
+        new(Leads, Contracts, Users, Vehicles, Groups, Lessons, Courses, Chats, Questions, new StaffTaskAccess(Tasks, Users, caller),
+            caller);
 
     public DocumentAccess CreateAccess(FakeCurrentUser caller) => new(Documents, CreateOwners(caller), Users, caller);
 

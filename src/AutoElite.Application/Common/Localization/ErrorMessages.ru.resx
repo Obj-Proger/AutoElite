@@ -367,6 +367,9 @@
   <data name="Document.FormatNotAllowed" xml:space="preserve">
     <value>Этот формат файла не разрешён.</value>
   </data>
+  <data name="Document.ImageRequired" xml:space="preserve">
+    <value>Документ должен быть изображением JPEG, PNG или WebP.</value>
+  </data>
   <data name="Document.NotFound" xml:space="preserve">
     <value>Документ не найден.</value>
   </data>
@@ -375,9 +378,6 @@
   </data>
   <data name="Document.OwnerNotFound" xml:space="preserve">
     <value>Запись не найдена.</value>
-  </data>
-  <data name="Document.PhotoNotAnImage" xml:space="preserve">
-    <value>Фото профиля должно быть изображением JPEG, PNG или WebP.</value>
   </data>
   <data name="Document.SentInMessage" xml:space="preserve">
     <value>Документ отправлен в сообщении; удалите сообщение.</value>
@@ -847,8 +847,11 @@
   <data name="Question.ExternalCodeTooLong" xml:space="preserve">
     <value>Внешний код превышает допустимую длину.</value>
   </data>
-  <data name="Question.ImageKeyTooLong" xml:space="preserve">
-    <value>Ключ изображения превышает допустимую длину.</value>
+  <data name="Question.ImageDocumentIdEmpty" xml:space="preserve">
+    <value>Идентификатор документа с картинкой не может быть пустым GUID.</value>
+  </data>
+  <data name="Question.ImageNotSet" xml:space="preserve">
+    <value>У вопроса нет картинки.</value>
   </data>
   <data name="Question.ImportCategoryUnknown" xml:space="preserve">
     <value>Неизвестная категория прав.</value>

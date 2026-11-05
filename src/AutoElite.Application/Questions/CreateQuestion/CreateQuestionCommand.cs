@@ -2,7 +2,8 @@ namespace AutoElite.Application.Questions.CreateQuestion;
 
 /// <summary>
 /// Adds a question to the bank (FR-7.1). Administrators add official and school questions; theory instructors add
-/// school questions. An image is attached separately, once documents are stored.
+/// school questions. An illustration is attached afterwards as a document and set with
+/// <see cref="SetQuestionImage.SetQuestionImageCommand"/>.
 /// </summary>
 /// <param name="Text">The question text.</param>
 /// <param name="Explanation">The explanation shown after the test, if any.</param>

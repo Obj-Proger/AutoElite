@@ -49,7 +49,7 @@ public class QuestionHandlerTests
     private Question Seed(QuestionSource source = QuestionSource.School, string? externalCode = null)
     {
         var question = Question.Create(
-                "Old text", null, "images/q1.png", _topicId, [LicenseCategory.B], source, externalCode,
+                "Old text", null, _topicId, [LicenseCategory.B], source, externalCode,
                 [new AnswerOptionDraft("Yes", true), new AnswerOptionDraft("No", false)])
             .Value;
         _questions.Seed(question);
@@ -69,7 +69,7 @@ public class QuestionHandlerTests
         question.Categories.Should().Equal(LicenseCategory.A, LicenseCategory.B);
         question.Options.Select(option => option.Text).Should().Equal("Stop", "Give way", "Speed up");
         question.CorrectOption.Text.Should().Be("Give way");
-        question.ImageKey.Should().BeNull();
+        question.ImageDocumentId.Should().BeNull();
     }
 
     [Fact]
@@ -113,6 +113,8 @@ public class QuestionHandlerTests
     public async Task Update_SchoolQuestion_ReplacesTheContentAndKeepsTheImage()
     {
         var question = Seed();
+        var imageId = Guid.CreateVersion7();
+        question.SetImage(imageId).IsSuccess.Should().BeTrue();
 
         var result = await Update(question, _instructor);
 
@@ -120,7 +122,7 @@ public class QuestionHandlerTests
         question.Text.Should().Be("Who goes first?");
         question.Categories.Should().Equal(LicenseCategory.C);
         question.CorrectOption.Text.Should().Be("The tram");
-        question.ImageKey.Should().Be("images/q1.png");
+        question.ImageDocumentId.Should().Be(imageId);
     }
 
     [Fact]

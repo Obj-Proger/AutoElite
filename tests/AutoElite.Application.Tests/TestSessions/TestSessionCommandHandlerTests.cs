@@ -50,7 +50,7 @@ public class TestSessionCommandHandlerTests
 
     private void SeedQuestion(Guid topicId, string text) =>
         _picker.Bank.Add(Question.Create(
-                text, null, null, topicId, [LicenseCategory.B], QuestionSource.School, null,
+                text, null, topicId, [LicenseCategory.B], QuestionSource.School, null,
                 [new AnswerOptionDraft("Right", true), new AnswerOptionDraft("Wrong", false)])
             .Value);
 

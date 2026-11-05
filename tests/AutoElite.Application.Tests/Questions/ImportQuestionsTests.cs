@@ -35,7 +35,7 @@ public class ImportQuestionsTests
     private Question SeedQuestion(string externalCode, QuestionSource source = QuestionSource.Official)
     {
         var question = Question.Create(
-                "Old text", null, "images/sign.png", _topicId, [LicenseCategory.B], source, externalCode,
+                "Old text", null, _topicId, [LicenseCategory.B], source, externalCode,
                 [new AnswerOptionDraft("Yes", true), new AnswerOptionDraft("No", false)])
             .Value;
         _questions.Seed(question);
@@ -58,13 +58,15 @@ public class ImportQuestionsTests
     public async Task Import_KnownExternalCode_UpdatesThatQuestionAndKeepsItsImage()
     {
         var existing = SeedQuestion("1.1");
+        var imageId = Guid.CreateVersion7();
+        existing.SetImage(imageId).IsSuccess.Should().BeTrue();
         _reader.Rows = [FakeQuestionFileReader.Row(2, "  1.1 ", text: "New text")];
 
         var result = await Import();
 
         result.Value.Should().Be(new QuestionImportResult(Created: 0, Updated: 1));
         existing.Text.Should().Be("New text");
-        existing.ImageKey.Should().Be("images/sign.png");
+        existing.ImageDocumentId.Should().Be(imageId);
         _questions.Items.Should().ContainSingle();
     }
 

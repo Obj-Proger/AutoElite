@@ -13,7 +13,7 @@ internal sealed class CreateQuestionCommandHandler(
             return Result.Failure<Guid>(ApplicationErrors.Question.OfficialAdministratorOnly);
 
         var questionResult = Question.Create(
-            command.Text, command.Explanation, null, command.TopicId, command.Categories ?? [], command.Source, command.ExternalCode,
+            command.Text, command.Explanation, command.TopicId, command.Categories ?? [], command.Source, command.ExternalCode,
             QuestionContent.ToDrafts(command.Options));
         if (questionResult.IsFailure)
             return Result.Failure<Guid>(questionResult.Error);

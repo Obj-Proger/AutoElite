@@ -26,7 +26,6 @@ public sealed class Question : AuditableEntity
 
     private const int MaxTextLength = 2000;
     private const int MaxExplanationLength = 4000;
-    private const int MaxImageKeyLength = 2048;
     private const int MaxOptionTextLength = 1000;
     private const int MaxExternalCodeLength = 50;
 
@@ -39,8 +38,11 @@ public sealed class Question : AuditableEntity
     /// <summary>Gets the explanation of the correct answer, shown after the attempt, if any.</summary>
     public string? Explanation { get; private set; }
 
-    /// <summary>Gets the location of the illustration in file storage, if the question has one.</summary>
-    public string? ImageKey { get; private set; }
+    /// <summary>
+    /// Gets the identifier of the document with the illustration, if the question has one. Checking that the document
+    /// is an image of this question is up to the caller.
+    /// </summary>
+    public Guid? ImageDocumentId { get; private set; }
 
     /// <summary>Gets the identifier of the course topic the question belongs to.</summary>
     public Guid TopicId { get; private set; }
@@ -77,7 +79,6 @@ public sealed class Question : AuditableEntity
     /// <summary>Adds a question to the bank.</summary>
     /// <param name="text">The question text. Required.</param>
     /// <param name="explanation">The explanation of the correct answer, if any.</param>
-    /// <param name="imageKey">The location of the illustration in file storage, if any.</param>
     /// <param name="topicId">The course topic; checking that it exists is up to the caller.</param>
     /// <param name="categories">The licence categories, at least one, without repetitions.</param>
     /// <param name="source">Where the question comes from.</param>
@@ -87,7 +88,6 @@ public sealed class Question : AuditableEntity
     public static Result<Question> Create(
         string? text,
         string? explanation,
-        string? imageKey,
         Guid topicId,
         IReadOnlyCollection<LicenseCategory> categories,
         QuestionSource source,
@@ -100,7 +100,7 @@ public sealed class Question : AuditableEntity
 
         var question = new Question(Guid.CreateVersion7(), source);
 
-        var contentResult = question.ApplyContent(text, explanation, imageKey, topicId, categories, externalCode, options);
+        var contentResult = question.ApplyContent(text, explanation, topicId, categories, externalCode, options);
         if (contentResult.IsFailure)
             return Result.Failure<Question>(contentResult.Error);
 
@@ -115,7 +115,6 @@ public sealed class Question : AuditableEntity
     public Result UpdateContent(
         string? text,
         string? explanation,
-        string? imageKey,
         Guid topicId,
         IReadOnlyCollection<LicenseCategory> categories,
         string? externalCode,
@@ -124,7 +123,36 @@ public sealed class Question : AuditableEntity
         if (!IsActive)
             return Result.Failure(DomainErrors.Question.CannotModifyInactive);
 
-        return ApplyContent(text, explanation, imageKey, topicId, categories, externalCode, options);
+        return ApplyContent(text, explanation, topicId, categories, externalCode, options);
+    }
+
+    /// <summary>Makes a document the illustration of the question. Use <see cref="RemoveImage"/> to clear it.</summary>
+    /// <param name="documentId">The document with the image.</param>
+    /// <returns>A failure if the question is inactive or the identifier is empty.</returns>
+    public Result SetImage(Guid documentId)
+    {
+        if (!IsActive)
+            return Result.Failure(DomainErrors.Question.CannotModifyInactive);
+
+        var documentResult = Guard.NotEmpty(documentId, DomainErrors.Question.ImageDocumentIdEmpty);
+        if (documentResult.IsFailure)
+            return Result.Failure(documentResult.Error);
+
+        ImageDocumentId = documentId;
+
+        return Result.Success();
+    }
+
+    /// <summary>Removes the illustration of the question; attempts already drawn keep it.</summary>
+    /// <returns>A failure if the question has no illustration.</returns>
+    public Result RemoveImage()
+    {
+        if (ImageDocumentId is null)
+            return Result.Failure(DomainErrors.Question.ImageNotSet);
+
+        ImageDocumentId = null;
+
+        return Result.Success();
     }
 
     /// <summary>Takes the question out of use in new tests.</summary>
@@ -155,7 +183,6 @@ public sealed class Question : AuditableEntity
     private Result ApplyContent(
         string? text,
         string? explanation,
-        string? imageKey,
         Guid topicId,
         IReadOnlyCollection<LicenseCategory> categories,
         string? externalCode,
@@ -168,10 +195,6 @@ public sealed class Question : AuditableEntity
         var explanationResult = Guard.OptionalText(explanation, MaxExplanationLength, DomainErrors.Question.ExplanationTooLong);
         if (explanationResult.IsFailure)
             return Result.Failure(explanationResult.Error);
-
-        var imageResult = Guard.OptionalText(imageKey, MaxImageKeyLength, DomainErrors.Question.ImageKeyTooLong);
-        if (imageResult.IsFailure)
-            return Result.Failure(imageResult.Error);
 
         var topicResult = Guard.NotEmpty(topicId, DomainErrors.Question.TopicIdEmpty);
         if (topicResult.IsFailure)
@@ -191,7 +214,6 @@ public sealed class Question : AuditableEntity
 
         Text = textResult.Value;
         Explanation = explanationResult.Value;
-        ImageKey = imageResult.Value;
         TopicId = topicId;
         ExternalCode = codeResult.Value;
 

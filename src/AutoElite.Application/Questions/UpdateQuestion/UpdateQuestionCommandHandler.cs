@@ -13,7 +13,7 @@ internal sealed class UpdateQuestionCommandHandler(QuestionAccess questionAccess
 
         var question = questionResult.Value;
         var updateResult = question.UpdateContent(
-            command.Text, command.Explanation, question.ImageKey, command.TopicId, command.Categories ?? [], command.ExternalCode,
+            command.Text, command.Explanation, command.TopicId, command.Categories ?? [], command.ExternalCode,
             QuestionContent.ToDrafts(command.Options));
         if (updateResult.IsFailure)
             return updateResult;

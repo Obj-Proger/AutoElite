@@ -49,7 +49,7 @@ public sealed record AnswerOptionItem(Guid Id, string Text, int Position, bool I
 /// <param name="Id">The identifier of the question.</param>
 /// <param name="Text">The question text.</param>
 /// <param name="Explanation">The explanation, if any.</param>
-/// <param name="ImageKey">The storage key of the image, if any.</param>
+/// <param name="ImageDocumentId">The document with the image, if any; anyone signed in can download it.</param>
 /// <param name="TopicId">The course topic.</param>
 /// <param name="TopicTitle">The title of the topic.</param>
 /// <param name="CourseId">The course of the topic.</param>
@@ -63,7 +63,7 @@ public sealed record QuestionDetails(
     Guid Id,
     string Text,
     string? Explanation,
-    string? ImageKey,
+    Guid? ImageDocumentId,
     Guid TopicId,
     string TopicTitle,
     Guid CourseId,

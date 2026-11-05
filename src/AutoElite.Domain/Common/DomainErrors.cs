@@ -695,8 +695,11 @@ public static class DomainErrors
         /// <summary>The explanation exceeds the maximum allowed length.</summary>
         public static readonly Error ExplanationTooLong = new("Question.ExplanationTooLong", "Explanation exceeds the maximum allowed length.", ErrorType.Validation);
 
-        /// <summary>The image key exceeds the maximum allowed length.</summary>
-        public static readonly Error ImageKeyTooLong = new("Question.ImageKeyTooLong", "Image key exceeds the maximum allowed length.", ErrorType.Validation);
+        /// <summary>The identifier of the image document is an empty GUID.</summary>
+        public static readonly Error ImageDocumentIdEmpty = new("Question.ImageDocumentIdEmpty", "Image document ID cannot be an empty GUID.", ErrorType.Validation);
+
+        /// <summary>The question has no illustration to remove.</summary>
+        public static readonly Error ImageNotSet = new("Question.ImageNotSet", "The question has no image.", ErrorType.Conflict);
 
         /// <summary>The topic identifier is an empty GUID.</summary>
         public static readonly Error TopicIdEmpty = new("Question.TopicIdEmpty", "Topic ID cannot be an empty GUID.", ErrorType.Validation);

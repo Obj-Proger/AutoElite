@@ -15,26 +15,25 @@ public class QuestionTests
     private static readonly LicenseCategory[] _abm = [LicenseCategory.B, LicenseCategory.A, LicenseCategory.M];
 
     private static Question CreateQuestion() =>
-        Question.Create("Who has the right of way?", null, null, _topicId, _abm, QuestionSource.Official, "ABM-1-1", _options).Value;
+        Question.Create("Who has the right of way?", null, _topicId, _abm, QuestionSource.Official, "ABM-1-1", _options).Value;
 
     private static Result<Question> CreateWithOptions(params AnswerOptionDraft[] options) =>
-        Question.Create("Who has the right of way?", null, null, _topicId, _abm, QuestionSource.School, null, options);
+        Question.Create("Who has the right of way?", null, _topicId, _abm, QuestionSource.School, null, options);
 
     private static Result<Question> CreateWithCategories(params LicenseCategory[] categories) =>
-        Question.Create("Who has the right of way?", null, null, _topicId, categories, QuestionSource.School, null, _options);
+        Question.Create("Who has the right of way?", null, _topicId, categories, QuestionSource.School, null, _options);
 
     [Fact]
     public void Create_ValidData_ReturnsActiveQuestionWithGivenValues()
     {
         var result = Question.Create(
-            "  Who has the right of way?  ", "  The tram, see 13.11  ", "  questions/abm-1-1.png  ",
-            _topicId, _abm, QuestionSource.Official, "  ABM-1-1  ", _options);
+            "  Who has the right of way?  ", "  The tram, see 13.11  ", _topicId, _abm, QuestionSource.Official, "  ABM-1-1  ", _options);
 
         result.IsSuccess.Should().BeTrue();
         var question = result.Value;
         question.Text.Should().Be("Who has the right of way?");
         question.Explanation.Should().Be("The tram, see 13.11");
-        question.ImageKey.Should().Be("questions/abm-1-1.png");
+        question.ImageDocumentId.Should().BeNull();
         question.TopicId.Should().Be(_topicId);
         question.Source.Should().Be(QuestionSource.Official);
         question.ExternalCode.Should().Be("ABM-1-1");
@@ -64,7 +63,7 @@ public class QuestionTests
     [InlineData("   ")]
     public void Create_EmptyText_ReturnsTextEmptyError(string? text)
     {
-        var result = Question.Create(text, null, null, _topicId, _abm, QuestionSource.School, null, _options);
+        var result = Question.Create(text, null, _topicId, _abm, QuestionSource.School, null, _options);
 
         result.IsFailure.Should().BeTrue();
         result.Error.Should().Be(DomainErrors.Question.TextEmpty);
@@ -73,7 +72,7 @@ public class QuestionTests
     [Fact]
     public void Create_TextTooLong_ReturnsTextTooLongError()
     {
-        var result = Question.Create(new string('a', 2001), null, null, _topicId, _abm, QuestionSource.School, null, _options);
+        var result = Question.Create(new string('a', 2001), null, _topicId, _abm, QuestionSource.School, null, _options);
 
         result.Error.Should().Be(DomainErrors.Question.TextTooLong);
     }
@@ -81,23 +80,15 @@ public class QuestionTests
     [Fact]
     public void Create_ExplanationTooLong_ReturnsExplanationTooLongError()
     {
-        var result = Question.Create("Text", new string('a', 4001), null, _topicId, _abm, QuestionSource.School, null, _options);
+        var result = Question.Create("Text", new string('a', 4001), _topicId, _abm, QuestionSource.School, null, _options);
 
         result.Error.Should().Be(DomainErrors.Question.ExplanationTooLong);
     }
 
     [Fact]
-    public void Create_ImageKeyTooLong_ReturnsImageKeyTooLongError()
-    {
-        var result = Question.Create("Text", null, new string('a', 2049), _topicId, _abm, QuestionSource.School, null, _options);
-
-        result.Error.Should().Be(DomainErrors.Question.ImageKeyTooLong);
-    }
-
-    [Fact]
     public void Create_EmptyTopicId_ReturnsTopicIdEmptyError()
     {
-        var result = Question.Create("Text", null, null, Guid.Empty, _abm, QuestionSource.School, null, _options);
+        var result = Question.Create("Text", null, Guid.Empty, _abm, QuestionSource.School, null, _options);
 
         result.Error.Should().Be(DomainErrors.Question.TopicIdEmpty);
     }
@@ -129,7 +120,7 @@ public class QuestionTests
     [Fact]
     public void Create_UndefinedSource_ReturnsSourceNotDefinedError()
     {
-        var result = Question.Create("Text", null, null, _topicId, _abm, (QuestionSource)0, null, _options);
+        var result = Question.Create("Text", null, _topicId, _abm, (QuestionSource)0, null, _options);
 
         result.Error.Should().Be(DomainErrors.Question.SourceNotDefined);
     }
@@ -137,7 +128,7 @@ public class QuestionTests
     [Fact]
     public void Create_ExternalCodeTooLong_ReturnsExternalCodeTooLongError()
     {
-        var result = Question.Create("Text", null, null, _topicId, _abm, QuestionSource.Official, new string('a', 51), _options);
+        var result = Question.Create("Text", null, _topicId, _abm, QuestionSource.Official, new string('a', 51), _options);
 
         result.Error.Should().Be(DomainErrors.Question.ExternalCodeTooLong);
     }
@@ -216,7 +207,7 @@ public class QuestionTests
         var question = CreateQuestion();
         AnswerOptionDraft[] newOptions = [new("Yes", false), new("No", true)];
 
-        var result = question.UpdateContent("Can you overtake here?", "Sign 3.20", null, _otherTopicId, [LicenseCategory.C], null, newOptions);
+        var result = question.UpdateContent("Can you overtake here?", "Sign 3.20", _otherTopicId, [LicenseCategory.C], null, newOptions);
 
         result.IsSuccess.Should().BeTrue();
         question.Text.Should().Be("Can you overtake here?");
@@ -234,7 +225,7 @@ public class QuestionTests
     {
         var question = CreateQuestion();
 
-        var result = question.UpdateContent("Can you overtake here?", null, null, _topicId, _abm, null, [new("Yes", true)]);
+        var result = question.UpdateContent("Can you overtake here?", null, _topicId, _abm, null, [new("Yes", true)]);
 
         result.Error.Should().Be(DomainErrors.Question.TooFewOptions);
         question.Text.Should().Be("Who has the right of way?");
@@ -247,7 +238,7 @@ public class QuestionTests
         var question = CreateQuestion();
         question.Deactivate();
 
-        var result = question.UpdateContent("Can you overtake here?", null, null, _topicId, _abm, null, _options);
+        var result = question.UpdateContent("Can you overtake here?", null, _topicId, _abm, null, _options);
 
         result.Error.Should().Be(DomainErrors.Question.CannotModifyInactive);
     }
@@ -283,5 +274,71 @@ public class QuestionTests
         var result = question.Reactivate();
 
         result.Error.Should().Be(DomainErrors.Question.AlreadyActive);
+    }
+
+    [Fact]
+    public void SetImage_Document_SetsIt()
+    {
+        var question = CreateQuestion();
+        var documentId = Guid.CreateVersion7();
+
+        var result = question.SetImage(documentId);
+
+        result.IsSuccess.Should().BeTrue();
+        question.ImageDocumentId.Should().Be(documentId);
+    }
+
+    [Fact]
+    public void SetImage_EmptyIdentifier_ReturnsImageDocumentIdEmptyError()
+    {
+        var question = CreateQuestion();
+
+        var result = question.SetImage(Guid.Empty);
+
+        result.Error.Should().Be(DomainErrors.Question.ImageDocumentIdEmpty);
+    }
+
+    [Fact]
+    public void SetImage_InactiveQuestion_ReturnsCannotModifyInactiveError()
+    {
+        var question = CreateQuestion();
+        question.Deactivate();
+
+        var result = question.SetImage(Guid.CreateVersion7());
+
+        result.Error.Should().Be(DomainErrors.Question.CannotModifyInactive);
+        question.ImageDocumentId.Should().BeNull();
+    }
+
+    [Fact]
+    public void UpdateContent_QuestionWithImage_KeepsTheImage()
+    {
+        var question = CreateQuestion();
+        var documentId = Guid.CreateVersion7();
+        question.SetImage(documentId);
+
+        question.UpdateContent("Can you overtake here?", null, _topicId, _abm, null, _options);
+
+        question.ImageDocumentId.Should().Be(documentId);
+    }
+
+    [Fact]
+    public void RemoveImage_QuestionWithImage_ClearsIt()
+    {
+        var question = CreateQuestion();
+        question.SetImage(Guid.CreateVersion7());
+
+        var result = question.RemoveImage();
+
+        result.IsSuccess.Should().BeTrue();
+        question.ImageDocumentId.Should().BeNull();
+    }
+
+    [Fact]
+    public void RemoveImage_QuestionWithoutImage_ReturnsImageNotSetError()
+    {
+        var result = CreateQuestion().RemoveImage();
+
+        result.Error.Should().Be(DomainErrors.Question.ImageNotSet);
     }
 }

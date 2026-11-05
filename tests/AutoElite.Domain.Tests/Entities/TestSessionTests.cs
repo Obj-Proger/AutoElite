@@ -33,7 +33,7 @@ public class TestSessionTests
 
     private static Question CreateQuestion(Guid topicId, string text, params LicenseCategory[] categories) =>
         Question.Create(
-            text, "Because of the rules", null, topicId, categories.Length == 0 ? [LicenseCategory.B] : categories,
+            text, "Because of the rules", topicId, categories.Length == 0 ? [LicenseCategory.B] : categories,
             QuestionSource.Official, null, [new("Right", true), new("Wrong", false), new("Also wrong", false)]).Value;
 
     private IReadOnlyList<IReadOnlyList<Question>> MainQuestions() =>
@@ -86,7 +86,7 @@ public class TestSessionTests
         var session = StartExam();
         var bankQuestion = _bank[0][0];
 
-        bankQuestion.UpdateContent("Edited text", null, null, _topicIds[0], [LicenseCategory.B], null, [new("Yes", true), new("No", false)]);
+        bankQuestion.UpdateContent("Edited text", null, _topicIds[0], [LicenseCategory.B], null, [new("Yes", true), new("No", false)]);
 
         var copy = session.Questions[0];
         copy.QuestionId.Should().Be(bankQuestion.Id);

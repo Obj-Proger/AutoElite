@@ -46,7 +46,7 @@ public sealed record SessionOptionItem(Guid OptionId, string Text);
 /// <param name="BlockNumber">The block, from 1.</param>
 /// <param name="IsAddOn">Whether the question was added for a mistake.</param>
 /// <param name="Text">The text, as it was when the question was drawn.</param>
-/// <param name="ImageKey">The storage key of the image, if any.</param>
+/// <param name="ImageDocumentId">The document with the image, if any; anyone signed in can download it.</param>
 /// <param name="Options">The answer options in order.</param>
 /// <param name="SelectedOptionId">The chosen option, if answered.</param>
 /// <param name="CorrectOptionId">The correct option; hidden while the attempt is in progress.</param>
@@ -58,7 +58,7 @@ public sealed record SessionQuestionItem(
     int BlockNumber,
     bool IsAddOn,
     string Text,
-    string? ImageKey,
+    Guid? ImageDocumentId,
     IReadOnlyList<SessionOptionItem> Options,
     Guid? SelectedOptionId,
     Guid? CorrectOptionId,
