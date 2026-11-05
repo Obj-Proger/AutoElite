@@ -8,8 +8,6 @@ internal sealed class RescheduleExamCommandValidator : AbstractValidator<Resched
 {
     public RescheduleExamCommandValidator()
     {
-        RuleFor(command => command.ScheduledAtUtc)
-            .Must(time => time.Kind == DateTimeKind.Utc)
-            .WithError(DomainErrors.TimeInterval.NotUtc);
+        RuleFor(command => command.ScheduledAtUtc).MustBeUtc();
     }
 }

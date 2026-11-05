@@ -129,6 +129,26 @@ public static class ApplicationErrors
             "Course.TopicInUse", "The topic is used by questions, lessons or test templates and cannot be removed.");
     }
 
+    /// <summary>Errors of staff tasks.</summary>
+    public static class StaffTask
+    {
+        /// <summary>The assignee is not an active staff member.</summary>
+        public static readonly Error AssigneeNotStaff = Error.Validation(
+            "StaffTask.AssigneeNotStaff", "Tasks can be given only to active staff members.");
+
+        /// <summary>The assignee works for a branch outside the manager's scope.</summary>
+        public static readonly Error AssigneeOfAnotherBranch = Error.Conflict(
+            "StaffTask.AssigneeOfAnotherBranch", "The staff member works for another branch.");
+
+        /// <summary>Only one of the kind and the identifier of the linked record is given.</summary>
+        public static readonly Error SubjectIncomplete = Error.Validation(
+            "StaffTask.SubjectIncomplete", "The linked record needs both a kind and an identifier.");
+
+        /// <summary>The linked record does not exist.</summary>
+        public static readonly Error SubjectNotFound = Error.Validation(
+            "StaffTask.SubjectNotFound", "The linked record does not exist.");
+    }
+
     /// <summary>Errors of leads that need more than the lead to check.</summary>
     public static class Lead
     {

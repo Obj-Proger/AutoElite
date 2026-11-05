@@ -9,12 +9,13 @@ public class StaffTaskTests
     private static readonly EntityReference _lead = EntityReference.Create(EntityKind.Lead, new("55555555-5555-5555-5555-555555555555")).Value;
 
     private static StaffTask CreateTask(TaskRecurrence recurrence = TaskRecurrence.None) =>
-        StaffTask.Create("Call the lead back", null, _managerId, _due, _lead, recurrence, _now).Value;
+        StaffTask.Create("Call the lead back", null, _managerId, _due, _lead, recurrence, null, _now).Value;
 
     [Fact]
     public void Create_ValidData_ReturnsNewTaskAndRaisesAssignedEvent()
     {
-        var result = StaffTask.Create("  Call the lead back  ", "  Ask about evening groups  ", _managerId, _due, _lead, TaskRecurrence.None, _now);
+        var result = StaffTask.Create(
+            "  Call the lead back  ", "  Ask about evening groups  ", _managerId, _due, _lead, TaskRecurrence.None, null, _now);
 
         result.IsSuccess.Should().BeTrue();
         var task = result.Value;
@@ -26,7 +27,7 @@ public class StaffTaskTests
         task.Recurrence.Should().Be(TaskRecurrence.None);
         task.Status.Should().Be(StaffTaskStatus.New);
         task.DomainEvents.Should().ContainSingle().Which.Should()
-            .Be(new StaffTaskAssignedDomainEvent(task.Id, _managerId, _due, _now));
+            .Be(new StaffTaskAssignedDomainEvent(task.Id, _managerId, null, _due, _now));
     }
 
     [Theory]
@@ -34,7 +35,7 @@ public class StaffTaskTests
     [InlineData("   ")]
     public void Create_EmptyTitle_ReturnsTitleEmptyError(string? title)
     {
-        var result = StaffTask.Create(title, null, _managerId, _due, null, TaskRecurrence.None, _now);
+        var result = StaffTask.Create(title, null, _managerId, _due, null, TaskRecurrence.None, null, _now);
 
         result.Error.Should().Be(DomainErrors.StaffTask.TitleEmpty);
     }
@@ -42,7 +43,7 @@ public class StaffTaskTests
     [Fact]
     public void Create_EmptyAssignee_ReturnsAssigneeIdEmptyError()
     {
-        var result = StaffTask.Create("Task", null, Guid.Empty, _due, null, TaskRecurrence.None, _now);
+        var result = StaffTask.Create("Task", null, Guid.Empty, _due, null, TaskRecurrence.None, null, _now);
 
         result.Error.Should().Be(DomainErrors.StaffTask.AssigneeIdEmpty);
     }
@@ -50,7 +51,7 @@ public class StaffTaskTests
     [Fact]
     public void Create_DueAtCurrentTime_ReturnsDueInPastError()
     {
-        var result = StaffTask.Create("Task", null, _managerId, _now, null, TaskRecurrence.None, _now);
+        var result = StaffTask.Create("Task", null, _managerId, _now, null, TaskRecurrence.None, null, _now);
 
         result.Error.Should().Be(DomainErrors.StaffTask.DueInPast);
     }
@@ -58,7 +59,7 @@ public class StaffTaskTests
     [Fact]
     public void Create_UndefinedRecurrence_ReturnsRecurrenceNotDefinedError()
     {
-        var result = StaffTask.Create("Task", null, _managerId, _due, null, (TaskRecurrence)0, _now);
+        var result = StaffTask.Create("Task", null, _managerId, _due, null, (TaskRecurrence)0, null, _now);
 
         result.Error.Should().Be(DomainErrors.StaffTask.RecurrenceNotDefined);
     }
@@ -117,7 +118,7 @@ public class StaffTaskTests
     public void UpdateDetails_DoneTask_ReturnsAlreadyDoneError()
     {
         var task = CreateTask();
-        task.Complete(_now);
+        task.Complete(null, _now);
 
         var result = task.UpdateDetails("Call", null, _due, null, _now);
 
@@ -130,18 +131,18 @@ public class StaffTaskTests
         var task = CreateTask();
         task.ClearDomainEvents();
 
-        var result = task.Reassign(_otherManagerId, _now);
+        var result = task.Reassign(_otherManagerId, null, _now);
 
         result.IsSuccess.Should().BeTrue();
         task.AssigneeId.Should().Be(_otherManagerId);
         task.DomainEvents.Should().ContainSingle().Which.Should()
-            .Be(new StaffTaskAssignedDomainEvent(task.Id, _otherManagerId, _due, _now));
+            .Be(new StaffTaskAssignedDomainEvent(task.Id, _otherManagerId, null, _due, _now));
     }
 
     [Fact]
     public void Reassign_SameAssignee_ReturnsAlreadyAssignedError()
     {
-        var result = CreateTask().Reassign(_managerId, _now);
+        var result = CreateTask().Reassign(_managerId, null, _now);
 
         result.Error.Should().Be(DomainErrors.StaffTask.AlreadyAssigned);
     }
@@ -177,7 +178,7 @@ public class StaffTaskTests
         if (startFirst)
             task.Start();
 
-        var result = task.Complete(_now);
+        var result = task.Complete(null, _now);
 
         result.IsSuccess.Should().BeTrue();
         result.Value.Should().BeNull();
@@ -189,9 +190,9 @@ public class StaffTaskTests
     public void Complete_DoneTask_ReturnsAlreadyDoneError()
     {
         var task = CreateTask();
-        task.Complete(_now);
+        task.Complete(null, _now);
 
-        var result = task.Complete(_now);
+        var result = task.Complete(null, _now);
 
         result.Error.Should().Be(DomainErrors.StaffTask.AlreadyDone);
     }
@@ -204,7 +205,7 @@ public class StaffTaskTests
     {
         var task = CreateTask(recurrence);
 
-        var next = task.Complete(_now).Value!;
+        var next = task.Complete(null, _now).Value!;
 
         next.Id.Should().NotBe(task.Id);
         next.Title.Should().Be(task.Title);
@@ -222,7 +223,7 @@ public class StaffTaskTests
         var task = CreateTask(TaskRecurrence.Daily);
         var completedAt = _due.AddDays(3).AddHours(1);
 
-        var next = task.Complete(completedAt).Value!;
+        var next = task.Complete(null, completedAt).Value!;
 
         next.DueAtUtc.Should().Be(_due.AddDays(4));
     }
@@ -231,7 +232,7 @@ public class StaffTaskTests
     public void Reopen_DoneTask_ReturnsItToWork()
     {
         var task = CreateTask();
-        task.Complete(_now);
+        task.Complete(null, _now);
 
         var result = task.Reopen();
 
@@ -286,10 +287,56 @@ public class StaffTaskTests
     public void MarkOverdue_DoneTask_ReturnsAlreadyDoneError()
     {
         var task = CreateTask();
-        task.Complete(_now);
+        task.Complete(null, _now);
 
         var result = task.MarkOverdue(_due.AddHours(1));
 
         result.Error.Should().Be(DomainErrors.StaffTask.AlreadyDone);
+    }
+
+    [Fact]
+    public void Create_ByAUser_RecordsTheUserInTheAssignedEvent()
+    {
+        var task = StaffTask.Create("Task", null, _managerId, _due, null, TaskRecurrence.None, _otherManagerId, _now).Value;
+
+        task.DomainEvents.OfType<StaffTaskAssignedDomainEvent>().Single().AssignedByUserId.Should().Be(_otherManagerId);
+    }
+
+    [Fact]
+    public void Create_EmptyCreatingUser_ReturnsUserIdEmptyError()
+    {
+        var result = StaffTask.Create("Task", null, _managerId, _due, null, TaskRecurrence.None, Guid.Empty, _now);
+
+        result.Error.Should().Be(DomainErrors.StaffTask.UserIdEmpty);
+    }
+
+    [Fact]
+    public void Reassign_EmptyUser_ReturnsUserIdEmptyErrorAndKeepsTheAssignee()
+    {
+        var task = CreateTask();
+
+        var result = task.Reassign(_otherManagerId, Guid.Empty, _now);
+
+        result.Error.Should().Be(DomainErrors.StaffTask.UserIdEmpty);
+        task.AssigneeId.Should().Be(_managerId);
+    }
+
+    [Fact]
+    public void Complete_RepeatingTask_RecordsTheCompletingUserInTheNextAssignment()
+    {
+        var next = CreateTask(TaskRecurrence.Weekly).Complete(_managerId, _now).Value!;
+
+        next.DomainEvents.OfType<StaffTaskAssignedDomainEvent>().Single().AssignedByUserId.Should().Be(_managerId);
+    }
+
+    [Fact]
+    public void Complete_EmptyUser_ReturnsUserIdEmptyErrorAndKeepsTheTaskOpen()
+    {
+        var task = CreateTask();
+
+        var result = task.Complete(Guid.Empty, _now);
+
+        result.Error.Should().Be(DomainErrors.StaffTask.UserIdEmpty);
+        task.Status.Should().Be(StaffTaskStatus.New);
     }
 }

@@ -8,8 +8,6 @@ internal sealed class MarkChatReadCommandValidator : AbstractValidator<MarkChatR
 {
     public MarkChatReadCommandValidator()
     {
-        RuleFor(command => command.ReadUpToUtc)
-            .Must(time => time.Kind == DateTimeKind.Utc)
-            .WithError(DomainErrors.TimeInterval.NotUtc);
+        RuleFor(command => command.ReadUpToUtc).MustBeUtc();
     }
 }

@@ -13,6 +13,7 @@ using AutoElite.Application.Notifications.DrivingLessons;
 using AutoElite.Application.Payments;
 using AutoElite.Application.Questions;
 using AutoElite.Application.Settings;
+using AutoElite.Application.StaffTasks;
 using AutoElite.Application.StudyGroups;
 using AutoElite.Application.TestSessions;
 using AutoElite.Application.TestTemplates;
@@ -74,6 +75,9 @@ public static class DependencyInjection
         services.AddScoped<Notifier>();
         services.AddScoped<GroupNotifier>();
         services.AddScoped<DrivingLessonReader>();
+        services.AddScoped<StaffTaskAccess>();
+        services.AddScoped<TaskAssignees>();
+        services.AddScoped<TaskSubjects>();
 
         RegisterOpenGenericImplementations(services, typeof(IRequestHandler<,>));
         RegisterOpenGenericImplementations(services, typeof(IValidator<>));

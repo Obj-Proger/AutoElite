@@ -75,6 +75,7 @@ public sealed class StaffTask : AuditableEntity
     /// <param name="dueAtUtc">The deadline; it must be in the future.</param>
     /// <param name="subject">The object the task is about, if any.</param>
     /// <param name="recurrence">How often the task repeats.</param>
+    /// <param name="createdByUserId">The user setting the task, or <see langword="null"/> for the system.</param>
     /// <param name="utcNow">The current UTC time.</param>
     /// <returns>The task, or the first validation failure encountered.</returns>
     public static Result<StaffTask> Create(
@@ -84,6 +85,7 @@ public sealed class StaffTask : AuditableEntity
         DateTime dueAtUtc,
         EntityReference? subject,
         TaskRecurrence recurrence,
+        Guid? createdByUserId,
         DateTime utcNow)
     {
         var textResult = ValidateText(title, description);
@@ -101,9 +103,13 @@ public sealed class StaffTask : AuditableEntity
         if (recurrenceResult.IsFailure)
             return Result.Failure<StaffTask>(recurrenceResult.Error);
 
+        var actorResult = ValidateActor(createdByUserId);
+        if (actorResult.IsFailure)
+            return Result.Failure<StaffTask>(actorResult.Error);
+
         var (validTitle, validDescription) = textResult.Value;
         var task = new StaffTask(Guid.CreateVersion7(), validTitle, validDescription, assigneeId, dueAtUtc, subject, recurrence);
-        task.RaiseDomainEvent(new StaffTaskAssignedDomainEvent(task.Id, assigneeId, dueAtUtc, utcNow));
+        task.RaiseDomainEvent(new StaffTaskAssignedDomainEvent(task.Id, assigneeId, createdByUserId, dueAtUtc, utcNow));
 
         return task;
     }
@@ -135,8 +141,11 @@ public sealed class StaffTask : AuditableEntity
     }
 
     /// <summary>Gives an open task to another staff member and raises <see cref="StaffTaskAssignedDomainEvent"/>.</summary>
-    /// <returns>A failure if the task is done, the identifier is empty, or it is the current assignee.</returns>
-    public Result Reassign(Guid assigneeId, DateTime utcNow)
+    /// <param name="assigneeId">The new assignee; checking the role is up to the caller.</param>
+    /// <param name="reassignedByUserId">The user giving the task, or <see langword="null"/> for the system.</param>
+    /// <param name="utcNow">The current UTC time.</param>
+    /// <returns>A failure if the task is done, an identifier is empty, or it is the current assignee.</returns>
+    public Result Reassign(Guid assigneeId, Guid? reassignedByUserId, DateTime utcNow)
     {
         if (Status == StaffTaskStatus.Done)
             return Result.Failure(DomainErrors.StaffTask.AlreadyDone);
@@ -145,11 +154,15 @@ public sealed class StaffTask : AuditableEntity
         if (assigneeResult.IsFailure)
             return Result.Failure(assigneeResult.Error);
 
+        var actorResult = ValidateActor(reassignedByUserId);
+        if (actorResult.IsFailure)
+            return actorResult;
+
         if (assigneeId == AssigneeId)
             return Result.Failure(DomainErrors.StaffTask.AlreadyAssigned);
 
         AssigneeId = assigneeId;
-        RaiseDomainEvent(new StaffTaskAssignedDomainEvent(Id, assigneeId, DueAtUtc, utcNow));
+        RaiseDomainEvent(new StaffTaskAssignedDomainEvent(Id, assigneeId, reassignedByUserId, DueAtUtc, utcNow));
 
         return Result.Success();
     }
@@ -167,12 +180,20 @@ public sealed class StaffTask : AuditableEntity
     }
 
     /// <summary>Completes an open task. For a repeating task, returns its next occurrence for the caller to save.</summary>
+    /// <param name="completedByUserId">The user completing the task, or <see langword="null"/> for the system.</param>
     /// <param name="utcNow">The current UTC time.</param>
-    /// <returns>The next occurrence, or <see langword="null"/> for a task that does not repeat; a failure if the task is already done.</returns>
-    public Result<StaffTask?> Complete(DateTime utcNow)
+    /// <returns>
+    /// The next occurrence, or <see langword="null"/> for a task that does not repeat; a failure if the task is already
+    /// done or the user identifier is empty.
+    /// </returns>
+    public Result<StaffTask?> Complete(Guid? completedByUserId, DateTime utcNow)
     {
         if (Status == StaffTaskStatus.Done)
             return Result.Failure<StaffTask?>(DomainErrors.StaffTask.AlreadyDone);
+
+        var actorResult = ValidateActor(completedByUserId);
+        if (actorResult.IsFailure)
+            return Result.Failure<StaffTask?>(actorResult.Error);
 
         Status = StaffTaskStatus.Done;
         CompletedAtUtc = utcNow;
@@ -182,7 +203,7 @@ public sealed class StaffTask : AuditableEntity
 
         var next = new StaffTask(
             Guid.CreateVersion7(), Title, Description, AssigneeId, NextDueAfter(utcNow), Subject, Recurrence);
-        next.RaiseDomainEvent(new StaffTaskAssignedDomainEvent(next.Id, AssigneeId, next.DueAtUtc, utcNow));
+        next.RaiseDomainEvent(new StaffTaskAssignedDomainEvent(next.Id, AssigneeId, completedByUserId, next.DueAtUtc, utcNow));
 
         return Result.Success<StaffTask?>(next);
     }
@@ -239,6 +260,9 @@ public sealed class StaffTask : AuditableEntity
 
         return due;
     }
+
+    private static Result ValidateActor(Guid? userId) =>
+        userId is { } id ? Guard.NotEmpty(id, DomainErrors.StaffTask.UserIdEmpty) : Result.Success();
 
     private static Result<(string Title, string? Description)> ValidateText(string? title, string? description)
     {

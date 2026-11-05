@@ -820,6 +820,9 @@ public static class DomainErrors
 
         /// <summary>The assignee was already reminded for this deadline.</summary>
         public static readonly Error OverdueAlreadyNotified = new("StaffTask.OverdueAlreadyNotified", "The overdue reminder was already sent.", ErrorType.Conflict);
+
+        /// <summary>The identifier of the acting user is an empty GUID.</summary>
+        public static readonly Error UserIdEmpty = new("StaffTask.UserIdEmpty", "User ID cannot be an empty GUID.", ErrorType.Validation);
     }
 
     /// <summary>Errors related to the <see cref="Entities.StudyGroup"/> aggregate.</summary>

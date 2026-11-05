@@ -910,6 +910,12 @@
   <data name="StaffTask.AssigneeIdEmpty" xml:space="preserve">
     <value>Идентификатор исполнителя не может быть пустым.</value>
   </data>
+  <data name="StaffTask.AssigneeNotStaff" xml:space="preserve">
+    <value>Задачу можно поставить только действующему сотруднику.</value>
+  </data>
+  <data name="StaffTask.AssigneeOfAnotherBranch" xml:space="preserve">
+    <value>Сотрудник работает в другом филиале.</value>
+  </data>
   <data name="StaffTask.DescriptionTooLong" xml:space="preserve">
     <value>Описание задачи превышает допустимую длину.</value>
   </data>
@@ -934,11 +940,20 @@
   <data name="StaffTask.RecurrenceNotDefined" xml:space="preserve">
     <value>Недопустимая периодичность.</value>
   </data>
+  <data name="StaffTask.SubjectIncomplete" xml:space="preserve">
+    <value>Для связанной записи нужны и тип, и идентификатор.</value>
+  </data>
+  <data name="StaffTask.SubjectNotFound" xml:space="preserve">
+    <value>Связанная запись не существует.</value>
+  </data>
   <data name="StaffTask.TitleEmpty" xml:space="preserve">
     <value>Название задачи не может быть пустым.</value>
   </data>
   <data name="StaffTask.TitleTooLong" xml:space="preserve">
     <value>Название задачи превышает допустимую длину.</value>
+  </data>
+  <data name="StaffTask.UserIdEmpty" xml:space="preserve">
+    <value>Идентификатор пользователя не может быть пустым GUID.</value>
   </data>
   <data name="StudyGroup.AlreadyActive" xml:space="preserve">
     <value>Группа уже активна.</value>

@@ -12,8 +12,6 @@ internal sealed class ScheduleExamCommandValidator : AbstractValidator<ScheduleE
             .IsInEnum()
             .WithError(DomainErrors.Exam.KindNotDefined);
 
-        RuleFor(command => command.ScheduledAtUtc)
-            .Must(time => time.Kind == DateTimeKind.Utc)
-            .WithError(DomainErrors.TimeInterval.NotUtc);
+        RuleFor(command => command.ScheduledAtUtc).MustBeUtc();
     }
 }
