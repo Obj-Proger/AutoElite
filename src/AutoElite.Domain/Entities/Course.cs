@@ -22,8 +22,11 @@ public sealed class Course : AuditableEntity
     /// <summary>The largest number of theory or practice hours a course may have.</summary>
     public const int MaxHours = 1000;
 
-    private const int MaxNameLength = 200;
-    private const int MaxDescriptionLength = 2000;
+    /// <summary>The longest course name.</summary>
+    public const int MaxNameLength = 200;
+
+    /// <summary>The longest course description.</summary>
+    public const int MaxDescriptionLength = 2000;
 
     private readonly List<CourseTopic> _topics = [];
 

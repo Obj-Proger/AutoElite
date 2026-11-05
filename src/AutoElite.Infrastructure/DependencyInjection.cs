@@ -1,4 +1,5 @@
 using AutoElite.Application.Branches;
+using AutoElite.Application.Courses;
 using AutoElite.Application.Leads;
 using AutoElite.Application.Settings;
 using AutoElite.Application.Users;
@@ -49,14 +50,21 @@ public static class DependencyInjection
             options.UseAutoElite(connectionString, provider.GetRequiredService<AuditInterceptor>()));
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+        // A repository with its own interface also serves as the generic one, which some handlers ask for.
         services.AddScoped<IBranchRepository, BranchRepository>();
+        services.AddScoped<IRepository<Branch>>(provider => provider.GetRequiredService<IBranchRepository>());
         services.AddScoped<IBranchQueries, BranchQueries>();
         services.AddScoped<ISchoolSettingsRepository, SchoolSettingsRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IRepository<User>>(provider => provider.GetRequiredService<IUserRepository>());
         services.AddScoped<IUserRoleRepository, UserRoleRepository>();
+        services.AddScoped<IRepository<UserRoleAssignment>>(provider => provider.GetRequiredService<IUserRoleRepository>());
         services.AddScoped<IUserQueries, UserQueries>();
         services.AddScoped<IRepository<Lead>, LeadRepository>();
         services.AddScoped<ILeadQueries, LeadQueries>();
+        services.AddScoped<ICourseRepository, CourseRepository>();
+        services.AddScoped<IRepository<Course>>(provider => provider.GetRequiredService<ICourseRepository>());
+        services.AddScoped<ICourseQueries, CourseQueries>();
 
         AddAccounts(services);
         AddSessions(services, configuration);

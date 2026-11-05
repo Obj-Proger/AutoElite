@@ -1,3 +1,4 @@
+using AutoElite.Infrastructure.Persistence.Conversions;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace AutoElite.Infrastructure.Persistence.Configurations;
@@ -60,6 +61,27 @@ internal static class EntityTypeBuilderExtensions
         builder.Property<Guid>(rootKey);
         builder.Ignore(entity => entity.DomainEvents);
     }
+
+    /// <summary>
+    /// Maps <see cref="Money"/> to the columns <c>{prefix}_amount</c>, with the precision of
+    /// <see cref="Money.MaxAbsoluteAmount"/> and two decimals, and <c>{prefix}_currency</c>.
+    /// </summary>
+    /// <param name="money">The builder of the complex property.</param>
+    /// <remarks>
+    /// The currency is mapped explicitly as a converted column: left to the conventions, a value object inside a
+    /// complex type is not taken as a column, and the constructor of <see cref="Money"/> could not be bound.
+    /// </remarks>
+    public static void MapMoney(this ComplexPropertyBuilder<Money> money)
+    {
+        money.Property(value => value.Amount).HasPrecision(MoneyPrecision, MoneyScale);
+        money.Property(value => value.Currency).HasConversion<CurrencyConverter>().HasMaxLength(Currency.CodeLength);
+    }
+
+    /// <summary>The digits of an amount: enough for <see cref="Money.MaxAbsoluteAmount"/>.</summary>
+    public const int MoneyPrecision = 14;
+
+    /// <summary>The decimals of an amount; currencies without minor units store zeros there.</summary>
+    public const int MoneyScale = 2;
 
     /// <summary>Maps an <see cref="Address"/> to the columns <c>{prefix}_city</c> and <c>{prefix}_street</c>.</summary>
     /// <param name="address">The builder of the complex property.</param>

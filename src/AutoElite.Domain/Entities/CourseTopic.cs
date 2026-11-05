@@ -3,8 +3,11 @@ namespace AutoElite.Domain.Entities;
 /// <summary>A topic of a <see cref="Course"/>'s curriculum. Part of the course aggregate.</summary>
 public sealed class CourseTopic : BaseEntity
 {
-    private const int MaxTitleLength = 200;
-    private const int MaxDescriptionLength = 2000;
+    /// <summary>The longest topic title.</summary>
+    public const int MaxTitleLength = 200;
+
+    /// <summary>The longest topic description.</summary>
+    public const int MaxDescriptionLength = 2000;
 
     /// <summary>Gets the title of the topic, unique within the course regardless of letter case.</summary>
     public string Title { get; private set; } = null!;
