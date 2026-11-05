@@ -55,7 +55,7 @@ public class ImportQuestionsTests
 
         result.Value.Should().Be(new QuestionImportResult(Created: 2, Updated: 0, Images: 0));
         _questions.Items.Should().HaveCount(2).And.OnlyContain(question => question.TopicId == _topicId);
-        _reader.Disposed.Should().BeTrue();
+        _reader.FileDisposed.Should().BeTrue();
     }
 
     [Fact]
