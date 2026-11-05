@@ -37,11 +37,17 @@ public sealed class Contract : AuditableEntity
     /// <summary>The longest practice lesson that can be recorded at once, in hours.</summary>
     public const decimal MaxLessonHours = 12m;
 
-    private const int MaxNumberLength = 50;
-    private const int MaxTerminationReasonLength = 1000;
-    private const int GradeDecimals = 2;
+    /// <summary>The longest contract number.</summary>
+    public const int MaxNumberLength = 50;
 
-    private readonly List<decimal> _recentGrades = [];
+    /// <summary>The longest reason of termination.</summary>
+    public const int MaxTerminationReasonLength = 1000;
+
+    /// <summary>The decimals of a grade and of the quality score.</summary>
+    public const int GradeDecimals = 2;
+
+    // Not read-only, so that the persistence layer can load the stored grades into it.
+    private List<decimal> _recentGrades = [];
 
     /// <summary>Gets the contract number printed on the paper contract, unique within the school.</summary>
     public string Number { get; private set; } = null!;

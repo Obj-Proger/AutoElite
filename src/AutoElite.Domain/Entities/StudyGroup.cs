@@ -23,7 +23,8 @@ public sealed class StudyGroup : AuditableEntity
     /// <summary>The largest number of students a group may hold.</summary>
     public const int MaxCapacity = 100;
 
-    private const int MaxNameLength = 200;
+    /// <summary>The longest group name.</summary>
+    public const int MaxNameLength = 200;
 
     private readonly List<GroupEnrollment> _enrollments = [];
 

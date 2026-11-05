@@ -1,7 +1,9 @@
 using AutoElite.Application.Branches;
+using AutoElite.Application.Contracts;
 using AutoElite.Application.Courses;
 using AutoElite.Application.Leads;
 using AutoElite.Application.Settings;
+using AutoElite.Application.StudyGroups;
 using AutoElite.Application.Users;
 using AutoElite.Application.Users.Authentication;
 using AutoElite.Infrastructure.Authentication;
@@ -65,6 +67,13 @@ public static class DependencyInjection
         services.AddScoped<ICourseRepository, CourseRepository>();
         services.AddScoped<IRepository<Course>>(provider => provider.GetRequiredService<ICourseRepository>());
         services.AddScoped<ICourseQueries, CourseQueries>();
+        services.AddScoped<IContractRepository, ContractRepository>();
+        services.AddScoped<IRepository<Contract>>(provider => provider.GetRequiredService<IContractRepository>());
+        services.AddScoped<IContractQueries, ContractQueries>();
+        services.AddScoped<IContractNumberGenerator, ContractNumberGenerator>();
+        services.AddScoped<IStudyGroupRepository, StudyGroupRepository>();
+        services.AddScoped<IRepository<StudyGroup>>(provider => provider.GetRequiredService<IStudyGroupRepository>());
+        services.AddScoped<IStudyGroupQueries, StudyGroupQueries>();
 
         AddAccounts(services);
         AddSessions(services, configuration);
