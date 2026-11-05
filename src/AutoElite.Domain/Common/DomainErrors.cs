@@ -1100,11 +1100,8 @@ public static class DomainErrors
         /// <summary>The branch identifier was provided but is an empty GUID.</summary>
         public static readonly Error BranchIdEmpty = new("User.BranchIdEmpty", "Branch ID cannot be an empty GUID.", ErrorType.Validation);
 
-        /// <summary>The photo URL is null, empty, or whitespace.</summary>
-        public static readonly Error PhotoUrlEmpty = new("User.PhotoUrlEmpty", "Photo URL cannot be empty.", ErrorType.Validation);
-
-        /// <summary>The photo URL exceeds the maximum allowed length.</summary>
-        public static readonly Error PhotoUrlTooLong = new("User.PhotoUrlTooLong", "Photo URL exceeds the maximum allowed length.", ErrorType.Validation);
+        /// <summary>The identifier of the photo document is an empty GUID.</summary>
+        public static readonly Error PhotoDocumentIdEmpty = new("User.PhotoDocumentIdEmpty", "Photo document ID cannot be an empty GUID.", ErrorType.Validation);
 
         /// <summary>The user is already active, so activating it again is not a valid transition.</summary>
         public static readonly Error AlreadyActive = new("User.AlreadyActive", "User is already active.", ErrorType.Conflict);

@@ -376,6 +376,9 @@
   <data name="Document.OwnerNotFound" xml:space="preserve">
     <value>Запись не найдена.</value>
   </data>
+  <data name="Document.PhotoNotAnImage" xml:space="preserve">
+    <value>Фото профиля должно быть изображением JPEG, PNG или WebP.</value>
+  </data>
   <data name="Document.SentInMessage" xml:space="preserve">
     <value>Документ отправлен в сообщении; удалите сообщение.</value>
   </data>
@@ -1279,14 +1282,11 @@
   <data name="User.NotFound" xml:space="preserve">
     <value>Пользователь не найден.</value>
   </data>
+  <data name="User.PhotoDocumentIdEmpty" xml:space="preserve">
+    <value>Идентификатор документа с фото не может быть пустым GUID.</value>
+  </data>
   <data name="User.PhotoNotSet" xml:space="preserve">
     <value>У пользователя нет фотографии профиля.</value>
-  </data>
-  <data name="User.PhotoUrlEmpty" xml:space="preserve">
-    <value>Адрес фотографии не может быть пустым.</value>
-  </data>
-  <data name="User.PhotoUrlTooLong" xml:space="preserve">
-    <value>Адрес фотографии превышает допустимую длину.</value>
   </data>
   <data name="UserRoleAssignment.AlreadyAssigned" xml:space="preserve">
     <value>У пользователя уже есть эта роль.</value>

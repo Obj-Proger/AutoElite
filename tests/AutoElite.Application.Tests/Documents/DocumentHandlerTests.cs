@@ -225,6 +225,25 @@ public class DocumentHandlerTests
         result.Error.Should().Be(ApplicationErrors.NotFound<Document>());
     }
 
+    [Theory]
+    [InlineData(true, true)]
+    [InlineData(false, false)]
+    public async Task GetFile_DocumentOfAnotherUser_IsReadableOnlyIfItIsTheirProfilePhoto(bool isPhoto, bool readable)
+    {
+        _fixture.Users.Seed(_student);
+        var document = _fixture.SeedDocument(EntityReference.Create(EntityKind.User, _student.Id).Value, _student.Id);
+        if (isPhoto)
+            _student.SetPhoto(document.Id).IsSuccess.Should().BeTrue();
+
+        var otherStudent = DocumentFixture.Caller(Guid.CreateVersion7(), UserRole.Student);
+        var result = await new GetDocumentFileQueryHandler(_fixture.CreateAccess(otherStudent), _fixture.Storage)
+            .Handle(new GetDocumentFileQuery(document.Id), TestContext.Current.CancellationToken);
+
+        result.IsSuccess.Should().Be(readable);
+        if (result.IsSuccess)
+            await result.Value.Content.DisposeAsync();
+    }
+
     [Fact]
     public async Task GetDocuments_CallerWhoMayRead_ReadsTheOwnersList()
     {

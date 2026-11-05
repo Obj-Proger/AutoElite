@@ -159,6 +159,10 @@ public static class ApplicationErrors
         public static readonly Error SentInMessage = Error.Conflict(
             "Document.SentInMessage", "The document was sent in a message; delete the message instead.");
 
+        /// <summary>A profile photo must be a JPEG, PNG or WebP image.</summary>
+        public static readonly Error PhotoNotAnImage = Error.Validation(
+            "Document.PhotoNotAnImage", "A profile photo must be a JPEG, PNG or WebP image.");
+
         /// <summary>No file content was given.</summary>
         public static readonly Error ContentMissing = Error.Validation("Document.ContentMissing", "The file content is missing.");
     }

@@ -34,7 +34,7 @@ public class UserTests
         result.Value.Email.Should().Be(_email);
         result.Value.Phone.Should().Be(_phone);
         result.Value.BranchId.Should().Be(_branchId);
-        result.Value.PhotoUrl.Should().BeNull();
+        result.Value.PhotoDocumentId.Should().BeNull();
         result.Value.IsActive.Should().BeTrue();
     }
 
@@ -181,87 +181,50 @@ public class UserTests
     }
 
     [Fact]
-    public void UpdatePhotoUrl_ValidUrl_SetsTrimmedUrl()
+    public void SetPhoto_Document_SetsIt()
     {
         var user = CreateUser();
+        var documentId = Guid.CreateVersion7();
 
-        var result = user.UpdatePhotoUrl("  https://example.com/photo.jpg  ");
+        var result = user.SetPhoto(documentId);
 
         result.IsSuccess.Should().BeTrue();
-        user.PhotoUrl.Should().Be("https://example.com/photo.jpg");
+        user.PhotoDocumentId.Should().Be(documentId);
     }
 
-    [Theory]
-    [InlineData(null)]
-    [InlineData("")]
-    [InlineData("   ")]
-    public void UpdatePhotoUrl_NullEmptyOrWhitespace_ReturnsPhotoUrlEmptyError(string? photoUrl)
+    [Fact]
+    public void SetPhoto_EmptyIdentifier_ReturnsPhotoDocumentIdEmptyError()
     {
         var user = CreateUser();
 
-        var result = user.UpdatePhotoUrl(photoUrl);
+        var result = user.SetPhoto(Guid.Empty);
 
-        result.IsFailure.Should().BeTrue();
-        result.Error.Should().Be(DomainErrors.User.PhotoUrlEmpty);
-        user.PhotoUrl.Should().BeNull();
+        result.Error.Should().Be(DomainErrors.User.PhotoDocumentIdEmpty);
+        user.PhotoDocumentId.Should().BeNull();
     }
 
     [Fact]
-    public void UpdatePhotoUrl_UrlExactlyAtMaximumLength_SetsUrl()
+    public void SetPhoto_InactiveUser_ReturnsCannotModifyInactiveError()
     {
         var user = CreateUser();
-        var photoUrl = new string('a', 2048);
+        user.Deactivate(_now);
 
-        var result = user.UpdatePhotoUrl(photoUrl);
-
-        result.IsSuccess.Should().BeTrue();
-        user.PhotoUrl.Should().Be(photoUrl);
-    }
-
-    [Fact]
-    public void UpdatePhotoUrl_UrlExceedingMaximumLength_ReturnsPhotoUrlTooLongError()
-    {
-        var user = CreateUser();
-
-        var result = user.UpdatePhotoUrl(new string('a', 2049));
-
-        result.IsFailure.Should().BeTrue();
-        result.Error.Should().Be(DomainErrors.User.PhotoUrlTooLong);
-        user.PhotoUrl.Should().BeNull();
-    }
-
-    [Fact]
-    public void UpdatePhotoUrl_InactiveUser_ReturnsCannotModifyInactiveError()
-    {
-        var user = CreateInactiveUser();
-
-        var result = user.UpdatePhotoUrl("https://example.com/photo.jpg");
-
-        result.IsFailure.Should().BeTrue();
-        result.Error.Should().Be(DomainErrors.User.CannotModifyInactive);
-        user.PhotoUrl.Should().BeNull();
-    }
-
-    [Fact]
-    public void UpdatePhotoUrl_InactiveUserAndEmptyUrl_ReportsInactiveFirst()
-    {
-        var user = CreateInactiveUser();
-
-        var result = user.UpdatePhotoUrl(null);
+        var result = user.SetPhoto(Guid.CreateVersion7());
 
         result.Error.Should().Be(DomainErrors.User.CannotModifyInactive);
+        user.PhotoDocumentId.Should().BeNull();
     }
 
     [Fact]
     public void RemovePhoto_UserWithPhoto_ClearsPhoto()
     {
         var user = CreateUser();
-        user.UpdatePhotoUrl("https://example.com/photo.jpg");
+        user.SetPhoto(Guid.CreateVersion7());
 
         var result = user.RemovePhoto();
 
         result.IsSuccess.Should().BeTrue();
-        user.PhotoUrl.Should().BeNull();
+        user.PhotoDocumentId.Should().BeNull();
     }
 
     [Fact]
@@ -271,7 +234,6 @@ public class UserTests
 
         var result = user.RemovePhoto();
 
-        result.IsFailure.Should().BeTrue();
         result.Error.Should().Be(DomainErrors.User.PhotoNotSet);
     }
 
@@ -279,14 +241,14 @@ public class UserTests
     public void RemovePhoto_InactiveUserWithPhoto_ReturnsCannotModifyInactiveErrorAndKeepsPhoto()
     {
         var user = CreateUser();
-        user.UpdatePhotoUrl("https://example.com/photo.jpg");
+        var documentId = Guid.CreateVersion7();
+        user.SetPhoto(documentId);
         user.Deactivate(_now);
 
         var result = user.RemovePhoto();
 
-        result.IsFailure.Should().BeTrue();
         result.Error.Should().Be(DomainErrors.User.CannotModifyInactive);
-        user.PhotoUrl.Should().Be("https://example.com/photo.jpg");
+        user.PhotoDocumentId.Should().Be(documentId);
     }
 
     [Fact]

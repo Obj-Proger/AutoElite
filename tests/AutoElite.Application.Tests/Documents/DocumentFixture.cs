@@ -42,7 +42,7 @@ internal sealed class DocumentFixture
     public DocumentOwners CreateOwners(FakeCurrentUser caller) =>
         new(Leads, Contracts, Users, Vehicles, Groups, Lessons, Courses, Chats, new StaffTaskAccess(Tasks, Users, caller), caller);
 
-    public DocumentAccess CreateAccess(FakeCurrentUser caller) => new(Documents, CreateOwners(caller), caller);
+    public DocumentAccess CreateAccess(FakeCurrentUser caller) => new(Documents, CreateOwners(caller), Users, caller);
 
     public static FakeCurrentUser Caller(Guid userId, UserRole role, Guid? branchId = null) =>
         new() { UserId = userId, BranchId = branchId, Roles = new HashSet<UserRole> { role } };

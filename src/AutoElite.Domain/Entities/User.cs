@@ -15,8 +15,6 @@ namespace AutoElite.Domain.Entities;
 /// </remarks>
 public sealed class User : AuditableEntity
 {
-    private const int MaxPhotoUrlLength = 2048;
-
     /// <summary>Gets the user's full name.</summary>
     public FullName FullName { get; private set; } = null!;
 
@@ -26,8 +24,11 @@ public sealed class User : AuditableEntity
     /// <summary>Gets the user's phone number, or <see langword="null"/> if not provided.</summary>
     public PhoneNumber? Phone { get; private set; }
 
-    /// <summary>Gets the location of the user's profile photo in file storage, or <see langword="null"/> if not set.</summary>
-    public string? PhotoUrl { get; private set; }
+    /// <summary>
+    /// Gets the identifier of the document that is the user's profile photo, or <see langword="null"/> if not set.
+    /// Checking that the document is the user's image is up to the caller.
+    /// </summary>
+    public Guid? PhotoDocumentId { get; private set; }
 
     /// <summary>
     /// Gets the identifier of the branch the user is assigned to,
@@ -124,18 +125,19 @@ public sealed class User : AuditableEntity
         return Result.Success();
     }
 
-    /// <summary>Sets the location of the user's profile photo. Use <see cref="RemovePhoto"/> to clear it.</summary>
-    /// <returns>A failure if the user is inactive, or the URL is empty or too long.</returns>
-    public Result UpdatePhotoUrl(string? photoUrl)
+    /// <summary>Makes a document the user's profile photo. Use <see cref="RemovePhoto"/> to clear it.</summary>
+    /// <param name="documentId">The document with the photo.</param>
+    /// <returns>A failure if the user is inactive or the identifier is empty.</returns>
+    public Result SetPhoto(Guid documentId)
     {
         if (!IsActive)
             return Result.Failure(DomainErrors.User.CannotModifyInactive);
 
-        var photoUrlResult = Guard.RequiredText(photoUrl, MaxPhotoUrlLength, DomainErrors.User.PhotoUrlEmpty, DomainErrors.User.PhotoUrlTooLong);
-        if (photoUrlResult.IsFailure)
-            return Result.Failure(photoUrlResult.Error);
+        var documentResult = Guard.NotEmpty(documentId, DomainErrors.User.PhotoDocumentIdEmpty);
+        if (documentResult.IsFailure)
+            return Result.Failure(documentResult.Error);
 
-        PhotoUrl = photoUrlResult.Value;
+        PhotoDocumentId = documentId;
 
         return Result.Success();
     }
@@ -147,10 +149,10 @@ public sealed class User : AuditableEntity
         if (!IsActive)
             return Result.Failure(DomainErrors.User.CannotModifyInactive);
 
-        if (PhotoUrl is null)
+        if (PhotoDocumentId is null)
             return Result.Failure(DomainErrors.User.PhotoNotSet);
 
-        PhotoUrl = null;
+        PhotoDocumentId = null;
 
         return Result.Success();
     }
