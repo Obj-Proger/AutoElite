@@ -868,6 +868,9 @@
   <data name="Question.ImportFormatNotSupported" xml:space="preserve">
     <value>Формат файла не поддерживается.</value>
   </data>
+  <data name="Question.ImportImageMissing" xml:space="preserve">
+    <value>Картинки вопроса нет в файле.</value>
+  </data>
   <data name="Question.ImportInvalid" xml:space="preserve">
     <value>В файле есть ошибочные вопросы, поэтому ничего не импортировано.</value>
   </data>

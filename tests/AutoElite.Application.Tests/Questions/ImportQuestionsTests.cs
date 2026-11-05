@@ -12,6 +12,8 @@ public class ImportQuestionsTests
     private readonly FakeQuestionRepository _questions = new();
     private readonly FakeCourseRepository _courses = new();
     private readonly FakeQuestionFileReader _reader = new();
+    private readonly FakeDocumentRepository _documents = new();
+    private readonly FakeFileStorage _storage = new();
     private readonly Guid _topicId;
 
     public ImportQuestionsTests()
@@ -28,7 +30,8 @@ public class ImportQuestionsTests
         await using var content = new MemoryStream([1]);
 
         return await new ImportQuestionsCommandHandler(
-                _reader, _questions, new QuestionAccess(_questions, caller), new QuestionContent(_questions, _courses))
+                _reader, _questions, new QuestionAccess(_questions, caller), new QuestionContent(_questions, _courses), _documents,
+                _storage, caller, TestData.Clock())
             .Handle(new ImportQuestionsCommand(content, "questions.xlsx", _topicId, source), TestContext.Current.CancellationToken);
     }
 
@@ -50,8 +53,93 @@ public class ImportQuestionsTests
 
         var result = await Import();
 
-        result.Value.Should().Be(new QuestionImportResult(Created: 2, Updated: 0));
+        result.Value.Should().Be(new QuestionImportResult(Created: 2, Updated: 0, Images: 0));
         _questions.Items.Should().HaveCount(2).And.OnlyContain(question => question.TopicId == _topicId);
+        _reader.Disposed.Should().BeTrue();
+    }
+
+    [Fact]
+    public async Task Import_RowWithImage_StoresItAsADocumentOfTheQuestion()
+    {
+        _reader.AddImage("A_B/1.png", [1, 2, 3]);
+        _reader.Rows = [FakeQuestionFileReader.Row(2, "1.1", imageName: "A_B/1.png")];
+
+        var result = await Import();
+
+        result.Value.Should().Be(new QuestionImportResult(Created: 1, Updated: 0, Images: 1));
+        var question = _questions.Items.Single();
+        var image = _documents.Items.Single();
+        image.Owner.Should().Be(EntityReference.Create(EntityKind.Question, question.Id).Value);
+        image.FileName.Should().Be("1.png");
+        image.ContentType.Should().Be("image/png");
+        question.ImageDocumentId.Should().Be(image.Id);
+        _storage.Files[image.StorageKey].Should().Equal(1, 2, 3);
+    }
+
+    [Fact]
+    public async Task Import_KnownExternalCodeWithImage_ReplacesTheIllustration()
+    {
+        var existing = SeedQuestion("1.1");
+        existing.SetImage(Guid.CreateVersion7()).IsSuccess.Should().BeTrue();
+        _reader.AddImage("1.jpg", [1, 2]);
+        _reader.Rows = [FakeQuestionFileReader.Row(2, "1.1", imageName: "1.jpg")];
+
+        var result = await Import();
+
+        result.Value.Should().Be(new QuestionImportResult(Created: 0, Updated: 1, Images: 1));
+        existing.ImageDocumentId.Should().Be(_documents.Items.Single().Id);
+    }
+
+    [Fact]
+    public async Task Import_ImageNotInTheFile_ReportsTheRowAndStoresNothing()
+    {
+        _reader.AddImage("1.png", [1]);
+        _reader.Rows =
+        [
+            FakeQuestionFileReader.Row(2, imageName: "1.png"),
+            FakeQuestionFileReader.Row(3, imageName: "2.png")
+        ];
+
+        var result = await Import();
+
+        var missing = ApplicationErrors.Question.ImportImageMissing;
+        result.Error.FieldErrors.Should().Equal(new FieldError("rows[3]", missing.Code, missing.Message));
+        _storage.Files.Should().BeEmpty();
+        _questions.Items.Should().BeEmpty();
+        _documents.Items.Should().BeEmpty();
+    }
+
+    [Fact]
+    public async Task Import_ImageThatIsNotAPicture_ReportsImageRequired()
+    {
+        _reader.AddImage("sign.pdf", [1]);
+        _reader.Rows = [FakeQuestionFileReader.Row(2, imageName: "sign.pdf")];
+
+        var result = await Import();
+
+        result.Error.FieldErrors!.Single().Code.Should().Be(ApplicationErrors.Document.ImageRequired.Code);
+    }
+
+    [Fact]
+    public async Task Import_ImagesTheStorageRejects_ReportsEveryRowAndAddsNothing()
+    {
+        _storage.RejectSignature = true;
+        _reader.AddImage("1.png", [1]);
+        _reader.AddImage("2.png", [2]);
+        _reader.Rows =
+        [
+            FakeQuestionFileReader.Row(2, imageName: "1.png"),
+            FakeQuestionFileReader.Row(3),
+            FakeQuestionFileReader.Row(4, imageName: "2.png")
+        ];
+
+        var result = await Import();
+
+        result.Error.Code.Should().Be(ApplicationErrors.Question.ImportInvalid.Code);
+        result.Error.FieldErrors!.Select(error => error.Field).Should().Equal("rows[2]", "rows[4]");
+        result.Error.FieldErrors!.Should().OnlyContain(error => error.Code == ApplicationErrors.Document.ContentMismatch.Code);
+        _questions.Items.Should().BeEmpty();
+        _documents.Items.Should().BeEmpty();
     }
 
     [Fact]
@@ -64,7 +152,7 @@ public class ImportQuestionsTests
 
         var result = await Import();
 
-        result.Value.Should().Be(new QuestionImportResult(Created: 0, Updated: 1));
+        result.Value.Should().Be(new QuestionImportResult(Created: 0, Updated: 1, Images: 0));
         existing.Text.Should().Be("New text");
         existing.ImageDocumentId.Should().Be(imageId);
         _questions.Items.Should().ContainSingle();

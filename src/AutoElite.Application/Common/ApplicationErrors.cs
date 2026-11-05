@@ -350,6 +350,10 @@ public static class ApplicationErrors
         /// <summary>The external code belongs to a question of the other source.</summary>
         public static readonly Error ImportSourceMismatch = Error.Conflict(
             "Question.ImportSourceMismatch", "A question with this external code comes from another source.");
+
+        /// <summary>A row names an illustration the file does not have.</summary>
+        public static readonly Error ImportImageMissing = Error.Validation(
+            "Question.ImportImageMissing", "The image of the question is not in the file.");
     }
 
     /// <summary>Errors of test attempts that need more than the attempt to check.</summary>
