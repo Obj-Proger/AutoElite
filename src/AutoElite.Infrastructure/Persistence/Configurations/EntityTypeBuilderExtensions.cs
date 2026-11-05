@@ -25,13 +25,23 @@ internal static class EntityTypeBuilderExtensions
         builder.ToTable(tableName);
         builder.HasKey(entity => entity.Id);
         builder.Property(entity => entity.Id).ValueGeneratedNever();
+        builder.HasRowVersion();
+        builder.Ignore(entity => entity.DomainEvents);
+    }
+
+    /// <summary>
+    /// Maps PostgreSQL's <c>xmin</c> system column as the row version of the entity, a shadow property that changes with
+    /// every update, so that saving a stale copy fails.
+    /// </summary>
+    /// <param name="builder">The builder of the entity.</param>
+    /// <typeparam name="TEntity">The type of the entity.</typeparam>
+    public static void HasRowVersion<TEntity>(this EntityTypeBuilder<TEntity> builder)
+        where TEntity : class =>
         builder.Property<uint>(RowVersion)
             .HasColumnName("xmin")
             .HasColumnType("xid")
             .ValueGeneratedOnAddOrUpdate()
             .IsConcurrencyToken();
-        builder.Ignore(entity => entity.DomainEvents);
-    }
 
     /// <summary>Maps an <see cref="Address"/> to the columns <c>{prefix}_city</c> and <c>{prefix}_street</c>.</summary>
     /// <param name="address">The builder of the complex property.</param>

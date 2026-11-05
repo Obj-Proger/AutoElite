@@ -1,15 +1,19 @@
 using AutoElite.Application.Branches;
 using AutoElite.Application.Settings;
 using AutoElite.Application.Users;
+using AutoElite.Application.Users.Authentication;
+using AutoElite.Infrastructure.Authentication;
 using AutoElite.Infrastructure.Identity;
 using AutoElite.Infrastructure.Persistence;
 using AutoElite.Infrastructure.Persistence.Interceptors;
 using AutoElite.Infrastructure.Persistence.Queries;
 using AutoElite.Infrastructure.Persistence.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace AutoElite.Infrastructure;
 
@@ -20,8 +24,10 @@ public static class DependencyInjection
     public const string ConnectionStringName = "AutoElite";
 
     /// <summary>
-    /// Registers the database context, the unit of work, the sign-in accounts, and the repositories and read services
-    /// implemented so far. The host must register <see cref="ICurrentUser"/> and logging.
+    /// Registers the database context, the unit of work, the sign-in accounts and session tokens, the authentication of
+    /// requests, and the repositories and read services implemented so far. The host must register
+    /// <see cref="ICurrentUser"/> and logging, and configure the <see cref="JwtOptions.SectionName"/> and
+    /// <see cref="ClientOptions.SectionName"/> sections.
     /// </summary>
     /// <param name="services">The services to add to.</param>
     /// <param name="configuration">The configuration with the connection string <see cref="ConnectionStringName"/>.</param>
@@ -50,6 +56,7 @@ public static class DependencyInjection
         services.AddScoped<IUserQueries, UserQueries>();
 
         AddAccounts(services);
+        AddSessions(services, configuration);
 
         return services;
     }
@@ -87,6 +94,32 @@ public static class DependencyInjection
         // Password reset and email change links: short-lived, since the user is waiting for them.
         services.Configure<DataProtectionTokenProviderOptions>(options => options.TokenLifespan = EmailLinkLifetime);
         services.AddScoped<IIdentityService, IdentityService>();
+    }
+
+    /// <summary>
+    /// Registers the session tokens and the links to the web client, with their settings checked when the host starts,
+    /// and the authentication of requests by access token, with the same rules the tokens are created with.
+    /// </summary>
+    private static void AddSessions(IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddOptions<JwtOptions>().Bind(configuration.GetSection(JwtOptions.SectionName)).ValidateOnStart();
+        services.AddSingleton<IValidateOptions<JwtOptions>>(new SettingsValidator<JwtOptions>(options => options.Problems()));
+        services.AddOptions<ClientOptions>().Bind(configuration.GetSection(ClientOptions.SectionName)).ValidateOnStart();
+        services.AddSingleton<IValidateOptions<ClientOptions>>(
+            new SettingsValidator<ClientOptions>(options => options.Problems()));
+
+        services.AddSingleton<IAccessTokenFactory, JwtAccessTokenFactory>();
+        services.AddScoped<IRefreshTokenStore, RefreshTokenStore>();
+        services.AddSingleton<IClientLinks, ClientLinks>();
+
+        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer();
+        services.AddOptions<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme)
+            .Configure<IOptions<JwtOptions>>((bearer, jwt) =>
+            {
+                // Claims keep the names the factory writes, such as "sub" and "role".
+                bearer.MapInboundClaims = false;
+                bearer.TokenValidationParameters = JwtAccessTokenFactory.ValidationParameters(jwt.Value);
+            });
     }
 
     /// <summary>The number of wrong passwords in a row after which an account is locked.</summary>
