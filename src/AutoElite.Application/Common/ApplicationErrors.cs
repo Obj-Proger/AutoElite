@@ -129,6 +129,24 @@ public static class ApplicationErrors
             "Course.TopicInUse", "The topic is used by questions, lessons or test templates and cannot be removed.");
     }
 
+    /// <summary>Errors of reports.</summary>
+    public static class Report
+    {
+        /// <summary>The last day of the period is earlier than the first.</summary>
+        public static readonly Error PeriodInvalid = Error.Validation(
+            "Report.PeriodInvalid", "The last day of the period cannot be earlier than the first.");
+
+        /// <summary>The period is longer than <see cref="Analytics.ReportQueryValidator{TQuery}.MaxPeriodDays"/> days.</summary>
+        public static readonly Error PeriodTooLong = Error.Validation(
+            "Report.PeriodTooLong", "A report can cover at most three years.");
+
+        /// <summary>The branch filter is an empty GUID.</summary>
+        public static readonly Error BranchIdEmpty = Error.Validation("Report.BranchIdEmpty", "Branch ID cannot be an empty GUID.");
+
+        /// <summary>The course filter is an empty GUID.</summary>
+        public static readonly Error CourseIdEmpty = Error.Validation("Report.CourseIdEmpty", "Course ID cannot be an empty GUID.");
+    }
+
     /// <summary>Errors of chats.</summary>
     public static class Chat
     {

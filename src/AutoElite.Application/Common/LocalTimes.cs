@@ -24,7 +24,10 @@ internal sealed class LocalTimes(IRepository<Branch> branchRepository, ISchoolSe
         return TimeZoneInfo.ConvertTimeFromUtc(DateTime.SpecifyKind(utcTime, DateTimeKind.Utc), timeZone);
     }
 
-    private async Task<TimeZoneInfo> GetTimeZoneAsync(Guid? branchId, CancellationToken cancellationToken)
+    /// <summary>Gets the time zone of the branch, or the school's time zone for records not tied to a branch.</summary>
+    /// <param name="branchId">The branch, if any.</param>
+    /// <param name="cancellationToken">A token that signals cancellation of the operation.</param>
+    public async Task<TimeZoneInfo> GetTimeZoneAsync(Guid? branchId, CancellationToken cancellationToken)
     {
         if (branchId is not { } id)
             return await GetSchoolTimeZoneAsync(cancellationToken);

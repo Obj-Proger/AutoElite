@@ -1,3 +1,4 @@
+using AutoElite.Application.Analytics;
 using AutoElite.Application.Chats;
 using AutoElite.Application.Common.Behaviors;
 using AutoElite.Application.Common.Events;
@@ -85,6 +86,7 @@ public static class DependencyInjection
         services.AddScoped<StaffTaskNotices>();
         services.AddScoped<DocumentOwners>();
         services.AddScoped<DocumentAccess>();
+        services.AddScoped<ReportScopes>();
 
         RegisterOpenGenericImplementations(services, typeof(IRequestHandler<,>));
         RegisterOpenGenericImplementations(services, typeof(IValidator<>));
