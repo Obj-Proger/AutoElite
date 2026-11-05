@@ -8,5 +8,6 @@
     <Project Path="tests/AutoElite.Application.Tests/AutoElite.Application.Tests.csproj" Id="89e76eaa-a02d-482d-b503-691ea7f8077c" />
     <Project Path="tests/AutoElite.Architecture.Tests/AutoElite.Architecture.Tests.csproj" />
     <Project Path="tests/AutoElite.Domain.Tests/AutoElite.Domain.Tests.csproj" Id="8af2c48d-10d6-4cf2-bf09-9c3b421254ad" />
+    <Project Path="tests/AutoElite.Infrastructure.Tests/AutoElite.Infrastructure.Tests.csproj" />
   </Folder>
 </Solution>

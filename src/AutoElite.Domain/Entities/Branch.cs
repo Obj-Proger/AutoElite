@@ -11,7 +11,8 @@ namespace AutoElite.Domain.Entities;
 /// </remarks>
 public sealed class Branch : AuditableEntity
 {
-    private const int MaxNameLength = 200;
+    /// <summary>The longest branch name.</summary>
+    public const int MaxNameLength = 200;
 
     /// <summary>Gets the branch name, unique within the school.</summary>
     public string Name { get; private set; } = null!;

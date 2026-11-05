@@ -1,0 +1,43 @@
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+namespace AutoElite.Infrastructure.Persistence.Configurations;
+
+/// <summary>Mappings that the configurations of all aggregates share.</summary>
+internal static class EntityTypeBuilderExtensions
+{
+    /// <summary>The longest IANA time zone identifier a column holds; real identifiers are about half as long.</summary>
+    public const int TimeZoneIdMaxLength = 64;
+
+    /// <summary>The name of the shadow property that holds the row version of an aggregate.</summary>
+    public const string RowVersion = "RowVersion";
+
+    /// <summary>
+    /// Maps the key, which the domain generates itself, and the row version of an aggregate root: PostgreSQL's
+    /// <c>xmin</c> system column, which changes with every update of the row, so that a save based on a stale copy
+    /// fails instead of overwriting another request's change.
+    /// </summary>
+    /// <param name="builder">The builder of the aggregate root.</param>
+    /// <param name="tableName">The name of the table.</param>
+    /// <typeparam name="TAggregate">The type of the aggregate root.</typeparam>
+    public static void ConfigureAggregateRoot<TAggregate>(this EntityTypeBuilder<TAggregate> builder, string tableName)
+        where TAggregate : BaseEntity
+    {
+        builder.ToTable(tableName);
+        builder.HasKey(entity => entity.Id);
+        builder.Property(entity => entity.Id).ValueGeneratedNever();
+        builder.Property<uint>(RowVersion)
+            .HasColumnName("xmin")
+            .HasColumnType("xid")
+            .ValueGeneratedOnAddOrUpdate()
+            .IsConcurrencyToken();
+        builder.Ignore(entity => entity.DomainEvents);
+    }
+
+    /// <summary>Maps an <see cref="Address"/> to the columns <c>{prefix}_city</c> and <c>{prefix}_street</c>.</summary>
+    /// <param name="address">The builder of the complex property.</param>
+    public static void MapAddress(this ComplexPropertyBuilder<Address> address)
+    {
+        address.Property(value => value.City).HasMaxLength(Address.MaxCityLength);
+        address.Property(value => value.Street).HasMaxLength(Address.MaxStreetLength);
+    }
+}

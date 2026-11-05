@@ -42,7 +42,8 @@ public sealed class SchoolSettings : AuditableEntity
 
     private static readonly TimeSpan[] _defaultLessonReminderLeadTimes = [TimeSpan.FromHours(24), TimeSpan.FromHours(2)];
 
-    private readonly List<TimeSpan> _lessonReminderLeadTimes = [];
+    // Not read-only, so that the persistence layer can load the stored list into it.
+    private List<TimeSpan> _lessonReminderLeadTimes = [];
 
     /// <summary>Gets the currency offered by default for new courses, contracts and payments.</summary>
     public Currency DefaultCurrency { get; private set; } = null!;

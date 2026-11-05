@@ -5,9 +5,9 @@
 Management system for driving schools: the full student lifecycle from the first enquiry to
 graduation, in one self-hosted application.
 
-> **Status: early development.** The domain model foundation and the application pipeline are in
-> place; persistence, the HTTP API and the clients are not written yet. Nothing here is ready for
-> production use.
+> **Status: early development.** The domain model and the application layer are in place;
+> persistence is being written; the HTTP API and the clients are not written yet. Nothing here is
+> ready for production use.
 
 ## Planned scope
 
@@ -34,7 +34,7 @@ Clean architecture in four layers; dependencies point inwards only.
 |---|---|
 | `AutoElite.Domain` | Entities, value objects, domain events and business rules; no dependencies |
 | `AutoElite.Application` | Commands and queries (CQRS) with a small in-house dispatcher and pipeline behaviors |
-| `AutoElite.Infrastructure` | Persistence, identity and external services *(not implemented yet)* |
+| `AutoElite.Infrastructure` | Persistence (EF Core, PostgreSQL), identity and external services *(in progress)* |
 | `AutoElite.API` | Versioned public HTTP API *(not implemented yet)* |
 
 Expected failures are returned as `Result` values with typed errors rather than thrown; validation
@@ -48,6 +48,16 @@ Requires the [.NET 10 SDK](https://dotnet.microsoft.com/download).
 
 ```shell
 dotnet build
+dotnet test
+```
+
+The infrastructure tests need PostgreSQL 18; each test class creates a database of its own and drops it
+afterwards. By default they start a throwaway container, which needs a local Docker engine. To use a
+PostgreSQL server instead, give the tests the connection string of a user who may create databases:
+
+```shell
+# PowerShell
+$env:AUTOELITE_TEST_POSTGRES = "Host=...;Port=5432;Username=...;Password=..."
 dotnet test
 ```
 

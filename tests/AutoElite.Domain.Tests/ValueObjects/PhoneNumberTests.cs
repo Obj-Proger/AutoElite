@@ -12,6 +12,15 @@ public class PhoneNumberTests
     }
 
     [Fact]
+    public void Create_LongestNumber_IsMaxLengthLong()
+    {
+        var result = PhoneNumber.Create("+123456789012345");
+
+        result.Value.Value.Should().HaveLength(PhoneNumber.MaxLength);
+        PhoneNumber.Create("+1234567890123456").IsFailure.Should().BeTrue();
+    }
+
+    [Fact]
     public void Create_NumberWithFormatting_ReturnsNormalizedNumber()
     {
         var result = PhoneNumber.Create("+7 (999) 123-45-67");

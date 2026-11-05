@@ -5,6 +5,9 @@ namespace AutoElite.Domain.ValueObjects;
 /// <summary>An international phone number in E.164 format (e.g. <c>+79991234567</c>).</summary>
 public sealed partial class PhoneNumber : ValueObject
 {
+    /// <summary>The longest number: the plus sign and 15 digits.</summary>
+    public const int MaxLength = 16;
+
     [GeneratedRegex(@"^\+[1-9]\d{7,14}$")]
     private static partial Regex Pattern();
 

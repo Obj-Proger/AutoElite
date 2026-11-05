@@ -7,8 +7,7 @@ internal static class Layers
 
     public static readonly Assembly Application = typeof(IDispatcher).Assembly;
 
-    // The project has no types yet, so it is loaded by name; the project reference copies it to the output.
-    public static readonly Assembly Infrastructure = Assembly.Load("AutoElite.Infrastructure");
+    public static readonly Assembly Infrastructure = typeof(AutoElite.Infrastructure.DependencyInjection).Assembly;
 
     /// <summary>Gets the simple names of the assemblies that <paramref name="assembly"/> references.</summary>
     public static IReadOnlyList<string> ReferencedAssemblyNames(Assembly assembly) =>

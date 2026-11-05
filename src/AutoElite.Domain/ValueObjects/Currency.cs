@@ -9,7 +9,8 @@ namespace AutoElite.Domain.ValueObjects;
 /// </remarks>
 public sealed class Currency : ValueObject
 {
-    private const int CodeLength = 3;
+    /// <summary>The length of an ISO 4217 code.</summary>
+    public const int CodeLength = 3;
 
     // ISO 4217 code -> number of minor units (decimal places).
     private static readonly FrozenDictionary<string, int> _minorUnitsByCode = new Dictionary<string, int>

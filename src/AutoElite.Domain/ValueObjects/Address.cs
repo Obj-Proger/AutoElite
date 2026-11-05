@@ -4,8 +4,11 @@ namespace AutoElite.Domain.ValueObjects;
 /// <remarks>The city is kept separately so that lists can be filtered and grouped by it.</remarks>
 public sealed class Address : ValueObject
 {
-    private const int MaxCityLength = 100;
-    private const int MaxStreetLength = 300;
+    /// <summary>The longest city name.</summary>
+    public const int MaxCityLength = 100;
+
+    /// <summary>The longest street part of the address.</summary>
+    public const int MaxStreetLength = 300;
 
     /// <summary>Gets the city or settlement.</summary>
     public string City { get; }
