@@ -142,6 +142,18 @@
   <data name="RateDrivingLesson.Title" xml:space="preserve">
     <value>Оцените занятие</value>
   </data>
+  <data name="TaskAssigned.Body" xml:space="preserve">
+    <value>«{0}». Срок — {1:d MMMM 'в' HH:mm}.</value>
+  </data>
+  <data name="TaskAssigned.Title" xml:space="preserve">
+    <value>Новая задача</value>
+  </data>
+  <data name="TaskOverdue.Body" xml:space="preserve">
+    <value>Срок задачи «{0}» истёк {1:d MMMM 'в' HH:mm}.</value>
+  </data>
+  <data name="TaskOverdue.Title" xml:space="preserve">
+    <value>Задача просрочена</value>
+  </data>
   <data name="TheoryLessonCancelled.Body" xml:space="preserve">
     <value>Занятие группы «{0}» {1:d MMMM 'в' HH:mm} отменено. Причина: {2}</value>
   </data>

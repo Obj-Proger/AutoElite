@@ -10,6 +10,7 @@ using AutoElite.Application.Exams;
 using AutoElite.Application.Leads;
 using AutoElite.Application.Notifications;
 using AutoElite.Application.Notifications.DrivingLessons;
+using AutoElite.Application.Notifications.StaffTasks;
 using AutoElite.Application.Payments;
 using AutoElite.Application.Questions;
 using AutoElite.Application.Settings;
@@ -78,6 +79,7 @@ public static class DependencyInjection
         services.AddScoped<StaffTaskAccess>();
         services.AddScoped<TaskAssignees>();
         services.AddScoped<TaskSubjects>();
+        services.AddScoped<StaffTaskNotices>();
 
         RegisterOpenGenericImplementations(services, typeof(IRequestHandler<,>));
         RegisterOpenGenericImplementations(services, typeof(IValidator<>));

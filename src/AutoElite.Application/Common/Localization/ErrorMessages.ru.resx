@@ -940,6 +940,9 @@
   <data name="StaffTask.RecurrenceNotDefined" xml:space="preserve">
     <value>Недопустимая периодичность.</value>
   </data>
+  <data name="StaffTask.StatusNotDefined" xml:space="preserve">
+    <value>Недопустимый статус задачи.</value>
+  </data>
   <data name="StaffTask.SubjectIncomplete" xml:space="preserve">
     <value>Для связанной записи нужны и тип, и идентификатор.</value>
   </data>

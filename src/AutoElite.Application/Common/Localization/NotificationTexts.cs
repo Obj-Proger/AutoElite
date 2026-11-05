@@ -95,6 +95,12 @@ internal static class NotificationTexts
     /// </summary>
     public const string NewGroupMessages = "NewGroupMessages";
 
+    /// <summary>A staff member was given a task: <c>{0}</c> is the title, <c>{1}</c> the local deadline.</summary>
+    public const string TaskAssigned = "TaskAssigned";
+
+    /// <summary>A task of the staff member is past its deadline: <c>{0}</c> is the title, <c>{1}</c> the local deadline.</summary>
+    public const string TaskOverdue = "TaskOverdue";
+
     /// <summary>
     /// A payment of the student is confirmed: <c>{0}</c> is the amount, <c>{1}</c> the currency, <c>{2}</c> the
     /// contract number.

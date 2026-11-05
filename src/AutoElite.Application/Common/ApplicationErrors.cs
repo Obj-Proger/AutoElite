@@ -147,6 +147,9 @@ public static class ApplicationErrors
         /// <summary>The linked record does not exist.</summary>
         public static readonly Error SubjectNotFound = Error.Validation(
             "StaffTask.SubjectNotFound", "The linked record does not exist.");
+
+        /// <summary>The status filter of the task list is not a task status.</summary>
+        public static readonly Error StatusNotDefined = Error.Validation("StaffTask.StatusNotDefined", "Task status is not valid.");
     }
 
     /// <summary>Errors of leads that need more than the lead to check.</summary>
