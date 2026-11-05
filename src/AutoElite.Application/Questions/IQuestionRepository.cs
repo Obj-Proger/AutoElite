@@ -9,4 +9,10 @@ public interface IQuestionRepository : IRepository<Question>
     /// <param name="cancellationToken">A token that signals cancellation of the operation.</param>
     Task<bool> ExternalCodeExistsAsync(
         string externalCode, Guid? exceptQuestionId = null, CancellationToken cancellationToken = default);
+
+    /// <summary>Loads the questions, active or not, that have any of the external codes, ignoring case.</summary>
+    /// <param name="externalCodes">The trimmed codes.</param>
+    /// <param name="cancellationToken">A token that signals cancellation of the operation.</param>
+    Task<IReadOnlyList<Question>> GetByExternalCodesAsync(
+        IReadOnlyCollection<string> externalCodes, CancellationToken cancellationToken = default);
 }

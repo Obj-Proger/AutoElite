@@ -315,6 +315,41 @@ public static class ApplicationErrors
         /// <summary>Someone other than an administrator writes an official question.</summary>
         public static readonly Error OfficialAdministratorOnly = Error.Forbidden(
             "Question.OfficialAdministratorOnly", "Only an administrator can add or change official questions.");
+
+        /// <summary>Some rows of an imported file are invalid; their errors are listed by row and nothing is imported.</summary>
+        public static readonly Error ImportInvalid = Error.Validation(
+            "Question.ImportInvalid", "Some questions in the file are invalid, so nothing was imported.");
+
+        /// <summary>The imported file has no questions.</summary>
+        public static readonly Error ImportEmpty = Error.Validation("Question.ImportEmpty", "The file has no questions.");
+
+        /// <summary>The imported file has more questions than one import takes.</summary>
+        public static readonly Error ImportTooManyRows = Error.Validation(
+            "Question.ImportTooManyRows", "A file can have at most 2000 questions.");
+
+        /// <summary>The file is not in a format the import reads.</summary>
+        public static readonly Error ImportFormatNotSupported = Error.Validation(
+            "Question.ImportFormatNotSupported", "The file format is not supported.");
+
+        /// <summary>The file could not be read, for example because it is damaged or its columns are wrong.</summary>
+        public static readonly Error ImportUnreadable = Error.Validation(
+            "Question.ImportUnreadable", "The file could not be read.");
+
+        /// <summary>No file content was given.</summary>
+        public static readonly Error ImportContentMissing = Error.Validation(
+            "Question.ImportContentMissing", "The file content is missing.");
+
+        /// <summary>A licence category in a row is not one the school knows.</summary>
+        public static readonly Error ImportCategoryUnknown = Error.Validation(
+            "Question.ImportCategoryUnknown", "The licence category is not known.");
+
+        /// <summary>The same external code appears in more than one row.</summary>
+        public static readonly Error ImportExternalCodeRepeated = Error.Validation(
+            "Question.ImportExternalCodeRepeated", "The external code appears in more than one row.");
+
+        /// <summary>The external code belongs to a question of the other source.</summary>
+        public static readonly Error ImportSourceMismatch = Error.Conflict(
+            "Question.ImportSourceMismatch", "A question with this external code comes from another source.");
     }
 
     /// <summary>Errors of test attempts that need more than the attempt to check.</summary>
