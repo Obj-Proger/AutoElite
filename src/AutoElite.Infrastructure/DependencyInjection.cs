@@ -7,6 +7,7 @@ using AutoElite.Application.DrivingSlots;
 using AutoElite.Application.Exams;
 using AutoElite.Application.Leads;
 using AutoElite.Application.Notifications;
+using AutoElite.Application.Payments;
 using AutoElite.Application.Questions;
 using AutoElite.Application.Settings;
 using AutoElite.Application.StudyGroups;
@@ -120,6 +121,8 @@ public static class DependencyInjection
         services.AddScoped<IRepository<Notification>>(provider => provider.GetRequiredService<INotificationRepository>());
         services.AddScoped<INotificationQueries, NotificationQueries>();
         services.AddScoped<IEmailQueue, EmailQueue>();
+        services.AddScoped<IRepository<Payment>, PaymentRepository>();
+        services.AddScoped<IPaymentQueries, PaymentQueries>();
 
         AddChatEncryption(services, configuration);
         AddAccounts(services);

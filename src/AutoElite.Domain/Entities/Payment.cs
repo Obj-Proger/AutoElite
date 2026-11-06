@@ -19,9 +19,14 @@ namespace AutoElite.Domain.Entities;
 /// </remarks>
 public sealed class Payment : AuditableEntity
 {
-    private const int MaxPurposeLength = 500;
-    private const int MaxExternalReferenceLength = 200;
-    private const int MaxReasonLength = 1000;
+    /// <summary>The longest purpose.</summary>
+    public const int MaxPurposeLength = 500;
+
+    /// <summary>The longest external reference.</summary>
+    public const int MaxExternalReferenceLength = 200;
+
+    /// <summary>The longest reason of a refund or a cancellation.</summary>
+    public const int MaxReasonLength = 1000;
 
     /// <summary>Gets the identifier of the contract the payment is for.</summary>
     public Guid ContractId { get; private set; }
