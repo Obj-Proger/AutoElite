@@ -7,6 +7,7 @@ using AutoElite.Application.Leads;
 using AutoElite.Application.Questions;
 using AutoElite.Application.Settings;
 using AutoElite.Application.StudyGroups;
+using AutoElite.Application.TestSessions;
 using AutoElite.Application.TestTemplates;
 using AutoElite.Application.TheoryLessons;
 using AutoElite.Application.TrainingGrounds;
@@ -99,6 +100,10 @@ public static class DependencyInjection
         services.AddScoped<IQuestionQueries, QuestionQueries>();
         services.AddScoped<IRepository<TestTemplate>, TestTemplateRepository>();
         services.AddScoped<ITestTemplateQueries, TestTemplateQueries>();
+        services.AddScoped<ITestSessionRepository, TestSessionRepository>();
+        services.AddScoped<IRepository<TestSession>>(provider => provider.GetRequiredService<ITestSessionRepository>());
+        services.AddScoped<ITestSessionQueries, TestSessionQueries>();
+        services.AddScoped<IQuestionPicker, QuestionPicker>();
 
         AddAccounts(services);
         AddSessions(services, configuration);

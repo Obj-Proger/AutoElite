@@ -23,9 +23,11 @@ namespace AutoElite.Domain.Entities;
 /// </remarks>
 public sealed class TestSession : AuditableEntity
 {
-    private readonly List<TestBlock> _blocks = [];
+    // Not read-only, so that the persistence layer can load the stored blocks into it.
+    private List<TestBlock> _blocks = [];
     private readonly List<SessionQuestion> _questions = [];
-    private readonly List<int> _pendingAddOnBlocks = [];
+    // Not read-only, so that the persistence layer can load the stored list into it.
+    private List<int> _pendingAddOnBlocks = [];
 
     /// <summary>Gets the identifier of the student's contract.</summary>
     public Guid ContractId { get; private set; }
