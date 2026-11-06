@@ -17,3 +17,8 @@ internal sealed class PhoneNumberConverter() : ValueConverter<PhoneNumber, strin
 internal sealed class EmailConverter() : ValueConverter<Email, string>(
     email => email.Value,
     value => Email.Create(value).Value);
+
+/// <summary>Stores a <see cref="LicensePlate"/> in its normalized form: upper case, without spaces or hyphens.</summary>
+internal sealed class LicensePlateConverter() : ValueConverter<LicensePlate, string>(
+    plate => plate.Value,
+    value => LicensePlate.Create(value).Value);

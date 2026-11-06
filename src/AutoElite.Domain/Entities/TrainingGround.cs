@@ -6,8 +6,11 @@ namespace AutoElite.Domain.Entities;
 /// <remarks>A ground that is no longer used is deactivated rather than deleted, because past lessons refer to it.</remarks>
 public sealed class TrainingGround : AuditableEntity
 {
-    private const int MaxNameLength = 200;
-    private const int MaxDescriptionLength = 2000;
+    /// <summary>The longest ground name.</summary>
+    public const int MaxNameLength = 200;
+
+    /// <summary>The longest ground description.</summary>
+    public const int MaxDescriptionLength = 2000;
 
     /// <summary>Gets the name of the ground.</summary>
     public string Name { get; private set; } = null!;

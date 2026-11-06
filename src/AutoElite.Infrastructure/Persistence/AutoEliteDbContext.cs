@@ -43,6 +43,9 @@ public sealed class AutoEliteDbContext(DbContextOptions<AutoEliteDbContext> opti
 
         configurationBuilder.Properties<Currency>().HaveConversion<CurrencyConverter>().HaveMaxLength(Currency.CodeLength);
         configurationBuilder.Properties<Email>().HaveConversion<EmailConverter>().HaveMaxLength(Email.MaxLength);
+        configurationBuilder.Properties<LicensePlate>()
+            .HaveConversion<LicensePlateConverter>()
+            .HaveMaxLength(LicensePlate.MaxLength);
         configurationBuilder.Properties<PhoneNumber>().HaveConversion<PhoneNumberConverter>().HaveMaxLength(PhoneNumber.MaxLength);
     }
 

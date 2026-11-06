@@ -9,7 +9,8 @@ namespace AutoElite.Domain.ValueObjects;
 public sealed class LicensePlate : ValueObject
 {
     private const int MinLength = 2;
-    private const int MaxLength = 15;
+    /// <summary>The longest plate.</summary>
+    public const int MaxLength = 15;
 
     /// <summary>Gets the normalized plate.</summary>
     public string Value { get; }

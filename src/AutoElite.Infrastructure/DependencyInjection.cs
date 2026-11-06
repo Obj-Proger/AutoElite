@@ -1,11 +1,14 @@
 using AutoElite.Application.Branches;
 using AutoElite.Application.Contracts;
 using AutoElite.Application.Courses;
+using AutoElite.Application.DrivingRoutes;
 using AutoElite.Application.Leads;
 using AutoElite.Application.Settings;
 using AutoElite.Application.StudyGroups;
 using AutoElite.Application.TheoryLessons;
+using AutoElite.Application.TrainingGrounds;
 using AutoElite.Application.Users;
+using AutoElite.Application.Vehicles;
 using AutoElite.Application.Users.Authentication;
 using AutoElite.Infrastructure.Authentication;
 using AutoElite.Infrastructure.Identity;
@@ -78,6 +81,13 @@ public static class DependencyInjection
         services.AddScoped<ITheoryLessonRepository, TheoryLessonRepository>();
         services.AddScoped<IRepository<TheoryLesson>>(provider => provider.GetRequiredService<ITheoryLessonRepository>());
         services.AddScoped<ITheoryLessonQueries, TheoryLessonQueries>();
+        services.AddScoped<IVehicleRepository, VehicleRepository>();
+        services.AddScoped<IRepository<Vehicle>>(provider => provider.GetRequiredService<IVehicleRepository>());
+        services.AddScoped<IVehicleQueries, VehicleQueries>();
+        services.AddScoped<IRepository<TrainingGround>, TrainingGroundRepository>();
+        services.AddScoped<ITrainingGroundQueries, TrainingGroundQueries>();
+        services.AddScoped<IRepository<DrivingRoute>, DrivingRouteRepository>();
+        services.AddScoped<IDrivingRouteQueries, DrivingRouteQueries>();
 
         AddAccounts(services);
         AddSessions(services, configuration);

@@ -9,8 +9,11 @@ namespace AutoElite.Domain.Entities;
 /// </remarks>
 public sealed class DrivingRoute : AuditableEntity
 {
-    private const int MaxNameLength = 200;
-    private const int MaxDescriptionLength = 4000;
+    /// <summary>The longest route name.</summary>
+    public const int MaxNameLength = 200;
+
+    /// <summary>The longest route description.</summary>
+    public const int MaxDescriptionLength = 4000;
 
     /// <summary>Gets the name of the route.</summary>
     public string Name { get; private set; } = null!;

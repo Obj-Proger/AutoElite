@@ -13,8 +13,11 @@ public sealed class Vehicle : AuditableEntity
     /// <summary>The earliest model year accepted.</summary>
     public const int MinYear = 1950;
 
-    private const int MaxMakeLength = 100;
-    private const int MaxModelLength = 100;
+    /// <summary>The longest make.</summary>
+    public const int MaxMakeLength = 100;
+
+    /// <summary>The longest model.</summary>
+    public const int MaxModelLength = 100;
 
     /// <summary>Gets the registration plate.</summary>
     public LicensePlate Plate { get; private set; } = null!;
