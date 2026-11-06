@@ -22,7 +22,8 @@ namespace AutoElite.Domain.Entities;
 /// </remarks>
 public sealed class Chat : AuditableEntity
 {
-    private const int MaxTitleLength = 200;
+    /// <summary>The longest title of a group chat.</summary>
+    public const int MaxTitleLength = 200;
 
     private readonly List<ChatMember> _members = [];
 

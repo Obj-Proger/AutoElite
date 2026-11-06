@@ -19,7 +19,8 @@ public sealed class ChatMessage : AuditableEntity
 
     private const int MaxTextLength = 4000;
 
-    private readonly List<Guid> _attachmentIds = [];
+    // Not read-only, so that the persistence layer can load the stored identifiers into it.
+    private List<Guid> _attachmentIds = [];
 
     /// <summary>Gets the identifier of the chat.</summary>
     public Guid ChatId { get; private set; }

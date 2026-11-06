@@ -1,6 +1,7 @@
 using AutoElite.Infrastructure.Outbox;
 using AutoElite.Infrastructure.Persistence.Interceptors;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace AutoElite.Infrastructure.Persistence;
 
@@ -11,7 +12,8 @@ internal static class PersistenceOptions
     public const string MigrationsHistoryTable = "__ef_migrations_history";
 
     /// <summary>
-    /// Connects to PostgreSQL and applies the naming of the schema. On every save, domain events move into the outbox,
+    /// Connects to PostgreSQL and applies the naming of the schema; the model is cached per chat cipher
+    /// (<see cref="AutoEliteModelCacheKeyFactory"/>). On every save, domain events move into the outbox,
     /// and a change to a child entity also advances the row version of its aggregate root; the further interceptors,
     /// such as the audit, run after these.
     /// </summary>
@@ -27,6 +29,7 @@ internal static class PersistenceOptions
         builder
             .UseNpgsql(connectionString, npgsql => npgsql.MigrationsHistoryTable(MigrationsHistoryTable))
             .UseSnakeCaseNamingConvention()
+            .ReplaceService<IModelCacheKeyFactory, AutoEliteModelCacheKeyFactory>()
             .AddInterceptors(
                 interceptors.Prepend(AggregateVersionInterceptor.Instance).Prepend(DomainEventOutboxInterceptor.Instance));
 

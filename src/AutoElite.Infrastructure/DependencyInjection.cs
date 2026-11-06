@@ -1,4 +1,5 @@
 using AutoElite.Application.Branches;
+using AutoElite.Application.Chats;
 using AutoElite.Application.Contracts;
 using AutoElite.Application.Courses;
 using AutoElite.Application.DrivingRoutes;
@@ -16,6 +17,7 @@ using AutoElite.Application.Users;
 using AutoElite.Application.Vehicles;
 using AutoElite.Application.Users.Authentication;
 using AutoElite.Infrastructure.Authentication;
+using AutoElite.Infrastructure.Encryption;
 using AutoElite.Infrastructure.Identity;
 using AutoElite.Infrastructure.Persistence;
 using AutoElite.Infrastructure.Persistence.Interceptors;
@@ -39,8 +41,8 @@ public static class DependencyInjection
     /// <summary>
     /// Registers the database context, the unit of work, the sign-in accounts and session tokens, the authentication of
     /// requests, and the repositories and read services implemented so far. The host must register
-    /// <see cref="ICurrentUser"/> and logging, and configure the <see cref="JwtOptions.SectionName"/> and
-    /// <see cref="ClientOptions.SectionName"/> sections.
+    /// <see cref="ICurrentUser"/> and logging, and configure the <see cref="JwtOptions.SectionName"/>,
+    /// <see cref="ClientOptions.SectionName"/> and <see cref="ChatEncryptionOptions.SectionName"/> sections.
     /// </summary>
     /// <param name="services">The services to add to.</param>
     /// <param name="configuration">The configuration with the connection string <see cref="ConnectionStringName"/>.</param>
@@ -108,11 +110,30 @@ public static class DependencyInjection
         services.AddScoped<IExamRepository, ExamRepository>();
         services.AddScoped<IRepository<Exam>>(provider => provider.GetRequiredService<IExamRepository>());
         services.AddScoped<IExamQueries, ExamQueries>();
+        services.AddScoped<IChatRepository, ChatRepository>();
+        services.AddScoped<IRepository<Chat>>(provider => provider.GetRequiredService<IChatRepository>());
+        services.AddScoped<IRepository<ChatMessage>, ChatMessageRepository>();
+        services.AddScoped<IChatQueries, ChatQueries>();
 
+        AddChatEncryption(services, configuration);
         AddAccounts(services);
         AddSessions(services, configuration);
 
         return services;
+    }
+
+    /// <summary>
+    /// Registers the cipher of the chat texts, which the database context is built with, from validated settings: a
+    /// host with missing or invalid keys fails at startup rather than at the first message.
+    /// </summary>
+    private static void AddChatEncryption(IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddOptions<ChatEncryptionOptions>()
+            .Bind(configuration.GetSection(ChatEncryptionOptions.SectionName))
+            .ValidateOnStart();
+        services.AddSingleton<IValidateOptions<ChatEncryptionOptions>>(
+            new SettingsValidator<ChatEncryptionOptions>(options => options.Problems()));
+        services.AddSingleton(provider => new ChatTextCipher(provider.GetRequiredService<IOptions<ChatEncryptionOptions>>().Value));
     }
 
     /// <summary>

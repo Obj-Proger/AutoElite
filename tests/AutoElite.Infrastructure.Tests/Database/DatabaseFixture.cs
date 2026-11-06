@@ -18,11 +18,13 @@ public sealed class DatabaseFixture : IAsyncLifetime
     /// <param name="currentUser">The user of the request; the system by default.</param>
     /// <param name="timeProvider">The clock; the system clock by default.</param>
     public AutoEliteDbContext CreateContext(ICurrentUser? currentUser = null, TimeProvider? timeProvider = null) =>
-        new(new DbContextOptionsBuilder<AutoEliteDbContext>()
-            .UseAutoElite(
-                _connectionString,
-                new AuditInterceptor(currentUser ?? TestCurrentUser.System, timeProvider ?? TimeProvider.System))
-            .Options);
+        new(
+            new DbContextOptionsBuilder<AutoEliteDbContext>()
+                .UseAutoElite(
+                    _connectionString,
+                    new AuditInterceptor(currentUser ?? TestCurrentUser.System, timeProvider ?? TimeProvider.System))
+                .Options,
+            TestChatEncryption.Cipher);
 
     /// <summary>
     /// Builds the services of the infrastructure on the database, as a host would, for tests of components that are
@@ -36,6 +38,7 @@ public sealed class DatabaseFixture : IAsyncLifetime
             {
                 [$"ConnectionStrings:{DependencyInjection.ConnectionStringName}"] = _connectionString
             })
+            .AddInMemoryCollection(TestChatEncryption.Configuration)
             .Build();
         var services = new ServiceCollection();
         services.AddLogging();

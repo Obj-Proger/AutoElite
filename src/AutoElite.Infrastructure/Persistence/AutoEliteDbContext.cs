@@ -1,4 +1,6 @@
+using AutoElite.Infrastructure.Encryption;
 using AutoElite.Infrastructure.Identity;
+using AutoElite.Infrastructure.Persistence.Configurations;
 using AutoElite.Infrastructure.Persistence.Conversions;
 using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
@@ -19,8 +21,14 @@ namespace AutoElite.Infrastructure.Persistence;
 /// one transaction, and the data protection keys that protect the tokens sent by email, so that the tokens stay valid
 /// across restarts and instances.
 /// </para>
+/// <para>
+/// The text of chat messages is encrypted by <see cref="ChatTextCipher"/> on save and decrypted on load. The model
+/// depends on the cipher, so contexts with other keys get a model of their own (<see cref="AutoEliteModelCacheKeyFactory"/>).
+/// </para>
 /// </remarks>
-public sealed class AutoEliteDbContext(DbContextOptions<AutoEliteDbContext> options)
+/// <param name="options">The options, from <see cref="PersistenceOptions.UseAutoElite{TBuilder}"/>.</param>
+/// <param name="chatTextCipher">The cipher of the text of chat messages.</param>
+public sealed class AutoEliteDbContext(DbContextOptions<AutoEliteDbContext> options, ChatTextCipher chatTextCipher)
     : IdentityUserContext<UserAccount, Guid>(options), IDataProtectionKeyContext
 {
     /// <summary>The longest name of an enumeration member that a column holds.</summary>
@@ -34,6 +42,9 @@ public sealed class AutoEliteDbContext(DbContextOptions<AutoEliteDbContext> opti
 
     /// <inheritdoc />
     public DbSet<DataProtectionKey> DataProtectionKeys => Set<DataProtectionKey>();
+
+    /// <summary>Gets the cipher of the text of chat messages, which the model is built with.</summary>
+    internal ChatTextCipher ChatTextCipher { get; } = chatTextCipher;
 
     /// <inheritdoc />
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
@@ -67,5 +78,8 @@ public sealed class AutoEliteDbContext(DbContextOptions<AutoEliteDbContext> opti
         builder.HasPostgresExtension("btree_gist");
         builder.HasCollation(CaseInsensitiveCollation, locale: "und-u-ks-level2", provider: "icu", deterministic: false);
         builder.ApplyConfigurationsFromAssembly(typeof(AutoEliteDbContext).Assembly);
+
+        // Found configurations need a parameterless constructor; this one needs the cipher.
+        builder.ApplyConfiguration(new ChatMessageConfiguration(ChatTextCipher));
     }
 }

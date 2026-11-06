@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace AutoElite.Infrastructure.Tests;
 
@@ -14,21 +15,38 @@ public sealed class DependencyInjectionTests
         return services;
     }
 
-    [Fact]
-    public void AddInfrastructure_WithConnectionString_RegistersTheUnitOfWork()
-    {
-        var configuration = new ConfigurationBuilder()
+    private static IConfiguration Configuration(bool withChatKeys) =>
+        new ConfigurationBuilder()
             .AddInMemoryCollection(new Dictionary<string, string?>
             {
                 [$"ConnectionStrings:{DependencyInjection.ConnectionStringName}"] = "Host=localhost;Database=autoelite"
             })
+            .AddInMemoryCollection(withChatKeys ? TestChatEncryption.Configuration : new Dictionary<string, string?>())
             .Build();
+
+    [Fact]
+    public void AddInfrastructure_WithConnectionString_RegistersTheUnitOfWork()
+    {
+        var configuration = Configuration(withChatKeys: true);
 
         using var provider = Services().AddInfrastructure(configuration).BuildServiceProvider(validateScopes: true);
         using var scope = provider.CreateScope();
 
         scope.ServiceProvider.GetRequiredService<IUnitOfWork>().Should().NotBeNull();
         scope.ServiceProvider.GetRequiredService<AutoEliteDbContext>().Model.FindEntityType(typeof(Branch)).Should().NotBeNull();
+    }
+
+    [Fact]
+    public void AddInfrastructure_WithoutChatKeys_FailsToBuildTheDatabaseContext()
+    {
+        var configuration = Configuration(withChatKeys: false);
+
+        using var provider = Services().AddInfrastructure(configuration).BuildServiceProvider(validateScopes: true);
+        using var scope = provider.CreateScope();
+
+        var resolve = () => scope.ServiceProvider.GetRequiredService<AutoEliteDbContext>();
+
+        resolve.Should().Throw<OptionsValidationException>().WithMessage("*ChatEncryption:Keys*");
     }
 
     [Fact]
