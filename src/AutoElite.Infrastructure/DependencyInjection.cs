@@ -10,6 +10,7 @@ using AutoElite.Application.Notifications;
 using AutoElite.Application.Payments;
 using AutoElite.Application.Questions;
 using AutoElite.Application.Settings;
+using AutoElite.Application.StaffTasks;
 using AutoElite.Application.StudyGroups;
 using AutoElite.Application.TestSessions;
 using AutoElite.Application.TestTemplates;
@@ -123,6 +124,9 @@ public static class DependencyInjection
         services.AddScoped<IEmailQueue, EmailQueue>();
         services.AddScoped<IRepository<Payment>, PaymentRepository>();
         services.AddScoped<IPaymentQueries, PaymentQueries>();
+        services.AddScoped<IStaffTaskRepository, StaffTaskRepository>();
+        services.AddScoped<IRepository<StaffTask>>(provider => provider.GetRequiredService<IStaffTaskRepository>());
+        services.AddScoped<IStaffTaskQueries, StaffTaskQueries>();
 
         AddChatEncryption(services, configuration);
         AddAccounts(services);

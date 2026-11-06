@@ -20,8 +20,11 @@ namespace AutoElite.Domain.Entities;
 /// </remarks>
 public sealed class StaffTask : AuditableEntity
 {
-    private const int MaxTitleLength = 200;
-    private const int MaxDescriptionLength = 4000;
+    /// <summary>The longest title.</summary>
+    public const int MaxTitleLength = 200;
+
+    /// <summary>The longest description.</summary>
+    public const int MaxDescriptionLength = 4000;
 
     /// <summary>Gets the title.</summary>
     public string Title { get; private set; } = null!;
