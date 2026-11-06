@@ -6,6 +6,7 @@ using AutoElite.Application.DrivingRoutes;
 using AutoElite.Application.DrivingSlots;
 using AutoElite.Application.Exams;
 using AutoElite.Application.Leads;
+using AutoElite.Application.Notifications;
 using AutoElite.Application.Questions;
 using AutoElite.Application.Settings;
 using AutoElite.Application.StudyGroups;
@@ -19,6 +20,7 @@ using AutoElite.Application.Users.Authentication;
 using AutoElite.Infrastructure.Authentication;
 using AutoElite.Infrastructure.Encryption;
 using AutoElite.Infrastructure.Identity;
+using AutoElite.Infrastructure.Mail;
 using AutoElite.Infrastructure.Persistence;
 using AutoElite.Infrastructure.Persistence.Interceptors;
 using AutoElite.Infrastructure.Persistence.Queries;
@@ -114,6 +116,10 @@ public static class DependencyInjection
         services.AddScoped<IRepository<Chat>>(provider => provider.GetRequiredService<IChatRepository>());
         services.AddScoped<IRepository<ChatMessage>, ChatMessageRepository>();
         services.AddScoped<IChatQueries, ChatQueries>();
+        services.AddScoped<INotificationRepository, NotificationRepository>();
+        services.AddScoped<IRepository<Notification>>(provider => provider.GetRequiredService<INotificationRepository>());
+        services.AddScoped<INotificationQueries, NotificationQueries>();
+        services.AddScoped<IEmailQueue, EmailQueue>();
 
         AddChatEncryption(services, configuration);
         AddAccounts(services);

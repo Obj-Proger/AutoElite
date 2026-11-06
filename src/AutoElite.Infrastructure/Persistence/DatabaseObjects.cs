@@ -14,7 +14,8 @@ internal static class DatabaseObjects
     private static readonly string[] _scripts =
     [
         "01-theory-lesson-overlap",
-        "02-driving-overlap"
+        "02-driving-overlap",
+        "03-notification-subject"
     ];
 
     /// <summary>Creates the objects as part of a migration.</summary>

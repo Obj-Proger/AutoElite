@@ -12,8 +12,11 @@ namespace AutoElite.Domain.Entities;
 /// </remarks>
 public sealed class Notification : BaseEntity
 {
-    private const int MaxTitleLength = 200;
-    private const int MaxBodyLength = 2000;
+    /// <summary>The longest title.</summary>
+    public const int MaxTitleLength = 200;
+
+    /// <summary>The longest body.</summary>
+    public const int MaxBodyLength = 2000;
 
     /// <summary>Gets the identifier of the recipient.</summary>
     public Guid RecipientId { get; private set; }
