@@ -20,9 +20,11 @@ public sealed class TestTemplate : AuditableEntity
     /// <summary>The most blocks a template may have.</summary>
     public const int MaxBlocks = 10;
 
-    private const int MaxNameLength = 200;
+    /// <summary>The longest template name.</summary>
+    public const int MaxNameLength = 200;
 
-    private readonly List<TestBlock> _blocks = [];
+    // Not read-only, so that the persistence layer can load the stored blocks into it.
+    private List<TestBlock> _blocks = [];
 
     /// <summary>Gets the template name, for example "Exam ticket, category B".</summary>
     public string Name { get; private set; } = null!;

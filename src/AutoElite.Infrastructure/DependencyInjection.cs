@@ -4,8 +4,10 @@ using AutoElite.Application.Courses;
 using AutoElite.Application.DrivingRoutes;
 using AutoElite.Application.DrivingSlots;
 using AutoElite.Application.Leads;
+using AutoElite.Application.Questions;
 using AutoElite.Application.Settings;
 using AutoElite.Application.StudyGroups;
+using AutoElite.Application.TestTemplates;
 using AutoElite.Application.TheoryLessons;
 using AutoElite.Application.TrainingGrounds;
 using AutoElite.Application.Users;
@@ -92,6 +94,11 @@ public static class DependencyInjection
         services.AddScoped<IDrivingSlotRepository, DrivingSlotRepository>();
         services.AddScoped<IRepository<DrivingSlot>>(provider => provider.GetRequiredService<IDrivingSlotRepository>());
         services.AddScoped<IDrivingSlotQueries, DrivingSlotQueries>();
+        services.AddScoped<IQuestionRepository, QuestionRepository>();
+        services.AddScoped<IRepository<Question>>(provider => provider.GetRequiredService<IQuestionRepository>());
+        services.AddScoped<IQuestionQueries, QuestionQueries>();
+        services.AddScoped<IRepository<TestTemplate>, TestTemplateRepository>();
+        services.AddScoped<ITestTemplateQueries, TestTemplateQueries>();
 
         AddAccounts(services);
         AddSessions(services, configuration);

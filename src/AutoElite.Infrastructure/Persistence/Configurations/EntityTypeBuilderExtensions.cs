@@ -94,6 +94,21 @@ internal static class EntityTypeBuilderExtensions
         time.Property(value => value.EndUtc).HasColumnName("end_utc");
     }
 
+    /// <summary>
+    /// Maps <see cref="TestRules"/> to columns of the template. Every property is named, since get-only properties of a
+    /// value object are mapped only when configured, and the constructor binds all of them.
+    /// </summary>
+    /// <param name="rules">The builder of the complex property.</param>
+    public static void MapRules(this ComplexPropertyBuilder<TestRules> rules)
+    {
+        rules.Property(value => value.QuestionCount);
+        rules.Property(value => value.TimeLimit);
+        rules.Property(value => value.MaxMistakes);
+        rules.Property(value => value.MaxMistakesPerBlock);
+        rules.Property(value => value.ExtraQuestionsPerMistake);
+        rules.Property(value => value.ExtraTimePerMistake);
+    }
+
     /// <summary>Maps an <see cref="Address"/> to the columns <c>{prefix}_city</c> and <c>{prefix}_street</c>.</summary>
     /// <param name="address">The builder of the complex property.</param>
     public static void MapAddress(this ComplexPropertyBuilder<Address> address)

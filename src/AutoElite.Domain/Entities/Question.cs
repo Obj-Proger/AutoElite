@@ -24,13 +24,21 @@ public sealed class Question : AuditableEntity
     /// <summary>The most answer options a question may have.</summary>
     public const int MaxOptions = 6;
 
-    private const int MaxTextLength = 2000;
-    private const int MaxExplanationLength = 4000;
-    private const int MaxOptionTextLength = 1000;
-    private const int MaxExternalCodeLength = 50;
+    /// <summary>The longest question text.</summary>
+    public const int MaxTextLength = 2000;
+
+    /// <summary>The longest explanation.</summary>
+    public const int MaxExplanationLength = 4000;
+
+    /// <summary>The longest text of an answer option.</summary>
+    public const int MaxOptionTextLength = 1000;
+
+    /// <summary>The longest external code.</summary>
+    public const int MaxExternalCodeLength = 50;
 
     private readonly List<AnswerOption> _options = [];
-    private readonly List<LicenseCategory> _categories = [];
+    // Not read-only, so that the persistence layer can load the stored categories into it.
+    private List<LicenseCategory> _categories = [];
 
     /// <summary>Gets the question text.</summary>
     public string Text { get; private set; } = null!;
