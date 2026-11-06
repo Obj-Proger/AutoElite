@@ -31,6 +31,7 @@ internal sealed class TestSessionConfiguration : IEntityTypeConfiguration<TestSe
         builder.HasOne<Contract>().WithMany().HasForeignKey(session => session.ContractId).OnDelete(DeleteBehavior.Restrict);
         builder.HasOne<User>().WithMany().HasForeignKey(session => session.StudentId).OnDelete(DeleteBehavior.Restrict);
         builder.HasOne<TestTemplate>().WithMany().HasForeignKey(session => session.TemplateId).OnDelete(DeleteBehavior.Restrict);
+        builder.HasOne<Exam>().WithMany().HasForeignKey(session => session.ExamId).OnDelete(DeleteBehavior.Restrict);
         builder.HasIndex(session => session.ContractId)
             .IsUnique()
             .HasFilter("status = 'InProgress'")

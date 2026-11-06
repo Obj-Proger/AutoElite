@@ -32,5 +32,10 @@ internal static class TrainingRecords
             .Value;
 
     /// <summary>Gives a unique contract number.</summary>
+    public static StudyGroup NewGroup(Course course, User instructor, Guid? branchId = null) =>
+        StudyGroup.Create(
+                $"Группа {Guid.NewGuid():N}", course, instructor.Id, branchId, new DateOnly(2026, 2, 1), new DateOnly(2026, 6, 1), 20)
+            .Value;
+
     public static string Number() => "T-" + Guid.NewGuid().ToString("N")[..20];
 }

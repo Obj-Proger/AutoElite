@@ -3,6 +3,7 @@ using AutoElite.Application.Contracts;
 using AutoElite.Application.Courses;
 using AutoElite.Application.DrivingRoutes;
 using AutoElite.Application.DrivingSlots;
+using AutoElite.Application.Exams;
 using AutoElite.Application.Leads;
 using AutoElite.Application.Questions;
 using AutoElite.Application.Settings;
@@ -104,6 +105,9 @@ public static class DependencyInjection
         services.AddScoped<IRepository<TestSession>>(provider => provider.GetRequiredService<ITestSessionRepository>());
         services.AddScoped<ITestSessionQueries, TestSessionQueries>();
         services.AddScoped<IQuestionPicker, QuestionPicker>();
+        services.AddScoped<IExamRepository, ExamRepository>();
+        services.AddScoped<IRepository<Exam>>(provider => provider.GetRequiredService<IExamRepository>());
+        services.AddScoped<IExamQueries, ExamQueries>();
 
         AddAccounts(services);
         AddSessions(services, configuration);

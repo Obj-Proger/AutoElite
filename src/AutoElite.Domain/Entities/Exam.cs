@@ -17,8 +17,11 @@ public sealed class Exam : AuditableEntity
     /// <summary>The highest score that can be given.</summary>
     public const int MaxScore = 1000;
 
-    private const int MaxCommentLength = 2000;
-    private const int MaxCancellationReasonLength = 1000;
+    /// <summary>The longest comment of a result.</summary>
+    public const int MaxCommentLength = 2000;
+
+    /// <summary>The longest cancellation reason.</summary>
+    public const int MaxCancellationReasonLength = 1000;
 
     private readonly List<ExamResult> _results = [];
 

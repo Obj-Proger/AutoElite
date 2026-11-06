@@ -34,7 +34,8 @@ public sealed class TestSessionPersistenceTests(DatabaseFixture database) : ICla
             .Value;
 
     /// <summary>A contract, a topic of its own with the given number of questions, and a one-block template, saved.</summary>
-    private async Task<(Contract Contract, TestTemplate Template, Guid TopicId, Question[] Questions)> SceneAsync(int questionCount)
+    private async Task<(Contract Contract, TestTemplate Template, Guid TopicId, Question[] Questions, Course Course)> SceneAsync(
+        int questionCount)
     {
         var student = TrainingRecords.Person("Кузнецов");
         var course = TrainingRecords.NewCourse();
@@ -46,7 +47,7 @@ public sealed class TestSessionPersistenceTests(DatabaseFixture database) : ICla
         var questions = Enumerable.Range(1, questionCount).Select(number => NewQuestion(topicId, $"Вопрос {number}")).ToArray();
         await SaveAsync([student, course, contract, template, .. questions]);
 
-        return (contract, template, topicId, questions);
+        return (contract, template, topicId, questions, course);
     }
 
     private static QuestionPick Pick(Guid topicId, int count, params Guid[] excluded) =>
@@ -63,7 +64,7 @@ public sealed class TestSessionPersistenceTests(DatabaseFixture database) : ICla
     [Fact]
     public async Task Save_SessionWithAMistakeAndAnAddedQuestion_StoresTheAttemptAsShown()
     {
-        var (contract, template, topicId, _) = await SceneAsync(5);
+        var (contract, template, topicId, _, _) = await SceneAsync(5);
         var session = await StartAsync(contract, template, topicId);
         await SaveAsync(session);
         var answeredAt = FixedClock.Default.UtcNow.AddMinutes(1);
@@ -100,7 +101,7 @@ public sealed class TestSessionPersistenceTests(DatabaseFixture database) : ICla
     [Fact]
     public async Task Queries_ReadTheAttemptsOfAContractWithTheirCounts()
     {
-        var (contract, template, topicId, _) = await SceneAsync(4);
+        var (contract, template, topicId, _, _) = await SceneAsync(4);
         var session = await StartAsync(contract, template, topicId);
         var first = session.Questions[0];
         session.Answer(first.Id, first.CorrectOptionId, FixedClock.Default.UtcNow.AddMinutes(1)).IsSuccess.Should().BeTrue();
@@ -133,9 +134,13 @@ public sealed class TestSessionPersistenceTests(DatabaseFixture database) : ICla
     [Fact]
     public async Task Save_SecondAttemptInProgressOfAContract_ThrowsConcurrencyConflict()
     {
-        var (contract, template, topicId, _) = await SceneAsync(3);
-        var examId = Guid.CreateVersion7();
-        var first = await StartAsync(contract, template, topicId, examId);
+        var (contract, template, topicId, _, course) = await SceneAsync(3);
+        var instructor = TrainingRecords.Person("Орлов");
+        var group = TrainingRecords.NewGroup(course, instructor);
+        var exam = Exam.Schedule(group, ExamKind.Theory, template, FixedClock.Default.UtcNow.AddHours(1), FixedClock.Default.UtcNow)
+            .Value;
+        await SaveAsync(instructor, group, exam);
+        var first = await StartAsync(contract, template, topicId, exam.Id);
         await SaveAsync(first);
 
         var save = async () => await SaveAsync(await StartAsync(contract, template, topicId));
@@ -146,14 +151,14 @@ public sealed class TestSessionPersistenceTests(DatabaseFixture database) : ICla
         var inProgress = await repository.GetInProgressOfContractAsync(contract.Id, CancellationToken);
         inProgress!.Id.Should().Be(first.Id);
         inProgress.Questions.Should().HaveCount(3);
-        (await repository.ExistsForExamAsync(examId, contract.Id, CancellationToken)).Should().BeTrue();
+        (await repository.ExistsForExamAsync(exam.Id, contract.Id, CancellationToken)).Should().BeTrue();
         (await repository.ExistsForExamAsync(Guid.CreateVersion7(), contract.Id, CancellationToken)).Should().BeFalse();
     }
 
     [Fact]
     public async Task Pick_DrawsOnlyActiveQuestionsOfTheCategoryAndTopicThatAreNotExcluded()
     {
-        var (_, _, topicId, questions) = await SceneAsync(3);
+        var (_, _, topicId, questions, _) = await SceneAsync(3);
         var inactive = NewQuestion(topicId, "Снятый вопрос");
         inactive.Deactivate().IsSuccess.Should().BeTrue();
         var otherCategory = NewQuestion(topicId, "Вопрос категории C", LicenseCategory.C);
