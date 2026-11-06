@@ -27,8 +27,11 @@ public sealed class DrivingSlot : AuditableEntity
     /// <summary>The longest slot that can be offered.</summary>
     public static readonly TimeSpan MaxDuration = TimeSpan.FromHours(4);
 
-    private const int MaxReasonLength = 1000;
-    private const int MaxNoteLength = 2000;
+    /// <summary>The longest reason of a cancellation or withdrawal.</summary>
+    public const int MaxReasonLength = 1000;
+
+    /// <summary>The longest instructor note or student comment.</summary>
+    public const int MaxNoteLength = 2000;
     private const int MinRating = 1;
     private const int MaxRating = 5;
 

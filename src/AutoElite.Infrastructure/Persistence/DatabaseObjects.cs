@@ -13,7 +13,8 @@ internal static class DatabaseObjects
     /// <summary>The scripts in the order they are created; they are dropped in the reverse order.</summary>
     private static readonly string[] _scripts =
     [
-        "01-theory-lesson-overlap"
+        "01-theory-lesson-overlap",
+        "02-driving-overlap"
     ];
 
     /// <summary>Creates the objects as part of a migration.</summary>

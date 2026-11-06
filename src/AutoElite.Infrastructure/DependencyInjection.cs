@@ -2,6 +2,7 @@ using AutoElite.Application.Branches;
 using AutoElite.Application.Contracts;
 using AutoElite.Application.Courses;
 using AutoElite.Application.DrivingRoutes;
+using AutoElite.Application.DrivingSlots;
 using AutoElite.Application.Leads;
 using AutoElite.Application.Settings;
 using AutoElite.Application.StudyGroups;
@@ -88,6 +89,9 @@ public static class DependencyInjection
         services.AddScoped<ITrainingGroundQueries, TrainingGroundQueries>();
         services.AddScoped<IRepository<DrivingRoute>, DrivingRouteRepository>();
         services.AddScoped<IDrivingRouteQueries, DrivingRouteQueries>();
+        services.AddScoped<IDrivingSlotRepository, DrivingSlotRepository>();
+        services.AddScoped<IRepository<DrivingSlot>>(provider => provider.GetRequiredService<IDrivingSlotRepository>());
+        services.AddScoped<IDrivingSlotQueries, DrivingSlotQueries>();
 
         AddAccounts(services);
         AddSessions(services, configuration);
