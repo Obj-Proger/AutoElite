@@ -1,3 +1,4 @@
+using AutoElite.Application.Analytics;
 using AutoElite.Application.Branches;
 using AutoElite.Application.Chats;
 using AutoElite.Application.Contracts;
@@ -134,6 +135,7 @@ public static class DependencyInjection
         services.AddScoped<IDocumentQueries, DocumentQueries>();
         services.AddScoped<IStudentCardQueries, StudentCardQueries>();
         services.AddScoped<IEntityReferences, EntityReferences>();
+        services.AddScoped<IAnalyticsQueries, AnalyticsQueries>();
 
         AddChatEncryption(services, configuration);
         AddAccounts(services);
