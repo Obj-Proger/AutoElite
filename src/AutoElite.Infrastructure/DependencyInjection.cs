@@ -54,7 +54,8 @@ public static class DependencyInjection
     /// requests, the repositories and read services, and the outbox worker and the scheduled jobs that run in the host.
     /// The host must register <see cref="ICurrentUser"/>, which reports the system outside a request, since the outbox
     /// handlers and the jobs run on its behalf, and logging; and configure the <see cref="JwtOptions.SectionName"/>,
-    /// <see cref="ClientOptions.SectionName"/> and <see cref="ChatEncryptionOptions.SectionName"/> sections.
+    /// <see cref="ClientOptions.SectionName"/>, <see cref="ChatEncryptionOptions.SectionName"/> and
+    /// <see cref="EmailOptions.SectionName"/> sections.
     /// </summary>
     /// <param name="services">The services to add to.</param>
     /// <param name="configuration">The configuration with the connection string <see cref="ConnectionStringName"/>.</param>
@@ -144,6 +145,7 @@ public static class DependencyInjection
 
         AddChatEncryption(services, configuration);
         AddOutbox(services, configuration);
+        AddEmailDelivery(services, configuration);
         AddBackgroundJobs(services, configuration, connectionString);
         AddAccounts(services);
         AddSessions(services, configuration);
@@ -178,6 +180,25 @@ public static class DependencyInjection
         services.AddHangfireServer((provider, server) =>
             server.WorkerCount = provider.GetRequiredService<IOptions<BackgroundJobsOptions>>().Value.WorkerCount);
         services.AddHostedService<RecurringJobsRegistrar>();
+    }
+
+    /// <summary>
+    /// Registers the delivery of the queued emails, which runs in the host, from the <see cref="EmailOptions.SectionName"/>
+    /// section: to the SMTP server, or to a folder in the pickup directory mode.
+    /// </summary>
+    private static void AddEmailDelivery(IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddOptions<EmailOptions>()
+            .Bind(configuration.GetSection(EmailOptions.SectionName))
+            .ValidateOnStart();
+        services.AddSingleton<IValidateOptions<EmailOptions>>(
+            new SettingsValidator<EmailOptions>(options => options.Problems()));
+        services.AddSingleton<IEmailSender>(provider =>
+            provider.GetRequiredService<IOptions<EmailOptions>>().Value.Mode == EmailDeliveryMode.PickupDirectory
+                ? ActivatorUtilities.CreateInstance<PickupDirectoryEmailSender>(provider)
+                : ActivatorUtilities.CreateInstance<SmtpEmailSender>(provider));
+        services.AddSingleton<EmailDeliveryProcessor>();
+        services.AddHostedService<EmailDeliveryWorker>();
     }
 
     /// <summary>

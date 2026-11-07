@@ -1,3 +1,5 @@
+using AutoElite.Infrastructure.Common;
+
 namespace AutoElite.Infrastructure.Outbox;
 
 /// <summary>
@@ -26,13 +28,7 @@ internal sealed class OutboxOptions
 
     /// <summary>Gets the pause after the given number of failed deliveries.</summary>
     /// <param name="attempts">The failed deliveries so far, the latest included; at least 1.</param>
-    public TimeSpan RetryDelayAfter(int attempts)
-    {
-        var doublings = Math.Clamp(attempts - 1, 0, 30);
-        var delay = FirstRetryDelay * Math.Pow(2, doublings);
-
-        return delay < MaxRetryDelay ? delay : MaxRetryDelay;
-    }
+    public TimeSpan RetryDelayAfter(int attempts) => RetryDelays.After(attempts, FirstRetryDelay, MaxRetryDelay);
 
     /// <summary>Tells what is wrong with the settings, if anything.</summary>
     /// <returns>The problems, empty when the settings are valid.</returns>
