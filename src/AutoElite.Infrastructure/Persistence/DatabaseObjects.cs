@@ -4,45 +4,34 @@ namespace AutoElite.Infrastructure.Persistence;
 
 /// <summary>
 /// The database objects EF Core does not model, such as exclusion constraints against overlapping times. They are SQL
-/// scripts in <c>Persistence/Sql</c>, embedded in this assembly: the migrations apply them with
-/// <see cref="Create(MigrationBuilder)"/> and <see cref="Drop"/>, and a database created from the model without
-/// migrations, as in tests, gets them with <see cref="CreateAsync"/>.
+/// scripts in <c>Persistence/Sql</c>, embedded in this assembly, which the migrations apply with
+/// <see cref="Create"/> and <see cref="Drop"/>.
 /// </summary>
+/// <remarks>
+/// A migration names the scripts it applies, so that it keeps doing the same thing when later migrations add scripts.
+/// A script, once a migration applies it, does not change: a change to the objects is a new script and a new
+/// migration that drops the old objects and creates the new ones.
+/// </remarks>
 internal static class DatabaseObjects
 {
-    /// <summary>The scripts in the order they are created; they are dropped in the reverse order.</summary>
-    private static readonly string[] _scripts =
-    [
-        "01-theory-lesson-overlap",
-        "02-driving-overlap",
-        "03-notification-subject",
-        "04-staff-task-subject",
-        "05-document-owner"
-    ];
-
-    /// <summary>Creates the objects as part of a migration.</summary>
+    /// <summary>Creates the objects of the scripts, in the given order, as part of a migration.</summary>
     /// <param name="migrationBuilder">The builder of the migration.</param>
-    public static void Create(MigrationBuilder migrationBuilder)
+    /// <param name="scripts">The names of the scripts, without the <c>.up.sql</c> ending.</param>
+    public static void Create(MigrationBuilder migrationBuilder, params string[] scripts)
     {
-        foreach (var script in _scripts)
+        ArgumentNullException.ThrowIfNull(migrationBuilder);
+        foreach (var script in scripts)
             migrationBuilder.Sql(Read($"{script}.up.sql"));
     }
 
-    /// <summary>Drops the objects as part of reverting a migration.</summary>
+    /// <summary>Drops the objects of the scripts, in the reverse order, as part of reverting a migration.</summary>
     /// <param name="migrationBuilder">The builder of the migration.</param>
-    public static void Drop(MigrationBuilder migrationBuilder)
+    /// <param name="scripts">The names of the scripts as <see cref="Create"/> was given them.</param>
+    public static void Drop(MigrationBuilder migrationBuilder, params string[] scripts)
     {
-        foreach (var script in Enumerable.Reverse(_scripts))
+        ArgumentNullException.ThrowIfNull(migrationBuilder);
+        foreach (var script in Enumerable.Reverse(scripts))
             migrationBuilder.Sql(Read($"{script}.down.sql"));
-    }
-
-    /// <summary>Creates the objects in a database whose tables were created from the model.</summary>
-    /// <param name="dbContext">A context on the database.</param>
-    /// <param name="cancellationToken">A token that signals cancellation of the operation.</param>
-    public static async Task CreateAsync(AutoEliteDbContext dbContext, CancellationToken cancellationToken)
-    {
-        foreach (var script in _scripts)
-            await dbContext.Database.ExecuteSqlRawAsync(Read($"{script}.up.sql"), cancellationToken);
     }
 
     private static string Read(string fileName)

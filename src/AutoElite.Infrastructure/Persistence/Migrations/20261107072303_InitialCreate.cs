@@ -9,6 +9,16 @@ namespace AutoElite.Infrastructure.Persistence.Migrations
     /// <inheritdoc />
     public partial class InitialCreate : Migration
     {
+        // Written by hand: the scripts of the objects EF Core does not model, as they were when this migration was made.
+        private static readonly string[] Scripts =
+        [
+            "01-theory-lesson-overlap",
+            "02-driving-overlap",
+            "03-notification-subject",
+            "04-staff-task-subject",
+            "05-document-owner"
+        ];
+
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -1868,11 +1878,17 @@ namespace AutoElite.Infrastructure.Persistence.Migrations
                 principalTable: "users",
                 principalColumn: "id",
                 onDelete: ReferentialAction.Restrict);
+
+            // Written by hand: the objects EF Core does not model (see DatabaseObjects).
+            DatabaseObjects.Create(migrationBuilder, Scripts);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            // Written by hand: the objects EF Core does not model go first, since they depend on the tables.
+            DatabaseObjects.Drop(migrationBuilder, Scripts);
+
             migrationBuilder.DropForeignKey(
                 name: "fk_documents_user_uploaded_by_user_id",
                 table: "documents");
@@ -2002,6 +2018,9 @@ namespace AutoElite.Infrastructure.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "documents");
+
+            // Written by hand: Up creates the collation, and EF Core does not drop it, so that Up can run again.
+            migrationBuilder.Sql("DROP COLLATION IF EXISTS case_insensitive;");
         }
     }
 }

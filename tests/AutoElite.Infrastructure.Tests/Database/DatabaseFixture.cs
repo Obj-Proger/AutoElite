@@ -6,8 +6,8 @@ using Microsoft.Extensions.DependencyInjection;
 namespace AutoElite.Infrastructure.Tests.Database;
 
 /// <summary>
-/// A database of its own for one test class, with the schema of the model and the database objects the model does
-/// not describe; dropped when the class has run. Tests of a class share it, so each test uses records of its own and
+/// A database of its own for one test class, created by the migrations as a deployment creates it, so that every test
+/// class also checks them; dropped when the class has run. Tests of a class share it, so each test uses records of its own and
 /// does not count on the others being absent.
 /// </summary>
 public sealed class DatabaseFixture : IAsyncLifetime
@@ -55,8 +55,7 @@ public sealed class DatabaseFixture : IAsyncLifetime
         _connectionString = await TestPostgreSql.CreateDatabaseAsync(TestContext.Current.CancellationToken);
 
         await using var context = CreateContext();
-        await context.Database.EnsureCreatedAsync(TestContext.Current.CancellationToken);
-        await DatabaseObjects.CreateAsync(context, TestContext.Current.CancellationToken);
+        await context.Database.MigrateAsync(TestContext.Current.CancellationToken);
     }
 
     /// <inheritdoc />

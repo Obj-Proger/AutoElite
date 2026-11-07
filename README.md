@@ -72,8 +72,10 @@ dotnet ef migrations add <Name> --project src/AutoElite.Infrastructure --output-
 dotnet ef database update --project src/AutoElite.Infrastructure --connection "Host=...;Database=...;Username=...;Password=..."
 ```
 
-Objects that EF Core does not model, such as exclusion constraints, are SQL scripts in `Persistence/Sql`; a migration
-that changes them calls `DatabaseObjects.Create` in `Up` and `DatabaseObjects.Drop` in `Down`.
+Objects that EF Core does not model, such as exclusion constraints, are SQL scripts in `Persistence/Sql`. A migration
+applies the scripts it names with `DatabaseObjects.Create` in `Up` and `DatabaseObjects.Drop` in `Down`; a script that
+a migration has applied is never changed, so a change to those objects is a new script in a new migration. The tests
+create their databases with the migrations and fail when the model has changes that no migration holds.
 
 ## Repository layout
 
