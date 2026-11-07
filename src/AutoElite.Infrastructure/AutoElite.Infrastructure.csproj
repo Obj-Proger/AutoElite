@@ -13,6 +13,7 @@
     <PackageReference Include="EFCore.NamingConventions" />
     <PackageReference Include="Hangfire.NetCore" />
     <PackageReference Include="Hangfire.PostgreSql" />
+    <PackageReference Include="AWSSDK.S3" />
     <PackageReference Include="MailKit" />
     <!-- Lifts Hangfire's dependency to a version without known vulnerabilities; see Directory.Packages.props. -->
     <PackageReference Include="Newtonsoft.Json" />

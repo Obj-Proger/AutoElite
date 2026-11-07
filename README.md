@@ -61,6 +61,17 @@ $env:AUTOELITE_TEST_POSTGRES = "Host=...;Port=5432;Username=...;Password=..."
 dotnet test
 ```
 
+The tests of the S3 file storage need an S3-compatible storage; each test class creates a bucket of its own and
+removes it afterwards. By default they start SeaweedFS in a throwaway container, which also needs a local Docker
+engine; without Docker they are skipped, and CI, which has Docker, runs them on every push. To use a storage already
+running instead, such as `weed.exe` of SeaweedFS started locally, give the tests an account that may create buckets:
+
+```shell
+# PowerShell
+$env:AUTOELITE_TEST_S3 = "ServiceUrl=http://...:8333;AccessKey=...;SecretKey=..."
+dotnet test
+```
+
 ### Database migrations
 
 The schema is created by EF Core migrations in `src/AutoElite.Infrastructure/Persistence/Migrations`. The EF Core

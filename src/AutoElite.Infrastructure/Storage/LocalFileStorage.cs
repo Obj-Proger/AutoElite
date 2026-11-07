@@ -20,6 +20,9 @@ internal interface IStoredFiles
     Task RemoveAbandonedIncomingAsync(DateTime storedBeforeUtc, CancellationToken cancellationToken);
 }
 
+/// <summary>A storage of the files of documents that can also list them; every provider is one.</summary>
+internal interface IDocumentFileStore : IFileStorage, IStoredFiles;
+
 /// <summary>The rules of storage keys and local files, shared by the providers.</summary>
 internal static partial class LocalFiles
 {
@@ -61,6 +64,23 @@ internal static partial class LocalFiles
         return new FileStream(path, options);
     }
 
+    /// <summary>Removes the files left half-received in a folder of incoming files.</summary>
+    /// <param name="folder">The folder.</param>
+    /// <param name="storedBeforeUtc">The UTC time the files were left before.</param>
+    /// <param name="cancellationToken">A token that signals cancellation of the operation.</param>
+    public static void RemoveAbandonedIncoming(string folder, DateTime storedBeforeUtc, CancellationToken cancellationToken)
+    {
+        if (!Directory.Exists(folder))
+            return;
+
+        foreach (var file in new DirectoryInfo(folder).EnumerateFiles("*.part"))
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            if (file.LastWriteTimeUtc < storedBeforeUtc)
+                file.Delete();
+        }
+    }
+
     [GeneratedRegex("^documents/[0-9a-f]{32}$", RegexOptions.CultureInvariant)]
     private static partial Regex KeyPattern();
 }
@@ -70,7 +90,7 @@ internal static partial class LocalFiles
 /// A file is received into <c>.incoming</c> on the same disk and moved to its place only once it is checked, so that
 /// a half-received or rejected file is never kept.
 /// </summary>
-internal sealed class LocalFileStorage(IOptions<FileStorageOptions> options) : IFileStorage, IStoredFiles
+internal sealed class LocalFileStorage(IOptions<FileStorageOptions> options) : IDocumentFileStore
 {
     private string Root => Path.GetFullPath(options.Value.RootPath);
 
@@ -137,16 +157,7 @@ internal sealed class LocalFileStorage(IOptions<FileStorageOptions> options) : I
     /// <inheritdoc />
     public Task RemoveAbandonedIncomingAsync(DateTime storedBeforeUtc, CancellationToken cancellationToken)
     {
-        var folder = Path.Combine(Root, LocalFiles.IncomingFolder);
-        if (Directory.Exists(folder))
-        {
-            foreach (var file in new DirectoryInfo(folder).EnumerateFiles("*.part"))
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-                if (file.LastWriteTimeUtc < storedBeforeUtc)
-                    file.Delete();
-            }
-        }
+        LocalFiles.RemoveAbandonedIncoming(Path.Combine(Root, LocalFiles.IncomingFolder), storedBeforeUtc, cancellationToken);
 
         return Task.CompletedTask;
     }

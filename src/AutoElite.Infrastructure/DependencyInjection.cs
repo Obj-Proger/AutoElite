@@ -196,9 +196,16 @@ public static class DependencyInjection
         services.AddSingleton<IValidateOptions<FileStorageOptions>>(
             new SettingsValidator<FileStorageOptions>(options => options.Problems()));
         services.AddSingleton<LocalFileStorage>();
-        services.AddSingleton<IFileStorage>(provider => provider.GetRequiredService<LocalFileStorage>());
-        services.AddSingleton<IStoredFiles>(provider => provider.GetRequiredService<LocalFileStorage>());
+        services.AddSingleton<S3FileStorage>();
+        services.AddSingleton<IFileStorage>(provider => ChosenFileStorage(provider));
+        services.AddSingleton<IStoredFiles>(provider => ChosenFileStorage(provider));
     }
+
+    /// <summary>The storage the settings choose, which is both the storage and the list of its files.</summary>
+    private static IDocumentFileStore ChosenFileStorage(IServiceProvider provider) =>
+        provider.GetRequiredService<IOptions<FileStorageOptions>>().Value.Provider == FileStorageProvider.S3
+            ? provider.GetRequiredService<S3FileStorage>()
+            : provider.GetRequiredService<LocalFileStorage>();
 
     /// <summary>
     /// Registers the delivery of the queued emails, which runs in the host, from the <see cref="EmailOptions.SectionName"/>
