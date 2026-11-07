@@ -61,6 +61,20 @@ $env:AUTOELITE_TEST_POSTGRES = "Host=...;Port=5432;Username=...;Password=..."
 dotnet test
 ```
 
+### Database migrations
+
+The schema is created by EF Core migrations in `src/AutoElite.Infrastructure/Persistence/Migrations`. The EF Core
+tools are pinned in the repository's tool manifest:
+
+```shell
+dotnet tool restore
+dotnet ef migrations add <Name> --project src/AutoElite.Infrastructure --output-dir Persistence/Migrations
+dotnet ef database update --project src/AutoElite.Infrastructure --connection "Host=...;Database=...;Username=...;Password=..."
+```
+
+Objects that EF Core does not model, such as exclusion constraints, are SQL scripts in `Persistence/Sql`; a migration
+that changes them calls `DatabaseObjects.Create` in `Up` and `DatabaseObjects.Drop` in `Down`.
+
 ## Repository layout
 
 ```
