@@ -12,6 +12,7 @@ using AutoElite.Application.Payments;
 using AutoElite.Application.Questions;
 using AutoElite.Application.Settings;
 using AutoElite.Application.StaffTasks;
+using AutoElite.Application.StudentCards;
 using AutoElite.Application.StudyGroups;
 using AutoElite.Application.TestSessions;
 using AutoElite.Application.TestTemplates;
@@ -131,6 +132,8 @@ public static class DependencyInjection
         services.AddScoped<IDocumentRepository, DocumentRepository>();
         services.AddScoped<IRepository<Document>>(provider => provider.GetRequiredService<IDocumentRepository>());
         services.AddScoped<IDocumentQueries, DocumentQueries>();
+        services.AddScoped<IStudentCardQueries, StudentCardQueries>();
+        services.AddScoped<IEntityReferences, EntityReferences>();
 
         AddChatEncryption(services, configuration);
         AddAccounts(services);
