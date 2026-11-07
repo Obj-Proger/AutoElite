@@ -88,6 +88,20 @@ applies the scripts it names with `DatabaseObjects.Create` in `Up` and `Database
 a migration has applied is never changed, so a change to those objects is a new script in a new migration. The tests
 create their databases with the migrations and fail when the model has changes that no migration holds.
 
+## Importing questions
+
+Questions are imported into one course topic from a file, alone or in a ZIP archive with the images it names. An
+archive may hold several files of questions, read in the order of their paths, and the images in any folders: a
+question names an image by its path, or by the end of its path when no other file ends the same way.
+
+| Format | Extension | Content |
+|---|---|---|
+| [pdd_russia](https://github.com/etspring/pdd_russia) | `.json` | A list of questions of the official tickets. The `A,B` tickets go to categories A, A1, B, B1 and M, the `C,D` tickets to C, C1, D and D1; a question repeated in several tickets is imported once. Zip the `questions/A_B/tickets` (or `C_D`) folder together with `images` |
+| AutoElite | `.json` | `{"format": "autoelite.questions", "version": 1, "questions": [...]}`, each question with `code`, `text`, `explanation`, `categories`, `image` and `options` (`text`, `isCorrect`) |
+| Table | `.csv`, `.xlsx` | The first row names the columns: `question`, `correct` (the number of the correct option) and `option1`, `option2`, ... are required; `code`, `explanation`, `categories` and `image` are optional; other columns are ignored. Russian names work too (`Вопрос`, `Правильный ответ`, `Вариант 1`, `Код`, `Пояснение`, `Категории`, `Картинка`). CSV may be UTF-8 or Windows-1251, separated by commas or semicolons, as Excel saves it; of a workbook, the first worksheet is read |
+
+A file is at most 32 MB and an archive at most 512 MB. A question whose code is already in the bank is updated.
+
 ## Repository layout
 
 ```

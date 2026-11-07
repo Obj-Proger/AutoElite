@@ -1,3 +1,5 @@
+using AutoElite.Application.Questions.ImportQuestions;
+using AutoElite.Infrastructure.Import;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -34,6 +36,7 @@ public sealed class DependencyInjectionTests
 
         scope.ServiceProvider.GetRequiredService<IUnitOfWork>().Should().NotBeNull();
         scope.ServiceProvider.GetRequiredService<AutoEliteDbContext>().Model.FindEntityType(typeof(Branch)).Should().NotBeNull();
+        scope.ServiceProvider.GetRequiredService<IQuestionFileReader>().Should().BeOfType<QuestionFileReader>();
     }
 
     [Fact]
