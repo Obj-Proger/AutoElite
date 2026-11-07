@@ -113,3 +113,6 @@ tests/   one test project per layer (xUnit v3, AwesomeAssertions), plus architec
 ## License
 
 [GPL-3.0](LICENSE)
+
+The PDF reports use the PT Sans font by ParaType, embedded in the infrastructure assembly under the
+[SIL Open Font License 1.1](src/AutoElite.Infrastructure/Reports/Fonts/OFL.txt).

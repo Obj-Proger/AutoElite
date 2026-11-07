@@ -28,6 +28,8 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
+    <PackageReference Include="SkiaSharp" />
+    <PackageReference Include="SkiaSharp.NativeAssets.Linux.NoDependencies" />
   </ItemGroup>
 
   <ItemGroup>
@@ -38,6 +40,8 @@
   <ItemGroup>
     <!-- Database objects EF Core does not model, such as exclusion constraints; see Persistence/DatabaseObjects.cs. -->
     <EmbeddedResource Include="Persistence\Sql\*.sql" LogicalName="Sql/%(Filename)%(Extension)" />
+    <!-- The font of the PDF reports and its licence, which travels with it; see Reports/PdfFonts.cs. -->
+    <EmbeddedResource Include="Reports\Fonts\*.ttf;Reports\Fonts\OFL.txt" LogicalName="Fonts/%(Filename)%(Extension)" />
   </ItemGroup>
 
   <ItemGroup>

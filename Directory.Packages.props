@@ -43,8 +43,13 @@
   <ItemGroup Label="File storage">
     <PackageVersion Include="AWSSDK.S3" Version="4.0.104.5" />
   </ItemGroup>
-  <!-- ClosedXML (MIT) reads the Excel workbooks of question imports (D-070) and will write the Excel reports (D-071). -->
+  <!--
+    ClosedXML (MIT) reads the Excel workbooks of question imports (D-070) and writes the Excel reports; SkiaSharp (MIT)
+    draws the PDF reports (D-071), with the native library for Linux that needs no system packages such as Fontconfig.
+  -->
   <ItemGroup Label="Import and reports">
     <PackageVersion Include="ClosedXML" Version="0.105.1" />
+    <PackageVersion Include="SkiaSharp" Version="4.154.0" />
+    <PackageVersion Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Version="4.154.0" />
   </ItemGroup>
 </Project>

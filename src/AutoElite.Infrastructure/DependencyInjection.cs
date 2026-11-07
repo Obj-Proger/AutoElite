@@ -34,6 +34,7 @@ using AutoElite.Infrastructure.Persistence;
 using AutoElite.Infrastructure.Persistence.Interceptors;
 using AutoElite.Infrastructure.Persistence.Queries;
 using AutoElite.Infrastructure.Persistence.Repositories;
+using AutoElite.Infrastructure.Reports;
 using AutoElite.Infrastructure.Storage;
 using Hangfire;
 using Hangfire.PostgreSql;
@@ -118,6 +119,7 @@ public static class DependencyInjection
         services.AddScoped<IRepository<Question>>(provider => provider.GetRequiredService<IQuestionRepository>());
         services.AddScoped<IQuestionQueries, QuestionQueries>();
         services.AddSingleton<IQuestionFileReader, QuestionFileReader>();
+        services.AddSingleton<IReportRenderer, ReportRenderer>();
         services.AddScoped<IRepository<TestTemplate>, TestTemplateRepository>();
         services.AddScoped<ITestTemplateQueries, TestTemplateQueries>();
         services.AddScoped<ITestSessionRepository, TestSessionRepository>();
