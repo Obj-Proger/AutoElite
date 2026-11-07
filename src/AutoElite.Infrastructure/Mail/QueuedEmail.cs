@@ -47,6 +47,14 @@ internal sealed class QueuedEmail
     /// <summary>Gets the error of the last failed delivery, for whoever investigates an email that keeps failing.</summary>
     public string? LastError { get; private set; }
 
+    /// <summary>Marks the email sent and clears its body, which may hold one-time links.</summary>
+    /// <param name="utcNow">The current UTC time.</param>
+    public void MarkSent(DateTime utcNow)
+    {
+        SentAtUtc = utcNow;
+        Body = null;
+    }
+
     /// <summary>Queues an email.</summary>
     /// <param name="message">The email.</param>
     /// <param name="utcNow">The current UTC time.</param>

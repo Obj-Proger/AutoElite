@@ -11,6 +11,10 @@
 
   <ItemGroup>
     <PackageReference Include="EFCore.NamingConventions" />
+    <PackageReference Include="Hangfire.NetCore" />
+    <PackageReference Include="Hangfire.PostgreSql" />
+    <!-- Lifts Hangfire's dependency to a version without known vulnerabilities; see Directory.Packages.props. -->
+    <PackageReference Include="Newtonsoft.Json" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
     <PackageReference Include="Microsoft.AspNetCore.DataProtection.EntityFrameworkCore" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" />

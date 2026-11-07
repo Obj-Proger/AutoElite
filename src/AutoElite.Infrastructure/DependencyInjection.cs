@@ -23,6 +23,7 @@ using AutoElite.Application.Users;
 using AutoElite.Application.Vehicles;
 using AutoElite.Application.Users.Authentication;
 using AutoElite.Infrastructure.Authentication;
+using AutoElite.Infrastructure.BackgroundJobs;
 using AutoElite.Infrastructure.Encryption;
 using AutoElite.Infrastructure.Identity;
 using AutoElite.Infrastructure.Mail;
@@ -31,6 +32,8 @@ using AutoElite.Infrastructure.Persistence;
 using AutoElite.Infrastructure.Persistence.Interceptors;
 using AutoElite.Infrastructure.Persistence.Queries;
 using AutoElite.Infrastructure.Persistence.Repositories;
+using Hangfire;
+using Hangfire.PostgreSql;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
@@ -48,9 +51,9 @@ public static class DependencyInjection
 
     /// <summary>
     /// Registers the database context, the unit of work, the sign-in accounts and session tokens, the authentication of
-    /// requests, the repositories and read services, and the outbox worker that runs in the host. The host must
-    /// register <see cref="ICurrentUser"/>, which reports the system outside a request, since the outbox handlers run
-    /// on its behalf, and logging; and configure the <see cref="JwtOptions.SectionName"/>,
+    /// requests, the repositories and read services, and the outbox worker and the scheduled jobs that run in the host.
+    /// The host must register <see cref="ICurrentUser"/>, which reports the system outside a request, since the outbox
+    /// handlers and the jobs run on its behalf, and logging; and configure the <see cref="JwtOptions.SectionName"/>,
     /// <see cref="ClientOptions.SectionName"/> and <see cref="ChatEncryptionOptions.SectionName"/> sections.
     /// </summary>
     /// <param name="services">The services to add to.</param>
@@ -141,10 +144,40 @@ public static class DependencyInjection
 
         AddChatEncryption(services, configuration);
         AddOutbox(services, configuration);
+        AddBackgroundJobs(services, configuration, connectionString);
         AddAccounts(services);
         AddSessions(services, configuration);
 
         return services;
+    }
+
+    /// <summary>
+    /// Registers Hangfire with its tables in the school's database, in the schema
+    /// <see cref="BackgroundJobsOptions.SchemaName"/> that Hangfire creates and upgrades itself, its server in the host,
+    /// and the schedule of the recurring jobs.
+    /// The job classes are not registered: Hangfire creates them in the scope of each job.
+    /// </summary>
+    private static void AddBackgroundJobs(IServiceCollection services, IConfiguration configuration, string connectionString)
+    {
+        services.AddOptions<BackgroundJobsOptions>()
+            .Bind(configuration.GetSection(BackgroundJobsOptions.SectionName))
+            .ValidateOnStart();
+        services.AddSingleton<IValidateOptions<BackgroundJobsOptions>>(
+            new SettingsValidator<BackgroundJobsOptions>(options => options.Problems()));
+        services.AddHangfire(hangfire => hangfire
+            .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+            .UseSimpleAssemblyNameTypeSerializer()
+            .UseRecommendedSerializerSettings()
+            .UsePostgreSqlStorage(
+                storage => storage.UseNpgsqlConnection(connectionString),
+                new PostgreSqlStorageOptions
+                {
+                    SchemaName = BackgroundJobsOptions.SchemaName,
+                    PrepareSchemaIfNecessary = true
+                }));
+        services.AddHangfireServer((provider, server) =>
+            server.WorkerCount = provider.GetRequiredService<IOptions<BackgroundJobsOptions>>().Value.WorkerCount);
+        services.AddHostedService<RecurringJobsRegistrar>();
     }
 
     /// <summary>
