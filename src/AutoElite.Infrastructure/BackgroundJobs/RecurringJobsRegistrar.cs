@@ -18,6 +18,9 @@ internal sealed class RecurringJobsRegistrar(IRecurringJobManager recurringJobs)
     /// <summary>The identifier of the clean-up job.</summary>
     public const string CleanUpJobId = "clean-up";
 
+    /// <summary>The identifier of the job that removes stored files no document names.</summary>
+    public const string RemoveOrphanFilesJobId = "remove-orphan-files";
+
     private static readonly RecurringJobOptions _utc = new() { TimeZone = TimeZoneInfo.Utc };
 
     /// <inheritdoc />
@@ -32,6 +35,8 @@ internal sealed class RecurringJobsRegistrar(IRecurringJobManager recurringJobs)
             _utc);
         recurringJobs.AddOrUpdate<MaintenanceJobs>(
             CleanUpJobId, jobs => jobs.CleanUpAsync(CancellationToken.None), Cron.Daily(3), _utc);
+        recurringJobs.AddOrUpdate<FileCleanupJob>(
+            RemoveOrphanFilesJobId, job => job.RemoveOrphansAsync(CancellationToken.None), Cron.Daily(4), _utc);
 
         return Task.CompletedTask;
     }

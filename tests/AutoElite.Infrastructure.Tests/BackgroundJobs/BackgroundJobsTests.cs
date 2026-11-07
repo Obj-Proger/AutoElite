@@ -23,7 +23,8 @@ public sealed class BackgroundJobsTests(DatabaseFixture database) : IClassFixtur
     [
         RecurringJobsRegistrar.SendRemindersJobId,
         RecurringJobsRegistrar.RemindOverdueStaffTasksJobId,
-        RecurringJobsRegistrar.CleanUpJobId
+        RecurringJobsRegistrar.CleanUpJobId,
+        RecurringJobsRegistrar.RemoveOrphanFilesJobId
     ];
 
     private static CancellationToken CancellationToken => TestContext.Current.CancellationToken;

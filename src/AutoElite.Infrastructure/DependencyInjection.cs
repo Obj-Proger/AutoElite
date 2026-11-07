@@ -32,6 +32,7 @@ using AutoElite.Infrastructure.Persistence;
 using AutoElite.Infrastructure.Persistence.Interceptors;
 using AutoElite.Infrastructure.Persistence.Queries;
 using AutoElite.Infrastructure.Persistence.Repositories;
+using AutoElite.Infrastructure.Storage;
 using Hangfire;
 using Hangfire.PostgreSql;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -54,8 +55,8 @@ public static class DependencyInjection
     /// requests, the repositories and read services, and the outbox worker and the scheduled jobs that run in the host.
     /// The host must register <see cref="ICurrentUser"/>, which reports the system outside a request, since the outbox
     /// handlers and the jobs run on its behalf, and logging; and configure the <see cref="JwtOptions.SectionName"/>,
-    /// <see cref="ClientOptions.SectionName"/>, <see cref="ChatEncryptionOptions.SectionName"/> and
-    /// <see cref="EmailOptions.SectionName"/> sections.
+    /// <see cref="ClientOptions.SectionName"/>, <see cref="ChatEncryptionOptions.SectionName"/>,
+    /// <see cref="EmailOptions.SectionName"/> and <see cref="FileStorageOptions.SectionName"/> sections.
     /// </summary>
     /// <param name="services">The services to add to.</param>
     /// <param name="configuration">The configuration with the connection string <see cref="ConnectionStringName"/>.</param>
@@ -146,6 +147,7 @@ public static class DependencyInjection
         AddChatEncryption(services, configuration);
         AddOutbox(services, configuration);
         AddEmailDelivery(services, configuration);
+        AddFileStorage(services, configuration);
         AddBackgroundJobs(services, configuration, connectionString);
         AddAccounts(services);
         AddSessions(services, configuration);
@@ -180,6 +182,22 @@ public static class DependencyInjection
         services.AddHangfireServer((provider, server) =>
             server.WorkerCount = provider.GetRequiredService<IOptions<BackgroundJobsOptions>>().Value.WorkerCount);
         services.AddHostedService<RecurringJobsRegistrar>();
+    }
+
+    /// <summary>
+    /// Registers the storage of the files of documents chosen in the <see cref="FileStorageOptions.SectionName"/>
+    /// section (D-069).
+    /// </summary>
+    private static void AddFileStorage(IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddOptions<FileStorageOptions>()
+            .Bind(configuration.GetSection(FileStorageOptions.SectionName))
+            .ValidateOnStart();
+        services.AddSingleton<IValidateOptions<FileStorageOptions>>(
+            new SettingsValidator<FileStorageOptions>(options => options.Problems()));
+        services.AddSingleton<LocalFileStorage>();
+        services.AddSingleton<IFileStorage>(provider => provider.GetRequiredService<LocalFileStorage>());
+        services.AddSingleton<IStoredFiles>(provider => provider.GetRequiredService<LocalFileStorage>());
     }
 
     /// <summary>
