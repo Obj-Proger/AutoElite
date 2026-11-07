@@ -27,6 +27,9 @@ internal sealed class QuestionConfiguration : IEntityTypeConfiguration<Question>
             .HasField("_categories")
             .UsePropertyAccessMode(PropertyAccessMode.Field);
         builder.HasOne<CourseTopic>().WithMany().HasForeignKey(question => question.TopicId).OnDelete(DeleteBehavior.Restrict);
+
+        // Removing the image empties the reference; the domain handler of the deletion then finds nothing to change.
+        builder.HasOne<Document>().WithMany().HasForeignKey(question => question.ImageDocumentId).OnDelete(DeleteBehavior.SetNull);
         builder.Ignore(question => question.CorrectOption);
 
         builder.HasMany(question => question.Options).WithOne().HasForeignKey(QuestionKey).OnDelete(DeleteBehavior.Cascade);

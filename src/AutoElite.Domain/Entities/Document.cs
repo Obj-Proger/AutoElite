@@ -25,9 +25,14 @@ public sealed class Document : AuditableEntity
     /// <summary>The largest file that can be attached: 20 MB.</summary>
     public const long MaxSizeBytes = 20L * 1024 * 1024;
 
-    private const int MaxFileNameLength = 255;
-    private const int MaxStorageKeyLength = 1024;
-    private const int MaxDescriptionLength = 500;
+    /// <summary>The longest file name.</summary>
+    public const int MaxFileNameLength = 255;
+
+    /// <summary>The longest storage key.</summary>
+    public const int MaxStorageKeyLength = 1024;
+
+    /// <summary>The longest description.</summary>
+    public const int MaxDescriptionLength = 500;
 
     // Lower-case extension -> the content type it must be declared with.
     private static readonly FrozenDictionary<string, string> _contentTypeByExtension = new Dictionary<string, string>

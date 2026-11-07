@@ -16,7 +16,8 @@ internal static class DatabaseObjects
         "01-theory-lesson-overlap",
         "02-driving-overlap",
         "03-notification-subject",
-        "04-staff-task-subject"
+        "04-staff-task-subject",
+        "05-document-owner"
     ];
 
     /// <summary>Creates the objects as part of a migration.</summary>

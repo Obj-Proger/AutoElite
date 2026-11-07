@@ -57,6 +57,9 @@ internal sealed class SessionQuestionConfiguration : IEntityTypeConfiguration<Se
         builder.Property(question => question.Text).HasMaxLength(Question.MaxTextLength);
         builder.Property(question => question.Explanation).HasMaxLength(Question.MaxExplanationLength);
         builder.HasOne<Question>().WithMany().HasForeignKey(question => question.QuestionId).OnDelete(DeleteBehavior.Restrict);
+
+        // An attempt keeps its questions when their image is removed, without the image.
+        builder.HasOne<Document>().WithMany().HasForeignKey(question => question.ImageDocumentId).OnDelete(DeleteBehavior.SetNull);
         builder.OwnsMany(question => question.Options, options =>
         {
             options.ToJson();

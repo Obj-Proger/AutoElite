@@ -1,6 +1,7 @@
 using AutoElite.Application.Branches;
 using AutoElite.Application.Chats;
 using AutoElite.Application.Contracts;
+using AutoElite.Application.Documents;
 using AutoElite.Application.Courses;
 using AutoElite.Application.DrivingRoutes;
 using AutoElite.Application.DrivingSlots;
@@ -127,6 +128,9 @@ public static class DependencyInjection
         services.AddScoped<IStaffTaskRepository, StaffTaskRepository>();
         services.AddScoped<IRepository<StaffTask>>(provider => provider.GetRequiredService<IStaffTaskRepository>());
         services.AddScoped<IStaffTaskQueries, StaffTaskQueries>();
+        services.AddScoped<IDocumentRepository, DocumentRepository>();
+        services.AddScoped<IRepository<Document>>(provider => provider.GetRequiredService<IDocumentRepository>());
+        services.AddScoped<IDocumentQueries, DocumentQueries>();
 
         AddChatEncryption(services, configuration);
         AddAccounts(services);

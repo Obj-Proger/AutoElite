@@ -18,5 +18,8 @@ internal sealed class UserConfiguration : IEntityTypeConfiguration<User>
         });
         builder.HasIndex(user => user.Email).IsUnique();
         builder.HasOne<Branch>().WithMany().HasForeignKey(user => user.BranchId).OnDelete(DeleteBehavior.Restrict);
+
+        // Removing the photo empties the reference; the domain handler of the deletion then finds nothing to change.
+        builder.HasOne<Document>().WithMany().HasForeignKey(user => user.PhotoDocumentId).OnDelete(DeleteBehavior.SetNull);
     }
 }
