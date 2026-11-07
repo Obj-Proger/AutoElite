@@ -26,6 +26,7 @@ using AutoElite.Infrastructure.Authentication;
 using AutoElite.Infrastructure.Encryption;
 using AutoElite.Infrastructure.Identity;
 using AutoElite.Infrastructure.Mail;
+using AutoElite.Infrastructure.Outbox;
 using AutoElite.Infrastructure.Persistence;
 using AutoElite.Infrastructure.Persistence.Interceptors;
 using AutoElite.Infrastructure.Persistence.Queries;
@@ -47,8 +48,9 @@ public static class DependencyInjection
 
     /// <summary>
     /// Registers the database context, the unit of work, the sign-in accounts and session tokens, the authentication of
-    /// requests, and the repositories and read services implemented so far. The host must register
-    /// <see cref="ICurrentUser"/> and logging, and configure the <see cref="JwtOptions.SectionName"/>,
+    /// requests, the repositories and read services, and the outbox worker that runs in the host. The host must
+    /// register <see cref="ICurrentUser"/>, which reports the system outside a request, since the outbox handlers run
+    /// on its behalf, and logging; and configure the <see cref="JwtOptions.SectionName"/>,
     /// <see cref="ClientOptions.SectionName"/> and <see cref="ChatEncryptionOptions.SectionName"/> sections.
     /// </summary>
     /// <param name="services">The services to add to.</param>
@@ -138,10 +140,26 @@ public static class DependencyInjection
         services.AddScoped<IAnalyticsQueries, AnalyticsQueries>();
 
         AddChatEncryption(services, configuration);
+        AddOutbox(services, configuration);
         AddAccounts(services);
         AddSessions(services, configuration);
 
         return services;
+    }
+
+    /// <summary>
+    /// Registers the outbox processor and the worker that runs it in the host, from the optional
+    /// <see cref="OutboxOptions.SectionName"/> section.
+    /// </summary>
+    private static void AddOutbox(IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddOptions<OutboxOptions>()
+            .Bind(configuration.GetSection(OutboxOptions.SectionName))
+            .ValidateOnStart();
+        services.AddSingleton<IValidateOptions<OutboxOptions>>(
+            new SettingsValidator<OutboxOptions>(options => options.Problems()));
+        services.AddSingleton<OutboxProcessor>();
+        services.AddHostedService<OutboxWorker>();
     }
 
     /// <summary>

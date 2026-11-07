@@ -31,7 +31,8 @@ public sealed class DatabaseFixture : IAsyncLifetime
     /// resolved rather than constructed, such as the identity service.
     /// </summary>
     /// <param name="currentUser">The user of every request; the system by default.</param>
-    public ServiceProvider CreateServices(ICurrentUser? currentUser = null)
+    /// <param name="configure">Changes to the services after the infrastructure is added, such as test doubles.</param>
+    public ServiceProvider CreateServices(ICurrentUser? currentUser = null, Action<IServiceCollection>? configure = null)
     {
         var configuration = new ConfigurationBuilder()
             .AddInMemoryCollection(new Dictionary<string, string?>
@@ -45,6 +46,7 @@ public sealed class DatabaseFixture : IAsyncLifetime
         services.AddSingleton<ICurrentUser>(currentUser ?? TestCurrentUser.System);
         services.AddSingleton(TimeProvider.System);
         services.AddInfrastructure(configuration);
+        configure?.Invoke(services);
 
         return services.BuildServiceProvider(new ServiceProviderOptions { ValidateScopes = true, ValidateOnBuild = true });
     }

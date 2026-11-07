@@ -46,6 +46,22 @@ public sealed class NotificationPersistenceTests(DatabaseFixture database) : ICl
     }
 
     [Fact]
+    public async Task Save_SecondUnreadNewMessageNotificationOfAChat_ThrowsConcurrencyConflict()
+    {
+        var recipient = TrainingRecords.Person("Орлов");
+        var chat = Reference(EntityKind.Chat, Guid.CreateVersion7());
+        var otherChat = Reference(EntityKind.Chat, Guid.CreateVersion7());
+        var read = Notify(recipient, NotificationType.NewMessage, chat, 1);
+        read.MarkAsRead(_now.AddMinutes(2));
+        await SaveAsync(recipient, read, Notify(recipient, NotificationType.NewMessage, chat, 3),
+            Notify(recipient, NotificationType.NewMessage, otherChat, 3));
+
+        var save = () => SaveAsync(Notify(recipient, NotificationType.NewMessage, chat, 4));
+
+        await save.Should().ThrowAsync<ConcurrencyConflictException>();
+    }
+
+    [Fact]
     public async Task Queries_ReadThePagesAndTheUnreadCountOfAUser()
     {
         var recipient = TrainingRecords.Person("Орлов");

@@ -40,6 +40,10 @@ internal sealed class OutboxMessage
     /// <summary>Gets the error of the last failed delivery, for whoever investigates a message that keeps failing.</summary>
     public string? LastError { get; private set; }
 
+    /// <summary>Marks the message delivered; saved with the changes of the event's handlers.</summary>
+    /// <param name="utcNow">The current UTC time.</param>
+    public void MarkProcessed(DateTime utcNow) => ProcessedOnUtc = utcNow;
+
     /// <summary>Creates the message of an event.</summary>
     /// <param name="domainEvent">The event.</param>
     public static OutboxMessage Create(IDomainEvent domainEvent) => new()
