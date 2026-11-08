@@ -1,5 +1,8 @@
+using System.Net.Http.Headers;
+using System.Net.Http.Json;
 using AutoElite.Application.Common.Abstractions;
 using AutoElite.Application.Users;
+using AutoElite.Application.Users.Authentication;
 using AutoElite.Domain.Entities;
 using AutoElite.Domain.Enums;
 using AutoElite.Domain.ValueObjects;
@@ -75,6 +78,36 @@ public sealed class ApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
             return new InvitedUser(user.Id, user.Email.Value, token);
         }
     }
+
+    /// <summary>
+    /// Registers a user with roles, accepts the invitation and signs in through the API, and gives a client that sends
+    /// the access token of the session with every request.
+    /// </summary>
+    /// <param name="roles">The roles of the user.</param>
+    /// <returns>The client of the user and the user.</returns>
+    public async Task<(HttpClient Client, InvitedUser User)> SignInAsync(params UserRole[] roles)
+    {
+        const string password = "Correct-horse-7";
+        var cancellationToken = TestContext.Current.CancellationToken;
+        var user = await InviteAsync(roles);
+        var client = CreateClient();
+
+        using var accepted = await client.PostAsJsonAsync(
+            "/api/v1/auth/invitation", new { user.UserId, Token = user.InvitationToken, Password = password }, cancellationToken);
+        accepted.EnsureSuccessStatusCode();
+        using var login = await client.PostAsJsonAsync(
+            "/api/v1/auth/login", new { user.Email, Password = password }, cancellationToken);
+        login.EnsureSuccessStatusCode();
+        var tokens = await login.Content.ReadFromJsonAsync<AuthTokens>(ApiJson.Options, cancellationToken);
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokens!.AccessToken.Value);
+
+        return (client, user);
+    }
+
+    /// <summary>Signs in a new user with roles, as <see cref="SignInAsync"/> does, and gives only the client.</summary>
+    /// <param name="roles">The roles of the user.</param>
+    /// <returns>The client of the user.</returns>
+    public async Task<HttpClient> SignedInClientAsync(params UserRole[] roles) => (await SignInAsync(roles)).Client;
 
     /// <inheritdoc />
     protected override void ConfigureWebHost(IWebHostBuilder builder)

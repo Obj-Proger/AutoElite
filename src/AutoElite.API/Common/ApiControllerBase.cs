@@ -2,6 +2,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AutoElite.API.Common;
 
+/// <summary>The identifier of a resource that a request created.</summary>
+/// <param name="Id">The identifier.</param>
+public sealed record CreatedResource(Guid Id);
+
 /// <summary>
 /// The base of the controllers of the public API (D-002): each action sends one command or query through the dispatcher
 /// and turns its result into a response, the value on success and problem details (<see cref="ApiProblems"/>) on
@@ -25,6 +29,17 @@ public abstract class ApiControllerBase : ControllerBase
     /// <param name="result">The result.</param>
     /// <typeparam name="T">The type of the value.</typeparam>
     protected IActionResult Respond<T>(Result<T> result) => result.IsSuccess ? Ok(result.Value) : Failure(result.Error);
+
+    /// <summary>
+    /// Responds to the creation of a resource: 201 with its identifier and its address in the Location header.
+    /// </summary>
+    /// <param name="result">The result with the identifier of the new resource.</param>
+    /// <param name="actionName">The action that reads the resource.</param>
+    /// <param name="idName">The name of the identifier in the route of that action.</param>
+    protected IActionResult RespondCreated(Result<Guid> result, string actionName, string idName) =>
+        result.IsSuccess
+            ? CreatedAtAction(actionName, new RouteValueDictionary { [idName] = result.Value }, new CreatedResource(result.Value))
+            : Failure(result.Error);
 
     /// <summary>Responds with the problem details of an error.</summary>
     /// <param name="error">The error.</param>
