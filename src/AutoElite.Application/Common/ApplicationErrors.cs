@@ -431,6 +431,16 @@ public static class ApplicationErrors
             "Concurrency.Conflict", "The data was changed by someone else. Reload it and try again.");
     }
 
+    /// <summary>Errors of reading a request, before it reaches a command or a query.</summary>
+    public static class Request
+    {
+        /// <summary>
+        /// A value of the request could not be read, such as malformed JSON, text where a number is expected or an
+        /// unknown name of an enumeration; reported per field within <see cref="ValidationFailed"/>.
+        /// </summary>
+        public static readonly Error UnreadableValue = Error.Validation("Request.UnreadableValue", "The value could not be read.");
+    }
+
     /// <summary>Errors of authentication and authorization.</summary>
     public static class Auth
     {

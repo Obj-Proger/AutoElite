@@ -43,6 +43,13 @@
   <ItemGroup Label="File storage">
     <PackageVersion Include="AWSSDK.S3" Version="4.0.104.5" />
   </ItemGroup>
+  <!-- The host: the OpenAPI document of the public API with Scalar (MIT) to read it, and the health checks. -->
+  <ItemGroup Label="API">
+    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="10.0.14" />
+    <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="10.0.14" />
+    <PackageVersion Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="10.0.14" />
+    <PackageVersion Include="Scalar.AspNetCore" Version="2.18.3" />
+  </ItemGroup>
   <!--
     ClosedXML (MIT) reads the Excel workbooks of question imports (D-070) and writes the Excel reports; SkiaSharp (MIT)
     draws the PDF reports (D-071), with the native library for Linux that needs no system packages such as Fontconfig.

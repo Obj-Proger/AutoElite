@@ -5,9 +5,9 @@
 Management system for driving schools: the full student lifecycle from the first enquiry to
 graduation, in one self-hosted application.
 
-> **Status: early development.** The domain model and the application layer are in place;
-> persistence is being written; the HTTP API and the clients are not written yet. Nothing here is
-> ready for production use.
+> **Status: early development.** The domain model, the application layer and the infrastructure are in
+> place; the HTTP API is being written; the clients are not written yet. Nothing here is ready for
+> production use.
 
 ## Planned scope
 
@@ -34,8 +34,8 @@ Clean architecture in four layers; dependencies point inwards only.
 |---|---|
 | `AutoElite.Domain` | Entities, value objects, domain events and business rules; no dependencies |
 | `AutoElite.Application` | Commands and queries (CQRS) with a small in-house dispatcher and pipeline behaviors |
-| `AutoElite.Infrastructure` | Persistence (EF Core, PostgreSQL), identity and external services *(in progress)* |
-| `AutoElite.API` | Versioned public HTTP API *(not implemented yet)* |
+| `AutoElite.Infrastructure` | Persistence (EF Core, PostgreSQL), identity, background jobs, mail, files, import and reports |
+| `AutoElite.API` | Versioned public HTTP API with an OpenAPI document *(in progress)* |
 
 Expected failures are returned as `Result` values with typed errors rather than thrown; validation
 errors are reported per field. Each school deploys its own instance (single-tenant).
@@ -71,6 +71,34 @@ running instead, such as `weed.exe` of SeaweedFS started locally, give the tests
 $env:AUTOELITE_TEST_S3 = "ServiceUrl=http://...:8333;AccessKey=...;SecretKey=..."
 dotnet test
 ```
+
+### Running the API
+
+The API needs PostgreSQL and a few settings and secrets of the machine, which stay out of the repository in user
+secrets. Generate each key once (in PowerShell: `[Convert]::ToBase64String([Security.Cryptography.RandomNumberGenerator]::GetBytes(32))`):
+
+```shell
+dotnet user-secrets set "ConnectionStrings:AutoElite" "Host=...;Database=autoelite;Username=...;Password=..." --project src/AutoElite.API
+dotnet user-secrets set "Jwt:SigningKey" "<a random key>" --project src/AutoElite.API
+dotnet user-secrets set "ChatEncryption:CurrentKeyId" "key_1" --project src/AutoElite.API
+dotnet user-secrets set "ChatEncryption:Keys:key_1" "<a random key>" --project src/AutoElite.API
+dotnet user-secrets set "FileStorage:RootPath" "C:\AutoElite\files" --project src/AutoElite.API
+dotnet user-secrets set "Client:BaseUrl" "http://localhost:5173" --project src/AutoElite.API
+dotnet user-secrets set "Email:Mode" "PickupDirectory" --project src/AutoElite.API
+dotnet user-secrets set "Email:PickupDirectory" "C:\AutoElite\mail" --project src/AutoElite.API
+dotnet user-secrets set "Email:FromAddress" "no-reply@autoelite.localhost" --project src/AutoElite.API
+dotnet ef database update --project src/AutoElite.Infrastructure --connection "Host=...;Database=autoelite;Username=...;Password=..."
+dotnet run --project src/AutoElite.API
+```
+
+With the `PickupDirectory` mode, emails are written as files to that folder instead of being sent; `Client:BaseUrl`
+is the address of the web client that the links in emails lead to. In development the API reference (Scalar) opens at
+`/scalar`. The OpenAPI document is at `/openapi/v1.json`; `/health/live` and `/health/ready` report
+the health of the host and of its database. Errors are [problem details](https://www.rfc-editor.org/rfc/rfc9457):
+`detail` in the language of the `Accept-Language` header (English without one), a `code` for clients to choose their
+own text by, and the failed fields in `errors`, named as in the JSON of the request.
+
+The API tests start the API on a database of their own, on the same PostgreSQL server as the infrastructure tests.
 
 ### Database migrations
 

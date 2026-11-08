@@ -193,6 +193,9 @@
   <data name="ChatMessage.TooManyAttachments" xml:space="preserve">
     <value>В сообщении может быть не больше 10 вложений.</value>
   </data>
+  <data name="Request.UnreadableValue" xml:space="preserve">
+    <value>Значение не удалось прочитать.</value>
+  </data>
   <data name="Concurrency.Conflict" xml:space="preserve">
     <value>Данные изменил кто-то другой. Обновите их и повторите попытку.</value>
   </data>

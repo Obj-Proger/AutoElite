@@ -2,13 +2,14 @@ using System.Diagnostics.CodeAnalysis;
 using Npgsql;
 using Testcontainers.PostgreSql;
 
-namespace AutoElite.Infrastructure.Tests.Database;
+namespace AutoElite.Testing;
 
 /// <summary>
-/// The PostgreSQL server the tests create their databases on. When the <see cref="ServerVariable"/> environment
-/// variable holds the connection string of a user who may create databases, that server is used: for a PostgreSQL
-/// running elsewhere, such as a development server. Otherwise one throwaway container is started for the whole test
-/// run (Testcontainers, which needs a local Docker engine, as in CI) and removed when the run ends.
+/// The PostgreSQL server the tests create their databases on, shared by the test projects that need a database (each
+/// links this file). When the <see cref="ServerVariable"/> environment variable holds the connection string of a user
+/// who may create databases, that server is used: for a PostgreSQL running elsewhere, such as a development server.
+/// Otherwise one throwaway container is started for the whole test run (Testcontainers, which needs a local Docker
+/// engine, as in CI) and removed when the run ends.
 /// </summary>
 [SuppressMessage("Security", "CA2100", Justification = "The statements take no input; database names are generated here.")]
 internal static class TestPostgreSql

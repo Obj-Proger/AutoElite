@@ -4,5 +4,6 @@ global using AutoElite.Domain.ValueObjects;
 global using AutoElite.Infrastructure.Persistence;
 global using AutoElite.Infrastructure.Tests.Database;
 global using AutoElite.Infrastructure.Tests.TestDoubles;
+global using AutoElite.Testing;
 global using AwesomeAssertions;
 global using Xunit;
