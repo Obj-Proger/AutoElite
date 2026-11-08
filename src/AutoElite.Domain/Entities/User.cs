@@ -66,10 +66,10 @@ public sealed class User : AuditableEntity
     /// <param name="phone">The user's validated phone number, if any.</param>
     /// <param name="branchId">The branch to assign the user to, or <see langword="null"/> for none.</param>
     /// <param name="utcNow">The current UTC time, used as the event timestamp.</param>
-    /// <param name="preferredLanguage">The language for notifications and emails; Russian unless given.</param>
+    /// <param name="preferredLanguage">The language for notifications and emails; English unless given.</param>
     /// <returns>The created user, or a failure if <paramref name="branchId"/> is an empty GUID or the language is not defined.</returns>
     public static Result<User> Create(
-        FullName fullName, Email email, PhoneNumber? phone, Guid? branchId, DateTime utcNow, Language preferredLanguage = Language.Russian)
+        FullName fullName, Email email, PhoneNumber? phone, Guid? branchId, DateTime utcNow, Language preferredLanguage = Language.English)
     {
         var branchIdResult = ValidateBranchId(branchId);
         if (branchIdResult.IsFailure)

@@ -22,7 +22,8 @@ public sealed class UserQueriesTests(DatabaseFixture database) : IClassFixture<D
                 Email.Create(email ?? $"{Guid.NewGuid():N}@example.com").Value,
                 PhoneNumber.Create("+79990000000").Value,
                 branchId,
-                FixedClock.Default.UtcNow)
+                FixedClock.Default.UtcNow,
+                Language.Russian)
             .Value;
 
     private static UserRoleAssignment RoleOf(User user, UserRole role) => UserRoleAssignment.Create(user.Id, role).Value;

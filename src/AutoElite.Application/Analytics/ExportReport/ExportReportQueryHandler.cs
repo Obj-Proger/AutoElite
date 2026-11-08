@@ -26,7 +26,7 @@ internal sealed class ExportReportQueryHandler(
 
         var scope = scopeResult.Value;
         var caller = await userRepository.GetByIdAsync(currentUser.GetRequiredUserId(), cancellationToken);
-        var culture = (caller?.PreferredLanguage ?? Language.Russian).ToCulture();
+        var culture = (caller?.PreferredLanguage ?? SupportedLanguages.Default).ToCulture();
         var details = await DetailsAsync(query, scope, culture, cancellationToken);
 
         var document = query.Kind switch

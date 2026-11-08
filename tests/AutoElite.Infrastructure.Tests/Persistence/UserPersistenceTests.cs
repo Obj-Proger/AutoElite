@@ -16,7 +16,8 @@ public sealed class UserPersistenceTests(DatabaseFixture database) : IClassFixtu
                 Email.Create($"{Guid.NewGuid():N}@example.com").Value,
                 phone,
                 branchId,
-                FixedClock.Default.UtcNow)
+                FixedClock.Default.UtcNow,
+                Language.Russian)
             .Value;
 
     private static UserRoleAssignment RoleOf(User user, UserRole role) => UserRoleAssignment.Create(user.Id, role).Value;

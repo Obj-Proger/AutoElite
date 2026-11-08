@@ -37,12 +37,11 @@ builder.Services.AddProblemDetails();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 
 // Messages are in the language the client asks for in Accept-Language. The clients of the school send the language of
-// their user; a request without one, from a script or another system, is answered in English, the neutral language
-// of the resources.
+// their user; a request without one, from a script or another system, is answered in the default language.
 builder.Services.AddRequestLocalization(options =>
 {
     var cultures = SupportedLanguages.Cultures.ToList();
-    options.DefaultRequestCulture = new RequestCulture(Language.English.ToCulture());
+    options.DefaultRequestCulture = new RequestCulture(SupportedLanguages.Default.ToCulture());
     options.SupportedCultures = cultures;
     options.SupportedUICultures = cultures;
     options.RequestCultureProviders = [new AcceptLanguageHeaderRequestCultureProvider()];

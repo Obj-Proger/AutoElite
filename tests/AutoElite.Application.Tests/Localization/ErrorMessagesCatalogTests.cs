@@ -42,7 +42,7 @@ public class ErrorMessagesCatalogTests
     [Fact]
     public void Russian_HasEveryDomainError()
     {
-        _domainCodes.Where(code => !_russian.ContainsKey(code)).Should().BeEmpty("users read error messages in Russian");
+        _domainCodes.Where(code => !_russian.ContainsKey(code)).Should().BeEmpty("Russian users read every error message in Russian");
     }
 
     [Fact]

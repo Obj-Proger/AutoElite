@@ -367,19 +367,19 @@ public class UserTests
     }
 
     [Fact]
-    public void Create_WithoutLanguage_UsesRussian()
+    public void Create_WithoutLanguage_UsesEnglish()
     {
         var user = User.Create(_fullName, _email, null, null, _now).Value;
 
-        user.PreferredLanguage.Should().Be(Language.Russian);
+        user.PreferredLanguage.Should().Be(Language.English);
     }
 
     [Fact]
     public void Create_WithLanguage_UsesIt()
     {
-        var user = User.Create(_fullName, _email, null, null, _now, Language.English).Value;
+        var user = User.Create(_fullName, _email, null, null, _now, Language.Russian).Value;
 
-        user.PreferredLanguage.Should().Be(Language.English);
+        user.PreferredLanguage.Should().Be(Language.Russian);
     }
 
     [Fact]
@@ -396,10 +396,10 @@ public class UserTests
     {
         var user = CreateUser();
 
-        var result = user.ChangeLanguage(Language.English);
+        var result = user.ChangeLanguage(Language.Russian);
 
         result.IsSuccess.Should().BeTrue();
-        user.PreferredLanguage.Should().Be(Language.English);
+        user.PreferredLanguage.Should().Be(Language.Russian);
     }
 
     [Fact]
@@ -410,7 +410,7 @@ public class UserTests
         var result = user.ChangeLanguage((Language)9);
 
         result.Error.Should().Be(DomainErrors.User.LanguageNotDefined);
-        user.PreferredLanguage.Should().Be(Language.Russian);
+        user.PreferredLanguage.Should().Be(Language.English);
     }
 
     [Fact]

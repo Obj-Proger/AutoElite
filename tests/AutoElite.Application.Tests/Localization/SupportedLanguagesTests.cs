@@ -40,7 +40,7 @@ public class SupportedLanguagesTests
     [Fact]
     public void Cultures_EveryLanguageHasOne_DefaultFirst()
     {
-        SupportedLanguages.Cultures.Should().Equal(Enum.GetValues<Language>().Select(language => language.ToCulture()));
+        SupportedLanguages.Cultures.Should().BeEquivalentTo(Enum.GetValues<Language>().Select(language => language.ToCulture()));
         SupportedLanguages.Cultures[0].Should().Be(SupportedLanguages.Default.ToCulture());
     }
 }
