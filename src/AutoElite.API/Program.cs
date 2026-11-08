@@ -1,6 +1,7 @@
 using System.Text.Json.Serialization;
 using AutoElite.API.Authentication;
 using AutoElite.API.Common;
+using AutoElite.API.OpenApi;
 using AutoElite.Application;
 using AutoElite.Application.Common.Localization;
 using AutoElite.Infrastructure;
@@ -48,7 +49,7 @@ builder.Services.AddRequestLocalization(options =>
 });
 
 // The OpenAPI document is the public contract (D-002); the database decides whether the host is ready.
-builder.Services.AddOpenApi();
+builder.Services.AddOpenApi(options => options.AddDocumentTransformer<BearerSecuritySchemeTransformer>());
 builder.Services.AddHealthChecks().AddDbContextCheck<AutoEliteDbContext>(tags: [HealthEndpoints.ReadyTag]);
 
 var app = builder.Build();

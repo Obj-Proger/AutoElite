@@ -7,8 +7,11 @@ namespace AutoElite.API.Common;
 /// and turns its result into a response, the value on success and problem details (<see cref="ApiProblems"/>) on
 /// failure. Access is checked by the application, so the controllers carry no authorization attributes.
 /// </summary>
+/// <remarks>
+/// JSON is the only format the controllers write, so no <see cref="ProducesAttribute"/> narrows it: that attribute
+/// would also turn the <c>application/problem+json</c> of the errors into <c>application/json</c>.
+/// </remarks>
 [ApiController]
-[Produces("application/json")]
 [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest, "application/problem+json")]
 [ProducesResponseType<ProblemDetails>(StatusCodes.Status401Unauthorized, "application/problem+json")]
 [ProducesResponseType<ProblemDetails>(StatusCodes.Status403Forbidden, "application/problem+json")]

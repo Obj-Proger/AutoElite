@@ -1,3 +1,8 @@
+using AutoElite.Application.Common.Abstractions;
+using AutoElite.Application.Users;
+using AutoElite.Domain.Entities;
+using AutoElite.Domain.Enums;
+using AutoElite.Domain.ValueObjects;
 using AutoElite.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -34,6 +39,43 @@ public sealed class ApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
             Directory.Delete(_folder, recursive: true);
     }
 
+    /// <summary>
+    /// Registers a user with roles and a sign-in account, as an invitation does, and makes the token of the invitation
+    /// the user would get by email.
+    /// </summary>
+    /// <param name="roles">The roles of the user.</param>
+    /// <returns>The user, the address and the token of the invitation.</returns>
+    public async Task<InvitedUser> InviteAsync(params UserRole[] roles)
+    {
+        var cancellationToken = TestContext.Current.CancellationToken;
+        var user = User.Create(
+                FullName.Create("Тестов", "Тест").Value,
+                Email.Create($"{Guid.NewGuid():N}@example.com").Value,
+                null,
+                null,
+                DateTime.UtcNow)
+            .Value;
+
+        await using (var scope = Services.CreateAsyncScope())
+        {
+            var services = scope.ServiceProvider;
+            services.GetRequiredService<IUserRepository>().Add(user);
+            foreach (var role in roles)
+                services.GetRequiredService<IUserRoleRepository>().Add(UserRoleAssignment.Create(user.Id, role).Value);
+
+            await services.GetRequiredService<IIdentityService>().CreateAccountAsync(user.Id, user.Email, cancellationToken);
+            await services.GetRequiredService<IUnitOfWork>().SaveChangesAsync(cancellationToken);
+        }
+
+        await using (var scope = Services.CreateAsyncScope())
+        {
+            var token = await scope.ServiceProvider.GetRequiredService<IIdentityService>()
+                .GenerateInvitationTokenAsync(user.Id, cancellationToken);
+
+            return new InvitedUser(user.Id, user.Email.Value, token);
+        }
+    }
+
     /// <inheritdoc />
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
@@ -68,6 +110,12 @@ public sealed class ApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
         public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
     }
 }
+
+/// <summary>A user registered by <see cref="ApiFactory.InviteAsync"/>.</summary>
+/// <param name="UserId">The identifier of the user.</param>
+/// <param name="Email">The email address, the sign-in name.</param>
+/// <param name="InvitationToken">The token of the invitation link.</param>
+public sealed record InvitedUser(Guid UserId, string Email, string InvitationToken);
 
 /// <summary>The tests that share the host of <see cref="ApiFactory"/>.</summary>
 [CollectionDefinition(nameof(ApiCollection))]
