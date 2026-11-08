@@ -27,6 +27,11 @@ internal static class TestS3
 
     private const int S3Port = 8333;
 
+    // The account of the throwaway container; SeaweedFS refuses signed requests until it has one.
+    private const string ContainerAccessKey = "autoelite-test";
+
+    private const string ContainerSecretKey = "autoelite-test-secret";
+
     private static readonly Lazy<Task<S3StorageOptions?>> _server = new(StartAsync);
 
     // Kept for the whole run; the Testcontainers resource reaper removes it when the test process exits.
@@ -48,9 +53,11 @@ internal static class TestS3
         IContainer container;
         try
         {
-            // A SeaweedFS without accounts accepts any credentials.
+            // Without a configuration file, SeaweedFS makes an administrator of the keys in these variables.
             container = new ContainerBuilder("chrislusf/seaweedfs:4.48")
                 .WithCommand("server", "-s3", "-dir=/data")
+                .WithEnvironment("AWS_ACCESS_KEY_ID", ContainerAccessKey)
+                .WithEnvironment("AWS_SECRET_ACCESS_KEY", ContainerSecretKey)
                 .WithPortBinding(S3Port, assignRandomHostPort: true)
                 .WithWaitStrategy(Wait.ForUnixContainer()
                     .UntilHttpRequestIsSucceeded(request => request.ForPort(S3Port).ForStatusCodeMatching(_ => true)))
@@ -67,8 +74,8 @@ internal static class TestS3
         return new S3StorageOptions
         {
             ServiceUrl = $"http://{_container.Hostname}:{_container.GetMappedPublicPort(S3Port)}",
-            AccessKey = "test",
-            SecretKey = "test-secret"
+            AccessKey = ContainerAccessKey,
+            SecretKey = ContainerSecretKey
         };
     }
 
