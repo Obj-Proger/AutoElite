@@ -1,6 +1,5 @@
 using System.Net;
 using System.Net.Http.Json;
-using System.Text.Json;
 using AutoElite.Domain.Enums;
 
 namespace AutoElite.API.Tests.Controllers;
@@ -12,17 +11,6 @@ public sealed class AdministrationControllerTests(ApiFactory api)
     private static readonly UserRole[] _studentRole = [UserRole.Student];
 
     private static CancellationToken CancellationToken => TestContext.Current.CancellationToken;
-
-    private static async Task<JsonElement> JsonAsync(HttpResponseMessage response) =>
-        await response.Content.ReadFromJsonAsync<JsonElement>(ApiJson.Options, CancellationToken);
-
-    private static async Task<JsonElement> GetAsync(HttpClient client, string uri)
-    {
-        using var response = await client.GetAsync(uri, CancellationToken);
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
-
-        return await JsonAsync(response);
-    }
 
     [Fact]
     public async Task Administrator_InvitesFindsAndManagesAUser()
@@ -36,10 +24,10 @@ public sealed class AdministrationControllerTests(ApiFactory api)
             ApiJson.Options,
             CancellationToken);
         invited.StatusCode.Should().Be(HttpStatusCode.Created);
-        var userId = (await JsonAsync(invited)).GetProperty("id").GetGuid();
+        var userId = (await invited.ReadJsonAsync()).GetProperty("id").GetGuid();
         invited.Headers.Location!.AbsolutePath.Should().Be($"/api/v1/users/{userId}");
 
-        var user = await GetAsync(admin, $"/api/v1/users/{userId}");
+        var user = await admin.GetJsonAsync($"/api/v1/users/{userId}");
         user.GetProperty("email").GetString().Should().Be(email);
         user.GetProperty("hasAcceptedInvitation").GetBoolean().Should().BeFalse();
 
@@ -48,9 +36,9 @@ public sealed class AdministrationControllerTests(ApiFactory api)
         using var granted = await admin.PutAsync($"/api/v1/users/{userId}/roles/Manager", null, CancellationToken);
         using var revoked = await admin.DeleteAsync($"/api/v1/users/{userId}/roles/Manager", CancellationToken);
         using var deactivated = await admin.PostAsync($"/api/v1/users/{userId}/deactivate", null, CancellationToken);
-        var inactive = await GetAsync(admin, $"/api/v1/users/{userId}");
+        var inactive = await admin.GetJsonAsync($"/api/v1/users/{userId}");
         using var reactivated = await admin.PostAsync($"/api/v1/users/{userId}/reactivate", null, CancellationToken);
-        var found = await GetAsync(admin, $"/api/v1/users?search={email}");
+        var found = await admin.GetJsonAsync($"/api/v1/users?search={email}");
 
         renamed.StatusCode.Should().Be(HttpStatusCode.NoContent);
         granted.StatusCode.Should().Be(HttpStatusCode.NoContent);
@@ -74,7 +62,7 @@ public sealed class AdministrationControllerTests(ApiFactory api)
         using var response = await student.GetAsync("/api/v1/users", CancellationToken);
 
         response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
-        (await JsonAsync(response)).GetProperty("code").GetString().Should().Be("Auth.Forbidden");
+        (await response.ReadJsonAsync()).GetProperty("code").GetString().Should().Be("Auth.Forbidden");
     }
 
     [Fact]
@@ -96,12 +84,12 @@ public sealed class AdministrationControllerTests(ApiFactory api)
         var branch = new { Name = name, City = "Екатеринбург", Street = "ул. Ленина, 1", TimeZoneId = "Asia/Yekaterinburg" };
 
         using var created = await admin.PostAsJsonAsync("/api/v1/branches", branch, CancellationToken);
-        var branchId = (await JsonAsync(created)).GetProperty("id").GetGuid();
+        var branchId = (await created.ReadJsonAsync()).GetProperty("id").GetGuid();
         using var updated = await admin.PutAsJsonAsync(
             $"/api/v1/branches/{branchId}", branch with { Street = "ул. Мира, 5" }, CancellationToken);
-        var read = await GetAsync(student, $"/api/v1/branches/{branchId}");
+        var read = await student.GetJsonAsync($"/api/v1/branches/{branchId}");
         using var closed = await admin.PostAsync($"/api/v1/branches/{branchId}/deactivate", null, CancellationToken);
-        var active = await GetAsync(student, "/api/v1/branches?isActive=true");
+        var active = await student.GetJsonAsync("/api/v1/branches?isActive=true");
         using var refused = await student.PostAsJsonAsync("/api/v1/branches", branch, CancellationToken);
 
         created.StatusCode.Should().Be(HttpStatusCode.Created);
@@ -117,7 +105,7 @@ public sealed class AdministrationControllerTests(ApiFactory api)
     public async Task Administrator_ChangesTheSettings()
     {
         using var admin = await api.SignedInClientAsync(UserRole.Administrator);
-        var original = await GetAsync(admin, "/api/v1/settings");
+        var original = await admin.GetJsonAsync("/api/v1/settings");
         var notice = original.GetProperty("studentCancellationNoticeMinutes").GetInt32();
         var settings = new
         {
@@ -131,7 +119,7 @@ public sealed class AdministrationControllerTests(ApiFactory api)
         };
 
         using var changed = await admin.PutAsJsonAsync("/api/v1/settings", settings, CancellationToken);
-        var read = await GetAsync(admin, "/api/v1/settings");
+        var read = await admin.GetJsonAsync("/api/v1/settings");
         using var restored = await admin.PutAsJsonAsync(
             "/api/v1/settings", settings with { StudentCancellationNoticeMinutes = notice }, CancellationToken);
 

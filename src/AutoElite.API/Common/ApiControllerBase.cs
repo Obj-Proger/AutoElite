@@ -53,6 +53,21 @@ public abstract class ApiControllerBase : ControllerBase
             ? CreatedAtAction(actionName, routeValues, new CreatedResource(result.Value))
             : Failure(result.Error);
 
+    /// <summary>
+    /// Responds to a request that created a resource read by another controller: 201 with the value of the result and
+    /// the address of the resource in the Location header.
+    /// </summary>
+    /// <param name="result">The result.</param>
+    /// <param name="actionName">The action that reads the resource.</param>
+    /// <param name="controllerName">The controller of that action, without the <c>Controller</c> suffix.</param>
+    /// <param name="routeValues">Makes the route values of that action from the value of the result.</param>
+    /// <typeparam name="T">The type of the value.</typeparam>
+    protected IActionResult RespondCreatedAt<T>(
+        Result<T> result, string actionName, string controllerName, Func<T, object> routeValues) =>
+        result.IsSuccess
+            ? CreatedAtAction(actionName, controllerName, routeValues(result.Value), result.Value)
+            : Failure(result.Error);
+
     /// <summary>Responds with the problem details of an error.</summary>
     /// <param name="error">The error.</param>
     protected ObjectResult Failure(Error error)

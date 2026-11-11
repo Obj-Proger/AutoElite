@@ -1,6 +1,5 @@
 using System.Net;
 using System.Net.Http.Json;
-using System.Text.Json;
 using AutoElite.Domain.Enums;
 
 namespace AutoElite.API.Tests.Controllers;
@@ -11,31 +10,12 @@ public sealed class TrainingResourcesControllerTests(ApiFactory api)
 {
     private static CancellationToken CancellationToken => TestContext.Current.CancellationToken;
 
-    private static async Task<JsonElement> JsonAsync(HttpResponseMessage response) =>
-        await response.Content.ReadFromJsonAsync<JsonElement>(ApiJson.Options, CancellationToken);
-
-    private static async Task<JsonElement> GetAsync(HttpClient client, string uri)
-    {
-        using var response = await client.GetAsync(uri, CancellationToken);
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
-
-        return await JsonAsync(response);
-    }
-
-    private static async Task<Guid> CreateAsync(HttpClient client, string uri, object body)
-    {
-        using var response = await client.PostAsJsonAsync(uri, body, ApiJson.Options, CancellationToken);
-        response.StatusCode.Should().Be(HttpStatusCode.Created);
-
-        return (await JsonAsync(response)).GetProperty("id").GetGuid();
-    }
-
     [Fact]
     public async Task Administrator_BuildsTheTopicsOfACourse_WhichStudentsCanRead()
     {
         using var admin = await api.SignedInClientAsync(UserRole.Administrator);
         using var student = await api.SignedInClientAsync(UserRole.Student);
-        var courseId = await CreateAsync(admin, "/api/v1/courses", new
+        var courseId = await admin.CreateAsync("/api/v1/courses", new
         {
             Name = $"Категория B {Guid.NewGuid():N}",
             Category = LicenseCategory.B,
@@ -46,11 +26,11 @@ public sealed class TrainingResourcesControllerTests(ApiFactory api)
         var topics = "/api/v1/courses/" + courseId + "/topics";
 
         using var added = await admin.PostAsJsonAsync(topics, new { Title = "Общие положения" }, CancellationToken);
-        var signsId = await CreateAsync(admin, topics, new { Title = "Дорожные знаки" });
-        var markingsId = await CreateAsync(admin, topics, new { Title = "Разметка" });
+        var signsId = await admin.CreateAsync(topics, new { Title = "Дорожные знаки" });
+        var markingsId = await admin.CreateAsync(topics, new { Title = "Разметка" });
         using var moved = await admin.PutAsJsonAsync($"{topics}/{markingsId}/position", new { NewPosition = 1 }, CancellationToken);
         using var renamed = await admin.PutAsJsonAsync($"{topics}/{signsId}", new { Title = "Знаки" }, CancellationToken);
-        var course = await GetAsync(student, $"/api/v1/courses/{courseId}");
+        var course = await student.GetJsonAsync($"/api/v1/courses/{courseId}");
 
         added.StatusCode.Should().Be(HttpStatusCode.Created);
         added.Headers.Location!.AbsolutePath.Should().Be($"/api/v1/courses/{courseId}");
@@ -78,11 +58,11 @@ public sealed class TrainingResourcesControllerTests(ApiFactory api)
             Transmission = Transmission.Manual
         };
 
-        var vehicleId = await CreateAsync(admin, "/api/v1/vehicles", vehicle);
+        var vehicleId = await admin.CreateAsync("/api/v1/vehicles", vehicle);
         using var updated = await admin.PutAsJsonAsync(
             $"/api/v1/vehicles/{vehicleId}", vehicle with { Transmission = Transmission.Automatic }, ApiJson.Options, CancellationToken);
-        var read = await GetAsync(instructor, $"/api/v1/vehicles/{vehicleId}");
-        var automatic = await GetAsync(instructor, "/api/v1/vehicles?transmission=Automatic&isActive=true");
+        var read = await instructor.GetJsonAsync($"/api/v1/vehicles/{vehicleId}");
+        var automatic = await instructor.GetJsonAsync("/api/v1/vehicles?transmission=Automatic&isActive=true");
         using var refused = await student.GetAsync("/api/v1/vehicles", CancellationToken);
 
         updated.StatusCode.Should().Be(HttpStatusCode.NoContent);
@@ -99,15 +79,14 @@ public sealed class TrainingResourcesControllerTests(ApiFactory api)
         var (instructor, instructorUser) = await api.SignInAsync(UserRole.DrivingInstructor);
         using var instructorClient = instructor;
         var ground = new { Name = $"Автодром {Guid.NewGuid():N}", City = "Екатеринбург", Street = "ул. Мира, 5" };
-        var groundId = await CreateAsync(admin, "/api/v1/training-grounds", ground);
+        var groundId = await admin.CreateAsync("/api/v1/training-grounds", ground);
 
-        var routeId = await CreateAsync(
-            instructor,
+        var routeId = await instructor.CreateAsync(
             "/api/v1/driving-routes",
             new { Name = "Круг по центру", Description = "Перекрёстки и разворот", TrainingGroundId = groundId });
-        var route = await GetAsync(admin, $"/api/v1/driving-routes/{routeId}");
+        var route = await admin.GetJsonAsync($"/api/v1/driving-routes/{routeId}");
         using var closed = await admin.PostAsync($"/api/v1/driving-routes/{routeId}/deactivate", null, CancellationToken);
-        var active = await GetAsync(instructor, $"/api/v1/driving-routes?authorId={instructorUser.UserId}&isActive=true");
+        var active = await instructor.GetJsonAsync($"/api/v1/driving-routes?authorId={instructorUser.UserId}&isActive=true");
 
         route.GetProperty("authorId").GetGuid().Should().Be(instructorUser.UserId);
         route.GetProperty("trainingGroundId").GetGuid().Should().Be(groundId);

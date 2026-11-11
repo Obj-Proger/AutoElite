@@ -70,13 +70,7 @@ public sealed class ApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
             await services.GetRequiredService<IUnitOfWork>().SaveChangesAsync(cancellationToken);
         }
 
-        await using (var scope = Services.CreateAsyncScope())
-        {
-            var token = await scope.ServiceProvider.GetRequiredService<IIdentityService>()
-                .GenerateInvitationTokenAsync(user.Id, cancellationToken);
-
-            return new InvitedUser(user.Id, user.Email.Value, token);
-        }
+        return new InvitedUser(user.Id, user.Email.Value, await InvitationTokenAsync(user.Id));
     }
 
     /// <summary>
@@ -87,9 +81,38 @@ public sealed class ApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
     /// <returns>The client of the user and the user.</returns>
     public async Task<(HttpClient Client, InvitedUser User)> SignInAsync(params UserRole[] roles)
     {
+        var user = await InviteAsync(roles);
+
+        return (await SignInInvitedAsync(user), user);
+    }
+
+    /// <summary>
+    /// Signs in a user the application registered, such as the student of a converted lead: makes the token the
+    /// invitation email carries, accepts the invitation and signs in through the API.
+    /// </summary>
+    /// <param name="userId">The user.</param>
+    /// <param name="email">The email address of the user.</param>
+    /// <returns>The client of the user.</returns>
+    public async Task<HttpClient> SignInRegisteredAsync(Guid userId, string email) =>
+        await SignInInvitedAsync(new InvitedUser(userId, email, await InvitationTokenAsync(userId)));
+
+    /// <summary>Signs in a new user with roles, as <see cref="SignInAsync"/> does, and gives only the client.</summary>
+    /// <param name="roles">The roles of the user.</param>
+    /// <returns>The client of the user.</returns>
+    public async Task<HttpClient> SignedInClientAsync(params UserRole[] roles) => (await SignInAsync(roles)).Client;
+
+    private async Task<string> InvitationTokenAsync(Guid userId)
+    {
+        await using var scope = Services.CreateAsyncScope();
+
+        return await scope.ServiceProvider.GetRequiredService<IIdentityService>()
+            .GenerateInvitationTokenAsync(userId, TestContext.Current.CancellationToken);
+    }
+
+    private async Task<HttpClient> SignInInvitedAsync(InvitedUser user)
+    {
         const string password = "Correct-horse-7";
         var cancellationToken = TestContext.Current.CancellationToken;
-        var user = await InviteAsync(roles);
         var client = CreateClient();
 
         using var accepted = await client.PostAsJsonAsync(
@@ -101,13 +124,8 @@ public sealed class ApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
         var tokens = await login.Content.ReadFromJsonAsync<AuthTokens>(ApiJson.Options, cancellationToken);
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokens!.AccessToken.Value);
 
-        return (client, user);
+        return client;
     }
-
-    /// <summary>Signs in a new user with roles, as <see cref="SignInAsync"/> does, and gives only the client.</summary>
-    /// <param name="roles">The roles of the user.</param>
-    /// <returns>The client of the user.</returns>
-    public async Task<HttpClient> SignedInClientAsync(params UserRole[] roles) => (await SignInAsync(roles)).Client;
 
     /// <inheritdoc />
     protected override void ConfigureWebHost(IWebHostBuilder builder)
