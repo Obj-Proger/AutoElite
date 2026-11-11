@@ -1,5 +1,7 @@
 using AutoElite.API.Common;
 using AutoElite.Application.Common.Pagination;
+using AutoElite.Application.Exams;
+using AutoElite.Application.Exams.GetGroupExams;
 using AutoElite.Application.StudyGroups;
 using AutoElite.Application.StudyGroups.CreateStudyGroup;
 using AutoElite.Application.StudyGroups.DeactivateStudyGroup;
@@ -142,4 +144,14 @@ public sealed class StudyGroupsController(IDispatcher dispatcher) : ApiControlle
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound, "application/problem+json")]
     public async Task<IActionResult> GetTheoryLessons(Guid groupId, CancellationToken cancellationToken) =>
         Respond(await dispatcher.Send(new GetGroupTheoryLessonsQuery(groupId), cancellationToken));
+
+    /// <summary>Lists all exams of a group, cancelled ones included, the earliest first.</summary>
+    /// <param name="groupId">The group.</param>
+    /// <param name="cancellationToken">A token that signals cancellation of the request.</param>
+    /// <returns>The exams.</returns>
+    [HttpGet("{groupId:guid}/exams")]
+    [ProducesResponseType<IReadOnlyList<ExamItem>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound, "application/problem+json")]
+    public async Task<IActionResult> GetExams(Guid groupId, CancellationToken cancellationToken) =>
+        Respond(await dispatcher.Send(new GetGroupExamsQuery(groupId), cancellationToken));
 }
