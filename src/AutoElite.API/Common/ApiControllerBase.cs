@@ -41,6 +41,18 @@ public abstract class ApiControllerBase : ControllerBase
             ? CreatedAtAction(actionName, new RouteValueDictionary { [idName] = result.Value }, new CreatedResource(result.Value))
             : Failure(result.Error);
 
+    /// <summary>
+    /// Responds to the creation of a part of another resource, such as a topic of a course: 201 with the identifier of
+    /// the part and the address of the resource that holds it in the Location header.
+    /// </summary>
+    /// <param name="result">The result with the identifier of the new part.</param>
+    /// <param name="actionName">The action that reads the resource holding the part.</param>
+    /// <param name="routeValues">The route values of that action.</param>
+    protected IActionResult RespondCreatedIn(Result<Guid> result, string actionName, object routeValues) =>
+        result.IsSuccess
+            ? CreatedAtAction(actionName, routeValues, new CreatedResource(result.Value))
+            : Failure(result.Error);
+
     /// <summary>Responds with the problem details of an error.</summary>
     /// <param name="error">The error.</param>
     protected ObjectResult Failure(Error error)
