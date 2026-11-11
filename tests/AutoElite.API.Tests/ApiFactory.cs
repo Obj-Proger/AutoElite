@@ -141,6 +141,9 @@ public sealed class ApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
         builder.UseSetting("Email:PickupDirectory", Path.Combine(_folder, "mail"));
         builder.UseSetting("FileStorage:RootPath", Path.Combine(_folder, "files"));
 
+        // The outbox delivers the notifications of a test soon after its request, so that the test waits little.
+        builder.UseSetting("Outbox:PollingInterval", "00:00:00.100");
+
         // One Hangfire worker is enough for the tests and keeps the connections to the database few.
         builder.UseSetting("BackgroundJobs:WorkerCount", "1");
 

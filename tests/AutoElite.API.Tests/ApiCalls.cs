@@ -25,6 +25,28 @@ internal static class ApiCalls
         return await response.ReadJsonAsync();
     }
 
+    /// <summary>
+    /// Reads a resource until it shows what the test waits for, such as a notification the outbox delivers in the
+    /// background, and fails when it does not within ten seconds.
+    /// </summary>
+    /// <param name="client">The client.</param>
+    /// <param name="uri">The address of the resource.</param>
+    /// <param name="condition">What the resource must show.</param>
+    /// <returns>The resource as it shows it.</returns>
+    public static async Task<JsonElement> WaitForJsonAsync(this HttpClient client, string uri, Func<JsonElement, bool> condition)
+    {
+        var deadline = DateTime.UtcNow.AddSeconds(10);
+        while (true)
+        {
+            var resource = await client.GetJsonAsync(uri);
+            if (condition(resource))
+                return resource;
+
+            DateTime.UtcNow.Should().BeBefore(deadline, "{0} should show what the test waits for", uri);
+            await Task.Delay(TimeSpan.FromMilliseconds(100), CancellationToken);
+        }
+    }
+
     /// <summary>Creates a resource, which must be created, and gives its identifier.</summary>
     /// <param name="client">The client.</param>
     /// <param name="uri">The address of the collection.</param>
