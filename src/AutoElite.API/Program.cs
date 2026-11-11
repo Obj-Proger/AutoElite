@@ -64,6 +64,9 @@ builder.Services.AddTrustedProxies(builder.Configuration);
 builder.Services.AddApiCors(builder.Configuration);
 builder.Services.AddApiRateLimiting(builder.Configuration);
 
+// Administrators watch and retry the background jobs in the Hangfire dashboard.
+builder.Services.AddJobsDashboard();
+
 // The OpenAPI document is the public contract (D-002); the database decides whether the host is ready.
 builder.Services.AddOpenApi(options => options.AddDocumentTransformer<BearerSecuritySchemeTransformer>());
 builder.Services.AddHealthChecks().AddDbContextCheck<AutoEliteDbContext>(tags: [HealthEndpoints.ReadyTag]);
@@ -79,6 +82,7 @@ app.UseAuthentication();
 app.UseRateLimiter();
 
 app.MapControllers();
+app.MapJobsDashboard();
 app.MapOpenApi();
 if (app.Environment.IsDevelopment())
     app.MapScalarApiReference();

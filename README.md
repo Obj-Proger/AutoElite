@@ -106,6 +106,10 @@ requests a minute (600 by default, counted per signed-in user or per address) an
 `RateLimiting:SensitivePermitsPerMinute` to signing in, the password reset and the public form (20 by default, per
 address); over a limit the API answers 429 with `Retry-After`.
 
+Administrators watch and retry the background jobs in the Hangfire dashboard at `/jobs`. A browser does not send the
+access token when it opens a page, so an administrator first calls `POST /api/v1/jobs-dashboard/session` with it: the
+API answers with a cookie that only the dashboard receives and that lasts 30 minutes.
+
 The API tests start the API on a database of their own, on the same PostgreSQL server as the infrastructure tests.
 
 ### Database migrations
