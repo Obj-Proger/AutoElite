@@ -98,6 +98,14 @@ the health of the host and of its database. Errors are [problem details](https:/
 `detail` in the language of the `Accept-Language` header (English without one), a `code` for clients to choose their
 own text by, and the failed fields in `errors`, named as in the JSON of the request.
 
+Behind a reverse proxy, the API takes the client address and scheme from `X-Forwarded-For` and `X-Forwarded-Proto` of
+the proxies it trusts: one on the same machine, and those named in `ReverseProxy:KnownProxies` (addresses) or
+`ReverseProxy:KnownNetworks` (such as `172.18.0.0/16` of a Docker network). Pages of `Client:BaseUrl` and of the
+origins in `Cors:AllowedOrigins` may call the API from the browser. A client may send `RateLimiting:PermitsPerMinute`
+requests a minute (600 by default, counted per signed-in user or per address) and
+`RateLimiting:SensitivePermitsPerMinute` to signing in, the password reset and the public form (20 by default, per
+address); over a limit the API answers 429 with `Retry-After`.
+
 The API tests start the API on a database of their own, on the same PostgreSQL server as the infrastructure tests.
 
 ### Database migrations

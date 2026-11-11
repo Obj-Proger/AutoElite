@@ -44,12 +44,13 @@ internal static class ApiProblems
     /// <summary>Creates the problem details of an error, translated into the language of the request.</summary>
     /// <param name="httpContext">The request.</param>
     /// <param name="error">The error.</param>
-    public static ProblemDetails Create(HttpContext httpContext, Error error)
+    /// <param name="statusCode">The status code, for an error the type does not tell; the one of the type if not given.</param>
+    public static ProblemDetails Create(HttpContext httpContext, Error error, int? statusCode = null)
     {
         var services = httpContext.RequestServices;
         var localized = services.GetRequiredService<IErrorLocalizer>().Localize(error, CultureInfo.CurrentUICulture);
         var problem = services.GetRequiredService<ProblemDetailsFactory>()
-            .CreateProblemDetails(httpContext, StatusCodeOf(localized.Type), detail: localized.Message);
+            .CreateProblemDetails(httpContext, statusCode ?? StatusCodeOf(localized.Type), detail: localized.Message);
 
         problem.Extensions[CodeExtension] = localized.Code;
         if (localized.FieldErrors is { Count: > 0 } fieldErrors)

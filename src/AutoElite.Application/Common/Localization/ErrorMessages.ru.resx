@@ -196,6 +196,9 @@
   <data name="Request.UnreadableValue" xml:space="preserve">
     <value>Значение не удалось прочитать.</value>
   </data>
+  <data name="Request.TooManyRequests" xml:space="preserve">
+    <value>Слишком много запросов. Повторите попытку чуть позже.</value>
+  </data>
   <data name="Concurrency.Conflict" xml:space="preserve">
     <value>Данные изменил кто-то другой. Обновите их и повторите попытку.</value>
   </data>

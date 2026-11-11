@@ -1,4 +1,5 @@
 using AutoElite.API.Common;
+using AutoElite.API.Hosting;
 using AutoElite.Application.Common.Pagination;
 using AutoElite.Application.Contracts.ConvertLeadToContract;
 using AutoElite.Application.Leads;
@@ -14,6 +15,7 @@ using AutoElite.Application.Leads.StartLeadWork;
 using AutoElite.Application.Leads.SubmitLeadRequest;
 using AutoElite.Application.Leads.UpdateLeadContact;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace AutoElite.API.Controllers;
 
@@ -32,6 +34,7 @@ public sealed class LeadsController(IDispatcher dispatcher) : ApiControllerBase
     /// <param name="command">The contact, the wished category, a comment and the branch.</param>
     /// <param name="cancellationToken">A token that signals cancellation of the request.</param>
     [HttpPost("requests")]
+    [EnableRateLimiting(ApiRateLimiting.SensitivePolicy)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> SubmitRequest(SubmitLeadRequestCommand command, CancellationToken cancellationToken) =>
         Respond(await dispatcher.Send(command, cancellationToken));

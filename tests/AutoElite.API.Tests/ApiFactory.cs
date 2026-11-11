@@ -141,6 +141,10 @@ public sealed class ApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
         builder.UseSetting("Email:PickupDirectory", Path.Combine(_folder, "mail"));
         builder.UseSetting("FileStorage:RootPath", Path.Combine(_folder, "files"));
 
+        // Every test client sends from the same address and the tests sign in many users, far more than a client does.
+        builder.UseSetting("RateLimiting:PermitsPerMinute", "100000");
+        builder.UseSetting("RateLimiting:SensitivePermitsPerMinute", "100000");
+
         // The outbox delivers the notifications of a test soon after its request, so that the test waits little.
         builder.UseSetting("Outbox:PollingInterval", "00:00:00.100");
 

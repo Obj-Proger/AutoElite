@@ -1,6 +1,7 @@
 using System.Text.Json.Serialization;
 using AutoElite.API.Authentication;
 using AutoElite.API.Common;
+using AutoElite.API.Hosting;
 using AutoElite.API.OpenApi;
 using AutoElite.Application;
 using AutoElite.Application.Common.Localization;
@@ -8,6 +9,7 @@ using AutoElite.Infrastructure;
 using AutoElite.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -32,7 +34,15 @@ builder.Services.AddInfrastructure(builder.Configuration);
 // document and the problem details of exceptions; every error is problem details (ApiProblems).
 builder.Services.AddControllers()
     .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()))
-    .ConfigureApiBehaviorOptions(options => options.InvalidModelStateResponseFactory = ApiProblems.FromModelState);
+    .ConfigureApiBehaviorOptions(options =>
+    {
+        options.InvalidModelStateResponseFactory = ApiProblems.FromModelState;
+        options.ClientErrorMapping[StatusCodes.Status429TooManyRequests] = new ClientErrorData
+        {
+            Title = "Too Many Requests",
+            Link = "https://www.rfc-editor.org/rfc/rfc6585#section-4"
+        };
+    });
 builder.Services.ConfigureHttpJsonOptions(options => options.SerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 builder.Services.AddProblemDetails();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
@@ -48,24 +58,35 @@ builder.Services.AddRequestLocalization(options =>
     options.RequestCultureProviders = [new AcceptLanguageHeaderRequestCultureProvider()];
 });
 
+// Behind a reverse proxy the client and its scheme come from the forwarded headers of the trusted proxies; the pages of
+// the web client may call the API from the browser; and every client has limits on the requests it sends.
+builder.Services.AddTrustedProxies(builder.Configuration);
+builder.Services.AddApiCors(builder.Configuration);
+builder.Services.AddApiRateLimiting(builder.Configuration);
+
 // The OpenAPI document is the public contract (D-002); the database decides whether the host is ready.
 builder.Services.AddOpenApi(options => options.AddDocumentTransformer<BearerSecuritySchemeTransformer>());
 builder.Services.AddHealthChecks().AddDbContextCheck<AutoEliteDbContext>(tags: [HealthEndpoints.ReadyTag]);
 
 var app = builder.Build();
 
+app.UseForwardedHeaders();
 app.UseExceptionHandler();
 app.UseStatusCodePages();
+app.UseCors();
 app.UseRequestLocalization();
 app.UseAuthentication();
+app.UseRateLimiter();
 
 app.MapControllers();
 app.MapOpenApi();
 if (app.Environment.IsDevelopment())
     app.MapScalarApiReference();
 
-app.MapHealthChecks(HealthEndpoints.Live, new HealthCheckOptions { Predicate = _ => false });
+// The probes of the orchestrator are not limited, so that a busy host is not taken for a broken one.
+app.MapHealthChecks(HealthEndpoints.Live, new HealthCheckOptions { Predicate = _ => false }).DisableRateLimiting();
 app.MapHealthChecks(
-    HealthEndpoints.Ready, new HealthCheckOptions { Predicate = check => check.Tags.Contains(HealthEndpoints.ReadyTag) });
+        HealthEndpoints.Ready, new HealthCheckOptions { Predicate = check => check.Tags.Contains(HealthEndpoints.ReadyTag) })
+    .DisableRateLimiting();
 
 await app.RunAsync();

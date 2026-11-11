@@ -1,4 +1,5 @@
 using AutoElite.API.Common;
+using AutoElite.API.Hosting;
 using AutoElite.Application.Users.AcceptInvitation;
 using AutoElite.Application.Users.Authentication;
 using AutoElite.Application.Users.ConfirmEmailChange;
@@ -8,6 +9,7 @@ using AutoElite.Application.Users.RefreshTokens;
 using AutoElite.Application.Users.RequestPasswordReset;
 using AutoElite.Application.Users.ResetPassword;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace AutoElite.API.Controllers;
 
@@ -24,6 +26,7 @@ public sealed class AuthController(IDispatcher dispatcher) : ApiControllerBase
     /// <param name="cancellationToken">A token that signals cancellation of the request.</param>
     /// <returns>The tokens of the session.</returns>
     [HttpPost("login")]
+    [EnableRateLimiting(ApiRateLimiting.SensitivePolicy)]
     [ProducesResponseType<AuthTokens>(StatusCodes.Status200OK)]
     public async Task<IActionResult> Login(LoginCommand command, CancellationToken cancellationToken) =>
         Respond(await dispatcher.Send(command, cancellationToken));
@@ -52,6 +55,7 @@ public sealed class AuthController(IDispatcher dispatcher) : ApiControllerBase
     /// <param name="command">The user and the token from the link, and the password.</param>
     /// <param name="cancellationToken">A token that signals cancellation of the request.</param>
     [HttpPost("invitation")]
+    [EnableRateLimiting(ApiRateLimiting.SensitivePolicy)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status409Conflict, "application/problem+json")]
     public async Task<IActionResult> AcceptInvitation(AcceptInvitationCommand command, CancellationToken cancellationToken) =>
@@ -63,6 +67,7 @@ public sealed class AuthController(IDispatcher dispatcher) : ApiControllerBase
     /// <param name="command">The email address of the account.</param>
     /// <param name="cancellationToken">A token that signals cancellation of the request.</param>
     [HttpPost("password/forgot")]
+    [EnableRateLimiting(ApiRateLimiting.SensitivePolicy)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> RequestPasswordReset(RequestPasswordResetCommand command, CancellationToken cancellationToken) =>
         Respond(await dispatcher.Send(command, cancellationToken));
@@ -71,6 +76,7 @@ public sealed class AuthController(IDispatcher dispatcher) : ApiControllerBase
     /// <param name="command">The user and the token from the link, and the new password.</param>
     /// <param name="cancellationToken">A token that signals cancellation of the request.</param>
     [HttpPost("password/reset")]
+    [EnableRateLimiting(ApiRateLimiting.SensitivePolicy)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> ResetPassword(ResetPasswordCommand command, CancellationToken cancellationToken) =>
         Respond(await dispatcher.Send(command, cancellationToken));
@@ -79,6 +85,7 @@ public sealed class AuthController(IDispatcher dispatcher) : ApiControllerBase
     /// <param name="command">The user, the new address and the token from the link.</param>
     /// <param name="cancellationToken">A token that signals cancellation of the request.</param>
     [HttpPost("email/confirm")]
+    [EnableRateLimiting(ApiRateLimiting.SensitivePolicy)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status409Conflict, "application/problem+json")]
     public async Task<IActionResult> ConfirmEmailChange(ConfirmEmailChangeCommand command, CancellationToken cancellationToken) =>

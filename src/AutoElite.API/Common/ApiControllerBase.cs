@@ -19,6 +19,7 @@ public sealed record CreatedResource(Guid Id);
 [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest, "application/problem+json")]
 [ProducesResponseType<ProblemDetails>(StatusCodes.Status401Unauthorized, "application/problem+json")]
 [ProducesResponseType<ProblemDetails>(StatusCodes.Status403Forbidden, "application/problem+json")]
+[ProducesResponseType<ProblemDetails>(StatusCodes.Status429TooManyRequests, "application/problem+json")]
 public abstract class ApiControllerBase : ControllerBase
 {
     /// <summary>Responds to a result without a value: 204 on success.</summary>

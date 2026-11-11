@@ -439,6 +439,10 @@ public static class ApplicationErrors
         /// unknown name of an enumeration; reported per field within <see cref="ValidationFailed"/>.
         /// </summary>
         public static readonly Error UnreadableValue = Error.Validation("Request.UnreadableValue", "The value could not be read.");
+
+        /// <summary>The client sent more requests than the host allows in a while; the host answers it with 429.</summary>
+        public static readonly Error TooManyRequests = Error.Failure(
+            "Request.TooManyRequests", "Too many requests. Try again a little later.");
     }
 
     /// <summary>Errors of authentication and authorization.</summary>
