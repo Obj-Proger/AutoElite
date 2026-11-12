@@ -2,6 +2,7 @@ using System.Text.Json.Serialization;
 using AutoElite.API.Authentication;
 using AutoElite.API.Common;
 using AutoElite.API.Hosting;
+using AutoElite.API.Realtime;
 using AutoElite.API.OpenApi;
 using AutoElite.Application;
 using AutoElite.Application.Common.Localization;
@@ -67,6 +68,11 @@ builder.Services.AddApiRateLimiting(builder.Configuration);
 // Administrators watch and retry the background jobs in the Hangfire dashboard.
 builder.Services.AddJobsDashboard();
 
+// Signed-in users receive notifications and chat messages at once through the SignalR hub, which requires them to be
+// signed in; everything else checks access in the application.
+builder.Services.AddAuthorization();
+builder.Services.AddApiRealtime();
+
 // The OpenAPI document is the public contract (D-002); the database decides whether the host is ready.
 builder.Services.AddOpenApi(options => options.AddDocumentTransformer<BearerSecuritySchemeTransformer>());
 builder.Services.AddHealthChecks().AddDbContextCheck<AutoEliteDbContext>(tags: [HealthEndpoints.ReadyTag]);
@@ -79,10 +85,12 @@ app.UseStatusCodePages();
 app.UseCors();
 app.UseRequestLocalization();
 app.UseAuthentication();
+app.UseAuthorization();
 app.UseRateLimiter();
 
 app.MapControllers();
 app.MapJobsDashboard();
+app.MapApiRealtime();
 app.MapOpenApi();
 if (app.Environment.IsDevelopment())
     app.MapScalarApiReference();

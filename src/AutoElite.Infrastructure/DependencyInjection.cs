@@ -34,6 +34,7 @@ using AutoElite.Infrastructure.Persistence;
 using AutoElite.Infrastructure.Persistence.Interceptors;
 using AutoElite.Infrastructure.Persistence.Queries;
 using AutoElite.Infrastructure.Persistence.Repositories;
+using AutoElite.Infrastructure.Realtime;
 using AutoElite.Infrastructure.Reports;
 using AutoElite.Infrastructure.Storage;
 using Hangfire;
@@ -79,6 +80,9 @@ public static class DependencyInjection
         services.AddDbContext<AutoEliteDbContext>((provider, options) =>
             options.UseAutoElite(connectionString, provider.GetRequiredService<AuditInterceptor>()));
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+        // A host with connected clients, such as the API, replaces the channel with its own.
+        services.AddSingleton<IRealtimeUpdates, NoRealtimeUpdates>();
 
         // A repository with its own interface also serves as the generic one, which some handlers ask for.
         services.AddScoped<IBranchRepository, BranchRepository>();

@@ -110,6 +110,10 @@ Administrators watch and retry the background jobs in the Hangfire dashboard at 
 access token when it opens a page, so an administrator first calls `POST /api/v1/jobs-dashboard/session` with it: the
 API answers with a cookie that only the dashboard receives and that lasts 30 minutes.
 
+Signed-in users receive updates at once through the SignalR hub at `/hubs/realtime`: `NotificationReceived` for a new
+notification and `ChatMessageReceived` for a new message in their chats. The updates carry identifiers only; the client
+reads the rest through the API. Browsers send the access token in the `access_token` parameter of the hub's address.
+
 The API tests start the API on a database of their own, on the same PostgreSQL server as the infrastructure tests.
 
 ### Database migrations
