@@ -144,11 +144,11 @@ which must use HTTPS; a debug build also takes HTTP and offers the API of the de
 the staff of the school work on its website. A student sees their driving and theory lessons on the home page, books a
 free practice slot of one of their contracts and cancels a booking, with or without a network; pulling the page down
 sends the waiting actions and reads the lessons again. A driving instructor sees their practice slots of the next two
-weeks, cancels a booking before the lesson and, once it has started, completes it with the hours or records that the
-student did not come, also without a network. A theory instructor sees their theory lessons and marks the attendance of
-a lesson that has started for the whole group at once, in a classroom without a network too. The texts of the
-application are in English, with a Russian translation, in `Resources/Strings`; the device's language chooses between
-them.
+weeks, cancels a booking before the lesson and, once it has started, completes it with the hours, the grades of the
+student's skills and a note, or records that the student did not come, also without a network. A theory instructor sees
+their theory lessons and marks the attendance of a lesson that has started for the whole group at once, in a classroom
+without a network too. The texts of the application are in English, with a Russian translation, in `Resources/Strings`;
+the device's language chooses between them.
 
 The application works without a network too (`src/AutoElite.Client.Offline`). A SQLite database in its private storage
 keeps what the user last read, shown as possibly out of date while the API cannot be reached, and the actions the user

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="AutoElite.Mobile.Pages.CompletionPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:l="clr-namespace:AutoElite.Mobile.Localization"
+    xmlns:pages="clr-namespace:AutoElite.Mobile.Pages"
+    x:DataType="pages:CompletionViewModel"
+    Title="{l:Text Lesson.CompleteTitle}">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="{StaticResource PageMargin}" Spacing="14">
+            <Label Style="{StaticResource Title}" Text="{Binding Student}" />
+            <Label Style="{StaticResource Secondary}" Text="{Binding Time}" />
+
+            <Label Style="{StaticResource Secondary}" Text="{l:Text Lesson.CompleteHours}" />
+            <Border Style="{StaticResource Field}">
+                <Entry Text="{Binding Hours}" Keyboard="Numeric" />
+            </Border>
+            <Label Style="{StaticResource ErrorText}" Text="{Binding Error}" IsVisible="{Binding HasError}" />
+
+            <Label Style="{StaticResource Secondary}" Text="{l:Text Completion.Grades}" />
+            <VerticalStackLayout Spacing="8" BindableLayout.ItemsSource="{Binding Skills}">
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate x:DataType="pages:SkillGradeEntry">
+                        <Border Style="{StaticResource Card}">
+                            <Grid ColumnDefinitions="*,88" ColumnSpacing="12">
+                                <Label Style="{StaticResource BodyLarge}" Text="{Binding Name}" VerticalOptions="Center" />
+                                <Picker
+                                    Grid.Column="1"
+                                    ItemsSource="{x:Static pages:SkillGradeEntry.Choices}"
+                                    SelectedIndex="{Binding Grade}"
+                                    HorizontalTextAlignment="Center" />
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
+            </VerticalStackLayout>
+
+            <Label Style="{StaticResource Secondary}" Text="{l:Text Lesson.CompleteNote}" />
+            <Border Style="{StaticResource Field}">
+                <Editor Text="{Binding Note}" AutoSize="TextChanges" MaxLength="2000" />
+            </Border>
+
+            <Button Text="{l:Text Lesson.Complete}" Command="{Binding SaveCommand}" />
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

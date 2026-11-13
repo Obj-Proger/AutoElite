@@ -97,6 +97,18 @@
   <data name="Common.Ok" xml:space="preserve">
     <value>ОК</value>
   </data>
+  <data name="Completion.Grades" xml:space="preserve">
+    <value>Навыки от 1 до 5; без оценки — прочерк</value>
+  </data>
+  <data name="Completion.Queued" xml:space="preserve">
+    <value>Нет связи. Завершение отправится, когда появится сеть.</value>
+  </data>
+  <data name="Completion.Refused" xml:space="preserve">
+    <value>Автошкола не приняла завершение: занятие за это время могло измениться, или часы не подходят договору.</value>
+  </data>
+  <data name="Completion.Saved" xml:space="preserve">
+    <value>Занятие завершено.</value>
+  </data>
   <data name="Home.Afternoon" xml:space="preserve">
     <value>Добрый день,</value>
   </data>
@@ -164,10 +176,10 @@
     <value>Завершить</value>
   </data>
   <data name="Lesson.CompleteHours" xml:space="preserve">
-    <value>Сколько часов длилось занятие?</value>
+    <value>Сколько часов длилось занятие</value>
   </data>
   <data name="Lesson.CompleteNote" xml:space="preserve">
-    <value>Заметка о занятии для ученика, если нужна.</value>
+    <value>Заметка для ученика, если нужна</value>
   </data>
   <data name="Lesson.CompleteTitle" xml:space="preserve">
     <value>Завершение занятия</value>
@@ -195,9 +207,6 @@
   </data>
   <data name="Lesson.MarkNoShow" xml:space="preserve">
     <value>Не пришёл</value>
-  </data>
-  <data name="Lesson.NoNote" xml:space="preserve">
-    <value>Без заметки</value>
   </data>
   <data name="Lesson.NoShow" xml:space="preserve">
     <value>Пропущено</value>
@@ -282,5 +291,23 @@
   </data>
   <data name="SignIn.WrongCredentials" xml:space="preserve">
     <value>Неверная почта или пароль.</value>
+  </data>
+  <data name="Skill.CityDriving" xml:space="preserve">
+    <value>Езда по городу</value>
+  </data>
+  <data name="Skill.GearShifting" xml:space="preserve">
+    <value>Переключение передач</value>
+  </data>
+  <data name="Skill.Manoeuvring" xml:space="preserve">
+    <value>Маневрирование</value>
+  </data>
+  <data name="Skill.Observation" xml:space="preserve">
+    <value>Внимание и обзор</value>
+  </data>
+  <data name="Skill.TrafficRules" xml:space="preserve">
+    <value>Соблюдение ПДД</value>
+  </data>
+  <data name="Skill.VehicleControl" xml:space="preserve">
+    <value>Управление автомобилем</value>
   </data>
 </root>

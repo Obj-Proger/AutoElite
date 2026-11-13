@@ -18,7 +18,6 @@ namespace AutoElite.Mobile.Pages;
 public sealed partial class HomeViewModel
 {
     private const int MaxNoteLength = 2000;
-    private const decimal MaxHours = 24m;
 
     // The slot or the theory lesson a waiting action is about, so that its lesson shows the change waiting.
     private static Guid? SubjectOf(OfflineAction action) =>
@@ -31,15 +30,6 @@ public sealed partial class HomeViewModel
             MarkTheoryAttendance attendance => attendance.LessonId,
             _ => null
         };
-
-    private static bool TryParseHours(string text, out decimal hours)
-    {
-        var parsed = decimal.TryParse(text, NumberStyles.Number, CultureInfo.CurrentCulture, out hours)
-            || decimal.TryParse(text, NumberStyles.Number, CultureInfo.InvariantCulture, out hours);
-        hours = Math.Round(hours, 2);
-
-        return parsed && hours is > 0 and <= MaxHours;
-    }
 
     private static ScheduleEntry? TheoryEntry(StudentTheoryLessonItem item)
     {
@@ -197,6 +187,7 @@ public sealed partial class HomeViewModel
         }
 
         var booking = item.Booking;
+        var student = booking?.StudentName ?? string.Empty;
         var isWaiting = waitingSlots.Contains(slotId);
         var actions = new List<EntryAction>();
         if (booking?.Status == DrivingBookingStatus.Active && !isWaiting)
@@ -204,7 +195,8 @@ public sealed partial class HomeViewModel
             if (start <= now)
             {
                 actions.Add(new EntryAction(
-                    AppTexts.Get("Lesson.Complete"), new Command(async () => await CompleteAsync(slotId, end - start))));
+                    AppTexts.Get("Lesson.Complete"),
+                    new Command(async () => await CompleteAsync(slotId, start, end, student))));
                 actions.Add(new EntryAction(
                     AppTexts.Get("Lesson.MarkNoShow"), new Command(async () => await MarkNoShowAsync(slotId))));
             }
@@ -247,36 +239,15 @@ public sealed partial class HomeViewModel
             await SubmitAsync(new CancelDrivingBooking(slotId, reason.Trim()));
     }
 
-    private async Task CompleteAsync(Guid slotId, TimeSpan planned)
-    {
-        var plannedHours = Math.Round((decimal)planned.TotalHours, 2).ToString("0.##", CultureInfo.CurrentCulture);
-        var text = await Shell.Current.DisplayPromptAsync(
-            AppTexts.Get("Lesson.CompleteTitle"),
-            AppTexts.Get("Lesson.CompleteHours"),
-            AppTexts.Get("Common.Continue"),
-            AppTexts.Get("Common.Cancel"),
-            keyboard: Keyboard.Numeric,
-            initialValue: plannedHours);
-        if (text is null)
-            return;
-
-        if (!TryParseHours(text, out var hours))
-        {
-            await Shell.Current.DisplayAlertAsync(
-                AppTexts.Get("Lesson.CompleteTitle"), AppTexts.Get("Lesson.InvalidHours"), AppTexts.Get("Common.Ok"));
-
-            return;
-        }
-
-        // Leaving the note out completes the lesson without one.
-        var note = await Shell.Current.DisplayPromptAsync(
-            AppTexts.Get("Lesson.CompleteTitle"),
-            AppTexts.Get("Lesson.CompleteNote"),
-            AppTexts.Get("Lesson.Complete"),
-            AppTexts.Get("Lesson.NoNote"),
-            maxLength: MaxNoteLength);
-        await SubmitAsync(new CompleteDrivingLesson(slotId, hours, string.IsNullOrWhiteSpace(note) ? null : note.Trim()));
-    }
+    // The completion page asks for the hours, the grades and the note, and sends the completion through the queue.
+    private static Task CompleteAsync(Guid slotId, DateTimeOffset start, DateTimeOffset end, string student) =>
+        Routes.OpenAsync(
+            Routes.Completion,
+            new Dictionary<string, object>
+            {
+                [CompletionViewModel.RequestParameter] = new CompletionRequest(
+                    slotId, Math.Round((decimal)(end - start).TotalHours, 2), student, LessonTexts.TimeOf(start, end))
+            });
 
     private async Task MarkNoShowAsync(Guid slotId)
     {

@@ -2,6 +2,7 @@ using AutoElite.Client.Offline;
 using AutoElite.Client.Offline.Actions;
 using Microsoft.Data.Sqlite;
 using LeadRequest = AutoElite.Client.Api.Models.SubmitLeadRequestCommand;
+using Skill = AutoElite.Client.Api.Models.DrivingSkill;
 
 namespace AutoElite.API.Tests.Client.Offline;
 
@@ -45,7 +46,11 @@ public sealed class OfflineDatabaseTests : IDisposable
         var booking = new BookDrivingSlot(Guid.NewGuid(), Guid.NewGuid());
         var cancellation = new CancelDrivingBooking(Guid.NewGuid(), "Заболел");
         var noShow = new MarkDrivingNoShow(Guid.NewGuid());
-        var completion = new CompleteDrivingLesson(Guid.NewGuid(), 1.75m, "Уверенно на перекрёстках");
+        var completion = new CompleteDrivingLesson(
+            Guid.NewGuid(),
+            1.75m,
+            "Уверенно на перекрёстках",
+            [new DrivingSkillGrade(Skill.CityDriving, 5), new DrivingSkillGrade(Skill.GearShifting, 3)]);
         var attendance = new MarkTheoryAttendance(
             Guid.NewGuid(),
             [new TheoryAttendanceMark(Guid.NewGuid(), IsPresent: true), new TheoryAttendanceMark(Guid.NewGuid(), false, "Болел")]);

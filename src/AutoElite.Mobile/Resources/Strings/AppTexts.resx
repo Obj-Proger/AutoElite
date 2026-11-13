@@ -97,6 +97,18 @@
   <data name="Common.Ok" xml:space="preserve">
     <value>OK</value>
   </data>
+  <data name="Completion.Grades" xml:space="preserve">
+    <value>Skills, from 1 to 5; leave a skill ungraded with —</value>
+  </data>
+  <data name="Completion.Queued" xml:space="preserve">
+    <value>No connection. The completion will be sent when the device is online.</value>
+  </data>
+  <data name="Completion.Refused" xml:space="preserve">
+    <value>The school did not accept the completion: the lesson may have changed meanwhile, or the hours do not fit the contract.</value>
+  </data>
+  <data name="Completion.Saved" xml:space="preserve">
+    <value>The lesson is completed.</value>
+  </data>
   <data name="Home.Afternoon" xml:space="preserve">
     <value>Good afternoon,</value>
   </data>
@@ -164,10 +176,10 @@
     <value>Complete</value>
   </data>
   <data name="Lesson.CompleteHours" xml:space="preserve">
-    <value>How many hours did the lesson last?</value>
+    <value>Hours the lesson lasted</value>
   </data>
   <data name="Lesson.CompleteNote" xml:space="preserve">
-    <value>A note about the lesson for the student, if any.</value>
+    <value>Note for the student, if any</value>
   </data>
   <data name="Lesson.CompleteTitle" xml:space="preserve">
     <value>Complete the lesson</value>
@@ -195,9 +207,6 @@
   </data>
   <data name="Lesson.MarkNoShow" xml:space="preserve">
     <value>Did not come</value>
-  </data>
-  <data name="Lesson.NoNote" xml:space="preserve">
-    <value>Without a note</value>
   </data>
   <data name="Lesson.NoShow" xml:space="preserve">
     <value>Missed</value>
@@ -282,5 +291,23 @@
   </data>
   <data name="SignIn.WrongCredentials" xml:space="preserve">
     <value>Email or password is incorrect.</value>
+  </data>
+  <data name="Skill.CityDriving" xml:space="preserve">
+    <value>City driving</value>
+  </data>
+  <data name="Skill.GearShifting" xml:space="preserve">
+    <value>Gear shifting</value>
+  </data>
+  <data name="Skill.Manoeuvring" xml:space="preserve">
+    <value>Manoeuvring</value>
+  </data>
+  <data name="Skill.Observation" xml:space="preserve">
+    <value>Observation</value>
+  </data>
+  <data name="Skill.TrafficRules" xml:space="preserve">
+    <value>Traffic rules</value>
+  </data>
+  <data name="Skill.VehicleControl" xml:space="preserve">
+    <value>Vehicle control</value>
   </data>
 </root>

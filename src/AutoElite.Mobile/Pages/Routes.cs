@@ -21,6 +21,9 @@ internal static class Routes
     /// <summary>The attendance at a theory lesson, opened over the home page with the lesson in the query.</summary>
     public const string Attendance = "attendance";
 
+    /// <summary>Completing a driving lesson, opened over the home page with a <see cref="CompletionRequest"/>.</summary>
+    public const string Completion = "completion";
+
     /// <summary>Shows a page in place of the current one, with no way back.</summary>
     /// <param name="route">The route of the page.</param>
     /// <returns>A task that completes when the page is shown.</returns>
@@ -30,4 +33,11 @@ internal static class Routes
     /// <param name="route">The route of the page.</param>
     /// <returns>A task that completes when the page is shown.</returns>
     public static Task OpenAsync(string route) => Shell.Current.GoToAsync(route);
+
+    /// <summary>Opens a page over the current one and passes it parameters, which need no escaping.</summary>
+    /// <param name="route">The route of the page.</param>
+    /// <param name="parameters">The parameters, which the page receives in <see cref="IQueryAttributable"/>.</param>
+    /// <returns>A task that completes when the page is shown.</returns>
+    public static Task OpenAsync(string route, IDictionary<string, object> parameters) =>
+        Shell.Current.GoToAsync(route, parameters);
 }
