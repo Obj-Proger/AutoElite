@@ -20,6 +20,8 @@ public partial class AppShell : Shell
         Routing.RegisterRoute(Routes.Tests, typeof(TestsPage));
         Routing.RegisterRoute(Routes.TestSession, typeof(TestSessionPage));
         Routing.RegisterRoute(Routes.Notifications, typeof(NotificationsPage));
+        Routing.RegisterRoute(Routes.Chats, typeof(ChatsPage));
+        Routing.RegisterRoute(Routes.Chat, typeof(ChatPage));
         sessions.SessionEnded += (_, _) => Dispatcher.Dispatch(async () => await Routes.GoToAsync(Routes.SignIn));
     }
 }

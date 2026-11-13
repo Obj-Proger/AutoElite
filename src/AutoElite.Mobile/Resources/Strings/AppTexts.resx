@@ -25,6 +25,9 @@
   <data name="Action.Complete" xml:space="preserve">
     <value>Completing a lesson</value>
   </data>
+  <data name="Action.Message" xml:space="preserve">
+    <value>Sending a message</value>
+  </data>
   <data name="Action.NoShow" xml:space="preserve">
     <value>Marking a missed lesson</value>
   </data>
@@ -87,6 +90,33 @@
   </data>
   <data name="Booking.Unavailable" xml:space="preserve">
     <value>The slots could not be read: no connection to the school.</value>
+  </data>
+  <data name="Chat.Attachments" xml:space="preserve">
+    <value>Files are attached; open them on the website</value>
+  </data>
+  <data name="Chat.Deleted" xml:space="preserve">
+    <value>The message was deleted</value>
+  </data>
+  <data name="Chat.Placeholder" xml:space="preserve">
+    <value>Message</value>
+  </data>
+  <data name="Chat.Send" xml:space="preserve">
+    <value>Send</value>
+  </data>
+  <data name="Chat.Sending" xml:space="preserve">
+    <value>Waiting to be sent</value>
+  </data>
+  <data name="Chats.Empty" xml:space="preserve">
+    <value>No chats yet. Your instructors and groups write here.</value>
+  </data>
+  <data name="Chats.Offline" xml:space="preserve">
+    <value>No connection. The messages are as of {0}.</value>
+  </data>
+  <data name="Chats.Title" xml:space="preserve">
+    <value>Messages</value>
+  </data>
+  <data name="Chats.Unavailable" xml:space="preserve">
+    <value>The messages could not be read: no connection to the school.</value>
   </data>
   <data name="Common.Cancel" xml:space="preserve">
     <value>Cancel</value>

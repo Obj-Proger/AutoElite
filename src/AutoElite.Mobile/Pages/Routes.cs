@@ -33,6 +33,12 @@ internal static class Routes
     /// <summary>The notifications of the user, opened over the home page.</summary>
     public const string Notifications = "notifications";
 
+    /// <summary>The chats of the user, opened over the home page.</summary>
+    public const string Chats = "chats";
+
+    /// <summary>A chat, opened over the chats page with a <see cref="ChatRequest"/>.</summary>
+    public const string Chat = "chat";
+
     /// <summary>Shows a page in place of the current one, with no way back.</summary>
     /// <param name="route">The route of the page.</param>
     /// <returns>A task that completes when the page is shown.</returns>

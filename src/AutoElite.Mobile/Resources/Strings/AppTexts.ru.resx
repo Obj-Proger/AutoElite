@@ -25,6 +25,9 @@
   <data name="Action.Complete" xml:space="preserve">
     <value>Завершение занятия</value>
   </data>
+  <data name="Action.Message" xml:space="preserve">
+    <value>Отправка сообщения</value>
+  </data>
   <data name="Action.NoShow" xml:space="preserve">
     <value>Отметка о неявке</value>
   </data>
@@ -87,6 +90,33 @@
   </data>
   <data name="Booking.Unavailable" xml:space="preserve">
     <value>Не удалось загрузить слоты: нет связи с автошколой.</value>
+  </data>
+  <data name="Chat.Attachments" xml:space="preserve">
+    <value>Прикреплены файлы, откройте их на сайте</value>
+  </data>
+  <data name="Chat.Deleted" xml:space="preserve">
+    <value>Сообщение удалено</value>
+  </data>
+  <data name="Chat.Placeholder" xml:space="preserve">
+    <value>Сообщение</value>
+  </data>
+  <data name="Chat.Send" xml:space="preserve">
+    <value>Отправить</value>
+  </data>
+  <data name="Chat.Sending" xml:space="preserve">
+    <value>Ждёт отправки</value>
+  </data>
+  <data name="Chats.Empty" xml:space="preserve">
+    <value>Чатов пока нет. Здесь пишут ваши инструкторы и группы.</value>
+  </data>
+  <data name="Chats.Offline" xml:space="preserve">
+    <value>Нет связи. Сообщения на {0}.</value>
+  </data>
+  <data name="Chats.Title" xml:space="preserve">
+    <value>Сообщения</value>
+  </data>
+  <data name="Chats.Unavailable" xml:space="preserve">
+    <value>Не удалось загрузить сообщения: нет связи с автошколой.</value>
   </data>
   <data name="Common.Cancel" xml:space="preserve">
     <value>Отмена</value>

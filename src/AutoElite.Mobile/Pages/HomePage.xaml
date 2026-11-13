@@ -17,10 +17,17 @@
                     <Label Style="{StaticResource Headline}" Text="{Binding Name}" />
                 </VerticalStackLayout>
 
-                <Button
-                    Style="{StaticResource SecondaryButton}"
-                    Text="{Binding NotificationsText}"
-                    Command="{Binding NotificationsCommand}" />
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                    <Button
+                        Style="{StaticResource SecondaryButton}"
+                        Text="{Binding NotificationsText}"
+                        Command="{Binding NotificationsCommand}" />
+                    <Button
+                        Grid.Column="1"
+                        Style="{StaticResource SecondaryButton}"
+                        Text="{l:Text Chats.Title}"
+                        Command="{Binding ChatsCommand}" />
+                </Grid>
 
                 <Border Style="{StaticResource Card}" IsVisible="{Binding HasStatus}">
                     <Label Style="{StaticResource Secondary}" Text="{Binding Status}" />
