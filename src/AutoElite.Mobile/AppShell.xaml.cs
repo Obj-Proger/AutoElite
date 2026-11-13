@@ -14,6 +14,7 @@ public partial class AppShell : Shell
     public AppShell(AuthSessionManager sessions)
     {
         InitializeComponent();
+        Routing.RegisterRoute(Routes.Booking, typeof(BookingPage));
         sessions.SessionEnded += (_, _) => Dispatcher.Dispatch(async () => await Routes.GoToAsync(Routes.SignIn));
     }
 }

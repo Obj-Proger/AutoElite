@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="AutoElite.Mobile.Pages.BookingPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:l="clr-namespace:AutoElite.Mobile.Localization"
+    xmlns:pages="clr-namespace:AutoElite.Mobile.Pages"
+    x:DataType="pages:BookingViewModel"
+    Title="{l:Text Booking.Title}">
+
+    <!-- Pulling the page down reads the free slots again. -->
+    <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}" RefreshColor="{StaticResource Accent}">
+        <ScrollView>
+            <VerticalStackLayout Padding="{StaticResource PageMargin}" Spacing="14">
+                <VerticalStackLayout Spacing="8" IsVisible="{Binding HasChoice}">
+                    <Label Style="{StaticResource Secondary}" Text="{l:Text Booking.Choose}" />
+                    <VerticalStackLayout Spacing="8" BindableLayout.ItemsSource="{Binding Contracts}">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate x:DataType="pages:ContractOption">
+                                <Button
+                                    Style="{StaticResource SecondaryButton}"
+                                    Text="{Binding Course}"
+                                    Command="{Binding SelectCommand}" />
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+
+                <Label Style="{StaticResource Overline}" Text="{Binding Contract}" />
+
+                <Border Style="{StaticResource Card}" IsVisible="{Binding HasNotice}">
+                    <Label Style="{StaticResource Secondary}" Text="{Binding Notice}" />
+                </Border>
+
+                <VerticalStackLayout Spacing="12" BindableLayout.ItemsSource="{Binding Slots}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="pages:SlotEntry">
+                            <Border Style="{StaticResource Card}">
+                                <VerticalStackLayout Spacing="6">
+                                    <Label Style="{StaticResource Title}" Text="{Binding Time}" />
+                                    <Label Style="{StaticResource BodyLarge}" Text="{Binding Vehicle}" />
+                                    <Label Style="{StaticResource Secondary}" Text="{Binding Details}" />
+                                    <Button Text="{l:Text Booking.Book}" Command="{Binding BookCommand}" />
+                                </VerticalStackLayout>
+                            </Border>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+        </ScrollView>
+    </RefreshView>
+
+</ContentPage>

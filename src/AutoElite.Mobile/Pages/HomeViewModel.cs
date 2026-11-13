@@ -43,6 +43,7 @@ public sealed class HomeViewModel : ViewModel
         SignOutCommand = new Command(async () => await SignOutAsync(), () => !IsBusy);
         RefreshCommand = new Command(async () => await RefreshAsync());
         DismissRefusalsCommand = new Command(async () => await DismissRefusalsAsync());
+        BookCommand = new Command(async () => await Routes.OpenAsync(Routes.Booking));
     }
 
     /// <summary>Gets the greeting for the time of day.</summary>
@@ -142,6 +143,9 @@ public sealed class HomeViewModel : ViewModel
     /// <summary>Gets the command that sends the waiting actions and reads everything again.</summary>
     public Command RefreshCommand { get; }
 
+    /// <summary>Gets the command that opens the booking of a driving lesson.</summary>
+    public Command BookCommand { get; }
+
     /// <summary>Gets the command that removes the actions the school did not accept, once the user has seen them.</summary>
     public Command DismissRefusalsCommand { get; }
 
@@ -193,18 +197,6 @@ public sealed class HomeViewModel : ViewModel
     private static DateTimeOffset? Earliest(DateTimeOffset? first, DateTimeOffset? second) =>
         first is { } a && second is { } b ? (a < b ? a : b) : first ?? second;
 
-    private static string TimeOf(DateTimeOffset start, DateTimeOffset end)
-    {
-        var culture = CultureInfo.CurrentCulture;
-        var localStart = start.ToLocalTime();
-
-        return string.Create(
-            culture, $"{localStart.ToString("ddd d MMM", culture)}, {localStart:t} – {end.ToLocalTime():t}");
-    }
-
-    private static string DetailsOf(params string?[] parts) =>
-        string.Join(" · ", parts.Where(part => !string.IsNullOrWhiteSpace(part)));
-
     // Reads the lessons and gives when they were read, if they come from the device.
     private async Task<DateTimeOffset?> LoadLessonsAsync(IReadOnlyList<PendingAction> actions)
     {
@@ -255,8 +247,8 @@ public sealed class HomeViewModel : ViewModel
         {
             Kind = AppTexts.Get("Lesson.Driving"),
             Title = slot.VehicleName ?? string.Empty,
-            Time = TimeOf(start, end),
-            Details = DetailsOf(slot.InstructorName, slot.VehiclePlate, slot.TrainingGroundName),
+            Time = LessonTexts.TimeOf(start, end),
+            Details = LessonTexts.DetailsOf(slot.InstructorName, slot.VehiclePlate, slot.TrainingGroundName),
             Status = status switch
             {
                 DrivingBookingStatus.Completed => AppTexts.Get("Lesson.Completed"),
@@ -278,8 +270,8 @@ public sealed class HomeViewModel : ViewModel
         {
             Kind = AppTexts.Get("Lesson.Theory"),
             Title = lesson.TopicTitle ?? string.Empty,
-            Time = TimeOf(start, end),
-            Details = DetailsOf(lesson.InstructorName, lesson.GroupName),
+            Time = LessonTexts.TimeOf(start, end),
+            Details = LessonTexts.DetailsOf(lesson.InstructorName, lesson.GroupName),
             Status = (lesson.Status, item.IsPresent) switch
             {
                 (TheoryLessonStatus.Cancelled, _) => AppTexts.Get("Lesson.Cancelled"),

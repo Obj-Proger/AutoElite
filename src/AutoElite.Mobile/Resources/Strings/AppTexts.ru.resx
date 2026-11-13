@@ -25,14 +25,53 @@
   <data name="Action.Other" xml:space="preserve">
     <value>Действие</value>
   </data>
+  <data name="Booking.Book" xml:space="preserve">
+    <value>Записаться</value>
+  </data>
+  <data name="Booking.Booked" xml:space="preserve">
+    <value>Вы записаны.</value>
+  </data>
+  <data name="Booking.Choose" xml:space="preserve">
+    <value>Выберите договор</value>
+  </data>
+  <data name="Booking.ConfirmTitle" xml:space="preserve">
+    <value>Записаться на это занятие?</value>
+  </data>
+  <data name="Booking.Empty" xml:space="preserve">
+    <value>В ближайшие 30 дней свободных слотов нет. Потяните вниз, чтобы проверить снова.</value>
+  </data>
+  <data name="Booking.NoContract" xml:space="preserve">
+    <value>Нет действующего договора, по которому можно записаться на вождение.</value>
+  </data>
+  <data name="Booking.Offline" xml:space="preserve">
+    <value>Нет связи. Слоты на {0}, некоторые могут быть уже заняты.</value>
+  </data>
+  <data name="Booking.Queued" xml:space="preserve">
+    <value>Нет связи. Запись отправится, когда появится сеть; если слот к тому времени займут, автошкола её отклонит.</value>
+  </data>
+  <data name="Booking.Refused" xml:space="preserve">
+    <value>Автошкола не приняла запись: слот могли занять, или у вас в это время другое занятие.</value>
+  </data>
+  <data name="Booking.Title" xml:space="preserve">
+    <value>Запись на вождение</value>
+  </data>
+  <data name="Booking.Unavailable" xml:space="preserve">
+    <value>Не удалось загрузить слоты: нет связи с автошколой.</value>
+  </data>
   <data name="Common.Cancel" xml:space="preserve">
     <value>Отмена</value>
   </data>
   <data name="Common.Continue" xml:space="preserve">
     <value>Продолжить</value>
   </data>
+  <data name="Common.Ok" xml:space="preserve">
+    <value>ОК</value>
+  </data>
   <data name="Home.Afternoon" xml:space="preserve">
     <value>Добрый день,</value>
+  </data>
+  <data name="Home.Book" xml:space="preserve">
+    <value>Записаться на вождение</value>
   </data>
   <data name="Home.Coming" xml:space="preserve">
     <value>Здесь появятся страницы инструктора.</value>

@@ -141,10 +141,10 @@ and Windows. Building it, and so the whole solution, needs the MAUI workload: `d
 keeps the session in the secure storage of the device. On the first start it asks for the address of the school's API,
 which must use HTTPS; a debug build also takes HTTP and offers the API of the development machine:
 `http://localhost:5080` on Windows, `http://10.0.2.2:5080` from the Android emulator. Students and instructors sign in;
-the staff of the school work on its website. A student sees their driving and theory lessons on the home page and
-cancels the booking of a driving lesson there, with or without a network; pulling the page down sends the waiting
-actions and reads the lessons again. The texts of the application are in English, with a Russian translation, in
-`Resources/Strings`; the device's language chooses between them.
+the staff of the school work on its website. A student sees their driving and theory lessons on the home page, books
+a free practice slot of one of their contracts and cancels a booking, with or without a network; pulling the page down
+sends the waiting actions and reads the lessons again. The texts of the application are in English, with a Russian
+translation, in `Resources/Strings`; the device's language chooses between them.
 
 The application works without a network too (`src/AutoElite.Client.Offline`). A SQLite database in its private storage
 keeps what the user last read, shown as possibly out of date while the API cannot be reached, and the actions the user

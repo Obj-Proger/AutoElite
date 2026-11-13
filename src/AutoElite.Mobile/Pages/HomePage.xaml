@@ -40,6 +40,7 @@
 
                 <VerticalStackLayout Spacing="12" IsVisible="{Binding IsStudent}">
                     <Label Style="{StaticResource Title}" Text="{l:Text Home.Schedule}" />
+                    <Button Text="{l:Text Home.Book}" Command="{Binding BookCommand}" />
                     <Label Style="{StaticResource Secondary}" Text="{l:Text Home.Empty}" IsVisible="{Binding HasNoLessons}" />
                     <VerticalStackLayout Spacing="12" BindableLayout.ItemsSource="{Binding Lessons}">
                         <BindableLayout.ItemTemplate>
