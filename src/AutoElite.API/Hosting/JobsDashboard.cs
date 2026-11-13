@@ -69,6 +69,10 @@ internal static class JobsDashboard
             .ProducesProblem(StatusCodes.Status401Unauthorized, "application/problem+json")
             .ProducesProblem(StatusCodes.Status403Forbidden, "application/problem+json");
 
+        // The build, which only writes the OpenAPI document, has no Hangfire storage for the dashboard.
+        if (OpenApiDocumentGeneration.IsRunning)
+            return;
+
         app.MapHangfireDashboard(Path, new DashboardOptions
         {
             Authorization = [],

@@ -5,11 +5,20 @@
     <!-- Secrets of a development machine (connection string, signing and encryption keys) live outside the
          repository, in user secrets; the README lists them. -->
     <UserSecretsId>1ca2b598-7fd0-4d5d-ae9e-1ff6beaa46f2</UserSecretsId>
+
+    <!-- Every build writes the OpenAPI document to obj/openapi.json (Microsoft.Extensions.ApiDescription.Server);
+         AutoElite.Client generates the client of the API from it. -->
+    <OpenApiDocumentsDirectory>obj</OpenApiDocumentsDirectory>
+    <OpenApiGenerateDocumentsOptions>--file-name openapi</OpenApiGenerateDocumentsOptions>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Hangfire.AspNetCore" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
+    <PackageReference Include="Microsoft.Extensions.ApiDescription.Server">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" />
     <PackageReference Include="Scalar.AspNetCore" />
   </ItemGroup>

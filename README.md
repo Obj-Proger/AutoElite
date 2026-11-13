@@ -121,6 +121,14 @@ reads the rest through the API. Browsers send the access token in the `access_to
 
 The API tests start the API on a database of their own, on the same PostgreSQL server as the infrastructure tests.
 
+### The client of the API
+
+Every build of the API writes its OpenAPI document to `src/AutoElite.API/obj/openapi.json`. `src/AutoElite.Client`
+generates the .NET client of the API from it with [Kiota](https://learn.microsoft.com/openapi/kiota/) (MIT), a local
+tool of the repository that the build restores, whenever the document changes; the generated code is in
+`src/AutoElite.Client/obj/Kiota` and is not kept in the repository, so the client always matches the API. The
+applications of the school use it through `AutoEliteApiClientFactory.Create(httpClient)`.
+
 ### First start
 
 When the API starts, it applies the pending migrations, unless `Database:MigrateOnStartup` is `false` where the schema

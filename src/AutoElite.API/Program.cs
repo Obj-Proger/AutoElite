@@ -2,8 +2,8 @@ using System.Text.Json.Serialization;
 using AutoElite.API.Authentication;
 using AutoElite.API.Common;
 using AutoElite.API.Hosting;
-using AutoElite.API.Realtime;
 using AutoElite.API.OpenApi;
+using AutoElite.API.Realtime;
 using AutoElite.Application;
 using AutoElite.Application.Common.Localization;
 using AutoElite.Infrastructure;
@@ -25,11 +25,13 @@ if (builder.Environment.IsDevelopment())
     });
 }
 
-// The application, the infrastructure, and the caller of each request for both.
+// The application, the infrastructure, and the caller of each request for both. The build, which only writes the
+// OpenAPI document, starts the host without the infrastructure: it has no database, keys or mail.
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICurrentUser, HttpCurrentUser>();
 builder.Services.AddApplication();
-builder.Services.AddInfrastructure(builder.Configuration);
+if (!OpenApiDocumentGeneration.IsRunning)
+    builder.Services.AddInfrastructure(builder.Configuration);
 
 // JSON with enumerations as their names, in the controllers and in what the host writes itself, such as the OpenAPI
 // document and the problem details of exceptions; every error is problem details (ApiProblems).
