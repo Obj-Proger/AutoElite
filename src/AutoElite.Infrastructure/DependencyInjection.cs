@@ -56,7 +56,8 @@ public static class DependencyInjection
 
     /// <summary>
     /// Registers the database context, the unit of work, the sign-in accounts and session tokens, the authentication of
-    /// requests, the repositories and read services, and the outbox worker and the scheduled jobs that run in the host.
+    /// requests, the repositories and read services, and what runs in the host: the migrations and the invitation of the
+    /// first administrator when it starts, the outbox worker and the scheduled jobs.
     /// The host must register <see cref="ICurrentUser"/>, which reports the system outside a request, since the outbox
     /// handlers and the jobs run on its behalf, and logging; and configure the <see cref="JwtOptions.SectionName"/>,
     /// <see cref="ClientOptions.SectionName"/>, <see cref="ChatEncryptionOptions.SectionName"/>,
@@ -80,6 +81,13 @@ public static class DependencyInjection
         services.AddDbContext<AutoEliteDbContext>((provider, options) =>
             options.UseAutoElite(connectionString, provider.GetRequiredService<AuditInterceptor>()));
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+        // The first of the hosted services: the migrations, then the first administrator of a new school, before the
+        // outbox, the mail and Hangfire, which use the schema as soon as they start.
+        services.AddOptions<DatabaseOptions>().Bind(configuration.GetSection(DatabaseOptions.SectionName));
+        services.AddHostedService<DatabaseMigrator>();
+        services.AddOptions<FirstAdministratorOptions>().Bind(configuration.GetSection(FirstAdministratorOptions.SectionName));
+        services.AddHostedService<FirstAdministratorInviter>();
 
         // A host with connected clients, such as the API, replaces the channel with its own.
         services.AddSingleton<IRealtimeUpdates, NoRealtimeUpdates>();

@@ -87,9 +87,14 @@ dotnet user-secrets set "Client:BaseUrl" "http://localhost:5173" --project src/A
 dotnet user-secrets set "Email:Mode" "PickupDirectory" --project src/AutoElite.API
 dotnet user-secrets set "Email:PickupDirectory" "C:\AutoElite\mail" --project src/AutoElite.API
 dotnet user-secrets set "Email:FromAddress" "no-reply@autoelite.localhost" --project src/AutoElite.API
-dotnet ef database update --project src/AutoElite.Infrastructure --connection "Host=...;Database=autoelite;Username=...;Password=..."
+dotnet user-secrets set "FirstAdministrator:Email" "admin@autoelite.localhost" --project src/AutoElite.API
+dotnet user-secrets set "FirstAdministrator:LastName" "Administrator" --project src/AutoElite.API
+dotnet user-secrets set "FirstAdministrator:FirstName" "First" --project src/AutoElite.API
 dotnet run --project src/AutoElite.API
 ```
+
+The API creates the database schema when it starts and invites the first administrator; the invitation is in the mail
+folder (see [First start](#first-start)).
 
 With the `PickupDirectory` mode, emails are written as files to that folder instead of being sent; `Client:BaseUrl`
 is the address of the web client that the links in emails lead to. In development the API reference (Scalar) opens at
@@ -115,6 +120,15 @@ notification and `ChatMessageReceived` for a new message in their chats. The upd
 reads the rest through the API. Browsers send the access token in the `access_token` parameter of the hub's address.
 
 The API tests start the API on a database of their own, on the same PostgreSQL server as the infrastructure tests.
+
+### First start
+
+When the API starts, it applies the pending migrations, unless `Database:MigrateOnStartup` is `false` where the schema
+is updated otherwise. A new school has no administrator to invite the others, so the API invites the first one by email
+while the school has no active administrator: set `FirstAdministrator:Email`, `FirstAdministrator:LastName`,
+`FirstAdministrator:FirstName` and, optionally, `FirstAdministrator:PreferredLanguage` (`English` by default). The
+administrator sets a password from the invitation; no password is ever kept in the settings. Once the school has an
+active administrator, these settings change nothing.
 
 ### Database migrations
 
