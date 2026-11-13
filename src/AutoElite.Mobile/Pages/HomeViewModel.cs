@@ -1,6 +1,7 @@
 using System.Globalization;
 using AutoElite.Client.Api.Models;
 using AutoElite.Client.Offline;
+using AutoElite.Client.Realtime;
 using AutoElite.Mobile.Localization;
 using AutoElite.Mobile.Schedule;
 using AutoElite.Mobile.Session;
@@ -18,6 +19,8 @@ public sealed partial class HomeViewModel : ViewModel
     private readonly UserSession _session;
     private readonly StudentSchedule _schedule;
     private readonly InstructorSchedule _instructorSchedule;
+    private readonly Notifications _notifications;
+    private readonly RealtimeConnection _realtime;
     private readonly OfflineQueue _queue;
     private readonly OfflineSynchronizer _synchronizer;
     private readonly TimeProvider _timeProvider;
@@ -26,6 +29,8 @@ public sealed partial class HomeViewModel : ViewModel
     /// <param name="session">The user of the application.</param>
     /// <param name="schedule">The lessons of the student.</param>
     /// <param name="instructorSchedule">The lessons of the instructor.</param>
+    /// <param name="notifications">The notifications of the user.</param>
+    /// <param name="realtime">The connection through which new notifications arrive at once.</param>
     /// <param name="queue">The actions that wait to be sent.</param>
     /// <param name="synchronizer">Sends the actions.</param>
     /// <param name="timeProvider">The clock.</param>
@@ -33,6 +38,8 @@ public sealed partial class HomeViewModel : ViewModel
         UserSession session,
         StudentSchedule schedule,
         InstructorSchedule instructorSchedule,
+        Notifications notifications,
+        RealtimeConnection realtime,
         OfflineQueue queue,
         OfflineSynchronizer synchronizer,
         TimeProvider timeProvider)
@@ -40,6 +47,9 @@ public sealed partial class HomeViewModel : ViewModel
         _session = session;
         _schedule = schedule;
         _instructorSchedule = instructorSchedule;
+        _notifications = notifications;
+        _realtime = realtime;
+        realtime.NotificationReceived += (_, _) => MainThread.BeginInvokeOnMainThread(async () => await CountUnreadAsync());
         _queue = queue;
         _synchronizer = synchronizer;
         _timeProvider = timeProvider;
@@ -48,6 +58,7 @@ public sealed partial class HomeViewModel : ViewModel
         DismissRefusalsCommand = new Command(async () => await DismissRefusalsAsync());
         BookCommand = new Command(async () => await Routes.OpenAsync(Routes.Booking));
         TestsCommand = new Command(async () => await Routes.OpenAsync(Routes.Tests));
+        NotificationsCommand = new Command(async () => await Routes.OpenAsync(Routes.Notifications));
     }
 
     /// <summary>Gets the greeting for the time of day.</summary>
@@ -172,6 +183,16 @@ public sealed partial class HomeViewModel : ViewModel
     /// <summary>Gets the command that opens the practice tests.</summary>
     public Command TestsCommand { get; }
 
+    /// <summary>Gets the command that opens the notifications.</summary>
+    public Command NotificationsCommand { get; }
+
+    /// <summary>Gets the text of the button of the notifications, with the number of unread ones.</summary>
+    public string NotificationsText
+    {
+        get;
+        private set => SetProperty(ref field, value);
+    } = AppTexts.Get("Notifications.Title");
+
     /// <summary>Gets the command that removes the actions the school did not accept, once the user has seen them.</summary>
     public Command DismissRefusalsCommand { get; }
 
@@ -231,10 +252,42 @@ public sealed partial class HomeViewModel : ViewModel
             lines.Add(AppTexts.Format("Home.Pending", waitingCount));
 
         Status = lines.Count > 0 ? string.Join(Environment.NewLine, lines) : null;
+        await CountUnreadAsync();
+        await ConnectAsync();
     }
 
     private static DateTimeOffset? Earliest(DateTimeOffset? first, DateTimeOffset? second) =>
         first is { } a && second is { } b ? (a < b ? a : b) : first ?? second;
+
+    // Shows the number of unread notifications; without a network the button keeps the last number.
+    private async Task CountUnreadAsync()
+    {
+        try
+        {
+            var unread = await _notifications.CountUnreadAsync(CancellationToken.None);
+            NotificationsText = unread > 0
+                ? AppTexts.Format("Notifications.Unread", unread)
+                : AppTexts.Get("Notifications.Title");
+        }
+        catch (Exception exception) when (exception is ApiException or HttpRequestException)
+        {
+            // The number is shown again once the API can be reached.
+        }
+    }
+
+    // Connects to the hub, so that new notifications update the number at once; without a network it is tried again
+    // the next time the page appears, and a lost connection reconnects by itself.
+    private async Task ConnectAsync()
+    {
+        try
+        {
+            await _realtime.StartAsync(CancellationToken.None);
+        }
+        catch (Exception exception) when (exception is not OutOfMemoryException)
+        {
+            // Updates arrive when the page is next shown with a network.
+        }
+    }
 
     private void OnRolesChanged()
     {

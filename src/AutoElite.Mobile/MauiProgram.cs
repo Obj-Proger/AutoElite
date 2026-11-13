@@ -2,6 +2,7 @@ using AutoElite.Client;
 using AutoElite.Client.Api;
 using AutoElite.Client.Authentication;
 using AutoElite.Client.Offline;
+using AutoElite.Client.Realtime;
 using AutoElite.Mobile.Authentication;
 using AutoElite.Mobile.Offline;
 using AutoElite.Mobile.Pages;
@@ -52,6 +53,9 @@ public static class MauiProgram
         builder.Services.AddSingleton<DrivingBooking>();
         builder.Services.AddSingleton<InstructorSchedule>();
         builder.Services.AddSingleton<PracticeTests>();
+        builder.Services.AddSingleton<Notifications>();
+        builder.Services.AddSingleton(provider => new RealtimeConnection(
+            () => ApiAddress.Current, provider.GetRequiredService<AuthSessionManager>()));
         builder.Services.AddSingleton<AppShell>();
         builder.Services.AddTransient<StartPage>();
         builder.Services.AddTransient<SchoolPage>();
@@ -70,6 +74,8 @@ public static class MauiProgram
         builder.Services.AddTransient<TestsViewModel>();
         builder.Services.AddTransient<TestSessionPage>();
         builder.Services.AddTransient<TestSessionViewModel>();
+        builder.Services.AddTransient<NotificationsPage>();
+        builder.Services.AddTransient<NotificationsViewModel>();
 
 #if DEBUG
         builder.Logging.AddDebug();

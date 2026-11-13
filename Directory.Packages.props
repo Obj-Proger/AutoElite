@@ -47,7 +47,7 @@
   </ItemGroup>
   <!--
     The host: the OpenAPI document of the public API, which every build writes, with Scalar (MIT) to read it, and the
-    health checks; the tests connect to the SignalR hub with its .NET client.
+    health checks; the client of the API and the tests connect to the SignalR hub with its .NET client.
   -->
   <ItemGroup Label="API">
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="10.0.14" />

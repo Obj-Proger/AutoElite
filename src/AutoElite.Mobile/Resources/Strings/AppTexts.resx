@@ -253,6 +253,24 @@
   <data name="Lesson.Waiting" xml:space="preserve">
     <value>A change waits to be sent</value>
   </data>
+  <data name="Notifications.Empty" xml:space="preserve">
+    <value>No notifications yet.</value>
+  </data>
+  <data name="Notifications.Offline" xml:space="preserve">
+    <value>No connection. The notifications are as of {0}.</value>
+  </data>
+  <data name="Notifications.ReadAll" xml:space="preserve">
+    <value>Mark all as read</value>
+  </data>
+  <data name="Notifications.Title" xml:space="preserve">
+    <value>Notifications</value>
+  </data>
+  <data name="Notifications.Unavailable" xml:space="preserve">
+    <value>The notifications could not be read: no connection to the school.</value>
+  </data>
+  <data name="Notifications.Unread" xml:space="preserve">
+    <value>Notifications · {0} new</value>
+  </data>
   <data name="Refusal.Conflict" xml:space="preserve">
     <value>the schedule changed meanwhile</value>
   </data>

@@ -2,6 +2,7 @@ using AutoElite.Client.Api;
 using AutoElite.Client.Api.Models;
 using AutoElite.Client.Authentication;
 using AutoElite.Client.Offline;
+using AutoElite.Client.Realtime;
 using Microsoft.Kiota.Abstractions;
 
 namespace AutoElite.Mobile.Session;
@@ -15,8 +16,14 @@ namespace AutoElite.Mobile.Session;
 /// <param name="cache">What the user last read.</param>
 /// <param name="queue">The actions that wait to be sent.</param>
 /// <param name="createApi">Creates the client of the API.</param>
+/// <param name="realtime">The connection to the hub of the API, closed when the user signs out.</param>
 public sealed class UserSession(
-    AuthSessionManager sessions, OfflineDatabase offline, OfflineCache cache, OfflineQueue queue, Func<AutoEliteApiClient> createApi)
+    AuthSessionManager sessions,
+    OfflineDatabase offline,
+    OfflineCache cache,
+    OfflineQueue queue,
+    Func<AutoEliteApiClient> createApi,
+    RealtimeConnection realtime)
 {
     private const string ProfileKey = "me";
 
@@ -91,11 +98,12 @@ public sealed class UserSession(
     public async Task<int> CountWaitingActionsAsync(CancellationToken cancellationToken) =>
         (await queue.ListAsync(cancellationToken)).Count(action => !action.IsRejected);
 
-    /// <summary>Signs out and forgets the offline data.</summary>
+    /// <summary>Signs out, closes the connection to the hub and forgets the offline data.</summary>
     /// <param name="cancellationToken">A token that signals cancellation of the operation.</param>
     /// <returns>A task that completes when the user is signed out.</returns>
     public async Task SignOutAsync(CancellationToken cancellationToken)
     {
+        await realtime.StopAsync(cancellationToken);
         await sessions.SignOutAsync(cancellationToken);
         await offline.ForgetAsync(cancellationToken);
     }

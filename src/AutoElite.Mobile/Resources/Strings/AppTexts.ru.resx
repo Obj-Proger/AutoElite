@@ -253,6 +253,24 @@
   <data name="Lesson.Waiting" xml:space="preserve">
     <value>Изменение ждёт отправки</value>
   </data>
+  <data name="Notifications.Empty" xml:space="preserve">
+    <value>Уведомлений пока нет.</value>
+  </data>
+  <data name="Notifications.Offline" xml:space="preserve">
+    <value>Нет связи. Уведомления на {0}.</value>
+  </data>
+  <data name="Notifications.ReadAll" xml:space="preserve">
+    <value>Отметить все прочитанными</value>
+  </data>
+  <data name="Notifications.Title" xml:space="preserve">
+    <value>Уведомления</value>
+  </data>
+  <data name="Notifications.Unavailable" xml:space="preserve">
+    <value>Не удалось загрузить уведомления: нет связи с автошколой.</value>
+  </data>
+  <data name="Notifications.Unread" xml:space="preserve">
+    <value>Уведомления · новых: {0}</value>
+  </data>
   <data name="Refusal.Conflict" xml:space="preserve">
     <value>расписание за это время изменилось</value>
   </data>

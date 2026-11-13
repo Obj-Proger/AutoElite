@@ -17,6 +17,11 @@
                     <Label Style="{StaticResource Headline}" Text="{Binding Name}" />
                 </VerticalStackLayout>
 
+                <Button
+                    Style="{StaticResource SecondaryButton}"
+                    Text="{Binding NotificationsText}"
+                    Command="{Binding NotificationsCommand}" />
+
                 <Border Style="{StaticResource Card}" IsVisible="{Binding HasStatus}">
                     <Label Style="{StaticResource Secondary}" Text="{Binding Status}" />
                 </Border>

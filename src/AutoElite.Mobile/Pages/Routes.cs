@@ -30,6 +30,9 @@ internal static class Routes
     /// <summary>A practice test attempt, opened over the tests page with the attempt as a parameter.</summary>
     public const string TestSession = "test-session";
 
+    /// <summary>The notifications of the user, opened over the home page.</summary>
+    public const string Notifications = "notifications";
+
     /// <summary>Shows a page in place of the current one, with no way back.</summary>
     /// <param name="route">The route of the page.</param>
     /// <returns>A task that completes when the page is shown.</returns>
