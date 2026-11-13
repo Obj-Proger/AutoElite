@@ -19,6 +19,9 @@ namespace AutoElite.API.Tests;
 /// </summary>
 public sealed class ApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
+    /// <summary>The password of the users that the tests sign in.</summary>
+    public const string Password = "Correct-horse-7";
+
     // 32 bytes of 0x02 in Base64, the chat key of the tests.
     private const string ChatKey = "AgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgI=";
 
@@ -108,15 +111,14 @@ public sealed class ApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
 
     private async Task<HttpClient> SignInInvitedAsync(InvitedUser user)
     {
-        const string password = "Correct-horse-7";
         var cancellationToken = TestContext.Current.CancellationToken;
         var client = CreateClient();
 
         using var accepted = await client.PostAsJsonAsync(
-            "/api/v1/auth/invitation", new { user.UserId, Token = user.InvitationToken, Password = password }, cancellationToken);
+            "/api/v1/auth/invitation", new { user.UserId, Token = user.InvitationToken, Password }, cancellationToken);
         accepted.EnsureSuccessStatusCode();
         using var login = await client.PostAsJsonAsync(
-            "/api/v1/auth/login", new { user.Email, Password = password }, cancellationToken);
+            "/api/v1/auth/login", new { user.Email, Password }, cancellationToken);
         login.EnsureSuccessStatusCode();
         var tokens = await login.Content.ReadFromJsonAsync<AuthTokens>(ApiJson.Options, cancellationToken);
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokens!.AccessToken.Value);

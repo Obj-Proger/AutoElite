@@ -127,7 +127,10 @@ Every build of the API writes its OpenAPI document to `src/AutoElite.API/obj/ope
 generates the .NET client of the API from it with [Kiota](https://learn.microsoft.com/openapi/kiota/) (MIT), a local
 tool of the repository that the build restores, whenever the document changes; the generated code is in
 `src/AutoElite.Client/obj/Kiota` and is not kept in the repository, so the client always matches the API. The
-applications of the school use it through `AutoEliteApiClientFactory.Create(httpClient)`.
+applications of the school register it with `services.AddAutoEliteClient(apiAddress)`: `AuthSessionManager` signs in
+and out, and the requests of `AutoEliteApiClient` carry the access token, which is renewed with the refresh token when
+it expires or the API rejects it. An application keeps the session in its own `IAuthSessionStore`, such as secure
+storage on a device.
 
 ### First start
 

@@ -57,8 +57,12 @@
     <PackageVersion Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="10.0.14" />
     <PackageVersion Include="Scalar.AspNetCore" Version="2.18.3" />
   </ItemGroup>
-  <!-- Kiota (MIT): the libraries of the client of the API that AutoElite.Client generates from the OpenAPI document. -->
+  <!--
+    Kiota (MIT): the libraries of the client of the API that AutoElite.Client generates from the OpenAPI document; the
+    client's HTTP clients come from the HTTP client factory of .NET.
+  -->
   <ItemGroup Label="API client">
+    <PackageVersion Include="Microsoft.Extensions.Http" Version="10.0.14" />
     <PackageVersion Include="Microsoft.Kiota.Bundle" Version="2.1.2" />
   </ItemGroup>
   <!--
