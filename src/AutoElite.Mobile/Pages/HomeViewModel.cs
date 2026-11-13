@@ -47,6 +47,7 @@ public sealed partial class HomeViewModel : ViewModel
         RefreshCommand = new Command(async () => await RefreshAsync());
         DismissRefusalsCommand = new Command(async () => await DismissRefusalsAsync());
         BookCommand = new Command(async () => await Routes.OpenAsync(Routes.Booking));
+        TestsCommand = new Command(async () => await Routes.OpenAsync(Routes.Tests));
     }
 
     /// <summary>Gets the greeting for the time of day.</summary>
@@ -167,6 +168,9 @@ public sealed partial class HomeViewModel : ViewModel
 
     /// <summary>Gets the command that opens the booking of a driving lesson.</summary>
     public Command BookCommand { get; }
+
+    /// <summary>Gets the command that opens the practice tests.</summary>
+    public Command TestsCommand { get; }
 
     /// <summary>Gets the command that removes the actions the school did not accept, once the user has seen them.</summary>
     public Command DismissRefusalsCommand { get; }

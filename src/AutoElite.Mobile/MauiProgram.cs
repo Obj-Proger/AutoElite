@@ -51,6 +51,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<StudentSchedule>();
         builder.Services.AddSingleton<DrivingBooking>();
         builder.Services.AddSingleton<InstructorSchedule>();
+        builder.Services.AddSingleton<PracticeTests>();
         builder.Services.AddSingleton<AppShell>();
         builder.Services.AddTransient<StartPage>();
         builder.Services.AddTransient<SchoolPage>();
@@ -65,6 +66,10 @@ public static class MauiProgram
         builder.Services.AddTransient<AttendanceViewModel>();
         builder.Services.AddTransient<CompletionPage>();
         builder.Services.AddTransient<CompletionViewModel>();
+        builder.Services.AddTransient<TestsPage>();
+        builder.Services.AddTransient<TestsViewModel>();
+        builder.Services.AddTransient<TestSessionPage>();
+        builder.Services.AddTransient<TestSessionViewModel>();
 
 #if DEBUG
         builder.Logging.AddDebug();

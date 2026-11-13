@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="AutoElite.Mobile.Pages.TestSessionPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:l="clr-namespace:AutoElite.Mobile.Localization"
+    xmlns:pages="clr-namespace:AutoElite.Mobile.Pages"
+    x:DataType="pages:TestSessionViewModel"
+    Title="{Binding Title}">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="{StaticResource PageMargin}" Spacing="14">
+            <Border Style="{StaticResource Card}" IsVisible="{Binding HasError}">
+                <Label Style="{StaticResource ErrorText}" Text="{Binding Error}" />
+            </Border>
+
+            <!-- The question in progress. -->
+            <VerticalStackLayout Spacing="14" IsVisible="{Binding IsInProgress}">
+                <Grid ColumnDefinitions="*,Auto">
+                    <Label Style="{StaticResource Overline}" Text="{Binding Progress}" VerticalOptions="Center" />
+                    <Label Grid.Column="1" Style="{StaticResource Title}" Text="{Binding TimeLeft}" />
+                </Grid>
+                <Image Source="{Binding Image}" IsVisible="{Binding HasImage}" Aspect="AspectFit" MaximumHeightRequest="260" />
+                <Label Style="{StaticResource BodyLarge}" Text="{Binding Question}" />
+                <VerticalStackLayout Spacing="10" BindableLayout.ItemsSource="{Binding Options}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="pages:EntryAction">
+                            <Button
+                                Style="{StaticResource SecondaryButton}"
+                                Text="{Binding Text}"
+                                Command="{Binding Command}"
+                                LineBreakMode="WordWrap" />
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+
+            <!-- The outcome of a finished attempt. -->
+            <VerticalStackLayout Spacing="14" IsVisible="{Binding IsFinished}">
+                <Border Style="{StaticResource HighlightCard}">
+                    <VerticalStackLayout Spacing="6">
+                        <Label Style="{StaticResource Headline}" Text="{Binding Outcome}" />
+                        <Label Style="{StaticResource BodyLarge}" Text="{Binding Score}" />
+                    </VerticalStackLayout>
+                </Border>
+                <VerticalStackLayout Spacing="12" BindableLayout.ItemsSource="{Binding Mistakes}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="pages:MistakeEntry">
+                            <Border Style="{StaticResource Card}">
+                                <VerticalStackLayout Spacing="6">
+                                    <Label Style="{StaticResource BodyLarge}" Text="{Binding Question}" />
+                                    <Label Style="{StaticResource Caption}" Text="{l:Text Test.YourAnswer}" />
+                                    <Label Style="{StaticResource ErrorText}" Text="{Binding YourAnswer}" />
+                                    <Label Style="{StaticResource Caption}" Text="{l:Text Test.CorrectAnswer}" />
+                                    <Label Style="{StaticResource Secondary}" Text="{Binding CorrectAnswer}" />
+                                    <Label
+                                        Style="{StaticResource Caption}"
+                                        Text="{Binding Explanation}"
+                                        IsVisible="{Binding HasExplanation}" />
+                                </VerticalStackLayout>
+                            </Border>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

@@ -151,6 +151,9 @@
   <data name="Home.SignOutTitle" xml:space="preserve">
     <value>Выйти?</value>
   </data>
+  <data name="Home.Tests" xml:space="preserve">
+    <value>Тренировочные тесты</value>
+  </data>
   <data name="Lesson.Absent" xml:space="preserve">
     <value>Пропущено</value>
   </data>
@@ -309,5 +312,77 @@
   </data>
   <data name="Skill.VehicleControl" xml:space="preserve">
     <value>Управление автомобилем</value>
+  </data>
+  <data name="Test.AnswerNotSent" xml:space="preserve">
+    <value>Нет связи: ответ не отправлен. Выберите его ещё раз.</value>
+  </data>
+  <data name="Test.CorrectAnswer" xml:space="preserve">
+    <value>Правильный ответ</value>
+  </data>
+  <data name="Test.Failed" xml:space="preserve">
+    <value>Не сдано</value>
+  </data>
+  <data name="Test.InProgress" xml:space="preserve">
+    <value>Идёт</value>
+  </data>
+  <data name="Test.MistakeInAddOn" xml:space="preserve">
+    <value>Не сдано: ошибка в дополнительном вопросе</value>
+  </data>
+  <data name="Test.NotAnswered" xml:space="preserve">
+    <value>Нет ответа</value>
+  </data>
+  <data name="Test.Passed" xml:space="preserve">
+    <value>Сдано</value>
+  </data>
+  <data name="Test.Progress" xml:space="preserve">
+    <value>Вопрос {0} из {1}</value>
+  </data>
+  <data name="Test.Score" xml:space="preserve">
+    <value>Верно: {0} из {1}</value>
+  </data>
+  <data name="Test.TimeExpired" xml:space="preserve">
+    <value>Не сдано: время вышло</value>
+  </data>
+  <data name="Test.TooManyMistakes" xml:space="preserve">
+    <value>Не сдано: слишком много ошибок</value>
+  </data>
+  <data name="Test.TooManyMistakesInBlock" xml:space="preserve">
+    <value>Не сдано: слишком много ошибок в одном блоке</value>
+  </data>
+  <data name="Test.Unavailable" xml:space="preserve">
+    <value>Не удалось загрузить попытку: нет связи с автошколой.</value>
+  </data>
+  <data name="Test.YourAnswer" xml:space="preserve">
+    <value>Ваш ответ</value>
+  </data>
+  <data name="Tests.AlreadyInProgress" xml:space="preserve">
+    <value>У вас есть незавершённая попытка. Продолжите её из списка.</value>
+  </data>
+  <data name="Tests.Attempts" xml:space="preserve">
+    <value>Ваши попытки</value>
+  </data>
+  <data name="Tests.Continue" xml:space="preserve">
+    <value>Продолжить</value>
+  </data>
+  <data name="Tests.NoContract" xml:space="preserve">
+    <value>Нет действующего договора, по которому можно проходить тесты.</value>
+  </data>
+  <data name="Tests.NoTemplates" xml:space="preserve">
+    <value>У автошколы пока нет тестов для вашей категории.</value>
+  </data>
+  <data name="Tests.Review" xml:space="preserve">
+    <value>Разбор</value>
+  </data>
+  <data name="Tests.Rules" xml:space="preserve">
+    <value>Вопросов: {0} · {1} мин · ошибок не более {2}</value>
+  </data>
+  <data name="Tests.Start" xml:space="preserve">
+    <value>Начать</value>
+  </data>
+  <data name="Tests.Title" xml:space="preserve">
+    <value>Тренировочные тесты</value>
+  </data>
+  <data name="Tests.Unavailable" xml:space="preserve">
+    <value>Для тестов нужна связь с автошколой. Попробуйте, когда появится сеть.</value>
   </data>
 </root>

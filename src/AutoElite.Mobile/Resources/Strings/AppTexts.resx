@@ -151,6 +151,9 @@
   <data name="Home.SignOutTitle" xml:space="preserve">
     <value>Sign out?</value>
   </data>
+  <data name="Home.Tests" xml:space="preserve">
+    <value>Practice tests</value>
+  </data>
   <data name="Lesson.Absent" xml:space="preserve">
     <value>Missed</value>
   </data>
@@ -309,5 +312,77 @@
   </data>
   <data name="Skill.VehicleControl" xml:space="preserve">
     <value>Vehicle control</value>
+  </data>
+  <data name="Test.AnswerNotSent" xml:space="preserve">
+    <value>No connection: the answer was not sent. Choose it again.</value>
+  </data>
+  <data name="Test.CorrectAnswer" xml:space="preserve">
+    <value>Correct answer</value>
+  </data>
+  <data name="Test.Failed" xml:space="preserve">
+    <value>Not passed</value>
+  </data>
+  <data name="Test.InProgress" xml:space="preserve">
+    <value>In progress</value>
+  </data>
+  <data name="Test.MistakeInAddOn" xml:space="preserve">
+    <value>Not passed: a mistake in an additional question</value>
+  </data>
+  <data name="Test.NotAnswered" xml:space="preserve">
+    <value>No answer</value>
+  </data>
+  <data name="Test.Passed" xml:space="preserve">
+    <value>Passed</value>
+  </data>
+  <data name="Test.Progress" xml:space="preserve">
+    <value>Question {0} of {1}</value>
+  </data>
+  <data name="Test.Score" xml:space="preserve">
+    <value>Correct: {0} of {1}</value>
+  </data>
+  <data name="Test.TimeExpired" xml:space="preserve">
+    <value>Not passed: the time ran out</value>
+  </data>
+  <data name="Test.TooManyMistakes" xml:space="preserve">
+    <value>Not passed: too many mistakes</value>
+  </data>
+  <data name="Test.TooManyMistakesInBlock" xml:space="preserve">
+    <value>Not passed: too many mistakes in one block</value>
+  </data>
+  <data name="Test.Unavailable" xml:space="preserve">
+    <value>The attempt could not be read: no connection to the school.</value>
+  </data>
+  <data name="Test.YourAnswer" xml:space="preserve">
+    <value>Your answer</value>
+  </data>
+  <data name="Tests.AlreadyInProgress" xml:space="preserve">
+    <value>You have an attempt in progress. Continue it from the list.</value>
+  </data>
+  <data name="Tests.Attempts" xml:space="preserve">
+    <value>Your attempts</value>
+  </data>
+  <data name="Tests.Continue" xml:space="preserve">
+    <value>Continue</value>
+  </data>
+  <data name="Tests.NoContract" xml:space="preserve">
+    <value>You have no active contract to take tests for.</value>
+  </data>
+  <data name="Tests.NoTemplates" xml:space="preserve">
+    <value>The school has no practice tests for your category yet.</value>
+  </data>
+  <data name="Tests.Review" xml:space="preserve">
+    <value>Review</value>
+  </data>
+  <data name="Tests.Rules" xml:space="preserve">
+    <value>{0} questions · {1} min · up to {2} mistakes</value>
+  </data>
+  <data name="Tests.Start" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="Tests.Title" xml:space="preserve">
+    <value>Practice tests</value>
+  </data>
+  <data name="Tests.Unavailable" xml:space="preserve">
+    <value>Tests need a connection to the school. Try again when the device is online.</value>
   </data>
 </root>
