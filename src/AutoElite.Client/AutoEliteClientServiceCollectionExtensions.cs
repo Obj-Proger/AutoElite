@@ -28,11 +28,28 @@ public static class AutoEliteClientServiceCollectionExtensions
     {
         ArgumentNullException.ThrowIfNull(apiAddress);
 
+        return services.AddAutoEliteClient(() => apiAddress, configureHttpClient);
+    }
+
+    /// <summary>
+    /// Registers the client of the API, as <see cref="AddAutoEliteClient(IServiceCollection, Uri, Action{IHttpClientBuilder})"/>
+    /// does, for an application whose user chooses the API, such as the API of their school: the address is read again
+    /// for every client of the API that is created.
+    /// </summary>
+    /// <param name="services">The services of the application.</param>
+    /// <param name="apiAddress">Gives the current address of the API.</param>
+    /// <param name="configureHttpClient">Configures both HTTP clients further, for example their primary handler.</param>
+    /// <returns>The services, for chaining.</returns>
+    public static IServiceCollection AddAutoEliteClient(
+        this IServiceCollection services, Func<Uri> apiAddress, Action<IHttpClientBuilder>? configureHttpClient = null)
+    {
+        ArgumentNullException.ThrowIfNull(apiAddress);
+
         services.TryAddSingleton<IAuthSessionStore, InMemoryAuthSessionStore>();
         services.TryAddSingleton(TimeProvider.System);
 
-        var authentication = services.AddHttpClient(AuthenticationHttpClientName, http => http.BaseAddress = apiAddress);
-        var api = services.AddHttpClient(ApiHttpClientName, http => http.BaseAddress = apiAddress)
+        var authentication = services.AddHttpClient(AuthenticationHttpClientName, http => http.BaseAddress = apiAddress());
+        var api = services.AddHttpClient(ApiHttpClientName, http => http.BaseAddress = apiAddress())
             .AddHttpMessageHandler<AuthenticationHandler>();
         configureHttpClient?.Invoke(authentication);
         configureHttpClient?.Invoke(api);

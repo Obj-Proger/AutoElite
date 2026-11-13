@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- English texts of the mobile application. Placeholders such as {0} must be the same in every culture. -->
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Common.Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Common.Continue" xml:space="preserve">
+    <value>Continue</value>
+  </data>
+  <data name="Home.Afternoon" xml:space="preserve">
+    <value>Good afternoon,</value>
+  </data>
+  <data name="Home.Coming" xml:space="preserve">
+    <value>Your schedule, lessons and tests will appear here.</value>
+  </data>
+  <data name="Home.Evening" xml:space="preserve">
+    <value>Good evening,</value>
+  </data>
+  <data name="Home.Morning" xml:space="preserve">
+    <value>Good morning,</value>
+  </data>
+  <data name="Home.Offline" xml:space="preserve">
+    <value>No connection. The data is as of {0}.</value>
+  </data>
+  <data name="Home.Pending" xml:space="preserve">
+    <value>Not yet sent to the school: {0}</value>
+  </data>
+  <data name="Home.SignOut" xml:space="preserve">
+    <value>Sign out</value>
+  </data>
+  <data name="Home.SignOutPending" xml:space="preserve">
+    <value>Some actions have not been sent to the school yet. They will be lost.</value>
+  </data>
+  <data name="Home.SignOutTitle" xml:space="preserve">
+    <value>Sign out?</value>
+  </data>
+  <data name="School.Hint" xml:space="preserve">
+    <value>Enter the address of your school's AutoElite. The school gives it to you together with your account.</value>
+  </data>
+  <data name="School.InvalidAddress" xml:space="preserve">
+    <value>Enter an address such as school.example.com.</value>
+  </data>
+  <data name="School.Overline" xml:space="preserve">
+    <value>Welcome</value>
+  </data>
+  <data name="School.Placeholder" xml:space="preserve">
+    <value>school.example.com</value>
+  </data>
+  <data name="School.Title" xml:space="preserve">
+    <value>Your driving school</value>
+  </data>
+  <data name="School.Unreachable" xml:space="preserve">
+    <value>The school could not be reached at this address. Check the address and the connection.</value>
+  </data>
+  <data name="SignIn.Blocked" xml:space="preserve">
+    <value>Signing in is not possible now: the account is locked for a while, not confirmed or deactivated. If this persists, contact your school.</value>
+  </data>
+  <data name="SignIn.ChangeSchool" xml:space="preserve">
+    <value>Change school</value>
+  </data>
+  <data name="SignIn.Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="SignIn.Failed" xml:space="preserve">
+    <value>Signing in failed. Try again later.</value>
+  </data>
+  <data name="SignIn.Missing" xml:space="preserve">
+    <value>Enter your email and password.</value>
+  </data>
+  <data name="SignIn.NotForThisApp" xml:space="preserve">
+    <value>The app is for students and instructors. The staff of the school work on its website.</value>
+  </data>
+  <data name="SignIn.Password" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="SignIn.Submit" xml:space="preserve">
+    <value>Sign in</value>
+  </data>
+  <data name="SignIn.Title" xml:space="preserve">
+    <value>Sign in</value>
+  </data>
+  <data name="SignIn.TooManyAttempts" xml:space="preserve">
+    <value>Too many attempts. Try again in a minute.</value>
+  </data>
+  <data name="SignIn.Unreachable" xml:space="preserve">
+    <value>No connection to the school. Check the internet and try again.</value>
+  </data>
+  <data name="SignIn.WrongCredentials" xml:space="preserve">
+    <value>Email or password is incorrect.</value>
+  </data>
+</root>

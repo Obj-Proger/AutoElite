@@ -3,9 +3,13 @@
     x:Class="AutoElite.Mobile.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:AutoElite.Mobile"
+    xmlns:pages="clr-namespace:AutoElite.Mobile.Pages"
     Shell.FlyoutBehavior="Disabled">
 
-    <ShellContent ContentTemplate="{DataTemplate local:MainPage}" Route="main" />
+    <!-- The start page comes first and moves on to one of the others; the pages replace each other. -->
+    <ShellContent ContentTemplate="{DataTemplate pages:StartPage}" Route="start" />
+    <ShellContent ContentTemplate="{DataTemplate pages:SchoolPage}" Route="school" />
+    <ShellContent ContentTemplate="{DataTemplate pages:SignInPage}" Route="sign-in" />
+    <ShellContent ContentTemplate="{DataTemplate pages:HomePage}" Route="home" />
 
 </Shell>

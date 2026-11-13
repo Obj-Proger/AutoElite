@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="AutoElite.Mobile.Pages.HomePage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:l="clr-namespace:AutoElite.Mobile.Localization"
+    xmlns:pages="clr-namespace:AutoElite.Mobile.Pages"
+    x:DataType="pages:HomeViewModel"
+    Shell.NavBarIsVisible="False">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="{StaticResource PageMargin}" Spacing="18">
+            <VerticalStackLayout Spacing="2">
+                <Label Style="{StaticResource Secondary}" Text="{Binding Greeting}" />
+                <Label Style="{StaticResource Headline}" Text="{Binding Name}" />
+            </VerticalStackLayout>
+            <Border Style="{StaticResource Card}" IsVisible="{Binding HasStatus}">
+                <Label Style="{StaticResource Secondary}" Text="{Binding Status}" />
+            </Border>
+            <Border Style="{StaticResource HighlightCard}">
+                <VerticalStackLayout Spacing="8">
+                    <Label Style="{StaticResource Overline}" Text="AutoElite" />
+                    <Label Style="{StaticResource BodyLarge}" Text="{l:Text Home.Coming}" />
+                </VerticalStackLayout>
+            </Border>
+            <Button
+                Style="{StaticResource SecondaryButton}"
+                Text="{l:Text Home.SignOut}"
+                Command="{Binding SignOutCommand}" />
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

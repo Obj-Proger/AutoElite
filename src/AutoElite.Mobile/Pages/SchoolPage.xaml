@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="AutoElite.Mobile.Pages.SchoolPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:l="clr-namespace:AutoElite.Mobile.Localization"
+    xmlns:pages="clr-namespace:AutoElite.Mobile.Pages"
+    x:DataType="pages:SchoolViewModel"
+    Shell.NavBarIsVisible="False">
+
+    <ScrollView>
+        <VerticalStackLayout
+            Padding="{StaticResource PageMargin}"
+            Spacing="16"
+            MaximumWidthRequest="440"
+            VerticalOptions="Center">
+            <Label Style="{StaticResource Overline}" Text="{l:Text School.Overline}" />
+            <Label Style="{StaticResource Headline}" Text="{l:Text School.Title}" />
+            <Label Style="{StaticResource Secondary}" Text="{l:Text School.Hint}" />
+            <Border Style="{StaticResource Field}">
+                <Entry
+                    Text="{Binding Address}"
+                    Placeholder="{l:Text School.Placeholder}"
+                    Keyboard="Url"
+                    IsSpellCheckEnabled="False"
+                    IsTextPredictionEnabled="False"
+                    ReturnType="Go"
+                    ReturnCommand="{Binding ContinueCommand}" />
+            </Border>
+            <Label Style="{StaticResource ErrorText}" Text="{Binding Error}" IsVisible="{Binding HasError}" />
+            <Button Text="{l:Text Common.Continue}" Command="{Binding ContinueCommand}" />
+            <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

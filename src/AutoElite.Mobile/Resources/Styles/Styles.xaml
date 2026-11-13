@@ -2,7 +2,7 @@
 <?xaml-comp compile="true" ?>
 <!--
     The styles of Noir Modern (design/README.md). Controls look right without a style; text, buttons and cards take a
-    named style for their role: Display, Headline, Title, BodyLarge, Secondary, Caption and Overline for labels,
+    named style for their role: Display, Headline, Title, BodyLarge, Secondary, Caption, ErrorText and Overline for labels,
     SecondaryButton, Field for the border around an entry, Card and HighlightCard.
 -->
 <ResourceDictionary
@@ -67,6 +67,11 @@
     <Style x:Key="Caption" TargetType="Label" BasedOn="{StaticResource BaseLabel}">
         <Setter Property="TextColor" Value="{StaticResource TextMuted}" />
         <Setter Property="FontSize" Value="12" />
+    </Style>
+
+    <Style x:Key="ErrorText" TargetType="Label" BasedOn="{StaticResource BaseLabel}">
+        <Setter Property="TextColor" Value="{StaticResource Danger}" />
+        <Setter Property="FontSize" Value="14" />
     </Style>
 
     <Style x:Key="Overline" TargetType="Label" BasedOn="{StaticResource BaseLabel}">

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="AutoElite.Mobile.Pages.SignInPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:l="clr-namespace:AutoElite.Mobile.Localization"
+    xmlns:pages="clr-namespace:AutoElite.Mobile.Pages"
+    x:DataType="pages:SignInViewModel"
+    Shell.NavBarIsVisible="False">
+
+    <ScrollView>
+        <VerticalStackLayout
+            Padding="{StaticResource PageMargin}"
+            Spacing="16"
+            MaximumWidthRequest="440"
+            VerticalOptions="Center">
+            <Label Style="{StaticResource Overline}" Text="{Binding School}" />
+            <Label Style="{StaticResource Display}" Text="AutoElite" />
+            <Label Style="{StaticResource Title}" Text="{l:Text SignIn.Title}" />
+            <Border Style="{StaticResource Field}">
+                <Entry
+                    Text="{Binding Email}"
+                    Placeholder="{l:Text SignIn.Email}"
+                    Keyboard="Email"
+                    IsSpellCheckEnabled="False"
+                    IsTextPredictionEnabled="False"
+                    ReturnType="Next" />
+            </Border>
+            <Border Style="{StaticResource Field}">
+                <Entry
+                    Text="{Binding Password}"
+                    Placeholder="{l:Text SignIn.Password}"
+                    IsPassword="True"
+                    ReturnType="Go"
+                    ReturnCommand="{Binding SignInCommand}" />
+            </Border>
+            <Label Style="{StaticResource ErrorText}" Text="{Binding Error}" IsVisible="{Binding HasError}" />
+            <Button Text="{l:Text SignIn.Submit}" Command="{Binding SignInCommand}" />
+            <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
+            <Button
+                Style="{StaticResource SecondaryButton}"
+                Text="{l:Text SignIn.ChangeSchool}"
+                Command="{Binding ChangeSchoolCommand}" />
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

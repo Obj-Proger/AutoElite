@@ -1,8 +1,19 @@
+using AutoElite.Client.Authentication;
+using AutoElite.Mobile.Pages;
+
 namespace AutoElite.Mobile;
 
-/// <summary>The navigation of the application between its pages.</summary>
+/// <summary>
+/// The navigation of the application between its pages. When the API refuses to renew the session, the user is asked
+/// to sign in again.
+/// </summary>
 public partial class AppShell : Shell
 {
     /// <summary>Initializes a new instance of the <see cref="AppShell"/> class.</summary>
-    public AppShell() => InitializeComponent();
+    /// <param name="sessions">The session of the signed-in user.</param>
+    public AppShell(AuthSessionManager sessions)
+    {
+        InitializeComponent();
+        sessions.SessionEnded += (_, _) => Dispatcher.Dispatch(async () => await Routes.GoToAsync(Routes.SignIn));
+    }
 }

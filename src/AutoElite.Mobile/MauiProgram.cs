@@ -1,8 +1,11 @@
 using AutoElite.Client;
+using AutoElite.Client.Api;
 using AutoElite.Client.Authentication;
 using AutoElite.Client.Offline;
 using AutoElite.Mobile.Authentication;
 using AutoElite.Mobile.Offline;
+using AutoElite.Mobile.Pages;
+using AutoElite.Mobile.Session;
 #if DEBUG
 using Microsoft.Extensions.Logging;
 #endif
@@ -33,15 +36,25 @@ public static class MauiProgram
         builder.Services.AddSingleton(SecureStorage.Default);
         builder.Services.AddSingleton<ISecretStore, SecureStorageSecretStore>();
         builder.Services.AddSingleton<IAuthSessionStore, SecretAuthSessionStore>();
-        builder.Services.AddAutoEliteClient(ApiAddress.Current);
+
+        // The address of the API is the one the user gave, read again for every client of the API.
+        builder.Services.AddAutoEliteClient(() => ApiAddress.Current);
+        builder.Services.AddSingleton<Func<AutoEliteApiClient>>(provider => () => provider.GetRequiredService<AutoEliteApiClient>());
 
         // What the user read and the actions they took without a network, in the private storage of the application.
         builder.Services.AddAutoEliteOffline(Path.Combine(FileSystem.AppDataDirectory, "offline.db3"));
         builder.Services.AddSingleton(Connectivity.Current);
         builder.Services.AddSingleton<SynchronizationTrigger>();
 
+        builder.Services.AddSingleton<UserSession>();
         builder.Services.AddSingleton<AppShell>();
-        builder.Services.AddTransient<MainPage>();
+        builder.Services.AddTransient<StartPage>();
+        builder.Services.AddTransient<SchoolPage>();
+        builder.Services.AddTransient<SchoolViewModel>();
+        builder.Services.AddTransient<SignInPage>();
+        builder.Services.AddTransient<SignInViewModel>();
+        builder.Services.AddTransient<HomePage>();
+        builder.Services.AddTransient<HomeViewModel>();
 
 #if DEBUG
         builder.Logging.AddDebug();

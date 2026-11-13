@@ -138,8 +138,11 @@ storage on a device.
 `src/AutoElite.Mobile` is the .NET MAUI application of students, driving instructors and theory instructors, for Android
 and Windows. Building it, and so the whole solution, needs the MAUI workload: `dotnet workload install maui`, or the
 *.NET Multi-platform App UI development* workload of Visual Studio, which also installs the Android SDK. The application
-keeps the session in the secure storage of the device. Until the user gives the address of the school's API, it uses the
-API of the development machine: `http://localhost:5080` on Windows, `http://10.0.2.2:5080` from the Android emulator.
+keeps the session in the secure storage of the device. On the first start it asks for the address of the school's API,
+which must use HTTPS; a debug build also takes HTTP and offers the API of the development machine:
+`http://localhost:5080` on Windows, `http://10.0.2.2:5080` from the Android emulator. Students and instructors sign in;
+the staff of the school work on its website. The texts of the application are in English, with a Russian translation, in
+`Resources/Strings`; the device's language chooses between them.
 
 The application works without a network too (`src/AutoElite.Client.Offline`). A SQLite database in its private storage
 keeps what the user last read, shown as possibly out of date while the API cannot be reached, and the actions the user
