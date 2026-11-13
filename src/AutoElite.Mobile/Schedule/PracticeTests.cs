@@ -4,9 +4,9 @@ using AutoElite.Client.Api.Models;
 namespace AutoElite.Mobile.Schedule;
 
 /// <summary>
-/// The practice tests of a student: the active templates of the category of their contract, their attempts, and taking
-/// an attempt question by question. A test needs the API, which keeps the timer and checks the answers, so it is not
-/// taken offline.
+/// The tests of a student: the active templates of the category of their contract, their attempts, their exams with the
+/// attempt of a theory exam, and taking an attempt question by question. A test needs the API, which keeps the timer
+/// and checks the answers, so it is not taken offline.
 /// </summary>
 /// <param name="createApi">Creates the client of the API.</param>
 public sealed class PracticeTests(Func<AutoEliteApiClient> createApi)
@@ -39,6 +39,28 @@ public sealed class PracticeTests(Func<AutoEliteApiClient> createApi)
     {
         var created = await createApi().Api.V1.TestSessions.PostAsync(
             new StartTestCommand { ContractId = contractId, TemplateId = templateId }, cancellationToken: cancellationToken);
+
+        return created?.Id ?? throw new InvalidOperationException("The API started the attempt without giving it.");
+    }
+
+    /// <summary>Reads the exams of the student with their own results, the latest first.</summary>
+    /// <param name="cancellationToken">A token that signals cancellation of the operation.</param>
+    /// <returns>The exams.</returns>
+    public async Task<IReadOnlyList<StudentExamItem>> ReadExamsAsync(CancellationToken cancellationToken) =>
+        await createApi().Api.V1.Me.Exams.GetAsync(cancellationToken: cancellationToken) ?? [];
+
+    /// <summary>
+    /// Starts the attempt of a theory exam once the exam has begun; its result becomes the exam result. Each contract
+    /// takes the exam once.
+    /// </summary>
+    /// <param name="examId">The exam.</param>
+    /// <param name="contractId">The contract of the student, a member of the group of the exam.</param>
+    /// <param name="cancellationToken">A token that signals cancellation of the operation.</param>
+    /// <returns>The attempt.</returns>
+    public async Task<Guid> StartExamAsync(Guid examId, Guid contractId, CancellationToken cancellationToken)
+    {
+        var created = await createApi().Api.V1.Exams[examId].TestSession.PostAsync(
+            new StartExamTestCommand { ExamId = examId, ContractId = contractId }, cancellationToken: cancellationToken);
 
         return created?.Id ?? throw new InvalidOperationException("The API started the attempt without giving it.");
     }

@@ -109,6 +109,30 @@
   <data name="Completion.Saved" xml:space="preserve">
     <value>Занятие завершено.</value>
   </data>
+  <data name="Exams.ConfirmMessage" xml:space="preserve">
+    <value>Экзамен сдаётся один раз, и таймер начнётся сразу.</value>
+  </data>
+  <data name="Exams.ConfirmTitle" xml:space="preserve">
+    <value>Начать экзамен?</value>
+  </data>
+  <data name="Exams.NotStarted" xml:space="preserve">
+    <value>Не удалось начать экзамен: он мог быть уже сдан, отменён или ещё не начаться, либо нет связи.</value>
+  </data>
+  <data name="Exams.Practice" xml:space="preserve">
+    <value>Практический экзамен</value>
+  </data>
+  <data name="Exams.Score" xml:space="preserve">
+    <value>Баллы: {0}</value>
+  </data>
+  <data name="Exams.Start" xml:space="preserve">
+    <value>Сдать экзамен</value>
+  </data>
+  <data name="Exams.Theory" xml:space="preserve">
+    <value>Теоретический экзамен</value>
+  </data>
+  <data name="Exams.Title" xml:space="preserve">
+    <value>Экзамены</value>
+  </data>
   <data name="Home.Afternoon" xml:space="preserve">
     <value>Добрый день,</value>
   </data>
@@ -152,7 +176,7 @@
     <value>Выйти?</value>
   </data>
   <data name="Home.Tests" xml:space="preserve">
-    <value>Тренировочные тесты</value>
+    <value>Тесты и экзамены</value>
   </data>
   <data name="Lesson.Absent" xml:space="preserve">
     <value>Пропущено</value>
@@ -370,6 +394,9 @@
   <data name="Tests.NoTemplates" xml:space="preserve">
     <value>У автошколы пока нет тестов для вашей категории.</value>
   </data>
+  <data name="Tests.Practice" xml:space="preserve">
+    <value>Тренировочные тесты</value>
+  </data>
   <data name="Tests.Review" xml:space="preserve">
     <value>Разбор</value>
   </data>
@@ -380,7 +407,7 @@
     <value>Начать</value>
   </data>
   <data name="Tests.Title" xml:space="preserve">
-    <value>Тренировочные тесты</value>
+    <value>Тесты и экзамены</value>
   </data>
   <data name="Tests.Unavailable" xml:space="preserve">
     <value>Для тестов нужна связь с автошколой. Попробуйте, когда появится сеть.</value>

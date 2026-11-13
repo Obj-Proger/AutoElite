@@ -109,6 +109,30 @@
   <data name="Completion.Saved" xml:space="preserve">
     <value>The lesson is completed.</value>
   </data>
+  <data name="Exams.ConfirmMessage" xml:space="preserve">
+    <value>The exam is taken once, and its timer starts at once.</value>
+  </data>
+  <data name="Exams.ConfirmTitle" xml:space="preserve">
+    <value>Start the exam?</value>
+  </data>
+  <data name="Exams.NotStarted" xml:space="preserve">
+    <value>The exam could not be started: it may have been taken already, cancelled or not begun yet, or there is no connection.</value>
+  </data>
+  <data name="Exams.Practice" xml:space="preserve">
+    <value>Practical exam</value>
+  </data>
+  <data name="Exams.Score" xml:space="preserve">
+    <value>Score: {0}</value>
+  </data>
+  <data name="Exams.Start" xml:space="preserve">
+    <value>Take the exam</value>
+  </data>
+  <data name="Exams.Theory" xml:space="preserve">
+    <value>Theory exam</value>
+  </data>
+  <data name="Exams.Title" xml:space="preserve">
+    <value>Exams</value>
+  </data>
   <data name="Home.Afternoon" xml:space="preserve">
     <value>Good afternoon,</value>
   </data>
@@ -152,7 +176,7 @@
     <value>Sign out?</value>
   </data>
   <data name="Home.Tests" xml:space="preserve">
-    <value>Practice tests</value>
+    <value>Tests and exams</value>
   </data>
   <data name="Lesson.Absent" xml:space="preserve">
     <value>Missed</value>
@@ -370,6 +394,9 @@
   <data name="Tests.NoTemplates" xml:space="preserve">
     <value>The school has no practice tests for your category yet.</value>
   </data>
+  <data name="Tests.Practice" xml:space="preserve">
+    <value>Practice tests</value>
+  </data>
   <data name="Tests.Review" xml:space="preserve">
     <value>Review</value>
   </data>
@@ -380,7 +407,7 @@
     <value>Start</value>
   </data>
   <data name="Tests.Title" xml:space="preserve">
-    <value>Practice tests</value>
+    <value>Tests and exams</value>
   </data>
   <data name="Tests.Unavailable" xml:space="preserve">
     <value>Tests need a connection to the school. Try again when the device is online.</value>

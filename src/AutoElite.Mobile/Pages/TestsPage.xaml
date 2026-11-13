@@ -15,6 +15,22 @@
                     <Label Style="{StaticResource Secondary}" Text="{Binding Notice}" />
                 </Border>
 
+                <Label Style="{StaticResource Title}" Text="{l:Text Exams.Title}" IsVisible="{Binding HasExams}" />
+                <VerticalStackLayout Spacing="12" BindableLayout.ItemsSource="{Binding Exams}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="pages:TestEntry">
+                            <Border Style="{StaticResource Card}">
+                                <VerticalStackLayout Spacing="6">
+                                    <Label Style="{StaticResource BodyLarge}" Text="{Binding Title}" />
+                                    <Label Style="{StaticResource Secondary}" Text="{Binding Details}" />
+                                    <Button Text="{Binding ActionText}" Command="{Binding Command}" IsVisible="{Binding HasAction}" />
+                                </VerticalStackLayout>
+                            </Border>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </VerticalStackLayout>
+
+                <Label Style="{StaticResource Title}" Text="{l:Text Tests.Practice}" />
                 <VerticalStackLayout Spacing="12" BindableLayout.ItemsSource="{Binding Templates}">
                     <BindableLayout.ItemTemplate>
                         <DataTemplate x:DataType="pages:TestEntry">

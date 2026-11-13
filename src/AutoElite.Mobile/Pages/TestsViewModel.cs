@@ -7,23 +7,41 @@ using Microsoft.Kiota.Abstractions;
 namespace AutoElite.Mobile.Pages;
 
 /// <summary>
-/// The practice tests of a student: the active templates of the category of their first active contract, each to
-/// start an attempt from, and their attempts, the one in progress to continue and the finished ones to review.
+/// The tests of a student: their exams, a theory exam to take once it has begun; the active templates of the category
+/// of their first active contract, each to start a practice attempt from; and their practice attempts, the one in
+/// progress to continue and the finished ones to review.
 /// </summary>
 public sealed class TestsViewModel : ViewModel
 {
     private readonly DrivingBooking _contracts;
     private readonly PracticeTests _tests;
+    private readonly TimeProvider _timeProvider;
 
     /// <summary>Initializes a new instance of the <see cref="TestsViewModel"/> class.</summary>
     /// <param name="contracts">The active contracts of the student.</param>
-    /// <param name="tests">The practice tests.</param>
-    public TestsViewModel(DrivingBooking contracts, PracticeTests tests)
+    /// <param name="tests">The tests.</param>
+    /// <param name="timeProvider">The clock.</param>
+    public TestsViewModel(DrivingBooking contracts, PracticeTests tests, TimeProvider timeProvider)
     {
         _contracts = contracts;
         _tests = tests;
+        _timeProvider = timeProvider;
         RefreshCommand = new Command(async () => await RefreshAsync());
     }
+
+    /// <summary>Gets the exams of the student, the latest first.</summary>
+    public IReadOnlyList<TestEntry> Exams
+    {
+        get;
+        private set
+        {
+            if (SetProperty(ref field, value))
+                OnPropertyChanged(nameof(HasExams));
+        }
+    } = [];
+
+    /// <summary>Gets a value indicating whether the student has exams.</summary>
+    public bool HasExams => Exams.Count > 0;
 
     /// <summary>Gets the templates to start a test from.</summary>
     public IReadOnlyList<TestEntry> Templates
@@ -80,6 +98,7 @@ public sealed class TestsViewModel : ViewModel
                 .FirstOrDefault(candidate => candidate is { Id: not null, Category: not null });
             if (contract is not { Id: { } contractId, Category: { } category })
             {
+                Exams = [];
                 Show([], [], AppTexts.Get("Tests.NoContract"));
 
                 return;
@@ -87,6 +106,9 @@ public sealed class TestsViewModel : ViewModel
 
             var templates = await _tests.ReadTemplatesAsync(category, CancellationToken.None);
             var attempts = await _tests.ReadAttemptsAsync(contractId, CancellationToken.None);
+            var exams = await _tests.ReadExamsAsync(CancellationToken.None);
+            var now = _timeProvider.GetUtcNow();
+            Exams = [.. exams.Select(exam => ExamEntry(exam, contractId, attempts, now)).OfType<TestEntry>()];
             Show(
                 [.. templates.Select(template => TemplateEntry(contractId, template)).OfType<TestEntry>()],
                 [.. attempts.Where(attempt => attempt.ExamId is null).Select(AttemptEntry).OfType<TestEntry>()],
@@ -94,6 +116,7 @@ public sealed class TestsViewModel : ViewModel
         }
         catch (Exception exception) when (exception is ApiException or HttpRequestException)
         {
+            Exams = [];
             Show([], [], AppTexts.Get("Tests.Unavailable"));
         }
     }
@@ -121,6 +144,62 @@ public sealed class TestsViewModel : ViewModel
             ActionText = inProgress ? AppTexts.Get("Tests.Continue") : AppTexts.Get("Tests.Review"),
             Command = new Command(async () => await OpenAttemptAsync(sessionId))
         };
+    }
+
+    private TestEntry? ExamEntry(
+        StudentExamItem item, Guid contractId, IReadOnlyList<TestSessionItem> attempts, DateTimeOffset now)
+    {
+        if (item.Exam is not { Id: { } examId, ScheduledAtUtc: { } scheduledAt, Kind: { } kind, Status: { } status } exam)
+            return null;
+
+        var title = kind == ExamKind.Theory
+            ? exam.TestTemplateName ?? AppTexts.Get("Exams.Theory")
+            : AppTexts.Get("Exams.Practice");
+        var when = scheduledAt.ToLocalTime().ToString("g", CultureInfo.CurrentCulture);
+        if (status == ExamStatus.Cancelled)
+            return new TestEntry { Title = title, Details = LessonTexts.DetailsOf(when, AppTexts.Get("Lesson.Cancelled")) };
+
+        if (item.Result is { } result)
+        {
+            return new TestEntry
+            {
+                Title = title,
+                Details = LessonTexts.DetailsOf(
+                    when,
+                    result.Passed == true ? AppTexts.Get("Test.Passed") : AppTexts.Get("Test.Failed"),
+                    result.Score is { } score ? AppTexts.Format("Exams.Score", score) : null),
+                ActionText = result.TestSessionId is null ? null : AppTexts.Get("Tests.Review"),
+                Command = result.TestSessionId is { } reviewed ? new Command(async () => await OpenAttemptAsync(reviewed)) : null
+            };
+        }
+
+        var details = LessonTexts.DetailsOf(when, exam.GroupName);
+        if (kind != ExamKind.Theory)
+            return new TestEntry { Title = title, Details = details };
+
+        // A theory exam is taken once: an attempt of it is continued, or reviewed until its result is recorded.
+        if (attempts.FirstOrDefault(attempt => attempt.ExamId == examId) is { Id: { } sessionId } attempt)
+        {
+            var inProgress = attempt.Status == TestSessionStatus.InProgress;
+
+            return new TestEntry
+            {
+                Title = title,
+                Details = details,
+                ActionText = inProgress ? AppTexts.Get("Tests.Continue") : AppTexts.Get("Tests.Review"),
+                Command = new Command(async () => await OpenAttemptAsync(sessionId))
+            };
+        }
+
+        return scheduledAt <= now
+            ? new TestEntry
+            {
+                Title = title,
+                Details = details,
+                ActionText = AppTexts.Get("Exams.Start"),
+                Command = new Command(async () => await StartExamAsync(examId, contractId))
+            }
+            : new TestEntry { Title = title, Details = details };
     }
 
     private TestEntry? TemplateEntry(Guid contractId, TestTemplateItem template)
@@ -164,6 +243,35 @@ public sealed class TestsViewModel : ViewModel
         {
             await Shell.Current.DisplayAlertAsync(
                 AppTexts.Get("Tests.Title"), AppTexts.Get("Tests.Unavailable"), AppTexts.Get("Common.Ok"));
+
+            return;
+        }
+
+        await OpenAttemptAsync(sessionId);
+    }
+
+    private async Task StartExamAsync(Guid examId, Guid contractId)
+    {
+        if (!await Shell.Current.DisplayAlertAsync(
+            AppTexts.Get("Exams.ConfirmTitle"),
+            AppTexts.Get("Exams.ConfirmMessage"),
+            AppTexts.Get("Exams.Start"),
+            AppTexts.Get("Common.Cancel")))
+        {
+            return;
+        }
+
+        Guid sessionId;
+        try
+        {
+            sessionId = await _tests.StartExamAsync(examId, contractId, CancellationToken.None);
+        }
+        catch (Exception exception) when (exception is ApiException or HttpRequestException)
+        {
+            // The exam may have been taken already, cancelled or not begun on the clock of the API.
+            await Shell.Current.DisplayAlertAsync(
+                AppTexts.Get("Tests.Title"), AppTexts.Get("Exams.NotStarted"), AppTexts.Get("Common.Ok"));
+            await LoadAsync();
 
             return;
         }
