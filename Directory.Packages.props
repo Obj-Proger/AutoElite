@@ -65,6 +65,13 @@
     <PackageVersion Include="Microsoft.Extensions.Http" Version="10.0.14" />
     <PackageVersion Include="Microsoft.Kiota.Bundle" Version="2.1.2" />
   </ItemGroup>
+  <!--
+    Microsoft.Data.Sqlite (MIT), with the SQLite library (public domain) built for each platform, keeps the offline data
+    of the applications on a device.
+  -->
+  <ItemGroup Label="Offline">
+    <PackageVersion Include="Microsoft.Data.Sqlite" Version="10.0.14" />
+  </ItemGroup>
   <!-- .NET MAUI (MIT): the application of students and instructors for Android and Windows (D-066). -->
   <ItemGroup Label="Mobile">
     <PackageVersion Include="Microsoft.Extensions.Logging.Debug" Version="10.0.14" />

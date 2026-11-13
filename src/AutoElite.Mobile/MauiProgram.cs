@@ -1,13 +1,17 @@
 using AutoElite.Client;
 using AutoElite.Client.Authentication;
+using AutoElite.Client.Offline;
 using AutoElite.Mobile.Authentication;
+using AutoElite.Mobile.Offline;
 #if DEBUG
 using Microsoft.Extensions.Logging;
 #endif
 
 namespace AutoElite.Mobile;
 
-/// <summary>Builds the application: its pages, the client of the API and the session kept in secure storage.</summary>
+/// <summary>
+/// Builds the application: its pages, the client of the API, the session kept in secure storage and the offline data.
+/// </summary>
 public static class MauiProgram
 {
     /// <summary>Creates the application.</summary>
@@ -30,6 +34,11 @@ public static class MauiProgram
         builder.Services.AddSingleton<ISecretStore, SecureStorageSecretStore>();
         builder.Services.AddSingleton<IAuthSessionStore, SecretAuthSessionStore>();
         builder.Services.AddAutoEliteClient(ApiAddress.Current);
+
+        // What the user read and the actions they took without a network, in the private storage of the application.
+        builder.Services.AddAutoEliteOffline(Path.Combine(FileSystem.AppDataDirectory, "offline.db3"));
+        builder.Services.AddSingleton(Connectivity.Current);
+        builder.Services.AddSingleton<SynchronizationTrigger>();
 
         builder.Services.AddSingleton<AppShell>();
         builder.Services.AddTransient<MainPage>();

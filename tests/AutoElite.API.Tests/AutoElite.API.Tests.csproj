@@ -23,6 +23,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\AutoElite.API\AutoElite.API.csproj" />
     <ProjectReference Include="..\..\src\AutoElite.Client\AutoElite.Client.csproj" />
+    <ProjectReference Include="..\..\src\AutoElite.Client.Offline\AutoElite.Client.Offline.csproj" />
   </ItemGroup>
 
 </Project>

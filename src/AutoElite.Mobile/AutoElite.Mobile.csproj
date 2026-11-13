@@ -41,6 +41,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AutoElite.Client\AutoElite.Client.csproj" />
+    <ProjectReference Include="..\AutoElite.Client.Offline\AutoElite.Client.Offline.csproj" />
   </ItemGroup>
 
 </Project>

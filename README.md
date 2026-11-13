@@ -141,6 +141,14 @@ and Windows. Building it, and so the whole solution, needs the MAUI workload: `d
 keeps the session in the secure storage of the device. Until the user gives the address of the school's API, it uses the
 API of the development machine: `http://localhost:5080` on Windows, `http://10.0.2.2:5080` from the Android emulator.
 
+The application works without a network too (`src/AutoElite.Client.Offline`). A SQLite database in its private storage
+keeps what the user last read, shown as possibly out of date while the API cannot be reached, and the actions the user
+takes, such as booking a practice slot, wait in a queue that is sent in order when the device connects to a network or
+the application comes back to the foreground. The API decides each action when it receives it: one it refuses, such as
+the booking of a slot that another student took meanwhile, stays in the queue for the user to see. The data on the
+device belongs to one user: `OfflineDatabase.ClaimAsync` forgets the data of another user when a user signs in, and
+`ForgetAsync` forgets everything when the user signs out.
+
 ### First start
 
 When the API starts, it applies the pending migrations, unless `Database:MigrateOnStartup` is `false` where the schema
@@ -183,7 +191,7 @@ A file is at most 32 MB and an archive at most 512 MB. A question whose code is 
 ## Repository layout
 
 ```
-src/     production code, one project per layer, the client of the API and the mobile application
+src/     production code, one project per layer, the client of the API, its offline mode and the mobile application
 tests/   one test project per layer (xUnit v3, AwesomeAssertions), plus architecture tests
           that check layer dependencies, code conventions and the copies of the design tokens
 design/  Noir Modern, the design system of the mobile application and the website: tokens and fonts
