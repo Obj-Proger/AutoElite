@@ -10,6 +10,9 @@ public partial class App : Application
     public App(AppShell shell)
     {
         InitializeComponent();
+
+        // Noir Modern is dark: the system controls follow it whatever the theme of the device.
+        UserAppTheme = AppTheme.Dark;
         _shell = shell;
     }
 

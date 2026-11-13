@@ -15,7 +15,15 @@ public static class MauiProgram
     public static MauiApp CreateMauiApp()
     {
         var builder = MauiApp.CreateBuilder();
-        builder.UseMauiApp<App>();
+        builder.UseMauiApp<App>().ConfigureFonts(fonts =>
+        {
+            // The fonts of Noir Modern (design/fonts), by the names the styles use.
+            fonts.AddFont("Unbounded-Medium.ttf", "DisplayMedium");
+            fonts.AddFont("Unbounded-SemiBold.ttf", "DisplaySemiBold");
+            fonts.AddFont("Inter-Regular.ttf", "TextRegular");
+            fonts.AddFont("Inter-Medium.ttf", "TextMedium");
+            fonts.AddFont("Inter-SemiBold.ttf", "TextSemiBold");
+        });
 
         // The user stays signed in between starts: the session is kept in the secure storage of the device.
         builder.Services.AddSingleton(SecureStorage.Default);

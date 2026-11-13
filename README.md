@@ -183,9 +183,10 @@ A file is at most 32 MB and an archive at most 512 MB. A question whose code is 
 ## Repository layout
 
 ```
-src/     production code, one project per layer
+src/     production code, one project per layer, the client of the API and the mobile application
 tests/   one test project per layer (xUnit v3, AwesomeAssertions), plus architecture tests
-          that check layer dependencies and code conventions
+          that check layer dependencies, code conventions and the copies of the design tokens
+design/  Noir Modern, the design system of the mobile application and the website: tokens and fonts
 ```
 
 ## License

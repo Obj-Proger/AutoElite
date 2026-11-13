@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?xaml-comp compile="true" ?>
+<!--
+    The styles of Noir Modern (design/README.md). Controls look right without a style; text, buttons and cards take a
+    named style for their role: Display, Headline, Title, BodyLarge, Secondary, Caption and Overline for labels,
+    SecondaryButton, Field for the border around an entry, Card and HighlightCard.
+-->
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <x:Double x:Key="PageMargin">22</x:Double>
+    <x:Double x:Key="TouchTarget">48</x:Double>
+
+    <Style TargetType="Page" ApplyToDerivedTypes="True">
+        <Setter Property="BackgroundColor" Value="{StaticResource Background}" />
+    </Style>
+
+    <Style TargetType="Shell" ApplyToDerivedTypes="True">
+        <Setter Property="Shell.BackgroundColor" Value="{StaticResource Background}" />
+        <Setter Property="Shell.ForegroundColor" Value="{StaticResource Text}" />
+        <Setter Property="Shell.TitleColor" Value="{StaticResource Text}" />
+        <Setter Property="Shell.DisabledColor" Value="{StaticResource TextMuted}" />
+        <Setter Property="Shell.UnselectedColor" Value="{StaticResource TextMuted}" />
+        <Setter Property="Shell.NavBarHasShadow" Value="False" />
+        <Setter Property="Shell.TabBarBackgroundColor" Value="{StaticResource Background}" />
+        <Setter Property="Shell.TabBarForegroundColor" Value="{StaticResource Accent}" />
+        <Setter Property="Shell.TabBarTitleColor" Value="{StaticResource Accent}" />
+        <Setter Property="Shell.TabBarUnselectedColor" Value="{StaticResource TextMuted}" />
+    </Style>
+
+    <!-- Text -->
+
+    <!-- A named style replaces the implicit one, so every label style is based on this one. -->
+    <Style x:Key="BaseLabel" TargetType="Label">
+        <Setter Property="TextColor" Value="{StaticResource Text}" />
+        <Setter Property="FontFamily" Value="TextRegular" />
+        <Setter Property="FontSize" Value="15" />
+    </Style>
+
+    <Style TargetType="Label" BasedOn="{StaticResource BaseLabel}" />
+
+    <Style x:Key="Display" TargetType="Label" BasedOn="{StaticResource BaseLabel}">
+        <Setter Property="FontFamily" Value="DisplaySemiBold" />
+        <Setter Property="FontSize" Value="44" />
+        <Setter Property="LineHeight" Value="1.05" />
+    </Style>
+
+    <Style x:Key="Headline" TargetType="Label" BasedOn="{StaticResource BaseLabel}">
+        <Setter Property="FontFamily" Value="DisplaySemiBold" />
+        <Setter Property="FontSize" Value="28" />
+    </Style>
+
+    <Style x:Key="Title" TargetType="Label" BasedOn="{StaticResource BaseLabel}">
+        <Setter Property="FontFamily" Value="DisplayMedium" />
+        <Setter Property="FontSize" Value="20" />
+    </Style>
+
+    <Style x:Key="BodyLarge" TargetType="Label" BasedOn="{StaticResource BaseLabel}">
+        <Setter Property="FontSize" Value="17" />
+    </Style>
+
+    <Style x:Key="Secondary" TargetType="Label" BasedOn="{StaticResource BaseLabel}">
+        <Setter Property="TextColor" Value="{StaticResource TextSecondary}" />
+    </Style>
+
+    <Style x:Key="Caption" TargetType="Label" BasedOn="{StaticResource BaseLabel}">
+        <Setter Property="TextColor" Value="{StaticResource TextMuted}" />
+        <Setter Property="FontSize" Value="12" />
+    </Style>
+
+    <Style x:Key="Overline" TargetType="Label" BasedOn="{StaticResource BaseLabel}">
+        <Setter Property="TextColor" Value="{StaticResource Accent}" />
+        <Setter Property="FontFamily" Value="TextMedium" />
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="CharacterSpacing" Value="2" />
+        <Setter Property="TextTransform" Value="Uppercase" />
+    </Style>
+
+    <!-- Actions -->
+
+    <Style TargetType="Button">
+        <Setter Property="BackgroundColor" Value="{StaticResource Accent}" />
+        <Setter Property="TextColor" Value="{StaticResource OnAccent}" />
+        <Setter Property="FontFamily" Value="TextSemiBold" />
+        <Setter Property="FontSize" Value="15" />
+        <Setter Property="CornerRadius" Value="14" />
+        <Setter Property="MinimumHeightRequest" Value="{StaticResource TouchTarget}" />
+        <Setter Property="Padding" Value="20,0" />
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="Pressed">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="{StaticResource AccentHover}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="PointerOver">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="{StaticResource AccentHover}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="{StaticResource Border}" />
+                            <Setter Property="TextColor" Value="{StaticResource TextMuted}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <Style x:Key="SecondaryButton" TargetType="Button">
+        <Setter Property="BackgroundColor" Value="{StaticResource Surface}" />
+        <Setter Property="TextColor" Value="{StaticResource Text}" />
+        <Setter Property="BorderColor" Value="{StaticResource Border}" />
+        <Setter Property="BorderWidth" Value="1" />
+        <Setter Property="FontFamily" Value="TextSemiBold" />
+        <Setter Property="FontSize" Value="15" />
+        <Setter Property="CornerRadius" Value="14" />
+        <Setter Property="MinimumHeightRequest" Value="{StaticResource TouchTarget}" />
+        <Setter Property="Padding" Value="20,0" />
+    </Style>
+
+    <!-- Input -->
+
+    <Style TargetType="Entry">
+        <Setter Property="TextColor" Value="{StaticResource Text}" />
+        <Setter Property="PlaceholderColor" Value="{StaticResource TextMuted}" />
+        <Setter Property="FontFamily" Value="TextRegular" />
+        <Setter Property="FontSize" Value="15" />
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="MinimumHeightRequest" Value="{StaticResource TouchTarget}" />
+    </Style>
+
+    <Style x:Key="Field" TargetType="Border">
+        <Setter Property="BackgroundColor" Value="{StaticResource Surface}" />
+        <Setter Property="Stroke" Value="{StaticResource Border}" />
+        <Setter Property="StrokeThickness" Value="1" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 14" />
+        <Setter Property="Padding" Value="14,0" />
+    </Style>
+
+    <!-- Surfaces -->
+
+    <Style x:Key="Card" TargetType="Border">
+        <Setter Property="BackgroundColor" Value="{StaticResource Surface}" />
+        <Setter Property="StrokeThickness" Value="0" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 18" />
+        <Setter Property="Padding" Value="16" />
+    </Style>
+
+    <Style x:Key="HighlightCard" TargetType="Border">
+        <Setter Property="BackgroundColor" Value="{StaticResource SurfaceRaised}" />
+        <Setter Property="Stroke" Value="{StaticResource Border}" />
+        <Setter Property="StrokeThickness" Value="1" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 22" />
+        <Setter Property="Padding" Value="20" />
+    </Style>
+
+    <Style TargetType="ProgressBar">
+        <Setter Property="ProgressColor" Value="{StaticResource Accent}" />
+        <Setter Property="BackgroundColor" Value="{StaticResource Border}" />
+    </Style>
+
+    <Style TargetType="ActivityIndicator">
+        <Setter Property="Color" Value="{StaticResource Accent}" />
+    </Style>
+
+</ResourceDictionary>
