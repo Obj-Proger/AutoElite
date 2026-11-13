@@ -14,6 +14,8 @@ env:
   DOTNET_CLI_TELEMETRY_OPTOUT: true
 
 jobs:
+  # The server, the client of the API and their tests. The mobile application needs the MAUI workload, which the
+  # mobile job installs, so this job builds the test projects, which reference everything else.
   build-and-test:
     runs-on: ubuntu-latest
     steps:
@@ -23,12 +25,34 @@ jobs:
         with:
           global-json-file: global.json
 
-      - name: Restore
-        run: dotnet restore
-
       # GitHub Actions sets CI=true, so Directory.Build.props turns every warning into an error.
       - name: Build
-        run: dotnet build --no-restore --configuration Release
+        run: |
+          for project in tests/*/*.csproj; do
+            dotnet build "$project" --configuration Release
+          done
 
       - name: Test
-        run: dotnet test --no-build --configuration Release
+        run: |
+          for project in tests/*/*.csproj; do
+            dotnet test --project "$project" --no-build --configuration Release
+          done
+
+  # The mobile application for Android and Windows, on Windows, where both targets build.
+  mobile:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+
+      - name: Install the MAUI workload
+        run: dotnet workload install maui-android maui-windows
+
+      - name: Build for Android
+        run: dotnet build src/AutoElite.Mobile/AutoElite.Mobile.csproj --framework net10.0-android
+
+      - name: Build for Windows
+        run: dotnet build src/AutoElite.Mobile/AutoElite.Mobile.csproj --framework net10.0-windows10.0.19041.0

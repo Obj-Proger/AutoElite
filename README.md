@@ -44,7 +44,8 @@ Planned stack: .NET 10, ASP.NET Core, EF Core with PostgreSQL, Blazor (web), .NE
 
 ## Getting started
 
-Requires the [.NET 10 SDK](https://dotnet.microsoft.com/download).
+Requires the [.NET 10 SDK](https://dotnet.microsoft.com/download) and, for the mobile application, the .NET MAUI
+workload (see [The mobile application](#the-mobile-application)).
 
 ```shell
 dotnet build
@@ -131,6 +132,14 @@ applications of the school register it with `services.AddAutoEliteClient(apiAddr
 and out, and the requests of `AutoEliteApiClient` carry the access token, which is renewed with the refresh token when
 it expires or the API rejects it. An application keeps the session in its own `IAuthSessionStore`, such as secure
 storage on a device.
+
+### The mobile application
+
+`src/AutoElite.Mobile` is the .NET MAUI application of students, driving instructors and theory instructors, for Android
+and Windows. Building it, and so the whole solution, needs the MAUI workload: `dotnet workload install maui`, or the
+*.NET Multi-platform App UI development* workload of Visual Studio, which also installs the Android SDK. The application
+keeps the session in the secure storage of the device. Until the user gives the address of the school's API, it uses the
+API of the development machine: `http://localhost:5080` on Windows, `http://10.0.2.2:5080` from the Android emulator.
 
 ### First start
 

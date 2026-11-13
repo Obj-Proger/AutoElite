@@ -23,9 +23,16 @@
     <PackageReference Include="Microsoft.Kiota.Bundle" />
   </ItemGroup>
 
-  <!-- Builds the API first, which writes the OpenAPI document; the client does not use its assembly. -->
+  <!--
+    Builds the API first, which writes the OpenAPI document; the client uses neither its assembly nor its packages, and
+    passes none of them on to the applications.
+  -->
   <ItemGroup>
-    <ProjectReference Include="..\AutoElite.API\AutoElite.API.csproj" ReferenceOutputAssembly="false" />
+    <ProjectReference
+      Include="..\AutoElite.API\AutoElite.API.csproj"
+      ReferenceOutputAssembly="false"
+      ExcludeAssets="all"
+      PrivateAssets="all" />
   </ItemGroup>
 
   <!-- Generates the client when the document, the version of Kiota or this file has changed. -->
