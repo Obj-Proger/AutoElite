@@ -42,6 +42,9 @@ internal static class Routes
     /// <summary>The contracts of a student with the progress and the payments, opened over the home page.</summary>
     public const string Contracts = "contracts";
 
+    /// <summary>The settings, opened over the home page.</summary>
+    public const string Settings = "settings";
+
     /// <summary>Shows a page in place of the current one, with no way back.</summary>
     /// <param name="route">The route of the page.</param>
     /// <returns>A task that completes when the page is shown.</returns>

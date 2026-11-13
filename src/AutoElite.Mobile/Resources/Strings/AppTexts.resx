@@ -415,6 +415,39 @@
   <data name="School.Unreachable" xml:space="preserve">
     <value>The school could not be reached at this address. Check the address and the connection.</value>
   </data>
+  <data name="Settings.About" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="Settings.DeviceLanguage" xml:space="preserve">
+    <value>Language of the device</value>
+  </data>
+  <data name="Settings.English" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="Settings.Language" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="Settings.License" xml:space="preserve">
+    <value>Free software under the GNU General Public License v3.</value>
+  </data>
+  <data name="Settings.Restart" xml:space="preserve">
+    <value>The language changes the next time the app starts.</value>
+  </data>
+  <data name="Settings.Russian" xml:space="preserve">
+    <value>Русский</value>
+  </data>
+  <data name="Settings.School" xml:space="preserve">
+    <value>School</value>
+  </data>
+  <data name="Settings.SourceCode" xml:space="preserve">
+    <value>Source code</value>
+  </data>
+  <data name="Settings.Title" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="Settings.Version" xml:space="preserve">
+    <value>AutoElite {0}</value>
+  </data>
   <data name="SignIn.Blocked" xml:space="preserve">
     <value>Signing in is not possible now: the account is locked for a while, not confirmed or deactivated. If this persists, contact your school.</value>
   </data>

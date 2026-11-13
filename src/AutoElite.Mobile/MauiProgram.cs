@@ -4,6 +4,7 @@ using AutoElite.Client.Authentication;
 using AutoElite.Client.Offline;
 using AutoElite.Client.Realtime;
 using AutoElite.Mobile.Authentication;
+using AutoElite.Mobile.Localization;
 using AutoElite.Mobile.Offline;
 using AutoElite.Mobile.Pages;
 using AutoElite.Mobile.Schedule;
@@ -23,6 +24,7 @@ public static class MauiProgram
     /// <returns>The application.</returns>
     public static MauiApp CreateMauiApp()
     {
+        AppLanguage.Apply();
         var builder = MauiApp.CreateBuilder();
         builder.UseMauiApp<App>().ConfigureFonts(fonts =>
         {
@@ -84,6 +86,8 @@ public static class MauiProgram
         builder.Services.AddTransient<ChatViewModel>();
         builder.Services.AddTransient<ContractsPage>();
         builder.Services.AddTransient<ContractsViewModel>();
+        builder.Services.AddTransient<SettingsPage>();
+        builder.Services.AddTransient<SettingsViewModel>();
 
 #if DEBUG
         builder.Logging.AddDebug();

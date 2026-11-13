@@ -415,6 +415,39 @@
   <data name="School.Unreachable" xml:space="preserve">
     <value>Не удалось связаться со школой по этому адресу. Проверьте адрес и подключение.</value>
   </data>
+  <data name="Settings.About" xml:space="preserve">
+    <value>О приложении</value>
+  </data>
+  <data name="Settings.DeviceLanguage" xml:space="preserve">
+    <value>Язык устройства</value>
+  </data>
+  <data name="Settings.English" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="Settings.Language" xml:space="preserve">
+    <value>Язык</value>
+  </data>
+  <data name="Settings.License" xml:space="preserve">
+    <value>Свободное программное обеспечение под лицензией GNU GPL v3.</value>
+  </data>
+  <data name="Settings.Restart" xml:space="preserve">
+    <value>Язык сменится при следующем запуске приложения.</value>
+  </data>
+  <data name="Settings.Russian" xml:space="preserve">
+    <value>Русский</value>
+  </data>
+  <data name="Settings.School" xml:space="preserve">
+    <value>Автошкола</value>
+  </data>
+  <data name="Settings.SourceCode" xml:space="preserve">
+    <value>Исходный код</value>
+  </data>
+  <data name="Settings.Title" xml:space="preserve">
+    <value>Настройки</value>
+  </data>
+  <data name="Settings.Version" xml:space="preserve">
+    <value>AutoElite {0}</value>
+  </data>
   <data name="SignIn.Blocked" xml:space="preserve">
     <value>Вход сейчас невозможен: учётная запись временно заблокирована, не подтверждена или отключена. Если это не проходит, обратитесь в автошколу.</value>
   </data>

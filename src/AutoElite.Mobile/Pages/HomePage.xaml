@@ -93,8 +93,8 @@
 
                 <Button
                     Style="{StaticResource SecondaryButton}"
-                    Text="{l:Text Home.SignOut}"
-                    Command="{Binding SignOutCommand}" />
+                    Text="{l:Text Settings.Title}"
+                    Command="{Binding SettingsCommand}" />
             </VerticalStackLayout>
         </ScrollView>
     </RefreshView>

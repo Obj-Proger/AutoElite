@@ -12,7 +12,7 @@ namespace AutoElite.Mobile.Pages;
 /// <summary>
 /// The home page of the signed-in user: the greeting; the lessons of a student or of an instructor, with what they can
 /// do with them (HomeViewModel.Lessons.cs); whether the data is from the device; the actions that wait to be sent and
-/// those the school did not accept; and signing out.
+/// those the school did not accept; and the way to the settings.
 /// </summary>
 public sealed partial class HomeViewModel : ViewModel
 {
@@ -53,7 +53,7 @@ public sealed partial class HomeViewModel : ViewModel
         _queue = queue;
         _synchronizer = synchronizer;
         _timeProvider = timeProvider;
-        SignOutCommand = new Command(async () => await SignOutAsync(), () => !IsBusy);
+        SettingsCommand = new Command(async () => await Routes.OpenAsync(Routes.Settings));
         RefreshCommand = new Command(async () => await RefreshAsync());
         DismissRefusalsCommand = new Command(async () => await DismissRefusalsAsync());
         BookCommand = new Command(async () => await Routes.OpenAsync(Routes.Booking));
@@ -162,19 +162,8 @@ public sealed partial class HomeViewModel : ViewModel
         set => SetProperty(ref field, value);
     }
 
-    /// <summary>Gets a value indicating whether the user is being signed out.</summary>
-    public bool IsBusy
-    {
-        get;
-        private set
-        {
-            if (SetProperty(ref field, value))
-                SignOutCommand.ChangeCanExecute();
-        }
-    }
-
-    /// <summary>Gets the command that signs out, after asking when actions have not been sent yet.</summary>
-    public Command SignOutCommand { get; }
+    /// <summary>Gets the command that opens the settings, where the user also signs out.</summary>
+    public Command SettingsCommand { get; }
 
     /// <summary>Gets the command that sends the waiting actions and reads everything again.</summary>
     public Command RefreshCommand { get; }
@@ -322,29 +311,5 @@ public sealed partial class HomeViewModel : ViewModel
             await _queue.DismissAsync(action.Id, CancellationToken.None);
 
         await LoadAsync();
-    }
-
-    private async Task SignOutAsync()
-    {
-        if (await _session.CountWaitingActionsAsync(CancellationToken.None) > 0
-            && !await Shell.Current.DisplayAlertAsync(
-                AppTexts.Get("Home.SignOutTitle"),
-                AppTexts.Get("Home.SignOutPending"),
-                AppTexts.Get("Home.SignOut"),
-                AppTexts.Get("Common.Cancel")))
-        {
-            return;
-        }
-
-        IsBusy = true;
-        try
-        {
-            await _session.SignOutAsync(CancellationToken.None);
-            await Routes.GoToAsync(Routes.SignIn);
-        }
-        finally
-        {
-            IsBusy = false;
-        }
     }
 }

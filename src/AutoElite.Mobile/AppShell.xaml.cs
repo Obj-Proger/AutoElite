@@ -23,6 +23,7 @@ public partial class AppShell : Shell
         Routing.RegisterRoute(Routes.Chats, typeof(ChatsPage));
         Routing.RegisterRoute(Routes.Chat, typeof(ChatPage));
         Routing.RegisterRoute(Routes.Contracts, typeof(ContractsPage));
+        Routing.RegisterRoute(Routes.Settings, typeof(SettingsPage));
         sessions.SessionEnded += (_, _) => Dispatcher.Dispatch(async () => await Routes.GoToAsync(Routes.SignIn));
     }
 }

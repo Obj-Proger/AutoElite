@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="AutoElite.Mobile.Pages.SettingsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:l="clr-namespace:AutoElite.Mobile.Localization"
+    xmlns:pages="clr-namespace:AutoElite.Mobile.Pages"
+    x:DataType="pages:SettingsViewModel"
+    Title="{l:Text Settings.Title}">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="{StaticResource PageMargin}" Spacing="14">
+            <Border Style="{StaticResource Card}">
+                <VerticalStackLayout Spacing="8">
+                    <Label Style="{StaticResource Overline}" Text="{l:Text Settings.School}" />
+                    <Label Style="{StaticResource BodyLarge}" Text="{Binding School}" />
+                    <Button
+                        Style="{StaticResource SecondaryButton}"
+                        Text="{l:Text SignIn.ChangeSchool}"
+                        Command="{Binding ChangeSchoolCommand}" />
+                </VerticalStackLayout>
+            </Border>
+
+            <Border Style="{StaticResource Card}">
+                <VerticalStackLayout Spacing="8">
+                    <Label Style="{StaticResource Overline}" Text="{l:Text Settings.Language}" />
+                    <Picker ItemsSource="{Binding Languages}" SelectedIndex="{Binding LanguageIndex}" />
+                    <Label Style="{StaticResource Caption}" Text="{Binding LanguageNote}" IsVisible="{Binding HasLanguageNote}" />
+                </VerticalStackLayout>
+            </Border>
+
+            <Border Style="{StaticResource Card}">
+                <VerticalStackLayout Spacing="8">
+                    <Label Style="{StaticResource Overline}" Text="{l:Text Settings.About}" />
+                    <Label Style="{StaticResource BodyLarge}" Text="{Binding Version}" />
+                    <Label Style="{StaticResource Secondary}" Text="{l:Text Settings.License}" />
+                    <Button
+                        Style="{StaticResource SecondaryButton}"
+                        Text="{l:Text Settings.SourceCode}"
+                        Command="{Binding SourceCodeCommand}" />
+                </VerticalStackLayout>
+            </Border>
+
+            <Button Text="{l:Text Home.SignOut}" Command="{Binding SignOutCommand}" />
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

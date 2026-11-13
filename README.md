@@ -151,7 +151,8 @@ the student did not come, also without a network. A theory instructor sees their
 of a lesson that has started for the whole group at once, in a classroom without a network too. Every user reads their
 notifications, whose number on the home page changes at once through the SignalR hub, and their chats, where new
 messages appear at once and a message written without a network is sent later. The texts of the application are in
-English, with a Russian translation, in `Resources/Strings`; the device's language chooses between them.
+English, with a Russian translation, in `Resources/Strings`; the device's language chooses between them unless the user
+chooses one in the settings, where they also change the school and sign out.
 
 The application works without a network too (`src/AutoElite.Client.Offline`). A SQLite database in its private storage
 keeps what the user last read, shown as possibly out of date while the API cannot be reached, and the actions the user
