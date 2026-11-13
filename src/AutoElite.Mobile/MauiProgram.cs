@@ -50,6 +50,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<UserSession>();
         builder.Services.AddSingleton<StudentSchedule>();
         builder.Services.AddSingleton<DrivingBooking>();
+        builder.Services.AddSingleton<InstructorSchedule>();
         builder.Services.AddSingleton<AppShell>();
         builder.Services.AddTransient<StartPage>();
         builder.Services.AddTransient<SchoolPage>();

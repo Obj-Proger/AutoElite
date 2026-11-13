@@ -45,18 +45,20 @@ public sealed class OfflineDatabaseTests : IDisposable
         var booking = new BookDrivingSlot(Guid.NewGuid(), Guid.NewGuid());
         var cancellation = new CancelDrivingBooking(Guid.NewGuid(), "Заболел");
         var noShow = new MarkDrivingNoShow(Guid.NewGuid());
+        var completion = new CompleteDrivingLesson(Guid.NewGuid(), 1.75m, "Уверенно на перекрёстках");
         using (var database = new OfflineDatabase(_path))
         {
             var queue = new OfflineQueue(database, TimeProvider.System);
             await queue.EnqueueAsync(booking, CancellationToken);
             await queue.EnqueueAsync(cancellation, CancellationToken);
             await queue.EnqueueAsync(noShow, CancellationToken);
+            await queue.EnqueueAsync(completion, CancellationToken);
         }
 
         using var restarted = new OfflineDatabase(_path);
         var pending = await new OfflineQueue(restarted, TimeProvider.System).ListAsync(CancellationToken);
 
-        pending.Select(action => action.Action).Should().Equal(booking, cancellation, noShow);
+        pending.Select(action => action.Action).Should().Equal(booking, cancellation, noShow, completion);
     }
 
     [Fact]

@@ -38,9 +38,9 @@
                     </VerticalStackLayout>
                 </Border>
 
-                <VerticalStackLayout Spacing="12" IsVisible="{Binding IsStudent}">
+                <VerticalStackLayout Spacing="12" IsVisible="{Binding ShowsLessons}">
                     <Label Style="{StaticResource Title}" Text="{l:Text Home.Schedule}" />
-                    <Button Text="{l:Text Home.Book}" Command="{Binding BookCommand}" />
+                    <Button Text="{l:Text Home.Book}" Command="{Binding BookCommand}" IsVisible="{Binding IsStudent}" />
                     <Label Style="{StaticResource Secondary}" Text="{l:Text Home.Empty}" IsVisible="{Binding HasNoLessons}" />
                     <VerticalStackLayout Spacing="12" BindableLayout.ItemsSource="{Binding Lessons}">
                         <BindableLayout.ItemTemplate>
@@ -52,11 +52,16 @@
                                         <Label Style="{StaticResource BodyLarge}" Text="{Binding Time}" />
                                         <Label Style="{StaticResource Secondary}" Text="{Binding Details}" />
                                         <Label Style="{StaticResource Caption}" Text="{Binding Status}" IsVisible="{Binding HasStatus}" />
-                                        <Button
-                                            Style="{StaticResource SecondaryButton}"
-                                            Text="{l:Text Lesson.Cancel}"
-                                            Command="{Binding CancelCommand}"
-                                            IsVisible="{Binding CanCancel}" />
+                                        <VerticalStackLayout Spacing="8" BindableLayout.ItemsSource="{Binding Actions}">
+                                            <BindableLayout.ItemTemplate>
+                                                <DataTemplate x:DataType="pages:EntryAction">
+                                                    <Button
+                                                        Style="{StaticResource SecondaryButton}"
+                                                        Text="{Binding Text}"
+                                                        Command="{Binding Command}" />
+                                                </DataTemplate>
+                                            </BindableLayout.ItemTemplate>
+                                        </VerticalStackLayout>
                                     </VerticalStackLayout>
                                 </Border>
                             </DataTemplate>
@@ -64,7 +69,7 @@
                     </VerticalStackLayout>
                 </VerticalStackLayout>
 
-                <Border Style="{StaticResource HighlightCard}" IsVisible="{Binding IsNotStudent}">
+                <Border Style="{StaticResource HighlightCard}" IsVisible="{Binding ShowsComing}">
                     <VerticalStackLayout Spacing="8">
                         <Label Style="{StaticResource Overline}" Text="AutoElite" />
                         <Label Style="{StaticResource BodyLarge}" Text="{l:Text Home.Coming}" />

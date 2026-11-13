@@ -19,6 +19,9 @@
   <data name="Action.Cancel" xml:space="preserve">
     <value>Cancelling a driving lesson</value>
   </data>
+  <data name="Action.Complete" xml:space="preserve">
+    <value>Completing a lesson</value>
+  </data>
   <data name="Action.NoShow" xml:space="preserve">
     <value>Marking a missed lesson</value>
   </data>
@@ -74,7 +77,7 @@
     <value>Book a driving lesson</value>
   </data>
   <data name="Home.Coming" xml:space="preserve">
-    <value>The pages of instructors will appear here.</value>
+    <value>The pages of theory instructors will appear here.</value>
   </data>
   <data name="Home.Dismiss" xml:space="preserve">
     <value>Got it</value>
@@ -125,31 +128,67 @@
     <value>Cancel lesson</value>
   </data>
   <data name="Lesson.CancelReason" xml:space="preserve">
-    <value>Tell the instructor why.</value>
+    <value>Tell why the lesson is cancelled.</value>
   </data>
   <data name="Lesson.CancelTitle" xml:space="preserve">
     <value>Cancel the lesson?</value>
   </data>
-  <data name="Lesson.CancellationWaiting" xml:space="preserve">
-    <value>The cancellation waits to be sent</value>
-  </data>
   <data name="Lesson.Cancelled" xml:space="preserve">
     <value>Cancelled</value>
+  </data>
+  <data name="Lesson.Complete" xml:space="preserve">
+    <value>Complete</value>
+  </data>
+  <data name="Lesson.CompleteHours" xml:space="preserve">
+    <value>How many hours did the lesson last?</value>
+  </data>
+  <data name="Lesson.CompleteNote" xml:space="preserve">
+    <value>A note about the lesson for the student, if any.</value>
+  </data>
+  <data name="Lesson.CompleteTitle" xml:space="preserve">
+    <value>Complete the lesson</value>
   </data>
   <data name="Lesson.Completed" xml:space="preserve">
     <value>Completed</value>
   </data>
+  <data name="Lesson.CompletedHours" xml:space="preserve">
+    <value>Completed, {0} h</value>
+  </data>
   <data name="Lesson.Driving" xml:space="preserve">
     <value>Driving</value>
+  </data>
+  <data name="Lesson.Free" xml:space="preserve">
+    <value>Free slot</value>
+  </data>
+  <data name="Lesson.InvalidHours" xml:space="preserve">
+    <value>Enter the hours as a number from 0 to 24, such as 1.5.</value>
   </data>
   <data name="Lesson.Keep" xml:space="preserve">
     <value>Keep</value>
   </data>
+  <data name="Lesson.MarkNoShow" xml:space="preserve">
+    <value>Did not come</value>
+  </data>
+  <data name="Lesson.NoNote" xml:space="preserve">
+    <value>Without a note</value>
+  </data>
   <data name="Lesson.NoShow" xml:space="preserve">
     <value>Missed</value>
   </data>
+  <data name="Lesson.NoShowMessage" xml:space="preserve">
+    <value>No hours will be counted for the lesson.</value>
+  </data>
+  <data name="Lesson.NoShowTitle" xml:space="preserve">
+    <value>The student did not come?</value>
+  </data>
+  <data name="Lesson.StudentNoShow" xml:space="preserve">
+    <value>The student did not come</value>
+  </data>
   <data name="Lesson.Theory" xml:space="preserve">
     <value>Theory</value>
+  </data>
+  <data name="Lesson.Waiting" xml:space="preserve">
+    <value>A change waits to be sent</value>
   </data>
   <data name="Refusal.Conflict" xml:space="preserve">
     <value>the schedule changed meanwhile</value>

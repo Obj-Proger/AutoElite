@@ -1,5 +1,3 @@
-using System.Windows.Input;
-
 namespace AutoElite.Mobile.Pages;
 
 /// <summary>A lesson in the schedule on the home page, ready to show.</summary>
@@ -23,11 +21,8 @@ public sealed class ScheduleEntry
     /// <summary>Gets a value indicating whether the lesson has a state to show.</summary>
     public bool HasStatus => Status is not null;
 
-    /// <summary>Gets the command that cancels the booking of a driving lesson, when the student may cancel it.</summary>
-    public ICommand? CancelCommand { get; init; }
-
-    /// <summary>Gets a value indicating whether the booking may be cancelled.</summary>
-    public bool CanCancel => CancelCommand is not null;
+    /// <summary>Gets what the user can do with the lesson, such as cancel its booking or complete it.</summary>
+    public IReadOnlyList<EntryAction> Actions { get; init; } = [];
 
     /// <summary>Gets the start of the lesson, by which the schedule is ordered.</summary>
     internal DateTimeOffset Start { get; init; }

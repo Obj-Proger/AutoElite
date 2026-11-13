@@ -13,6 +13,7 @@ namespace AutoElite.Client.Offline;
 [JsonDerivedType(typeof(BookDrivingSlot), "driving-slot.book")]
 [JsonDerivedType(typeof(CancelDrivingBooking), "driving-slot.cancel-booking")]
 [JsonDerivedType(typeof(MarkDrivingNoShow), "driving-slot.no-show")]
+[JsonDerivedType(typeof(CompleteDrivingLesson), "driving-slot.complete")]
 public abstract record OfflineAction
 {
     /// <summary>Sends the action to the API.</summary>

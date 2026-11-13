@@ -19,6 +19,9 @@
   <data name="Action.Cancel" xml:space="preserve">
     <value>Отмена занятия по вождению</value>
   </data>
+  <data name="Action.Complete" xml:space="preserve">
+    <value>Завершение занятия</value>
+  </data>
   <data name="Action.NoShow" xml:space="preserve">
     <value>Отметка о неявке</value>
   </data>
@@ -74,7 +77,7 @@
     <value>Записаться на вождение</value>
   </data>
   <data name="Home.Coming" xml:space="preserve">
-    <value>Здесь появятся страницы инструктора.</value>
+    <value>Здесь появятся страницы преподавателя теории.</value>
   </data>
   <data name="Home.Dismiss" xml:space="preserve">
     <value>Понятно</value>
@@ -125,31 +128,67 @@
     <value>Отменить занятие</value>
   </data>
   <data name="Lesson.CancelReason" xml:space="preserve">
-    <value>Укажите причину для инструктора.</value>
+    <value>Укажите причину отмены.</value>
   </data>
   <data name="Lesson.CancelTitle" xml:space="preserve">
     <value>Отменить занятие?</value>
   </data>
-  <data name="Lesson.CancellationWaiting" xml:space="preserve">
-    <value>Отмена ждёт отправки</value>
-  </data>
   <data name="Lesson.Cancelled" xml:space="preserve">
     <value>Отменено</value>
+  </data>
+  <data name="Lesson.Complete" xml:space="preserve">
+    <value>Завершить</value>
+  </data>
+  <data name="Lesson.CompleteHours" xml:space="preserve">
+    <value>Сколько часов длилось занятие?</value>
+  </data>
+  <data name="Lesson.CompleteNote" xml:space="preserve">
+    <value>Заметка о занятии для ученика, если нужна.</value>
+  </data>
+  <data name="Lesson.CompleteTitle" xml:space="preserve">
+    <value>Завершение занятия</value>
   </data>
   <data name="Lesson.Completed" xml:space="preserve">
     <value>Проведено</value>
   </data>
+  <data name="Lesson.CompletedHours" xml:space="preserve">
+    <value>Проведено, {0} ч</value>
+  </data>
   <data name="Lesson.Driving" xml:space="preserve">
     <value>Вождение</value>
+  </data>
+  <data name="Lesson.Free" xml:space="preserve">
+    <value>Свободный слот</value>
+  </data>
+  <data name="Lesson.InvalidHours" xml:space="preserve">
+    <value>Введите часы числом от 0 до 24, например 1,5.</value>
   </data>
   <data name="Lesson.Keep" xml:space="preserve">
     <value>Оставить</value>
   </data>
+  <data name="Lesson.MarkNoShow" xml:space="preserve">
+    <value>Не пришёл</value>
+  </data>
+  <data name="Lesson.NoNote" xml:space="preserve">
+    <value>Без заметки</value>
+  </data>
   <data name="Lesson.NoShow" xml:space="preserve">
     <value>Пропущено</value>
   </data>
+  <data name="Lesson.NoShowMessage" xml:space="preserve">
+    <value>Часы за занятие не будут засчитаны.</value>
+  </data>
+  <data name="Lesson.NoShowTitle" xml:space="preserve">
+    <value>Ученик не пришёл?</value>
+  </data>
+  <data name="Lesson.StudentNoShow" xml:space="preserve">
+    <value>Ученик не пришёл</value>
+  </data>
   <data name="Lesson.Theory" xml:space="preserve">
     <value>Теория</value>
+  </data>
+  <data name="Lesson.Waiting" xml:space="preserve">
+    <value>Изменение ждёт отправки</value>
   </data>
   <data name="Refusal.Conflict" xml:space="preserve">
     <value>расписание за это время изменилось</value>

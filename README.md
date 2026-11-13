@@ -143,7 +143,9 @@ which must use HTTPS; a debug build also takes HTTP and offers the API of the de
 `http://localhost:5080` on Windows, `http://10.0.2.2:5080` from the Android emulator. Students and instructors sign in;
 the staff of the school work on its website. A student sees their driving and theory lessons on the home page, books
 a free practice slot of one of their contracts and cancels a booking, with or without a network; pulling the page down
-sends the waiting actions and reads the lessons again. The texts of the application are in English, with a Russian
+sends the waiting actions and reads the lessons again. A driving instructor sees their practice slots of the next two
+weeks, cancels a booking before the lesson and, once it has started, completes it with the hours or records that the
+student did not come, also without a network. The texts of the application are in English, with a Russian
 translation, in `Resources/Strings`; the device's language chooses between them.
 
 The application works without a network too (`src/AutoElite.Client.Offline`). A SQLite database in its private storage
