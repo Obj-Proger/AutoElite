@@ -1,0 +1,18 @@
+@inject IStringLocalizer<WebTexts> L
+@* The routes of the site; a page that does not exist is shown in the layout of the site. *@
+<Router AppAssembly="typeof(App).Assembly">
+    <Found Context="routeData">
+        <RouteView RouteData="routeData" DefaultLayout="typeof(MainLayout)" />
+        <FocusOnNavigate RouteData="routeData" Selector="h1" />
+    </Found>
+    <NotFound>
+        <PageTitle>AutoElite</PageTitle>
+        <LayoutView Layout="typeof(MainLayout)">
+            <section class="page">
+                <h1 class="headline">@L["NotFound.Title"]</h1>
+                <p class="secondary">@L["NotFound.Text"]</p>
+                <a class="button" href="">@L["NotFound.Home"]</a>
+            </section>
+        </LayoutView>
+    </NotFound>
+</Router>

@@ -1,0 +1,13 @@
+@inherits LayoutComponentBase
+@inject IStringLocalizer<WebTexts> L
+
+@* The frame of every page: the bar with the brand, then the page. *@
+<div class="shell">
+    <header class="topbar">
+        <a class="brand" href="">AutoElite</a>
+        <span class="topbar-note">@L["Layout.Tagline"]</span>
+    </header>
+    <main>
+        @Body
+    </main>
+</div>

@@ -1,0 +1,81 @@
+/*
+ * The design tokens of Noir Modern, copied from design/tokens.json as custom properties; the architecture tests
+ * check that the colors match.
+ */
+@font-face {
+    font-family: "Unbounded";
+    font-weight: 500;
+    font-display: swap;
+    src: url("../fonts/Unbounded-Medium.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Unbounded";
+    font-weight: 600;
+    font-display: swap;
+    src: url("../fonts/Unbounded-SemiBold.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Inter";
+    font-weight: 400;
+    font-display: swap;
+    src: url("../fonts/Inter-Regular.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Inter";
+    font-weight: 500;
+    font-display: swap;
+    src: url("../fonts/Inter-Medium.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Inter";
+    font-weight: 600;
+    font-display: swap;
+    src: url("../fonts/Inter-SemiBold.ttf") format("truetype");
+}
+
+:root {
+    --color-background: #0E0F11;
+    --color-surface: #1A1C20;
+    --color-surface-raised: #23252A;
+    --color-border: #2A2C31;
+    --color-text: #EDEAE3;
+    --color-text-secondary: #B7B2A8;
+    --color-text-muted: #979288;
+    --color-accent: #C9A96E;
+    --color-accent-hover: #E2C891;
+    --color-on-accent: #0E0F11;
+    --color-success: #86C29A;
+    --color-warning: #E0B661;
+    --color-danger: #E5867A;
+
+    --font-display: "Unbounded", system-ui, sans-serif;
+    --font-text: "Inter", system-ui, sans-serif;
+
+    --font-size-caption: 12px;
+    --font-size-label: 13px;
+    --font-size-body: 15px;
+    --font-size-body-large: 17px;
+    --font-size-title: 20px;
+    --font-size-headline: 28px;
+    --font-size-display: 44px;
+
+    --space-xs: 4px;
+    --space-sm: 8px;
+    --space-md: 12px;
+    --space-lg: 16px;
+    --space-xl: 24px;
+    --space-xxl: 32px;
+    --space-page: 22px;
+
+    --radius-sm: 10px;
+    --radius-md: 14px;
+    --radius-lg: 18px;
+    --radius-xl: 22px;
+    --radius-pill: 999px;
+
+    --size-touch-target: 48px;
+}

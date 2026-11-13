@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- Russian texts of the website, with the keys and placeholders of WebTexts.resx. -->
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Home.ComingText" xml:space="preserve">
+    <value>Скоро здесь появятся вход и страницы учеников и сотрудников.</value>
+  </data>
+  <data name="Home.ComingTitle" xml:space="preserve">
+    <value>Скоро</value>
+  </data>
+  <data name="Home.Lead" xml:space="preserve">
+    <value>Занятия, расписание, тесты и оплаты автошколы в одном месте — на сайте и в приложении.</value>
+  </data>
+  <data name="Home.Overline" xml:space="preserve">
+    <value>Автошкола</value>
+  </data>
+  <data name="Layout.Tagline" xml:space="preserve">
+    <value>Автошкола</value>
+  </data>
+  <data name="NotFound.Home" xml:space="preserve">
+    <value>На главную</value>
+  </data>
+  <data name="NotFound.Text" xml:space="preserve">
+    <value>Такой страницы нет. Возможно, она переехала.</value>
+  </data>
+  <data name="NotFound.Title" xml:space="preserve">
+    <value>Страница не найдена</value>
+  </data>
+</root>

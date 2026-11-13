@@ -14,8 +14,9 @@ env:
   DOTNET_CLI_TELEMETRY_OPTOUT: true
 
 jobs:
-  # The server, the client of the API and their tests. The mobile application needs the MAUI workload, which the
-  # mobile job installs, so this job builds the test projects, which reference everything else.
+  # The server, the client of the API, the website and their tests. The mobile application needs the MAUI workload,
+  # which the mobile job installs, so this job builds the test projects, which reference everything else, and the
+  # website.
   build-and-test:
     runs-on: ubuntu-latest
     steps:
@@ -28,7 +29,7 @@ jobs:
       # GitHub Actions sets CI=true, so Directory.Build.props turns every warning into an error.
       - name: Build
         run: |
-          for project in tests/*/*.csproj; do
+          for project in tests/*/*.csproj src/AutoElite.Web/AutoElite.Web.csproj; do
             dotnet build "$project" --configuration Release
           done
 

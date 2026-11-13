@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- English texts of the website. Placeholders such as {0} must be the same in every culture. -->
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Home.ComingText" xml:space="preserve">
+    <value>Signing in and the pages of students and staff come next.</value>
+  </data>
+  <data name="Home.ComingTitle" xml:space="preserve">
+    <value>Coming soon</value>
+  </data>
+  <data name="Home.Lead" xml:space="preserve">
+    <value>Lessons, schedules, tests and payments of the school in one place, on the website and in the app.</value>
+  </data>
+  <data name="Home.Overline" xml:space="preserve">
+    <value>Driving school</value>
+  </data>
+  <data name="Layout.Tagline" xml:space="preserve">
+    <value>Driving school</value>
+  </data>
+  <data name="NotFound.Home" xml:space="preserve">
+    <value>To the front page</value>
+  </data>
+  <data name="NotFound.Text" xml:space="preserve">
+    <value>There is no such page. It may have moved.</value>
+  </data>
+  <data name="NotFound.Title" xml:space="preserve">
+    <value>Page not found</value>
+  </data>
+</root>

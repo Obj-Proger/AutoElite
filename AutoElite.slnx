@@ -9,6 +9,7 @@
     <Project Path="src/AutoElite.Mobile/AutoElite.Mobile.csproj">
       <Deploy />
     </Project>
+    <Project Path="src/AutoElite.Web/AutoElite.Web.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/AutoElite.API.Tests/AutoElite.API.Tests.csproj" />

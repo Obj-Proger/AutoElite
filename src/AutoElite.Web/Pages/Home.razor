@@ -1,0 +1,15 @@
+@page "/"
+@inject IStringLocalizer<WebTexts> L
+
+@* The front page of the site; the pages of students and staff come with signing in. *@
+<PageTitle>AutoElite</PageTitle>
+
+<section class="page hero">
+    <span class="overline">@L["Home.Overline"]</span>
+    <h1 class="display">AutoElite</h1>
+    <p class="body-large secondary">@L["Home.Lead"]</p>
+    <div class="card highlight">
+        <span class="overline">@L["Home.ComingTitle"]</span>
+        <p class="body-large">@L["Home.ComingText"]</p>
+    </div>
+</section>

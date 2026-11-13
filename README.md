@@ -162,6 +162,22 @@ the booking of a slot that another student took meanwhile, stays in the queue fo
 device belongs to one user: `OfflineDatabase.ClaimAsync` forgets the data of another user when a user signs in, and
 `ForgetAsync` forgets everything when the user signs out.
 
+### The website
+
+`src/AutoElite.Web` is the website of the school, in Blazor WebAssembly: it runs in the browser, calls the API through
+the same generated client as the mobile application and is served as static files. Its design is Noir Modern, like the
+application's: `wwwroot/css/tokens.css` copies the tokens of `design/tokens.json` and `wwwroot/fonts` the fonts of
+`design/fonts`, and the architecture tests check both copies. Its texts are in `Resources/WebTexts.resx`, in English,
+with a Russian translation, and follow the language of the browser. It calls the API of `Api:BaseUrl` in
+`wwwroot/appsettings.json`, `http://localhost:5080/` for development, or the site's own address when that is empty. Run
+it next to the API with
+
+```bash
+dotnet run --project src/AutoElite.Web
+```
+
+and open `http://localhost:5173`, the `Client:BaseUrl` of the API, whose pages the API lets call it.
+
 ### First start
 
 When the API starts, it applies the pending migrations, unless `Database:MigrateOnStartup` is `false` where the schema
@@ -204,7 +220,8 @@ A file is at most 32 MB and an archive at most 512 MB. A question whose code is 
 ## Repository layout
 
 ```
-src/     production code, one project per layer, the client of the API, its offline mode and the mobile application
+src/     production code, one project per layer, the client of the API, its offline mode, the mobile application and
+         the website
 tests/   one test project per layer (xUnit v3, AwesomeAssertions), plus architecture tests
           that check layer dependencies, code conventions and the copies of the design tokens
 design/  Noir Modern, the design system of the mobile application and the website: tokens and fonts

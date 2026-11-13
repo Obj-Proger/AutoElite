@@ -66,6 +66,14 @@
     <PackageVersion Include="Microsoft.Kiota.Bundle" Version="2.1.2" />
   </ItemGroup>
   <!--
+    Blazor WebAssembly (MIT): the website of the school, served as static files, with the localization of its texts.
+  -->
+  <ItemGroup Label="Website">
+    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.14" />
+    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="10.0.14" />
+    <PackageVersion Include="Microsoft.Extensions.Localization" Version="10.0.14" />
+  </ItemGroup>
+  <!--
     Microsoft.Data.Sqlite (MIT), with the SQLite library (public domain) built for each platform, keeps the offline data
     of the applications on a device.
   -->
