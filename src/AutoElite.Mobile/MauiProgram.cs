@@ -5,6 +5,7 @@ using AutoElite.Client.Offline;
 using AutoElite.Mobile.Authentication;
 using AutoElite.Mobile.Offline;
 using AutoElite.Mobile.Pages;
+using AutoElite.Mobile.Schedule;
 using AutoElite.Mobile.Session;
 #if DEBUG
 using Microsoft.Extensions.Logging;
@@ -47,6 +48,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<SynchronizationTrigger>();
 
         builder.Services.AddSingleton<UserSession>();
+        builder.Services.AddSingleton<StudentSchedule>();
         builder.Services.AddSingleton<AppShell>();
         builder.Services.AddTransient<StartPage>();
         builder.Services.AddTransient<SchoolPage>();

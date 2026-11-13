@@ -8,26 +8,74 @@
     x:DataType="pages:HomeViewModel"
     Shell.NavBarIsVisible="False">
 
-    <ScrollView>
-        <VerticalStackLayout Padding="{StaticResource PageMargin}" Spacing="18">
-            <VerticalStackLayout Spacing="2">
-                <Label Style="{StaticResource Secondary}" Text="{Binding Greeting}" />
-                <Label Style="{StaticResource Headline}" Text="{Binding Name}" />
-            </VerticalStackLayout>
-            <Border Style="{StaticResource Card}" IsVisible="{Binding HasStatus}">
-                <Label Style="{StaticResource Secondary}" Text="{Binding Status}" />
-            </Border>
-            <Border Style="{StaticResource HighlightCard}">
-                <VerticalStackLayout Spacing="8">
-                    <Label Style="{StaticResource Overline}" Text="AutoElite" />
-                    <Label Style="{StaticResource BodyLarge}" Text="{l:Text Home.Coming}" />
+    <!-- Pulling the page down sends the waiting actions and reads everything again. -->
+    <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}" RefreshColor="{StaticResource Accent}">
+        <ScrollView>
+            <VerticalStackLayout Padding="{StaticResource PageMargin}" Spacing="18">
+                <VerticalStackLayout Spacing="2">
+                    <Label Style="{StaticResource Secondary}" Text="{Binding Greeting}" />
+                    <Label Style="{StaticResource Headline}" Text="{Binding Name}" />
                 </VerticalStackLayout>
-            </Border>
-            <Button
-                Style="{StaticResource SecondaryButton}"
-                Text="{l:Text Home.SignOut}"
-                Command="{Binding SignOutCommand}" />
-        </VerticalStackLayout>
-    </ScrollView>
+
+                <Border Style="{StaticResource Card}" IsVisible="{Binding HasStatus}">
+                    <Label Style="{StaticResource Secondary}" Text="{Binding Status}" />
+                </Border>
+
+                <Border Style="{StaticResource Card}" IsVisible="{Binding HasRefusals}">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Style="{StaticResource ErrorText}" Text="{l:Text Home.Refused}" />
+                        <VerticalStackLayout Spacing="6" BindableLayout.ItemsSource="{Binding Refusals}">
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate x:DataType="x:String">
+                                    <Label Style="{StaticResource Secondary}" Text="{Binding .}" />
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </VerticalStackLayout>
+                        <Button
+                            Style="{StaticResource SecondaryButton}"
+                            Text="{l:Text Home.Dismiss}"
+                            Command="{Binding DismissRefusalsCommand}" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <VerticalStackLayout Spacing="12" IsVisible="{Binding IsStudent}">
+                    <Label Style="{StaticResource Title}" Text="{l:Text Home.Schedule}" />
+                    <Label Style="{StaticResource Secondary}" Text="{l:Text Home.Empty}" IsVisible="{Binding HasNoLessons}" />
+                    <VerticalStackLayout Spacing="12" BindableLayout.ItemsSource="{Binding Lessons}">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate x:DataType="pages:ScheduleEntry">
+                                <Border Style="{StaticResource Card}">
+                                    <VerticalStackLayout Spacing="6">
+                                        <Label Style="{StaticResource Overline}" Text="{Binding Kind}" />
+                                        <Label Style="{StaticResource Title}" Text="{Binding Title}" />
+                                        <Label Style="{StaticResource BodyLarge}" Text="{Binding Time}" />
+                                        <Label Style="{StaticResource Secondary}" Text="{Binding Details}" />
+                                        <Label Style="{StaticResource Caption}" Text="{Binding Status}" IsVisible="{Binding HasStatus}" />
+                                        <Button
+                                            Style="{StaticResource SecondaryButton}"
+                                            Text="{l:Text Lesson.Cancel}"
+                                            Command="{Binding CancelCommand}"
+                                            IsVisible="{Binding CanCancel}" />
+                                    </VerticalStackLayout>
+                                </Border>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+
+                <Border Style="{StaticResource HighlightCard}" IsVisible="{Binding IsNotStudent}">
+                    <VerticalStackLayout Spacing="8">
+                        <Label Style="{StaticResource Overline}" Text="AutoElite" />
+                        <Label Style="{StaticResource BodyLarge}" Text="{l:Text Home.Coming}" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Button
+                    Style="{StaticResource SecondaryButton}"
+                    Text="{l:Text Home.SignOut}"
+                    Command="{Binding SignOutCommand}" />
+            </VerticalStackLayout>
+        </ScrollView>
+    </RefreshView>
 
 </ContentPage>

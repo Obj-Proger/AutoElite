@@ -13,6 +13,18 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Action.Book" xml:space="preserve">
+    <value>Booking a driving lesson</value>
+  </data>
+  <data name="Action.Cancel" xml:space="preserve">
+    <value>Cancelling a driving lesson</value>
+  </data>
+  <data name="Action.NoShow" xml:space="preserve">
+    <value>Marking a missed lesson</value>
+  </data>
+  <data name="Action.Other" xml:space="preserve">
+    <value>An action</value>
+  </data>
   <data name="Common.Cancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
@@ -23,7 +35,13 @@
     <value>Good afternoon,</value>
   </data>
   <data name="Home.Coming" xml:space="preserve">
-    <value>Your schedule, lessons and tests will appear here.</value>
+    <value>The pages of instructors will appear here.</value>
+  </data>
+  <data name="Home.Dismiss" xml:space="preserve">
+    <value>Got it</value>
+  </data>
+  <data name="Home.Empty" xml:space="preserve">
+    <value>No lessons in the next two months.</value>
   </data>
   <data name="Home.Evening" xml:space="preserve">
     <value>Good evening,</value>
@@ -37,6 +55,15 @@
   <data name="Home.Pending" xml:space="preserve">
     <value>Not yet sent to the school: {0}</value>
   </data>
+  <data name="Home.Refused" xml:space="preserve">
+    <value>The school did not accept:</value>
+  </data>
+  <data name="Home.RefusedItem" xml:space="preserve">
+    <value>{0}: {1}</value>
+  </data>
+  <data name="Home.Schedule" xml:space="preserve">
+    <value>Schedule</value>
+  </data>
   <data name="Home.SignOut" xml:space="preserve">
     <value>Sign out</value>
   </data>
@@ -45,6 +72,57 @@
   </data>
   <data name="Home.SignOutTitle" xml:space="preserve">
     <value>Sign out?</value>
+  </data>
+  <data name="Lesson.Absent" xml:space="preserve">
+    <value>Missed</value>
+  </data>
+  <data name="Lesson.Attended" xml:space="preserve">
+    <value>Attended</value>
+  </data>
+  <data name="Lesson.Cancel" xml:space="preserve">
+    <value>Cancel booking</value>
+  </data>
+  <data name="Lesson.CancelConfirm" xml:space="preserve">
+    <value>Cancel lesson</value>
+  </data>
+  <data name="Lesson.CancelReason" xml:space="preserve">
+    <value>Tell the instructor why.</value>
+  </data>
+  <data name="Lesson.CancelTitle" xml:space="preserve">
+    <value>Cancel the lesson?</value>
+  </data>
+  <data name="Lesson.CancellationWaiting" xml:space="preserve">
+    <value>The cancellation waits to be sent</value>
+  </data>
+  <data name="Lesson.Cancelled" xml:space="preserve">
+    <value>Cancelled</value>
+  </data>
+  <data name="Lesson.Completed" xml:space="preserve">
+    <value>Completed</value>
+  </data>
+  <data name="Lesson.Driving" xml:space="preserve">
+    <value>Driving</value>
+  </data>
+  <data name="Lesson.Keep" xml:space="preserve">
+    <value>Keep</value>
+  </data>
+  <data name="Lesson.NoShow" xml:space="preserve">
+    <value>Missed</value>
+  </data>
+  <data name="Lesson.Theory" xml:space="preserve">
+    <value>Theory</value>
+  </data>
+  <data name="Refusal.Conflict" xml:space="preserve">
+    <value>the schedule changed meanwhile</value>
+  </data>
+  <data name="Refusal.Forbidden" xml:space="preserve">
+    <value>not allowed</value>
+  </data>
+  <data name="Refusal.NotFound" xml:space="preserve">
+    <value>the lesson no longer exists</value>
+  </data>
+  <data name="Refusal.Other" xml:space="preserve">
+    <value>refused by the school</value>
   </data>
   <data name="School.Hint" xml:space="preserve">
     <value>Enter the address of your school's AutoElite. The school gives it to you together with your account.</value>

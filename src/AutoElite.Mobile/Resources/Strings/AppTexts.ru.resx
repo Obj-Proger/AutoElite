@@ -13,6 +13,18 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Action.Book" xml:space="preserve">
+    <value>Запись на вождение</value>
+  </data>
+  <data name="Action.Cancel" xml:space="preserve">
+    <value>Отмена занятия по вождению</value>
+  </data>
+  <data name="Action.NoShow" xml:space="preserve">
+    <value>Отметка о неявке</value>
+  </data>
+  <data name="Action.Other" xml:space="preserve">
+    <value>Действие</value>
+  </data>
   <data name="Common.Cancel" xml:space="preserve">
     <value>Отмена</value>
   </data>
@@ -23,7 +35,13 @@
     <value>Добрый день,</value>
   </data>
   <data name="Home.Coming" xml:space="preserve">
-    <value>Здесь появятся расписание, занятия и тесты.</value>
+    <value>Здесь появятся страницы инструктора.</value>
+  </data>
+  <data name="Home.Dismiss" xml:space="preserve">
+    <value>Понятно</value>
+  </data>
+  <data name="Home.Empty" xml:space="preserve">
+    <value>В ближайшие два месяца занятий нет.</value>
   </data>
   <data name="Home.Evening" xml:space="preserve">
     <value>Добрый вечер,</value>
@@ -37,6 +55,15 @@
   <data name="Home.Pending" xml:space="preserve">
     <value>Ещё не отправлено в автошколу: {0}</value>
   </data>
+  <data name="Home.Refused" xml:space="preserve">
+    <value>Автошкола не приняла:</value>
+  </data>
+  <data name="Home.RefusedItem" xml:space="preserve">
+    <value>{0}: {1}</value>
+  </data>
+  <data name="Home.Schedule" xml:space="preserve">
+    <value>Расписание</value>
+  </data>
   <data name="Home.SignOut" xml:space="preserve">
     <value>Выйти</value>
   </data>
@@ -45,6 +72,57 @@
   </data>
   <data name="Home.SignOutTitle" xml:space="preserve">
     <value>Выйти?</value>
+  </data>
+  <data name="Lesson.Absent" xml:space="preserve">
+    <value>Пропущено</value>
+  </data>
+  <data name="Lesson.Attended" xml:space="preserve">
+    <value>Посещено</value>
+  </data>
+  <data name="Lesson.Cancel" xml:space="preserve">
+    <value>Отменить запись</value>
+  </data>
+  <data name="Lesson.CancelConfirm" xml:space="preserve">
+    <value>Отменить занятие</value>
+  </data>
+  <data name="Lesson.CancelReason" xml:space="preserve">
+    <value>Укажите причину для инструктора.</value>
+  </data>
+  <data name="Lesson.CancelTitle" xml:space="preserve">
+    <value>Отменить занятие?</value>
+  </data>
+  <data name="Lesson.CancellationWaiting" xml:space="preserve">
+    <value>Отмена ждёт отправки</value>
+  </data>
+  <data name="Lesson.Cancelled" xml:space="preserve">
+    <value>Отменено</value>
+  </data>
+  <data name="Lesson.Completed" xml:space="preserve">
+    <value>Проведено</value>
+  </data>
+  <data name="Lesson.Driving" xml:space="preserve">
+    <value>Вождение</value>
+  </data>
+  <data name="Lesson.Keep" xml:space="preserve">
+    <value>Оставить</value>
+  </data>
+  <data name="Lesson.NoShow" xml:space="preserve">
+    <value>Пропущено</value>
+  </data>
+  <data name="Lesson.Theory" xml:space="preserve">
+    <value>Теория</value>
+  </data>
+  <data name="Refusal.Conflict" xml:space="preserve">
+    <value>расписание за это время изменилось</value>
+  </data>
+  <data name="Refusal.Forbidden" xml:space="preserve">
+    <value>не разрешено</value>
+  </data>
+  <data name="Refusal.NotFound" xml:space="preserve">
+    <value>занятия больше нет</value>
+  </data>
+  <data name="Refusal.Other" xml:space="preserve">
+    <value>отклонено автошколой</value>
   </data>
   <data name="School.Hint" xml:space="preserve">
     <value>Введите адрес AutoElite вашей автошколы. Школа сообщает его вместе с учётной записью.</value>
