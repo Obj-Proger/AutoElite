@@ -61,6 +61,8 @@ public static class MauiProgram
         builder.Services.AddTransient<HomeViewModel>();
         builder.Services.AddTransient<BookingPage>();
         builder.Services.AddTransient<BookingViewModel>();
+        builder.Services.AddTransient<AttendancePage>();
+        builder.Services.AddTransient<AttendanceViewModel>();
 
 #if DEBUG
         builder.Logging.AddDebug();

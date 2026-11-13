@@ -18,6 +18,9 @@ internal static class Routes
     /// <summary>Booking a driving lesson, opened over the home page.</summary>
     public const string Booking = "booking";
 
+    /// <summary>The attendance at a theory lesson, opened over the home page with the lesson in the query.</summary>
+    public const string Attendance = "attendance";
+
     /// <summary>Shows a page in place of the current one, with no way back.</summary>
     /// <param name="route">The route of the page.</param>
     /// <returns>A task that completes when the page is shown.</returns>

@@ -69,13 +69,6 @@
                     </VerticalStackLayout>
                 </VerticalStackLayout>
 
-                <Border Style="{StaticResource HighlightCard}" IsVisible="{Binding ShowsComing}">
-                    <VerticalStackLayout Spacing="8">
-                        <Label Style="{StaticResource Overline}" Text="AutoElite" />
-                        <Label Style="{StaticResource BodyLarge}" Text="{l:Text Home.Coming}" />
-                    </VerticalStackLayout>
-                </Border>
-
                 <Button
                     Style="{StaticResource SecondaryButton}"
                     Text="{l:Text Home.SignOut}"

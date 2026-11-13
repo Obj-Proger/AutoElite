@@ -13,6 +13,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Action.Attendance" xml:space="preserve">
+    <value>Отметка посещаемости</value>
+  </data>
   <data name="Action.Book" xml:space="preserve">
     <value>Запись на вождение</value>
   </data>
@@ -27,6 +30,30 @@
   </data>
   <data name="Action.Other" xml:space="preserve">
     <value>Действие</value>
+  </data>
+  <data name="Attendance.Hint" xml:space="preserve">
+    <value>Выключите тех, кто не пришёл.</value>
+  </data>
+  <data name="Attendance.Offline" xml:space="preserve">
+    <value>Нет связи. Список учеников на момент последней загрузки, он мог измениться.</value>
+  </data>
+  <data name="Attendance.Queued" xml:space="preserve">
+    <value>Нет связи. Посещаемость отправится, когда появится сеть.</value>
+  </data>
+  <data name="Attendance.Refused" xml:space="preserve">
+    <value>Автошкола не приняла посещаемость: занятие за это время могло измениться.</value>
+  </data>
+  <data name="Attendance.Save" xml:space="preserve">
+    <value>Сохранить посещаемость</value>
+  </data>
+  <data name="Attendance.Saved" xml:space="preserve">
+    <value>Посещаемость сохранена.</value>
+  </data>
+  <data name="Attendance.Title" xml:space="preserve">
+    <value>Посещаемость</value>
+  </data>
+  <data name="Attendance.Unavailable" xml:space="preserve">
+    <value>Не удалось загрузить занятие: нет связи с автошколой.</value>
   </data>
   <data name="Booking.Book" xml:space="preserve">
     <value>Записаться</value>
@@ -75,9 +102,6 @@
   </data>
   <data name="Home.Book" xml:space="preserve">
     <value>Записаться на вождение</value>
-  </data>
-  <data name="Home.Coming" xml:space="preserve">
-    <value>Здесь появятся страницы преподавателя теории.</value>
   </data>
   <data name="Home.Dismiss" xml:space="preserve">
     <value>Понятно</value>
@@ -165,6 +189,9 @@
   </data>
   <data name="Lesson.Keep" xml:space="preserve">
     <value>Оставить</value>
+  </data>
+  <data name="Lesson.MarkAttendance" xml:space="preserve">
+    <value>Отметить посещаемость</value>
   </data>
   <data name="Lesson.MarkNoShow" xml:space="preserve">
     <value>Не пришёл</value>

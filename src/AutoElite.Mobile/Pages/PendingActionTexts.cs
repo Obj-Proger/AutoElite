@@ -18,6 +18,7 @@ internal static class PendingActionTexts
             CancelDrivingBooking => AppTexts.Get("Action.Cancel"),
             MarkDrivingNoShow => AppTexts.Get("Action.NoShow"),
             CompleteDrivingLesson => AppTexts.Get("Action.Complete"),
+            MarkTheoryAttendance => AppTexts.Get("Action.Attendance"),
             _ => AppTexts.Get("Action.Other")
         };
         var why = action.RejectedWithStatusCode switch

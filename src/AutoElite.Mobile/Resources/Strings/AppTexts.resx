@@ -13,6 +13,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Action.Attendance" xml:space="preserve">
+    <value>Marking attendance</value>
+  </data>
   <data name="Action.Book" xml:space="preserve">
     <value>Booking a driving lesson</value>
   </data>
@@ -27,6 +30,30 @@
   </data>
   <data name="Action.Other" xml:space="preserve">
     <value>An action</value>
+  </data>
+  <data name="Attendance.Hint" xml:space="preserve">
+    <value>Turn off the students who did not come.</value>
+  </data>
+  <data name="Attendance.Offline" xml:space="preserve">
+    <value>No connection. The students are as last read and may have changed.</value>
+  </data>
+  <data name="Attendance.Queued" xml:space="preserve">
+    <value>No connection. The attendance will be sent when the device is online.</value>
+  </data>
+  <data name="Attendance.Refused" xml:space="preserve">
+    <value>The school did not accept the attendance: the lesson may have changed meanwhile.</value>
+  </data>
+  <data name="Attendance.Save" xml:space="preserve">
+    <value>Save attendance</value>
+  </data>
+  <data name="Attendance.Saved" xml:space="preserve">
+    <value>The attendance is saved.</value>
+  </data>
+  <data name="Attendance.Title" xml:space="preserve">
+    <value>Attendance</value>
+  </data>
+  <data name="Attendance.Unavailable" xml:space="preserve">
+    <value>The lesson could not be read: no connection to the school.</value>
   </data>
   <data name="Booking.Book" xml:space="preserve">
     <value>Book</value>
@@ -75,9 +102,6 @@
   </data>
   <data name="Home.Book" xml:space="preserve">
     <value>Book a driving lesson</value>
-  </data>
-  <data name="Home.Coming" xml:space="preserve">
-    <value>The pages of theory instructors will appear here.</value>
   </data>
   <data name="Home.Dismiss" xml:space="preserve">
     <value>Got it</value>
@@ -165,6 +189,9 @@
   </data>
   <data name="Lesson.Keep" xml:space="preserve">
     <value>Keep</value>
+  </data>
+  <data name="Lesson.MarkAttendance" xml:space="preserve">
+    <value>Mark attendance</value>
   </data>
   <data name="Lesson.MarkNoShow" xml:space="preserve">
     <value>Did not come</value>

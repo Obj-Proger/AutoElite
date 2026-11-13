@@ -1,3 +1,4 @@
+using System.Globalization;
 using AutoElite.Client.Api;
 using AutoElite.Client.Api.Models;
 using AutoElite.Client.Offline;
@@ -5,8 +6,9 @@ using AutoElite.Client.Offline;
 namespace AutoElite.Mobile.Schedule;
 
 /// <summary>
-/// The practice slots of the signed-in driving instructor, with the bookings that hold them, from a day ago to two
-/// weeks ahead, read from the API or, without a network, from the device.
+/// The lessons of the signed-in instructor from a day ago to two weeks ahead, read from the API or, without a network,
+/// from the device: the practice slots of a driving instructor with their bookings, the theory lessons of a theory
+/// instructor with the students expected at a lesson.
 /// </summary>
 /// <param name="cache">What the user last read.</param>
 /// <param name="createApi">Creates the client of the API.</param>
@@ -36,4 +38,39 @@ public sealed class InstructorSchedule(OfflineCache cache, Func<AutoEliteApiClie
             DrivingScheduleItem.CreateFromDiscriminatorValue,
             cancellationToken);
     }
+
+    /// <summary>
+    /// Reads the theory lessons, the earliest first; the API gives an instructor the lessons they give and those of
+    /// the groups they are responsible for.
+    /// </summary>
+    /// <param name="cancellationToken">A token that signals cancellation of the operation.</param>
+    /// <returns>The lessons.</returns>
+    public Task<Cached<IReadOnlyList<TheoryLessonItem>>> ReadTheoryAsync(CancellationToken cancellationToken)
+    {
+        var fromUtc = timeProvider.GetUtcNow() - _past;
+        var toUtc = fromUtc + _ahead;
+
+        return cache.GetListAsync(
+            "theory-lessons/mine",
+            token => createApi().Api.V1.TheoryLessons.GetAsync(
+                request =>
+                {
+                    request.QueryParameters.FromUtc = fromUtc;
+                    request.QueryParameters.ToUtc = toUtc;
+                },
+                token),
+            TheoryLessonItem.CreateFromDiscriminatorValue,
+            cancellationToken);
+    }
+
+    /// <summary>Reads a theory lesson with the students expected at it and their marks.</summary>
+    /// <param name="lessonId">The lesson.</param>
+    /// <param name="cancellationToken">A token that signals cancellation of the operation.</param>
+    /// <returns>The lesson.</returns>
+    public Task<Cached<TheoryLessonDetails>> ReadTheoryLessonAsync(Guid lessonId, CancellationToken cancellationToken) =>
+        cache.GetAsync(
+            string.Create(CultureInfo.InvariantCulture, $"theory-lessons/{lessonId:N}"),
+            token => createApi().Api.V1.TheoryLessons[lessonId].GetAsync(cancellationToken: token),
+            TheoryLessonDetails.CreateFromDiscriminatorValue,
+            cancellationToken);
 }

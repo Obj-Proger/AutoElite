@@ -9,9 +9,9 @@ using Microsoft.Kiota.Abstractions;
 namespace AutoElite.Mobile.Pages;
 
 /// <summary>
-/// The home page of the signed-in user: the greeting; the lessons of a student or of a driving instructor, with what
-/// they can do with them (HomeViewModel.Lessons.cs); whether the data is from the device; the actions that wait to be
-/// sent and those the school did not accept; and signing out.
+/// The home page of the signed-in user: the greeting; the lessons of a student or of an instructor, with what they can
+/// do with them (HomeViewModel.Lessons.cs); whether the data is from the device; the actions that wait to be sent and
+/// those the school did not accept; and signing out.
 /// </summary>
 public sealed partial class HomeViewModel : ViewModel
 {
@@ -25,7 +25,7 @@ public sealed partial class HomeViewModel : ViewModel
     /// <summary>Initializes a new instance of the <see cref="HomeViewModel"/> class.</summary>
     /// <param name="session">The user of the application.</param>
     /// <param name="schedule">The lessons of the student.</param>
-    /// <param name="instructorSchedule">The slots of the driving instructor.</param>
+    /// <param name="instructorSchedule">The lessons of the instructor.</param>
     /// <param name="queue">The actions that wait to be sent.</param>
     /// <param name="synchronizer">Sends the actions.</param>
     /// <param name="timeProvider">The clock.</param>
@@ -99,11 +99,19 @@ public sealed partial class HomeViewModel : ViewModel
         }
     }
 
-    /// <summary>Gets a value indicating whether the page shows lessons.</summary>
-    public bool ShowsLessons => IsStudent || IsDrivingInstructor;
+    /// <summary>Gets a value indicating whether the user is a theory instructor, who marks attendance at their lessons.</summary>
+    public bool IsTheoryInstructor
+    {
+        get;
+        private set
+        {
+            if (SetProperty(ref field, value))
+                OnRolesChanged();
+        }
+    }
 
-    /// <summary>Gets a value indicating whether the user has pages that come next, as a theory instructor has.</summary>
-    public bool ShowsComing => !ShowsLessons;
+    /// <summary>Gets a value indicating whether the page shows lessons, which it does for every user of the application.</summary>
+    public bool ShowsLessons => IsStudent || IsDrivingInstructor || IsTheoryInstructor;
 
     /// <summary>Gets the lessons of the user, the earliest first.</summary>
     public IReadOnlyList<ScheduleEntry> Lessons
@@ -181,6 +189,7 @@ public sealed partial class HomeViewModel : ViewModel
             Name = profile.Value.FirstName ?? string.Empty;
             IsStudent = profile.Value.Roles?.Contains(UserRole.Student) == true;
             IsDrivingInstructor = profile.Value.Roles?.Contains(UserRole.DrivingInstructor) == true;
+            IsTheoryInstructor = profile.Value.Roles?.Contains(UserRole.TheoryInstructor) == true;
             if (profile.IsFromCache)
                 offlineSince = profile.SavedAt;
         }
@@ -191,16 +200,19 @@ public sealed partial class HomeViewModel : ViewModel
         }
 
         var actions = await _queue.ListAsync(CancellationToken.None);
-        var waitingSlots = actions.Where(action => !action.IsRejected)
-            .Select(action => SlotOf(action.Action))
+        var waiting = actions.Where(action => !action.IsRejected)
+            .Select(action => SubjectOf(action.Action))
             .OfType<Guid>()
             .ToHashSet();
         var lessons = new List<ScheduleEntry>();
         if (IsStudent)
-            offlineSince = Earliest(offlineSince, await LoadStudentLessonsAsync(lessons, waitingSlots));
+            offlineSince = Earliest(offlineSince, await LoadStudentLessonsAsync(lessons, waiting));
 
         if (IsDrivingInstructor)
-            offlineSince = Earliest(offlineSince, await LoadInstructorLessonsAsync(lessons, waitingSlots));
+            offlineSince = Earliest(offlineSince, await LoadInstructorLessonsAsync(lessons, waiting));
+
+        if (IsTheoryInstructor)
+            offlineSince = Earliest(offlineSince, await LoadTheoryInstructorLessonsAsync(lessons, waiting));
 
         Lessons = [.. lessons.OrderBy(entry => entry.Start)];
 
@@ -210,9 +222,9 @@ public sealed partial class HomeViewModel : ViewModel
         if (offlineSince is { } savedAt)
             lines.Add(AppTexts.Format("Home.Offline", savedAt.ToLocalTime().ToString("g", CultureInfo.CurrentCulture)));
 
-        var waiting = actions.Count(action => !action.IsRejected);
-        if (waiting > 0)
-            lines.Add(AppTexts.Format("Home.Pending", waiting));
+        var waitingCount = actions.Count(action => !action.IsRejected);
+        if (waitingCount > 0)
+            lines.Add(AppTexts.Format("Home.Pending", waitingCount));
 
         Status = lines.Count > 0 ? string.Join(Environment.NewLine, lines) : null;
     }
@@ -223,7 +235,6 @@ public sealed partial class HomeViewModel : ViewModel
     private void OnRolesChanged()
     {
         OnPropertyChanged(nameof(ShowsLessons));
-        OnPropertyChanged(nameof(ShowsComing));
         OnPropertyChanged(nameof(HasNoLessons));
     }
 
