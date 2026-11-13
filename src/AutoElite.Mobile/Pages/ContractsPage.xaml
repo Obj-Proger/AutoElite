@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="AutoElite.Mobile.Pages.ContractsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:l="clr-namespace:AutoElite.Mobile.Localization"
+    xmlns:pages="clr-namespace:AutoElite.Mobile.Pages"
+    x:DataType="pages:ContractsViewModel"
+    Title="{l:Text Contracts.Title}">
+
+    <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}" RefreshColor="{StaticResource Accent}">
+        <ScrollView>
+            <VerticalStackLayout Padding="{StaticResource PageMargin}" Spacing="14">
+                <Border Style="{StaticResource Card}" IsVisible="{Binding HasNotice}">
+                    <Label Style="{StaticResource Secondary}" Text="{Binding Notice}" />
+                </Border>
+
+                <VerticalStackLayout Spacing="14" BindableLayout.ItemsSource="{Binding Items}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="pages:ContractEntry">
+                            <Border Style="{StaticResource HighlightCard}">
+                                <VerticalStackLayout Spacing="8">
+                                    <Label Style="{StaticResource Overline}" Text="{Binding Number}" />
+                                    <Label Style="{StaticResource Title}" Text="{Binding Course}" />
+                                    <Label Style="{StaticResource BodyLarge}" Text="{Binding Practice}" />
+                                    <ProgressBar Progress="{Binding PracticeProgress}" />
+                                    <Label Style="{StaticResource Secondary}" Text="{Binding Theory}" />
+                                    <Label Style="{StaticResource Secondary}" Text="{Binding Quality}" IsVisible="{Binding HasQuality}" />
+                                    <Label Style="{StaticResource BodyLarge}" Text="{Binding Money}" />
+                                    <VerticalStackLayout Spacing="4" IsVisible="{Binding HasPayments}">
+                                        <Label Style="{StaticResource Caption}" Text="{l:Text Payments.Title}" />
+                                        <VerticalStackLayout Spacing="4" BindableLayout.ItemsSource="{Binding Payments}">
+                                            <BindableLayout.ItemTemplate>
+                                                <DataTemplate x:DataType="x:String">
+                                                    <Label Style="{StaticResource Secondary}" Text="{Binding .}" />
+                                                </DataTemplate>
+                                            </BindableLayout.ItemTemplate>
+                                        </VerticalStackLayout>
+                                    </VerticalStackLayout>
+                                </VerticalStackLayout>
+                            </Border>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+        </ScrollView>
+    </RefreshView>
+
+</ContentPage>

@@ -28,6 +28,7 @@ public sealed partial class HomeViewModel
             MarkDrivingNoShow noShow => noShow.SlotId,
             CompleteDrivingLesson completion => completion.SlotId,
             MarkTheoryAttendance attendance => attendance.LessonId,
+            RateDrivingLesson rating => rating.SlotId,
             _ => null
         };
 
@@ -157,8 +158,12 @@ public sealed partial class HomeViewModel
 
         var isWaiting = waitingSlots.Contains(slotId);
         var actions = new List<EntryAction>();
+        var rating = lesson.Booking?.StudentRating;
         if (status == DrivingBookingStatus.Active && start > now && !isWaiting)
             actions.Add(new EntryAction(AppTexts.Get("Lesson.Cancel"), new Command(async () => await CancelBookingAsync(slotId))));
+
+        if (status == DrivingBookingStatus.Completed && rating is null && !isWaiting)
+            actions.Add(new EntryAction(AppTexts.Get("Lesson.Rate"), new Command(async () => await RateAsync(slotId))));
 
         return new ScheduleEntry
         {
@@ -169,6 +174,7 @@ public sealed partial class HomeViewModel
             Status = status switch
             {
                 _ when isWaiting => AppTexts.Get("Lesson.Waiting"),
+                DrivingBookingStatus.Completed when rating is { } given => AppTexts.Format("Lesson.CompletedRated", given),
                 DrivingBookingStatus.Completed => AppTexts.Get("Lesson.Completed"),
                 DrivingBookingStatus.NoShow => AppTexts.Get("Lesson.NoShow"),
                 _ => null
@@ -248,6 +254,32 @@ public sealed partial class HomeViewModel
                 [CompletionViewModel.RequestParameter] = new CompletionRequest(
                     slotId, Math.Round((decimal)(end - start).TotalHours, 2), student, LessonTexts.TimeOf(start, end))
             });
+
+    // The student chooses from 5 down to 1 and may add a comment; a low rating reaches the managers of the school.
+    private async Task RateAsync(Guid slotId)
+    {
+        string[] choices =
+        [
+            AppTexts.Get("Rating.Five"),
+            AppTexts.Get("Rating.Four"),
+            AppTexts.Get("Rating.Three"),
+            AppTexts.Get("Rating.Two"),
+            AppTexts.Get("Rating.One")
+        ];
+        var choice = await Shell.Current.DisplayActionSheetAsync(
+            AppTexts.Get("Lesson.RateTitle"), AppTexts.Get("Common.Cancel"), null, choices);
+        var index = Array.IndexOf(choices, choice);
+        if (index < 0)
+            return;
+
+        var comment = await Shell.Current.DisplayPromptAsync(
+            AppTexts.Get("Lesson.RateTitle"),
+            AppTexts.Get("Lesson.RateComment"),
+            AppTexts.Get("Lesson.RateSend"),
+            AppTexts.Get("Lesson.NoComment"),
+            maxLength: MaxNoteLength);
+        await SubmitAsync(new RateDrivingLesson(slotId, 5 - index, string.IsNullOrWhiteSpace(comment) ? null : comment.Trim()));
+    }
 
     private async Task MarkNoShowAsync(Guid slotId)
     {

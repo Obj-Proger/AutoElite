@@ -55,6 +55,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<PracticeTests>();
         builder.Services.AddSingleton<Notifications>();
         builder.Services.AddSingleton<Chats>();
+        builder.Services.AddSingleton<StudentContracts>();
         builder.Services.AddSingleton(provider => new RealtimeConnection(
             () => ApiAddress.Current, provider.GetRequiredService<AuthSessionManager>()));
         builder.Services.AddSingleton<AppShell>();
@@ -81,6 +82,8 @@ public static class MauiProgram
         builder.Services.AddTransient<ChatsViewModel>();
         builder.Services.AddTransient<ChatPage>();
         builder.Services.AddTransient<ChatViewModel>();
+        builder.Services.AddTransient<ContractsPage>();
+        builder.Services.AddTransient<ContractsViewModel>();
 
 #if DEBUG
         builder.Logging.AddDebug();

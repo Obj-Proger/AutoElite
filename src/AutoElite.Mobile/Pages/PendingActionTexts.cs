@@ -20,6 +20,7 @@ internal static class PendingActionTexts
             CompleteDrivingLesson => AppTexts.Get("Action.Complete"),
             MarkTheoryAttendance => AppTexts.Get("Action.Attendance"),
             SendChatMessage => AppTexts.Get("Action.Message"),
+            RateDrivingLesson => AppTexts.Get("Action.Rating"),
             _ => AppTexts.Get("Action.Other")
         };
         var why = action.RejectedWithStatusCode switch

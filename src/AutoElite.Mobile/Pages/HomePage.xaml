@@ -58,6 +58,11 @@
                         Text="{l:Text Home.Tests}"
                         Command="{Binding TestsCommand}"
                         IsVisible="{Binding IsStudent}" />
+                    <Button
+                        Style="{StaticResource SecondaryButton}"
+                        Text="{l:Text Contracts.Title}"
+                        Command="{Binding ContractsCommand}"
+                        IsVisible="{Binding IsStudent}" />
                     <Label Style="{StaticResource Secondary}" Text="{l:Text Home.Empty}" IsVisible="{Binding HasNoLessons}" />
                     <VerticalStackLayout Spacing="12" BindableLayout.ItemsSource="{Binding Lessons}">
                         <BindableLayout.ItemTemplate>

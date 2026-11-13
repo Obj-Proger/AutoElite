@@ -34,6 +34,9 @@
   <data name="Action.Other" xml:space="preserve">
     <value>An action</value>
   </data>
+  <data name="Action.Rating" xml:space="preserve">
+    <value>Rating a lesson</value>
+  </data>
   <data name="Attendance.Hint" xml:space="preserve">
     <value>Turn off the students who did not come.</value>
   </data>
@@ -138,6 +141,42 @@
   </data>
   <data name="Completion.Saved" xml:space="preserve">
     <value>The lesson is completed.</value>
+  </data>
+  <data name="Contracts.Active" xml:space="preserve">
+    <value>active</value>
+  </data>
+  <data name="Contracts.Completed" xml:space="preserve">
+    <value>completed</value>
+  </data>
+  <data name="Contracts.Empty" xml:space="preserve">
+    <value>You have no contracts yet.</value>
+  </data>
+  <data name="Contracts.MoneyOwed" xml:space="preserve">
+    <value>Paid {0} of {1} · owed {2}</value>
+  </data>
+  <data name="Contracts.MoneyPaid" xml:space="preserve">
+    <value>Paid {0} of {1}</value>
+  </data>
+  <data name="Contracts.Offline" xml:space="preserve">
+    <value>No connection. The data is as of {0}.</value>
+  </data>
+  <data name="Contracts.Practice" xml:space="preserve">
+    <value>Driving: {0} of {1} h</value>
+  </data>
+  <data name="Contracts.Quality" xml:space="preserve">
+    <value>Quality of training: {0} of 5</value>
+  </data>
+  <data name="Contracts.Terminated" xml:space="preserve">
+    <value>terminated</value>
+  </data>
+  <data name="Contracts.Theory" xml:space="preserve">
+    <value>Theory lessons attended: {0}</value>
+  </data>
+  <data name="Contracts.Title" xml:space="preserve">
+    <value>My training</value>
+  </data>
+  <data name="Contracts.Unavailable" xml:space="preserve">
+    <value>The contracts could not be read: no connection to the school.</value>
   </data>
   <data name="Exams.ConfirmMessage" xml:space="preserve">
     <value>The exam is taken once, and its timer starts at once.</value>
@@ -247,6 +286,9 @@
   <data name="Lesson.CompletedHours" xml:space="preserve">
     <value>Completed, {0} h</value>
   </data>
+  <data name="Lesson.CompletedRated" xml:space="preserve">
+    <value>Completed · your rating {0}</value>
+  </data>
   <data name="Lesson.Driving" xml:space="preserve">
     <value>Driving</value>
   </data>
@@ -265,6 +307,9 @@
   <data name="Lesson.MarkNoShow" xml:space="preserve">
     <value>Did not come</value>
   </data>
+  <data name="Lesson.NoComment" xml:space="preserve">
+    <value>Without a comment</value>
+  </data>
   <data name="Lesson.NoShow" xml:space="preserve">
     <value>Missed</value>
   </data>
@@ -273,6 +318,18 @@
   </data>
   <data name="Lesson.NoShowTitle" xml:space="preserve">
     <value>The student did not come?</value>
+  </data>
+  <data name="Lesson.Rate" xml:space="preserve">
+    <value>Rate the lesson</value>
+  </data>
+  <data name="Lesson.RateComment" xml:space="preserve">
+    <value>A comment for the school, if any.</value>
+  </data>
+  <data name="Lesson.RateSend" xml:space="preserve">
+    <value>Send</value>
+  </data>
+  <data name="Lesson.RateTitle" xml:space="preserve">
+    <value>How was the lesson?</value>
   </data>
   <data name="Lesson.StudentNoShow" xml:space="preserve">
     <value>The student did not come</value>
@@ -300,6 +357,33 @@
   </data>
   <data name="Notifications.Unread" xml:space="preserve">
     <value>Notifications · {0} new</value>
+  </data>
+  <data name="Payments.Cancelled" xml:space="preserve">
+    <value>cancelled</value>
+  </data>
+  <data name="Payments.Refunded" xml:space="preserve">
+    <value>refunded</value>
+  </data>
+  <data name="Payments.Registered" xml:space="preserve">
+    <value>awaits confirmation</value>
+  </data>
+  <data name="Payments.Title" xml:space="preserve">
+    <value>Payments</value>
+  </data>
+  <data name="Rating.Five" xml:space="preserve">
+    <value>5 — excellent</value>
+  </data>
+  <data name="Rating.Four" xml:space="preserve">
+    <value>4 — good</value>
+  </data>
+  <data name="Rating.One" xml:space="preserve">
+    <value>1 — very poor</value>
+  </data>
+  <data name="Rating.Three" xml:space="preserve">
+    <value>3 — fair</value>
+  </data>
+  <data name="Rating.Two" xml:space="preserve">
+    <value>2 — poor</value>
   </data>
   <data name="Refusal.Conflict" xml:space="preserve">
     <value>the schedule changed meanwhile</value>

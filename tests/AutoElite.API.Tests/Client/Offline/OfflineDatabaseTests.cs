@@ -55,6 +55,7 @@ public sealed class OfflineDatabaseTests : IDisposable
             Guid.NewGuid(),
             [new TheoryAttendanceMark(Guid.NewGuid(), IsPresent: true), new TheoryAttendanceMark(Guid.NewGuid(), false, "Болел")]);
         var message = new SendChatMessage(Guid.NewGuid(), "Буду через 5 минут");
+        var rating = new RateDrivingLesson(Guid.NewGuid(), 5, "Спокойно и понятно");
         using (var database = new OfflineDatabase(_path))
         {
             var queue = new OfflineQueue(database, TimeProvider.System);
@@ -64,12 +65,13 @@ public sealed class OfflineDatabaseTests : IDisposable
             await queue.EnqueueAsync(completion, CancellationToken);
             await queue.EnqueueAsync(attendance, CancellationToken);
             await queue.EnqueueAsync(message, CancellationToken);
+            await queue.EnqueueAsync(rating, CancellationToken);
         }
 
         using var restarted = new OfflineDatabase(_path);
         var pending = await new OfflineQueue(restarted, TimeProvider.System).ListAsync(CancellationToken);
 
-        pending.Select(action => action.Action).Should().Equal(booking, cancellation, noShow, completion, attendance, message);
+        pending.Select(action => action.Action).Should().Equal(booking, cancellation, noShow, completion, attendance, message, rating);
     }
 
     [Fact]

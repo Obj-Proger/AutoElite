@@ -34,6 +34,9 @@
   <data name="Action.Other" xml:space="preserve">
     <value>Действие</value>
   </data>
+  <data name="Action.Rating" xml:space="preserve">
+    <value>Оценка занятия</value>
+  </data>
   <data name="Attendance.Hint" xml:space="preserve">
     <value>Выключите тех, кто не пришёл.</value>
   </data>
@@ -138,6 +141,42 @@
   </data>
   <data name="Completion.Saved" xml:space="preserve">
     <value>Занятие завершено.</value>
+  </data>
+  <data name="Contracts.Active" xml:space="preserve">
+    <value>действует</value>
+  </data>
+  <data name="Contracts.Completed" xml:space="preserve">
+    <value>завершён</value>
+  </data>
+  <data name="Contracts.Empty" xml:space="preserve">
+    <value>Договоров пока нет.</value>
+  </data>
+  <data name="Contracts.MoneyOwed" xml:space="preserve">
+    <value>Оплачено {0} из {1} · к оплате {2}</value>
+  </data>
+  <data name="Contracts.MoneyPaid" xml:space="preserve">
+    <value>Оплачено {0} из {1}</value>
+  </data>
+  <data name="Contracts.Offline" xml:space="preserve">
+    <value>Нет связи. Данные на {0}.</value>
+  </data>
+  <data name="Contracts.Practice" xml:space="preserve">
+    <value>Вождение: {0} из {1} ч</value>
+  </data>
+  <data name="Contracts.Quality" xml:space="preserve">
+    <value>Качество обучения: {0} из 5</value>
+  </data>
+  <data name="Contracts.Terminated" xml:space="preserve">
+    <value>расторгнут</value>
+  </data>
+  <data name="Contracts.Theory" xml:space="preserve">
+    <value>Посещено занятий по теории: {0}</value>
+  </data>
+  <data name="Contracts.Title" xml:space="preserve">
+    <value>Моё обучение</value>
+  </data>
+  <data name="Contracts.Unavailable" xml:space="preserve">
+    <value>Не удалось загрузить договоры: нет связи с автошколой.</value>
   </data>
   <data name="Exams.ConfirmMessage" xml:space="preserve">
     <value>Экзамен сдаётся один раз, и таймер начнётся сразу.</value>
@@ -247,6 +286,9 @@
   <data name="Lesson.CompletedHours" xml:space="preserve">
     <value>Проведено, {0} ч</value>
   </data>
+  <data name="Lesson.CompletedRated" xml:space="preserve">
+    <value>Проведено · ваша оценка {0}</value>
+  </data>
   <data name="Lesson.Driving" xml:space="preserve">
     <value>Вождение</value>
   </data>
@@ -265,6 +307,9 @@
   <data name="Lesson.MarkNoShow" xml:space="preserve">
     <value>Не пришёл</value>
   </data>
+  <data name="Lesson.NoComment" xml:space="preserve">
+    <value>Без комментария</value>
+  </data>
   <data name="Lesson.NoShow" xml:space="preserve">
     <value>Пропущено</value>
   </data>
@@ -273,6 +318,18 @@
   </data>
   <data name="Lesson.NoShowTitle" xml:space="preserve">
     <value>Ученик не пришёл?</value>
+  </data>
+  <data name="Lesson.Rate" xml:space="preserve">
+    <value>Оценить занятие</value>
+  </data>
+  <data name="Lesson.RateComment" xml:space="preserve">
+    <value>Комментарий для автошколы, если нужен.</value>
+  </data>
+  <data name="Lesson.RateSend" xml:space="preserve">
+    <value>Отправить</value>
+  </data>
+  <data name="Lesson.RateTitle" xml:space="preserve">
+    <value>Как прошло занятие?</value>
   </data>
   <data name="Lesson.StudentNoShow" xml:space="preserve">
     <value>Ученик не пришёл</value>
@@ -300,6 +357,33 @@
   </data>
   <data name="Notifications.Unread" xml:space="preserve">
     <value>Уведомления · новых: {0}</value>
+  </data>
+  <data name="Payments.Cancelled" xml:space="preserve">
+    <value>отменён</value>
+  </data>
+  <data name="Payments.Refunded" xml:space="preserve">
+    <value>возвращён</value>
+  </data>
+  <data name="Payments.Registered" xml:space="preserve">
+    <value>ожидает подтверждения</value>
+  </data>
+  <data name="Payments.Title" xml:space="preserve">
+    <value>Платежи</value>
+  </data>
+  <data name="Rating.Five" xml:space="preserve">
+    <value>5 — отлично</value>
+  </data>
+  <data name="Rating.Four" xml:space="preserve">
+    <value>4 — хорошо</value>
+  </data>
+  <data name="Rating.One" xml:space="preserve">
+    <value>1 — очень плохо</value>
+  </data>
+  <data name="Rating.Three" xml:space="preserve">
+    <value>3 — удовлетворительно</value>
+  </data>
+  <data name="Rating.Two" xml:space="preserve">
+    <value>2 — плохо</value>
   </data>
   <data name="Refusal.Conflict" xml:space="preserve">
     <value>расписание за это время изменилось</value>

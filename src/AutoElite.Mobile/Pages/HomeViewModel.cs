@@ -60,6 +60,7 @@ public sealed partial class HomeViewModel : ViewModel
         TestsCommand = new Command(async () => await Routes.OpenAsync(Routes.Tests));
         NotificationsCommand = new Command(async () => await Routes.OpenAsync(Routes.Notifications));
         ChatsCommand = new Command(async () => await Routes.OpenAsync(Routes.Chats));
+        ContractsCommand = new Command(async () => await Routes.OpenAsync(Routes.Contracts));
     }
 
     /// <summary>Gets the greeting for the time of day.</summary>
@@ -189,6 +190,9 @@ public sealed partial class HomeViewModel : ViewModel
 
     /// <summary>Gets the command that opens the chats.</summary>
     public Command ChatsCommand { get; }
+
+    /// <summary>Gets the command that opens the contracts of a student.</summary>
+    public Command ContractsCommand { get; }
 
     /// <summary>Gets the text of the button of the notifications, with the number of unread ones.</summary>
     public string NotificationsText
