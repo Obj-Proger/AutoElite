@@ -50,7 +50,7 @@ public sealed class RequestLimitsAndCorsTests(ApiFactory api)
 
         response.StatusCode.Should().Be(HttpStatusCode.NoContent);
         response.Headers.GetValues("Access-Control-Allow-Origin").Should().Equal(WebClientOrigin);
-        response.Headers.Contains("Access-Control-Allow-Credentials").Should().BeFalse();
+        response.Headers.GetValues("Access-Control-Allow-Credentials").Should().Equal("true");
     }
 
     [Fact]

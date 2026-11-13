@@ -35,9 +35,10 @@ internal sealed class CorsSettings
 
 /// <summary>
 /// Lets the pages of the web client, at <see cref="ClientOptions.BaseUrl"/>, and of the origins of
-/// <see cref="CorsSettings"/> call the API from the browser. They send the access token in the Authorization header,
-/// not in cookies, so no credentials are allowed; the headers that tell where a created resource is, the name of a
-/// download and when to try again are exposed to them.
+/// <see cref="CorsSettings"/> call the API from the browser. They send the access token in the Authorization header;
+/// credentials are allowed for these origins only, so that the website can send the cookie of its session to the
+/// endpoints of the browser session (<see cref="BrowserSessionCookie"/>). The headers that tell where a created
+/// resource is, the name of a download and when to try again are exposed to them.
 /// </summary>
 internal static class ApiCors
 {
@@ -62,6 +63,7 @@ internal static class ApiCors
                     .WithOrigins([.. OriginsOf(client.Value, settings.Value)])
                     .AllowAnyHeader()
                     .AllowAnyMethod()
+                    .AllowCredentials()
                     .WithExposedHeaders("Location", "Content-Disposition", "Retry-After")
                     .SetPreflightMaxAge(_preflightMaxAge)));
 

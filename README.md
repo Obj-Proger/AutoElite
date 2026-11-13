@@ -112,6 +112,15 @@ requests a minute (600 by default, counted per signed-in user or per address) an
 `RateLimiting:SensitivePermitsPerMinute` to signing in, the password reset and the public form (20 by default, per
 address); over a limit the API answers 429 with `Retry-After`.
 
+The website keeps no refresh token where a script could read it. It signs in with `POST /api/v1/auth/browser/login`,
+which answers the access token only, kept in memory, and sets the refresh token as an HttpOnly, Secure,
+SameSite=Strict cookie sent only to `/api/v1/auth/browser`; `POST .../refresh` renews the session with it, when the
+site starts and when the access token expires, and `POST .../logout` ends it. These endpoints answer only requests with
+the header `X-AutoElite-Client: browser`, which no page of another site can send without a CORS preflight the API
+refuses. So that the browser sends the cookie, the website and the API must be on the same site, such as
+`school.example` and `api.school.example`, and the website at `Client:BaseUrl` or in `Cors:AllowedOrigins`, the only
+origins allowed to send credentials.
+
 Administrators watch and retry the background jobs in the Hangfire dashboard at `/jobs`. A browser does not send the
 access token when it opens a page, so an administrator first calls `POST /api/v1/jobs-dashboard/session` with it: the
 API answers with a cookie that only the dashboard receives and that lasts 30 minutes.

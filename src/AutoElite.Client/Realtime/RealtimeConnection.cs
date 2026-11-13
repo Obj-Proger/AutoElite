@@ -16,7 +16,7 @@ public sealed class RealtimeConnection : IAsyncDisposable
     private const string HubPath = "hubs/realtime";
 
     private readonly Func<Uri> _apiAddress;
-    private readonly AuthSessionManager _sessions;
+    private readonly IAccessTokens _sessions;
     private readonly Action<HttpConnectionOptions>? _configure;
     private readonly SemaphoreSlim _lock = new(1, 1);
     private HubConnection? _connection;
@@ -26,7 +26,7 @@ public sealed class RealtimeConnection : IAsyncDisposable
     /// <param name="apiAddress">Gives the current address of the API.</param>
     /// <param name="sessions">The session whose access token the connection carries.</param>
     /// <param name="configure">Configures the connection further, for example its transport in tests.</param>
-    public RealtimeConnection(Func<Uri> apiAddress, AuthSessionManager sessions, Action<HttpConnectionOptions>? configure = null)
+    public RealtimeConnection(Func<Uri> apiAddress, IAccessTokens sessions, Action<HttpConnectionOptions>? configure = null)
     {
         ArgumentNullException.ThrowIfNull(apiAddress);
         ArgumentNullException.ThrowIfNull(sessions);

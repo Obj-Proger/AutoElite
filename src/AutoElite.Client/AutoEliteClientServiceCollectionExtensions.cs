@@ -59,6 +59,10 @@ public static class AutoEliteClientServiceCollectionExtensions
                 provider.GetRequiredService<IHttpClientFactory>().CreateClient(AuthenticationHttpClientName)),
             provider.GetRequiredService<IAuthSessionStore>(),
             provider.GetRequiredService<TimeProvider>()));
+
+        // The access tokens come from the session above unless the application registered its own source first, as the
+        // website does, whose refresh token stays in a cookie.
+        services.TryAddSingleton<IAccessTokens>(provider => provider.GetRequiredService<AuthSessionManager>());
         services.AddTransient<AuthenticationHandler>();
         services.AddTransient(provider => AutoEliteApiClientFactory.Create(
             provider.GetRequiredService<IHttpClientFactory>().CreateClient(ApiHttpClientName)));

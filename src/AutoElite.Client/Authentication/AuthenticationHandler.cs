@@ -7,8 +7,8 @@ namespace AutoElite.Client.Authentication;
 /// Sends the access token of the session with each request to the API and, when the API rejects it, renews the session
 /// and sends the request once more. The content of a request is buffered first, so that it can be sent again.
 /// </summary>
-/// <param name="sessions">The session of the signed-in user.</param>
-public sealed class AuthenticationHandler(AuthSessionManager sessions) : DelegatingHandler
+/// <param name="sessions">The access tokens of the signed-in user.</param>
+public sealed class AuthenticationHandler(IAccessTokens sessions) : DelegatingHandler
 {
     /// <inheritdoc />
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)

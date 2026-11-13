@@ -17,7 +17,7 @@ namespace AutoElite.Client.Authentication;
 public sealed class AuthSessionManager(
     Func<AutoEliteApiClient> createAuthenticationApi,
     IAuthSessionStore store,
-    TimeProvider timeProvider) : IDisposable
+    TimeProvider timeProvider) : IAccessTokens, IDisposable
 {
     // An access token this close to its expiry is renewed before a request, so that it does not expire on the way.
     private static readonly TimeSpan _renewalMargin = TimeSpan.FromMinutes(1);
