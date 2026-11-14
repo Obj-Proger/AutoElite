@@ -91,6 +91,9 @@ public static class MauiProgram
         builder.Services.AddTransient<ProfilePage>();
         builder.Services.AddTransient<ProfileViewModel>();
         builder.Services.AddTransient<StudyPage>();
+        builder.Services.AddTransient<SchedulePage>();
+        builder.Services.AddTransient<ScheduleViewModel>();
+        builder.Services.AddTransient<LessonEntries>();
 
 #if DEBUG
         builder.Logging.AddDebug();

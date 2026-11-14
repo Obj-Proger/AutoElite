@@ -250,6 +250,9 @@
   <data name="Lesson.Attended" xml:space="preserve">
     <value>Посещено</value>
   </data>
+  <data name="Lesson.Book" xml:space="preserve">
+    <value>Записаться</value>
+  </data>
   <data name="Lesson.Cancel" xml:space="preserve">
     <value>Отменить запись</value>
   </data>
@@ -264,6 +267,9 @@
   </data>
   <data name="Lesson.Cancelled" xml:space="preserve">
     <value>Отменено</value>
+  </data>
+  <data name="Lesson.ChooseContract" xml:space="preserve">
+    <value>По какому договору занятие?</value>
   </data>
   <data name="Lesson.Complete" xml:space="preserve">
     <value>Завершить</value>
@@ -290,6 +296,9 @@
     <value>Вождение</value>
   </data>
   <data name="Lesson.Free" xml:space="preserve">
+    <value>Свободный слот</value>
+  </data>
+  <data name="Lesson.FreeSlot" xml:space="preserve">
     <value>Свободный слот</value>
   </data>
   <data name="Lesson.InvalidHours" xml:space="preserve">
@@ -411,6 +420,36 @@
   </data>
   <data name="Role.TheoryInstructor" xml:space="preserve">
     <value>Преподаватель теории</value>
+  </data>
+  <data name="Schedule.Close" xml:space="preserve">
+    <value>Закрыть</value>
+  </data>
+  <data name="Schedule.Day" xml:space="preserve">
+    <value>День</value>
+  </data>
+  <data name="Schedule.Empty" xml:space="preserve">
+    <value>Занятий нет</value>
+  </data>
+  <data name="Schedule.Next" xml:space="preserve">
+    <value>Вперёд</value>
+  </data>
+  <data name="Schedule.Offline" xml:space="preserve">
+    <value>Расписание на {0}; оно могло устареть.</value>
+  </data>
+  <data name="Schedule.Previous" xml:space="preserve">
+    <value>Назад</value>
+  </data>
+  <data name="Schedule.Title" xml:space="preserve">
+    <value>Расписание</value>
+  </data>
+  <data name="Schedule.Today" xml:space="preserve">
+    <value>Сегодня</value>
+  </data>
+  <data name="Schedule.Unavailable" xml:space="preserve">
+    <value>Не удалось загрузить расписание. Проверьте подключение и потяните вниз, чтобы повторить.</value>
+  </data>
+  <data name="Schedule.Week" xml:space="preserve">
+    <value>Неделя</value>
   </data>
   <data name="School.Hint" xml:space="preserve">
     <value>Введите адрес AutoElite вашей автошколы. Школа сообщает его вместе с учётной записью.</value>
@@ -534,6 +573,9 @@
   </data>
   <data name="Tab.Profile" xml:space="preserve">
     <value>Профиль</value>
+  </data>
+  <data name="Tab.Schedule" xml:space="preserve">
+    <value>Расписание</value>
   </data>
   <data name="Tab.Study" xml:space="preserve">
     <value>Учёба</value>

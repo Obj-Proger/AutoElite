@@ -19,6 +19,9 @@
         <Tab Title="{l:Text Tab.Home}" Icon="tab_home.png" Route="home">
             <ShellContent ContentTemplate="{DataTemplate pages:HomePage}" />
         </Tab>
+        <Tab Title="{l:Text Tab.Schedule}" Icon="tab_schedule.png" Route="schedule">
+            <ShellContent ContentTemplate="{DataTemplate pages:SchedulePage}" />
+        </Tab>
         <Tab x:Name="StudyTab" Title="{l:Text Tab.Study}" Icon="tab_study.png" Route="study" IsVisible="False">
             <ShellContent ContentTemplate="{DataTemplate pages:StudyPage}" />
         </Tab>

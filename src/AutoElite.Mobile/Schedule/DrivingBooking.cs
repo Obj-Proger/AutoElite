@@ -31,17 +31,46 @@ public sealed class DrivingBooking(OfflineCache cache, Func<AutoEliteApiClient> 
         return contracts with { Value = [.. contracts.Value.Where(contract => contract.Status == ContractStatus.Active)] };
     }
 
-    /// <summary>Reads the free slots a contract can book, the earliest first.</summary>
+    /// <summary>Reads the free slots a contract can book in the next 30 days, the earliest first.</summary>
     /// <param name="contractId">The contract.</param>
     /// <param name="cancellationToken">A token that signals cancellation of the operation.</param>
     /// <returns>The slots.</returns>
     public Task<Cached<IReadOnlyList<DrivingSlotItem>>> ReadAvailableSlotsAsync(Guid contractId, CancellationToken cancellationToken)
     {
         var fromUtc = timeProvider.GetUtcNow();
-        var toUtc = fromUtc + _ahead;
 
-        return cache.GetListAsync(
+        return ReadAvailableSlotsAsync(
             string.Create(CultureInfo.InvariantCulture, $"driving-slots/available/{contractId:N}"),
+            contractId,
+            fromUtc,
+            fromUtc + _ahead,
+            cancellationToken);
+    }
+
+    /// <summary>Reads the free slots a contract can book in what is left of a week, for the schedule.</summary>
+    /// <param name="contractId">The contract.</param>
+    /// <param name="firstDay">The first day of the week.</param>
+    /// <param name="cancellationToken">A token that signals cancellation of the operation.</param>
+    /// <returns>The slots, none when the week is over.</returns>
+    public async Task<IReadOnlyList<DrivingSlotItem>> ReadAvailableWeekAsync(
+        Guid contractId, DateOnly firstDay, CancellationToken cancellationToken)
+    {
+        var now = timeProvider.GetUtcNow();
+        var start = ScheduleWeek.StartOf(firstDay);
+        var end = ScheduleWeek.StartOf(firstDay.AddDays(ScheduleWeek.Days));
+        if (end <= now)
+            return [];
+
+        var key = ScheduleWeek.KeyOf(string.Create(CultureInfo.InvariantCulture, $"driving-slots/available/{contractId:N}"), firstDay);
+        var slots = await ReadAvailableSlotsAsync(key, contractId, start > now ? start : now, end, cancellationToken);
+
+        return slots.Value;
+    }
+
+    private Task<Cached<IReadOnlyList<DrivingSlotItem>>> ReadAvailableSlotsAsync(
+        string key, Guid contractId, DateTimeOffset fromUtc, DateTimeOffset toUtc, CancellationToken cancellationToken) =>
+        cache.GetListAsync(
+            key,
             token => createApi().Api.V1.DrivingSlots.Available.GetAsync(
                 request =>
                 {
@@ -52,5 +81,4 @@ public sealed class DrivingBooking(OfflineCache cache, Func<AutoEliteApiClient> 
                 token),
             DrivingSlotItem.CreateFromDiscriminatorValue,
             cancellationToken);
-    }
 }

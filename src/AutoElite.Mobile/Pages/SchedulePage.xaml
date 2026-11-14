@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="AutoElite.Mobile.Pages.SchedulePage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:AutoElite.Mobile.Controls"
+    xmlns:l="clr-namespace:AutoElite.Mobile.Localization"
+    xmlns:pages="clr-namespace:AutoElite.Mobile.Pages"
+    x:DataType="pages:ScheduleViewModel"
+    Title="{l:Text Schedule.Title}"
+    Shell.NavBarIsVisible="False">
+
+    <!--
+        The schedule: the period with the arrows and today, the switch between a day and the week, the strip of the days
+        of the week, then the grid of hours, which a swipe moves to the next or previous day or week.
+    -->
+    <Grid Padding="16,16,16,0" RowDefinitions="Auto,Auto,Auto,Auto,*" RowSpacing="10">
+        <Grid ColumnDefinitions="*,Auto,Auto,Auto" ColumnSpacing="6">
+            <Label Style="{StaticResource Title}" Text="{Binding Period}" VerticalOptions="Center" LineBreakMode="TailTruncation" />
+            <Button
+                Grid.Column="1"
+                Style="{StaticResource SecondaryButton}"
+                Text="‹"
+                WidthRequest="44"
+                Padding="0"
+                SemanticProperties.Description="{l:Text Schedule.Previous}"
+                Command="{Binding PreviousCommand}" />
+            <Button
+                Grid.Column="2"
+                Style="{StaticResource SecondaryButton}"
+                Text="›"
+                WidthRequest="44"
+                Padding="0"
+                SemanticProperties.Description="{l:Text Schedule.Next}"
+                Command="{Binding NextCommand}" />
+            <Button
+                Grid.Column="3"
+                Style="{StaticResource SecondaryButton}"
+                Text="{l:Text Schedule.Today}"
+                Padding="14,0"
+                Command="{Binding TodayCommand}" />
+        </Grid>
+
+        <Grid Grid.Row="1" ColumnDefinitions="*,*" ColumnSpacing="8">
+            <Button Style="{StaticResource SecondaryButton}" Text="{l:Text Schedule.Day}" Command="{Binding ShowDayCommand}">
+                <Button.Triggers>
+                    <DataTrigger TargetType="Button" Binding="{Binding IsDayView}" Value="True">
+                        <Setter Property="BackgroundColor" Value="{StaticResource Accent}" />
+                        <Setter Property="TextColor" Value="{StaticResource OnAccent}" />
+                    </DataTrigger>
+                </Button.Triggers>
+            </Button>
+            <Button
+                Grid.Column="1"
+                Style="{StaticResource SecondaryButton}"
+                Text="{l:Text Schedule.Week}"
+                Command="{Binding ShowWeekCommand}">
+                <Button.Triggers>
+                    <DataTrigger TargetType="Button" Binding="{Binding IsWeekView}" Value="True">
+                        <Setter Property="BackgroundColor" Value="{StaticResource Accent}" />
+                        <Setter Property="TextColor" Value="{StaticResource OnAccent}" />
+                    </DataTrigger>
+                </Button.Triggers>
+            </Button>
+        </Grid>
+
+        <CollectionView Grid.Row="2" ItemsSource="{Binding Days}" SelectionMode="None" HeightRequest="72">
+            <CollectionView.ItemsLayout>
+                <GridItemsLayout Orientation="Vertical" Span="7" />
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="pages:DayChip">
+                    <Border
+                        Margin="2"
+                        Padding="0,8"
+                        BackgroundColor="Transparent"
+                        Stroke="Transparent"
+                        StrokeThickness="1"
+                        StrokeShape="RoundRectangle 12">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding SelectCommand}" />
+                        </Border.GestureRecognizers>
+                        <Border.Triggers>
+                            <DataTrigger TargetType="Border" Binding="{Binding IsToday}" Value="True">
+                                <Setter Property="Stroke" Value="{StaticResource Accent}" />
+                            </DataTrigger>
+                            <DataTrigger TargetType="Border" Binding="{Binding IsSelected}" Value="True">
+                                <Setter Property="BackgroundColor" Value="{StaticResource Accent}" />
+                            </DataTrigger>
+                        </Border.Triggers>
+                        <VerticalStackLayout Spacing="2" HorizontalOptions="Center">
+                            <Label Style="{StaticResource Caption}" Text="{Binding Name}" HorizontalOptions="Center">
+                                <Label.Triggers>
+                                    <DataTrigger TargetType="Label" Binding="{Binding IsSelected}" Value="True">
+                                        <Setter Property="TextColor" Value="{StaticResource OnAccent}" />
+                                    </DataTrigger>
+                                </Label.Triggers>
+                            </Label>
+                            <Label Style="{StaticResource Title}" Text="{Binding Number}" HorizontalOptions="Center">
+                                <Label.Triggers>
+                                    <DataTrigger TargetType="Label" Binding="{Binding IsSelected}" Value="True">
+                                        <Setter Property="TextColor" Value="{StaticResource OnAccent}" />
+                                    </DataTrigger>
+                                </Label.Triggers>
+                            </Label>
+                            <Ellipse
+                                WidthRequest="5"
+                                HeightRequest="5"
+                                Fill="{StaticResource Accent}"
+                                HorizontalOptions="Center"
+                                IsVisible="{Binding HasLessons}" />
+                        </VerticalStackLayout>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <Label Grid.Row="3" Style="{StaticResource Caption}" Text="{Binding Notice}" IsVisible="{Binding HasNotice}" />
+
+        <Grid Grid.Row="4">
+            <Grid.GestureRecognizers>
+                <SwipeGestureRecognizer Direction="Left" Command="{Binding NextCommand}" />
+                <SwipeGestureRecognizer Direction="Right" Command="{Binding PreviousCommand}" />
+            </Grid.GestureRecognizers>
+            <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}">
+                <ScrollView>
+                    <controls:ScheduleGrid
+                        Margin="0,8,0,24"
+                        Entries="{Binding Entries}"
+                        FirstDay="{Binding GridFirstDay}"
+                        DayCount="{Binding GridDayCount}"
+                        EntryCommand="{Binding OpenEntryCommand}" />
+                </ScrollView>
+            </RefreshView>
+            <Label
+                Style="{StaticResource Secondary}"
+                Text="{l:Text Schedule.Empty}"
+                IsVisible="{Binding IsEmpty}"
+                InputTransparent="True"
+                HorizontalOptions="Center"
+                VerticalOptions="Start"
+                Margin="0,48,0,0" />
+        </Grid>
+    </Grid>
+
+</ContentPage>

@@ -250,6 +250,9 @@
   <data name="Lesson.Attended" xml:space="preserve">
     <value>Attended</value>
   </data>
+  <data name="Lesson.Book" xml:space="preserve">
+    <value>Book</value>
+  </data>
   <data name="Lesson.Cancel" xml:space="preserve">
     <value>Cancel booking</value>
   </data>
@@ -264,6 +267,9 @@
   </data>
   <data name="Lesson.Cancelled" xml:space="preserve">
     <value>Cancelled</value>
+  </data>
+  <data name="Lesson.ChooseContract" xml:space="preserve">
+    <value>Which contract is the lesson for?</value>
   </data>
   <data name="Lesson.Complete" xml:space="preserve">
     <value>Complete</value>
@@ -290,6 +296,9 @@
     <value>Driving</value>
   </data>
   <data name="Lesson.Free" xml:space="preserve">
+    <value>Free slot</value>
+  </data>
+  <data name="Lesson.FreeSlot" xml:space="preserve">
     <value>Free slot</value>
   </data>
   <data name="Lesson.InvalidHours" xml:space="preserve">
@@ -411,6 +420,36 @@
   </data>
   <data name="Role.TheoryInstructor" xml:space="preserve">
     <value>Theory instructor</value>
+  </data>
+  <data name="Schedule.Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="Schedule.Day" xml:space="preserve">
+    <value>Day</value>
+  </data>
+  <data name="Schedule.Empty" xml:space="preserve">
+    <value>No lessons</value>
+  </data>
+  <data name="Schedule.Next" xml:space="preserve">
+    <value>Next</value>
+  </data>
+  <data name="Schedule.Offline" xml:space="preserve">
+    <value>The schedule as of {0}; it may be out of date.</value>
+  </data>
+  <data name="Schedule.Previous" xml:space="preserve">
+    <value>Previous</value>
+  </data>
+  <data name="Schedule.Title" xml:space="preserve">
+    <value>Schedule</value>
+  </data>
+  <data name="Schedule.Today" xml:space="preserve">
+    <value>Today</value>
+  </data>
+  <data name="Schedule.Unavailable" xml:space="preserve">
+    <value>The schedule could not be read. Check the connection and pull down to try again.</value>
+  </data>
+  <data name="Schedule.Week" xml:space="preserve">
+    <value>Week</value>
   </data>
   <data name="School.Hint" xml:space="preserve">
     <value>Enter the address of your school's AutoElite. The school gives it to you together with your account.</value>
@@ -534,6 +573,9 @@
   </data>
   <data name="Tab.Profile" xml:space="preserve">
     <value>Profile</value>
+  </data>
+  <data name="Tab.Schedule" xml:space="preserve">
+    <value>Schedule</value>
   </data>
   <data name="Tab.Study" xml:space="preserve">
     <value>Studies</value>

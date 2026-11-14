@@ -1,10 +1,13 @@
 namespace AutoElite.Mobile.Pages;
 
-/// <summary>A lesson in the schedule on the home page, ready to show.</summary>
+/// <summary>A lesson on the home page or in the schedule, ready to show.</summary>
 public sealed class ScheduleEntry
 {
     /// <summary>Gets the kind of the lesson: driving or theory.</summary>
     public required string Kind { get; init; }
+
+    /// <summary>Gets the kind of the lesson for its colour in the schedule.</summary>
+    public ScheduleCategory Category { get; init; }
 
     /// <summary>Gets what the lesson is: the vehicle of a driving lesson, the topic of a theory lesson.</summary>
     public required string Title { get; init; }
@@ -24,6 +27,9 @@ public sealed class ScheduleEntry
     /// <summary>Gets what the user can do with the lesson, such as cancel its booking or complete it.</summary>
     public IReadOnlyList<EntryAction> Actions { get; init; } = [];
 
-    /// <summary>Gets the start of the lesson, by which the schedule is ordered.</summary>
+    /// <summary>Gets the start of the lesson, by which the schedule is ordered and placed.</summary>
     internal DateTimeOffset Start { get; init; }
+
+    /// <summary>Gets the end of the lesson, which gives its height in the schedule.</summary>
+    internal DateTimeOffset End { get; init; }
 }

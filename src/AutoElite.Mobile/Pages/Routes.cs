@@ -18,6 +18,9 @@ internal static class Routes
     /// <summary>The home page of the signed-in user, the first tab.</summary>
     public const string Home = Main + "/home";
 
+    /// <summary>The schedule of the signed-in user, a tab.</summary>
+    public const string Schedule = Main + "/schedule";
+
     /// <summary>Booking a driving lesson, opened over the home page.</summary>
     public const string Booking = "booking";
 

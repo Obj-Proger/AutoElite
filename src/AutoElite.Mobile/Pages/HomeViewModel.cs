@@ -24,6 +24,7 @@ public sealed partial class HomeViewModel : ViewModel
     private readonly OfflineQueue _queue;
     private readonly OfflineSynchronizer _synchronizer;
     private readonly TimeProvider _timeProvider;
+    private readonly LessonEntries _entries;
 
     /// <summary>Initializes a new instance of the <see cref="HomeViewModel"/> class.</summary>
     /// <param name="session">The user of the application.</param>
@@ -34,6 +35,7 @@ public sealed partial class HomeViewModel : ViewModel
     /// <param name="queue">The actions that wait to be sent.</param>
     /// <param name="synchronizer">Sends the actions.</param>
     /// <param name="timeProvider">The clock.</param>
+    /// <param name="entries">Makes the cards of the lessons, with what the user can do with them.</param>
     public HomeViewModel(
         UserSession session,
         StudentSchedule schedule,
@@ -42,7 +44,8 @@ public sealed partial class HomeViewModel : ViewModel
         RealtimeConnection realtime,
         OfflineQueue queue,
         OfflineSynchronizer synchronizer,
-        TimeProvider timeProvider)
+        TimeProvider timeProvider,
+        LessonEntries entries)
     {
         _session = session;
         _schedule = schedule;
@@ -53,6 +56,8 @@ public sealed partial class HomeViewModel : ViewModel
         _queue = queue;
         _synchronizer = synchronizer;
         _timeProvider = timeProvider;
+        _entries = entries;
+        _entries.Changed = LoadAsync;
         RefreshCommand = new Command(async () => await RefreshAsync());
         DismissRefusalsCommand = new Command(async () => await DismissRefusalsAsync());
         BookCommand = new Command(async () => await Routes.OpenAsync(Routes.Booking));
@@ -207,7 +212,7 @@ public sealed partial class HomeViewModel : ViewModel
 
         var actions = await _queue.ListAsync(CancellationToken.None);
         var waiting = actions.Where(action => !action.IsRejected)
-            .Select(action => SubjectOf(action.Action))
+            .Select(action => LessonEntries.SubjectOf(action.Action))
             .OfType<Guid>()
             .ToHashSet();
         var lessons = new List<ScheduleEntry>();
