@@ -4,6 +4,7 @@ using AutoElite.Client.Authentication;
 using AutoElite.Client.Offline;
 using AutoElite.Client.Realtime;
 using AutoElite.Mobile.Authentication;
+using AutoElite.Mobile.Controls;
 using AutoElite.Mobile.Localization;
 using AutoElite.Mobile.Offline;
 using AutoElite.Mobile.Pages;
@@ -25,6 +26,7 @@ public static class MauiProgram
     public static MauiApp CreateMauiApp()
     {
         AppLanguage.Apply();
+        NativeFields.RemoveFrames();
         var builder = MauiApp.CreateBuilder();
         builder.UseMauiApp<App>().ConfigureFonts(fonts =>
         {

@@ -26,11 +26,12 @@
                         <Border Style="{StaticResource Card}">
                             <Grid ColumnDefinitions="*,88" ColumnSpacing="12">
                                 <Label Style="{StaticResource BodyLarge}" Text="{Binding Name}" VerticalOptions="Center" />
-                                <Picker
-                                    Grid.Column="1"
-                                    ItemsSource="{x:Static pages:SkillGradeEntry.Choices}"
-                                    SelectedIndex="{Binding Grade}"
-                                    HorizontalTextAlignment="Center" />
+                                <Border Grid.Column="1" Style="{StaticResource Field}" Padding="10,0">
+                                    <Picker
+                                        ItemsSource="{x:Static pages:SkillGradeEntry.Choices}"
+                                        SelectedIndex="{Binding Grade}"
+                                        HorizontalTextAlignment="Center" />
+                                </Border>
                             </Grid>
                         </Border>
                     </DataTemplate>

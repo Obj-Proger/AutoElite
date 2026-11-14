@@ -7,7 +7,8 @@
 -->
 <ResourceDictionary
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:AutoElite.Mobile.Controls">
 
     <x:Double x:Key="PageMargin">22</x:Double>
     <x:Double x:Key="TouchTarget">48</x:Double>
@@ -138,6 +139,27 @@
         <Setter Property="FontSize" Value="15" />
         <Setter Property="BackgroundColor" Value="Transparent" />
         <Setter Property="MinimumHeightRequest" Value="{StaticResource TouchTarget}" />
+        <Setter Property="controls:FieldFocus.IsEnabled" Value="True" />
+    </Style>
+
+    <Style TargetType="Editor">
+        <Setter Property="TextColor" Value="{StaticResource Text}" />
+        <Setter Property="PlaceholderColor" Value="{StaticResource TextMuted}" />
+        <Setter Property="FontFamily" Value="TextRegular" />
+        <Setter Property="FontSize" Value="15" />
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="MinimumHeightRequest" Value="{StaticResource TouchTarget}" />
+        <Setter Property="controls:FieldFocus.IsEnabled" Value="True" />
+    </Style>
+
+    <Style TargetType="Picker">
+        <Setter Property="TextColor" Value="{StaticResource Text}" />
+        <Setter Property="TitleColor" Value="{StaticResource TextMuted}" />
+        <Setter Property="FontFamily" Value="TextRegular" />
+        <Setter Property="FontSize" Value="15" />
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="MinimumHeightRequest" Value="{StaticResource TouchTarget}" />
+        <Setter Property="controls:FieldFocus.IsEnabled" Value="True" />
     </Style>
 
     <Style x:Key="Field" TargetType="Border">
