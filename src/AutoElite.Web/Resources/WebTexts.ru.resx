@@ -22,11 +22,41 @@
   <data name="Account.Roles" xml:space="preserve">
     <value>Роли</value>
   </data>
+  <data name="EmailChange.Done" xml:space="preserve">
+    <value>Адрес изменён. Войдите по новому адресу.</value>
+  </data>
+  <data name="EmailChange.Lead" xml:space="preserve">
+    <value>Подтвердите, что это ваш новый адрес; теперь вы будете входить по нему.</value>
+  </data>
+  <data name="EmailChange.Submit" xml:space="preserve">
+    <value>Подтвердить адрес</value>
+  </data>
+  <data name="EmailChange.Title" xml:space="preserve">
+    <value>Новый адрес почты</value>
+  </data>
   <data name="Forbidden.Text" xml:space="preserve">
     <value>Эта страница недоступна вашей учётной записи.</value>
   </data>
   <data name="Forbidden.Title" xml:space="preserve">
     <value>Нет доступа</value>
+  </data>
+  <data name="Forgot.Back" xml:space="preserve">
+    <value>← Вход</value>
+  </data>
+  <data name="Forgot.Lead" xml:space="preserve">
+    <value>Укажите адрес почты вашей учётной записи, и мы пришлём ссылку для создания нового пароля.</value>
+  </data>
+  <data name="Forgot.Missing" xml:space="preserve">
+    <value>Укажите адрес почты.</value>
+  </data>
+  <data name="Forgot.Sent" xml:space="preserve">
+    <value>Если адрес принадлежит учётной записи, ссылка для нового пароля уже в пути. Проверьте почту, в том числе папку «Спам».</value>
+  </data>
+  <data name="Forgot.Submit" xml:space="preserve">
+    <value>Прислать ссылку</value>
+  </data>
+  <data name="Forgot.Title" xml:space="preserve">
+    <value>Сброс пароля</value>
   </data>
   <data name="Home.Account" xml:space="preserve">
     <value>Моя учётная запись</value>
@@ -45,6 +75,18 @@
   </data>
   <data name="Home.SignedIn" xml:space="preserve">
     <value>Вы вошли как</value>
+  </data>
+  <data name="Invitation.Done" xml:space="preserve">
+    <value>Пароль сохранён. Войдите по адресу почты и новому паролю.</value>
+  </data>
+  <data name="Invitation.Lead" xml:space="preserve">
+    <value>Придумайте пароль для входа на сайт и в приложение.</value>
+  </data>
+  <data name="Invitation.Submit" xml:space="preserve">
+    <value>Сохранить пароль</value>
+  </data>
+  <data name="Invitation.Title" xml:space="preserve">
+    <value>Добро пожаловать в автошколу</value>
   </data>
   <data name="Invite.Back" xml:space="preserve">
     <value>← Пользователи</value>
@@ -97,6 +139,9 @@
   <data name="Layout.Tagline" xml:space="preserve">
     <value>Автошкола</value>
   </data>
+  <data name="Links.Broken" xml:space="preserve">
+    <value>Ссылка неполная. Откройте её из письма ещё раз или попросите автошколу прислать новую.</value>
+  </data>
   <data name="Menu.Account" xml:space="preserve">
     <value>Учётная запись</value>
   </data>
@@ -117,6 +162,21 @@
   </data>
   <data name="NotFound.Title" xml:space="preserve">
     <value>Страница не найдена</value>
+  </data>
+  <data name="Password.Mismatch" xml:space="preserve">
+    <value>Пароли не совпадают.</value>
+  </data>
+  <data name="Password.Missing" xml:space="preserve">
+    <value>Введите пароль.</value>
+  </data>
+  <data name="Password.New" xml:space="preserve">
+    <value>Новый пароль</value>
+  </data>
+  <data name="Password.Repeat" xml:space="preserve">
+    <value>Пароль ещё раз</value>
+  </data>
+  <data name="Password.Rules" xml:space="preserve">
+    <value>От 8 до 128 символов, хотя бы одна буква и одна цифра.</value>
   </data>
   <data name="Person.Branch" xml:space="preserve">
     <value>Филиал</value>
@@ -142,6 +202,18 @@
   <data name="Problems.Unreachable" xml:space="preserve">
     <value>Сервер недоступен. Проверьте подключение и попробуйте ещё раз.</value>
   </data>
+  <data name="Reset.Done" xml:space="preserve">
+    <value>Пароль изменён. Войдите с новым паролем.</value>
+  </data>
+  <data name="Reset.Lead" xml:space="preserve">
+    <value>Придумайте новый пароль. На других устройствах вы выйдете из учётной записи.</value>
+  </data>
+  <data name="Reset.Submit" xml:space="preserve">
+    <value>Сохранить пароль</value>
+  </data>
+  <data name="Reset.Title" xml:space="preserve">
+    <value>Новый пароль</value>
+  </data>
   <data name="Role.Administrator" xml:space="preserve">
     <value>Администратор</value>
   </data>
@@ -165,6 +237,9 @@
   </data>
   <data name="SignIn.Failed" xml:space="preserve">
     <value>Не удалось войти. Попробуйте ещё раз.</value>
+  </data>
+  <data name="SignIn.Forgot" xml:space="preserve">
+    <value>Забыли пароль?</value>
   </data>
   <data name="SignIn.Lead" xml:space="preserve">
     <value>По адресу почты и паролю вашей учётной записи в автошколе.</value>

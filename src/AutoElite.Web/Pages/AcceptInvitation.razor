@@ -1,0 +1,72 @@
+@page "/accept-invitation"
+@using AutoElite.Client.Api
+@using AutoElite.Client.Api.Models
+@inject Func<AutoEliteApiClient> CreateApi
+@inject NavigationManager Navigation
+@inject IStringLocalizer<WebTexts> L
+
+@* The page of the emailed invitation: the user sets their first password, which also confirms their email address. *@
+<PageTitle>@L["Invitation.Title"] · AutoElite</PageTitle>
+
+<section class="page narrow">
+    <h1 class="headline">@L["Invitation.Title"]</h1>
+    @if (_isDone)
+    {
+        <p class="body-large">@L["Invitation.Done"]</p>
+        <div><a class="button" href="sign-in">@L["Layout.SignIn"]</a></div>
+    }
+    else if (_userId is not { } userId || _token is not { } token)
+    {
+        <p class="error" role="alert">@L["Links.Broken"]</p>
+    }
+    else
+    {
+        <p class="secondary">@L["Invitation.Lead"]</p>
+        <NewPasswordForm SubmitText="@L["Invitation.Submit"]" IsBusy="_isBusy" Failure="_failure"
+                         OnSubmit="password => AcceptAsync(userId, token, password)" />
+    }
+</section>
+
+@code {
+    private Guid? _userId;
+    private string? _token;
+    private bool _isBusy;
+    private bool _isDone;
+    private Exception? _failure;
+
+    /// <summary>Gets or sets the invited user, from the link.</summary>
+    [SupplyParameterFromQuery(Name = "userId")]
+    public string? UserId { get; set; }
+
+    /// <summary>Gets or sets the token of the invitation, from the link.</summary>
+    [SupplyParameterFromQuery(Name = "token")]
+    public string? Token { get; set; }
+
+    /// <inheritdoc />
+    protected override void OnInitialized()
+    {
+        _userId = Guid.TryParse(UserId, out var userId) ? userId : null;
+        _token = string.IsNullOrEmpty(Token) ? null : Token;
+        EmailLinks.Forget(Navigation);
+    }
+
+    private async Task AcceptAsync(Guid userId, string token, string password)
+    {
+        _isBusy = true;
+        _failure = null;
+        try
+        {
+            await CreateApi().Api.V1.Auth.Invitation.PostAsync(
+                new AcceptInvitationCommand { UserId = userId, Token = token, Password = password });
+            _isDone = true;
+        }
+        catch (Exception exception) when (exception is ApiException or HttpRequestException)
+        {
+            _failure = exception;
+        }
+        finally
+        {
+            _isBusy = false;
+        }
+    }
+}

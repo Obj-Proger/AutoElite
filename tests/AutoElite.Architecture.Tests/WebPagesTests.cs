@@ -6,8 +6,16 @@ namespace AutoElite.Architecture.Tests;
 /// </summary>
 public class WebPagesTests
 {
-    // The pages that anybody may open: the front page and signing in.
-    private static readonly string[] _publicPages = ["Home.razor", "SignIn.razor"];
+    // The pages that anybody may open: the front page, signing in and the pages of the links that the API emails.
+    private static readonly string[] _publicPages =
+    [
+        "Home.razor",
+        "SignIn.razor",
+        "ForgotPassword.razor",
+        "AcceptInvitation.razor",
+        "ResetPassword.razor",
+        "ConfirmEmailChange.razor"
+    ];
 
     [Fact]
     public void EveryPageButThePublicOnes_NeedsSigningIn()

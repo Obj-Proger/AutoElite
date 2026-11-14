@@ -1,0 +1,86 @@
+@page "/confirm-email-change"
+@using AutoElite.Client.Api
+@using AutoElite.Client.Api.Models
+@inject Func<AutoEliteApiClient> CreateApi
+@inject NavigationManager Navigation
+@inject IStringLocalizer<WebTexts> L
+
+@*
+    The page of the link emailed to a new address: the user confirms it with a button, not by opening the link, so that
+    a mail program that opens links to check them does not confirm it.
+*@
+<PageTitle>@L["EmailChange.Title"] · AutoElite</PageTitle>
+
+<section class="page narrow">
+    <h1 class="headline">@L["EmailChange.Title"]</h1>
+    @if (_isDone)
+    {
+        <p class="body-large">@L["EmailChange.Done"]</p>
+        <div><a class="button" href="sign-in">@L["Layout.SignIn"]</a></div>
+    }
+    else if (_userId is not { } userId || _token is not { } token || _email is not { } email)
+    {
+        <p class="error" role="alert">@L["Links.Broken"]</p>
+    }
+    else
+    {
+        <p class="secondary">@L["EmailChange.Lead"]</p>
+        <p class="body-large"><strong>@email</strong></p>
+        <Problems Failure="_failure" />
+        <div>
+            <button class="button" type="button" disabled="@_isBusy" @onclick="() => ConfirmAsync(userId, email, token)">
+                @L["EmailChange.Submit"]
+            </button>
+        </div>
+    }
+</section>
+
+@code {
+    private Guid? _userId;
+    private string? _token;
+    private string? _email;
+    private bool _isBusy;
+    private bool _isDone;
+    private Exception? _failure;
+
+    /// <summary>Gets or sets the user, from the link.</summary>
+    [SupplyParameterFromQuery(Name = "userId")]
+    public string? UserId { get; set; }
+
+    /// <summary>Gets or sets the new email address, from the link.</summary>
+    [SupplyParameterFromQuery(Name = "email")]
+    public string? Email { get; set; }
+
+    /// <summary>Gets or sets the token of the change, from the link.</summary>
+    [SupplyParameterFromQuery(Name = "token")]
+    public string? Token { get; set; }
+
+    /// <inheritdoc />
+    protected override void OnInitialized()
+    {
+        _userId = Guid.TryParse(UserId, out var userId) ? userId : null;
+        _token = string.IsNullOrEmpty(Token) ? null : Token;
+        _email = string.IsNullOrEmpty(Email) ? null : Email;
+        EmailLinks.Forget(Navigation);
+    }
+
+    private async Task ConfirmAsync(Guid userId, string email, string token)
+    {
+        _isBusy = true;
+        _failure = null;
+        try
+        {
+            await CreateApi().Api.V1.Auth.Email.Confirm.PostAsync(
+                new ConfirmEmailChangeCommand { UserId = userId, NewEmail = email, Token = token });
+            _isDone = true;
+        }
+        catch (Exception exception) when (exception is ApiException or HttpRequestException)
+        {
+            _failure = exception;
+        }
+        finally
+        {
+            _isBusy = false;
+        }
+    }
+}

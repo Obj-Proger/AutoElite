@@ -208,6 +208,12 @@ branch, as the API decides, and the errors of the API are shown in the language 
 page and signing in needs signing in, which an architecture test checks; the menu only shows what a role may do, and the
 API checks the roles on every request.
 
+The links that the API emails open pages of the website: an invited user sets their first password
+(`/accept-invitation`), a user who forgot theirs asks for a link (`/forgot-password`) and sets a new one
+(`/reset-password`), and a new email address is confirmed with a button (`/confirm-email-change`), so that a mail
+program that opens links to check them does not confirm it. Each page takes the token out of the address as soon as it
+has read it, so that it stays neither in the history of the browser nor on the screen.
+
 ### First start
 
 When the API starts, it applies the pending migrations, unless `Database:MigrateOnStartup` is `false` where the schema

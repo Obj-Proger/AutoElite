@@ -22,11 +22,41 @@
   <data name="Account.Roles" xml:space="preserve">
     <value>Roles</value>
   </data>
+  <data name="EmailChange.Done" xml:space="preserve">
+    <value>The address is changed. Sign in with the new one.</value>
+  </data>
+  <data name="EmailChange.Lead" xml:space="preserve">
+    <value>Confirm that this is your new address; you will sign in with it from now on.</value>
+  </data>
+  <data name="EmailChange.Submit" xml:space="preserve">
+    <value>Confirm the address</value>
+  </data>
+  <data name="EmailChange.Title" xml:space="preserve">
+    <value>A new email address</value>
+  </data>
   <data name="Forbidden.Text" xml:space="preserve">
     <value>This page is not available to your account.</value>
   </data>
   <data name="Forbidden.Title" xml:space="preserve">
     <value>No access</value>
+  </data>
+  <data name="Forgot.Back" xml:space="preserve">
+    <value>← Sign in</value>
+  </data>
+  <data name="Forgot.Lead" xml:space="preserve">
+    <value>Enter the email address of your account, and we will send a link to set a new password.</value>
+  </data>
+  <data name="Forgot.Missing" xml:space="preserve">
+    <value>Enter the email address.</value>
+  </data>
+  <data name="Forgot.Sent" xml:space="preserve">
+    <value>If the address belongs to an account, a link to set a new password is on its way. Check the mail, the spam folder too.</value>
+  </data>
+  <data name="Forgot.Submit" xml:space="preserve">
+    <value>Send the link</value>
+  </data>
+  <data name="Forgot.Title" xml:space="preserve">
+    <value>Reset the password</value>
   </data>
   <data name="Home.Account" xml:space="preserve">
     <value>My account</value>
@@ -45,6 +75,18 @@
   </data>
   <data name="Home.SignedIn" xml:space="preserve">
     <value>Signed in as</value>
+  </data>
+  <data name="Invitation.Done" xml:space="preserve">
+    <value>The password is set. Sign in with your email address and the new password.</value>
+  </data>
+  <data name="Invitation.Lead" xml:space="preserve">
+    <value>Set the password you will sign in with, on the website and in the app.</value>
+  </data>
+  <data name="Invitation.Submit" xml:space="preserve">
+    <value>Set the password</value>
+  </data>
+  <data name="Invitation.Title" xml:space="preserve">
+    <value>Welcome to the school</value>
   </data>
   <data name="Invite.Back" xml:space="preserve">
     <value>← Users</value>
@@ -97,6 +139,9 @@
   <data name="Layout.Tagline" xml:space="preserve">
     <value>Driving school</value>
   </data>
+  <data name="Links.Broken" xml:space="preserve">
+    <value>The link is incomplete. Open it from the email again, or ask the school for a new one.</value>
+  </data>
   <data name="Menu.Account" xml:space="preserve">
     <value>Account</value>
   </data>
@@ -117,6 +162,21 @@
   </data>
   <data name="NotFound.Title" xml:space="preserve">
     <value>Page not found</value>
+  </data>
+  <data name="Password.Mismatch" xml:space="preserve">
+    <value>The passwords do not match.</value>
+  </data>
+  <data name="Password.Missing" xml:space="preserve">
+    <value>Enter the password.</value>
+  </data>
+  <data name="Password.New" xml:space="preserve">
+    <value>New password</value>
+  </data>
+  <data name="Password.Repeat" xml:space="preserve">
+    <value>The password again</value>
+  </data>
+  <data name="Password.Rules" xml:space="preserve">
+    <value>From 8 to 128 characters, with at least one letter and one digit.</value>
   </data>
   <data name="Person.Branch" xml:space="preserve">
     <value>Branch</value>
@@ -142,6 +202,18 @@
   <data name="Problems.Unreachable" xml:space="preserve">
     <value>The server cannot be reached. Check the connection and try again.</value>
   </data>
+  <data name="Reset.Done" xml:space="preserve">
+    <value>The password is changed. Sign in with the new one.</value>
+  </data>
+  <data name="Reset.Lead" xml:space="preserve">
+    <value>Set a new password. You will be signed out on your other devices.</value>
+  </data>
+  <data name="Reset.Submit" xml:space="preserve">
+    <value>Save the password</value>
+  </data>
+  <data name="Reset.Title" xml:space="preserve">
+    <value>A new password</value>
+  </data>
   <data name="Role.Administrator" xml:space="preserve">
     <value>Administrator</value>
   </data>
@@ -165,6 +237,9 @@
   </data>
   <data name="SignIn.Failed" xml:space="preserve">
     <value>Could not sign in. Try again.</value>
+  </data>
+  <data name="SignIn.Forgot" xml:space="preserve">
+    <value>Forgot the password?</value>
   </data>
   <data name="SignIn.Lead" xml:space="preserve">
     <value>With the email address and the password of your account at the school.</value>
