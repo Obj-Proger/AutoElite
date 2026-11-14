@@ -56,12 +56,15 @@ internal sealed class ChatMemberConfiguration : IEntityTypeConfiguration<ChatMem
 /// <summary>
 /// Maps <see cref="ChatMessage"/>, an aggregate of its own. The text is stored encrypted, so it has no length limit
 /// of its own: the domain limits the plain text. The attachments are an array of document identifiers with a GIN
-/// index, so that finding the messages a document is attached to does not read the whole table.
+/// index, so that finding the messages a document is attached to does not read the whole table. It needs the cipher, so
+/// it is not an <see cref="IEntityTypeConfiguration{TEntity}"/>, which the scan of the assembly would try to create
+/// without one; the context applies it itself.
 /// </summary>
 /// <param name="cipher">The cipher of the text.</param>
-internal sealed class ChatMessageConfiguration(ChatTextCipher cipher) : IEntityTypeConfiguration<ChatMessage>
+internal sealed class ChatMessageConfiguration(ChatTextCipher cipher)
 {
-    /// <inheritdoc />
+    /// <summary>Configures the entity.</summary>
+    /// <param name="builder">The builder of the entity.</param>
     public void Configure(EntityTypeBuilder<ChatMessage> builder)
     {
         builder.ConfigureAggregateRoot("chat_messages");

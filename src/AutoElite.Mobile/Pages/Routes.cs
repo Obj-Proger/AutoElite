@@ -45,10 +45,34 @@ internal static class Routes
     /// <summary>The settings, opened over the home page.</summary>
     public const string Settings = "settings";
 
-    /// <summary>Shows a page in place of the current one, with no way back.</summary>
+    // How often and how long a navigation waits for one that the shell is still finishing.
+    private const int NavigationAttempts = 20;
+    private static readonly TimeSpan _navigationRetryDelay = TimeSpan.FromMilliseconds(50);
+
+    /// <summary>
+    /// Shows a page in place of the current one, with no way back. When the shell is still finishing another
+    /// navigation, such as its first one, it refuses a new one ("Pending Navigations still processing"); the
+    /// navigation then waits a moment and tries again.
+    /// </summary>
     /// <param name="route">The route of the page.</param>
     /// <returns>A task that completes when the page is shown.</returns>
-    public static Task GoToAsync(string route) => Shell.Current.GoToAsync("//" + route);
+    public static async Task GoToAsync(string route)
+    {
+        for (var attempt = 1; ; attempt++)
+        {
+            try
+            {
+                await Shell.Current.GoToAsync("//" + route);
+
+                return;
+            }
+            catch (Exception exception) when (attempt < NavigationAttempts
+                && exception.Message.Contains("Pending Navigations", StringComparison.Ordinal))
+            {
+                await Task.Delay(_navigationRetryDelay);
+            }
+        }
+    }
 
     /// <summary>Opens a page over the current one, which the back button returns to.</summary>
     /// <param name="route">The route of the page.</param>

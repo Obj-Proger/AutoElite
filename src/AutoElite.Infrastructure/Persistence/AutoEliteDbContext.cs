@@ -77,10 +77,8 @@ public sealed class AutoEliteDbContext(DbContextOptions<AutoEliteDbContext> opti
         // GiST index.
         builder.HasPostgresExtension("btree_gist");
         builder.HasCollation(CaseInsensitiveCollation, locale: "und-u-ks-level2", provider: "icu", deterministic: false);
-        // Found configurations need a parameterless constructor; the one of chat messages needs the cipher, so it is
-        // left out of the scan rather than reported by it at every start.
-        builder.ApplyConfigurationsFromAssembly(
-            typeof(AutoEliteDbContext).Assembly, type => type != typeof(ChatMessageConfiguration));
-        builder.ApplyConfiguration(new ChatMessageConfiguration(ChatTextCipher));
+        // The configuration of chat messages needs the cipher, so the scan does not find it; it is applied here.
+        builder.ApplyConfigurationsFromAssembly(typeof(AutoEliteDbContext).Assembly);
+        builder.Entity<ChatMessage>(new ChatMessageConfiguration(ChatTextCipher).Configure);
     }
 }

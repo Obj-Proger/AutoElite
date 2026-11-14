@@ -9,6 +9,7 @@ namespace AutoElite.Mobile.Pages;
 public partial class StartPage : ContentPage
 {
     private readonly UserSession _session;
+    private bool _hasChosen;
 
     /// <summary>Initializes a new instance of the <see cref="StartPage"/> class.</summary>
     /// <param name="session">The user of the application.</param>
@@ -19,9 +20,20 @@ public partial class StartPage : ContentPage
     }
 
     /// <inheritdoc />
-    protected override async void OnAppearing()
+    protected override void OnNavigatedTo(NavigatedToEventArgs args)
     {
-        base.OnAppearing();
+        base.OnNavigatedTo(args);
+        if (_hasChosen)
+            return;
+
+        // The shell refuses a navigation while its first one, to this page, is still finishing ("Pending Navigations
+        // still processing", seen on Windows), so the next page is chosen after it, from the queue of the dispatcher.
+        _hasChosen = true;
+        Dispatcher.Dispatch(async () => await ChooseAsync());
+    }
+
+    private async Task ChooseAsync()
+    {
         if (ApiAddress.Saved is null)
             await Routes.GoToAsync(Routes.School);
         else

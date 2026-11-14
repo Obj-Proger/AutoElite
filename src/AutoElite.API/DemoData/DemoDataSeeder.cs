@@ -55,6 +55,7 @@ internal sealed partial class DemoDataSeeder(
             if (await HasDemoDataAsync(cancellationToken))
                 return;
 
+            LogCreating(logger);
             await CreateAsync(password, cancellationToken);
             LogCreated(logger, EmailDomain);
         }
@@ -266,6 +267,11 @@ internal sealed partial class DemoDataSeeder(
 
     [LoggerMessage(Level = LogLevel.Warning, Message = "DemoData:Password is not set, so no demo data was created")]
     private static partial void LogNoPassword(ILogger logger);
+
+    [LoggerMessage(
+        Level = LogLevel.Information,
+        Message = "Creating the demo data, which takes a while; the API answers once it is created")]
+    private static partial void LogCreating(ILogger logger);
 
     [LoggerMessage(Level = LogLevel.Information, Message = "Created the demo data; its users sign in at @{EmailDomain}")]
     private static partial void LogCreated(ILogger logger, string emailDomain);
