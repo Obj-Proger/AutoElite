@@ -62,7 +62,7 @@
     client's HTTP clients come from the HTTP client factory of .NET.
   -->
   <ItemGroup Label="API client">
-    <PackageVersion Include="Microsoft.Extensions.Http" Version="10.0.14" />
+    <PackageVersion Include="Microsoft.Extensions.Http" Version="11.0.0" />
     <PackageVersion Include="Microsoft.Kiota.Bundle" Version="2.1.2" />
   </ItemGroup>
   <!--
