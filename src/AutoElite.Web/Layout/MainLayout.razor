@@ -4,7 +4,7 @@
 @inject NavigationManager Navigation
 @inject IStringLocalizer<WebTexts> L
 
-@* The frame of every page: the bar with the brand and the account, then the page. *@
+@* The frame of every page: the bar with the brand and the account, the menu of a signed-in user, then the page. *@
 <div class="shell">
     <header class="topbar">
         <a class="brand" href="">AutoElite</a>
@@ -27,9 +27,14 @@
     {
         <p class="banner error" role="alert">@L["Layout.SignOutFailed"]</p>
     }
-    <main>
-        @Body
-    </main>
+    <div class="workspace">
+        <AuthorizeView>
+            <NavMenu />
+        </AuthorizeView>
+        <main class="content">
+            @Body
+        </main>
+    </div>
 </div>
 
 @code {

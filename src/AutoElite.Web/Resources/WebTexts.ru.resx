@@ -61,6 +61,18 @@
   <data name="Layout.Tagline" xml:space="preserve">
     <value>Автошкола</value>
   </data>
+  <data name="Menu.Account" xml:space="preserve">
+    <value>Учётная запись</value>
+  </data>
+  <data name="Menu.Label" xml:space="preserve">
+    <value>Разделы</value>
+  </data>
+  <data name="Menu.Overview" xml:space="preserve">
+    <value>Обзор</value>
+  </data>
+  <data name="Menu.Users" xml:space="preserve">
+    <value>Пользователи</value>
+  </data>
   <data name="NotFound.Home" xml:space="preserve">
     <value>На главную</value>
   </data>
@@ -117,5 +129,68 @@
   </data>
   <data name="SignIn.WrongCredentials" xml:space="preserve">
     <value>Неверный адрес почты или пароль.</value>
+  </data>
+  <data name="Users.Active" xml:space="preserve">
+    <value>Активен</value>
+  </data>
+  <data name="Users.AnyRole" xml:space="preserve">
+    <value>Любая роль</value>
+  </data>
+  <data name="Users.AnyStatus" xml:space="preserve">
+    <value>Любой статус</value>
+  </data>
+  <data name="Users.Branch" xml:space="preserve">
+    <value>Филиал</value>
+  </data>
+  <data name="Users.Deactivated" xml:space="preserve">
+    <value>Отключён</value>
+  </data>
+  <data name="Users.Email" xml:space="preserve">
+    <value>Почта</value>
+  </data>
+  <data name="Users.Empty" xml:space="preserve">
+    <value>Никого не нашлось.</value>
+  </data>
+  <data name="Users.Failed" xml:space="preserve">
+    <value>Не удалось загрузить пользователей. Попробуйте ещё раз.</value>
+  </data>
+  <data name="Users.Find" xml:space="preserve">
+    <value>Найти</value>
+  </data>
+  <data name="Users.Invited" xml:space="preserve">
+    <value>Приглашён</value>
+  </data>
+  <data name="Users.Lead" xml:space="preserve">
+    <value>Сотрудники и ученики автошколы. Менеджер видит пользователей своего филиала.</value>
+  </data>
+  <data name="Users.Name" xml:space="preserve">
+    <value>Имя</value>
+  </data>
+  <data name="Users.Next" xml:space="preserve">
+    <value>Вперёд</value>
+  </data>
+  <data name="Users.PageOf" xml:space="preserve">
+    <value>Страница {0} из {1}</value>
+  </data>
+  <data name="Users.Phone" xml:space="preserve">
+    <value>Телефон</value>
+  </data>
+  <data name="Users.Previous" xml:space="preserve">
+    <value>Назад</value>
+  </data>
+  <data name="Users.Role" xml:space="preserve">
+    <value>Роль</value>
+  </data>
+  <data name="Users.Roles" xml:space="preserve">
+    <value>Роли</value>
+  </data>
+  <data name="Users.Search" xml:space="preserve">
+    <value>Имя, почта или телефон</value>
+  </data>
+  <data name="Users.Status" xml:space="preserve">
+    <value>Статус</value>
+  </data>
+  <data name="Users.Title" xml:space="preserve">
+    <value>Пользователи</value>
   </data>
 </root>

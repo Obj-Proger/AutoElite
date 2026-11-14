@@ -14,19 +14,7 @@
             <span class="caption">@L["Account.Email"]</span>
             <span>@context.User.FindFirst(ClaimTypes.Email)?.Value</span>
             <span class="caption">@L["Account.Roles"]</span>
-            <span>@string.Join(", ", context.User.FindAll(ClaimTypes.Role).Select(role => RoleName(role.Value)))</span>
+            <span>@string.Join(", ", context.User.FindAll(ClaimTypes.Role).Select(role => L.RoleName(role.Value)))</span>
         </div>
     </section>
 </AuthorizeView>
-
-@code {
-    private string RoleName(string role) => role switch
-    {
-        "Administrator" => L["Role.Administrator"],
-        "Manager" => L["Role.Manager"],
-        "DrivingInstructor" => L["Role.DrivingInstructor"],
-        "TheoryInstructor" => L["Role.TheoryInstructor"],
-        "Student" => L["Role.Student"],
-        _ => role
-    };
-}

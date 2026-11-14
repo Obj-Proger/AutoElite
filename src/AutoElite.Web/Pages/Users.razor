@@ -1,0 +1,175 @@
+@page "/users"
+@attribute [Authorize(Roles = WebRoles.Staff)]
+@using System.Globalization
+@using AutoElite.Client.Api
+@using AutoElite.Client.Api.Models
+@using Microsoft.Kiota.Abstractions
+@inject Func<AutoEliteApiClient> CreateApi
+@inject IStringLocalizer<WebTexts> L
+
+@*
+    The users of the school for administrators and managers, a page at a time, found by their name, email address or
+    phone, their role and whether they are active; a manager sees the users of their branch, as the API decides.
+*@
+<PageTitle>@L["Users.Title"] · AutoElite</PageTitle>
+
+<section class="page">
+    <div class="page-header">
+        <h1 class="headline">@L["Users.Title"]</h1>
+        <p class="secondary">@L["Users.Lead"]</p>
+    </div>
+
+    <form class="filters" @onsubmit="FindAsync">
+        <input class="field grow" type="search" placeholder="@L["Users.Search"]" aria-label="@L["Users.Search"]"
+               @bind="_search" />
+        <select class="field" aria-label="@L["Users.Role"]" @bind="_role">
+            <option value="">@L["Users.AnyRole"]</option>
+            @foreach (var role in _roles)
+            {
+                <option value="@role">@L.RoleName(role)</option>
+            }
+        </select>
+        <select class="field" aria-label="@L["Users.Status"]" @bind="_status">
+            <option value="">@L["Users.AnyStatus"]</option>
+            <option value="@ActiveStatus">@L["Users.Active"]</option>
+            <option value="@DeactivatedStatus">@L["Users.Deactivated"]</option>
+        </select>
+        <button class="button" type="submit" disabled="@_isLoading">@L["Users.Find"]</button>
+    </form>
+
+    @if (_hasFailed)
+    {
+        <p class="error" role="alert">@L["Users.Failed"]</p>
+    }
+    else if (_users is null)
+    {
+        <p class="secondary">@L["Layout.Loading"]</p>
+    }
+    else if (_users.Items is not { Count: > 0 } items)
+    {
+        <p class="secondary">@L["Users.Empty"]</p>
+    }
+    else
+    {
+        <div class="table-wrap">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>@L["Users.Name"]</th>
+                        <th>@L["Users.Email"]</th>
+                        <th>@L["Users.Phone"]</th>
+                        <th>@L["Users.Roles"]</th>
+                        <th>@L["Users.Branch"]</th>
+                        <th>@L["Users.Status"]</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in items)
+                    {
+                        <tr>
+                            <td>@FullName(user)</td>
+                            <td>@user.Email</td>
+                            <td>@user.Phone</td>
+                            <td>@RoleNames(user)</td>
+                            <td>@user.BranchName</td>
+                            <td>
+                                @if (user.IsActive != true)
+                                {
+                                    <span class="badge muted">@L["Users.Deactivated"]</span>
+                                }
+                                else if (user.HasAcceptedInvitation != true)
+                                {
+                                    <span class="badge warning">@L["Users.Invited"]</span>
+                                }
+                                else
+                                {
+                                    <span class="badge success">@L["Users.Active"]</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="pager">
+            <button class="button secondary small" type="button" disabled="@(_isLoading || _page <= 1)"
+                    @onclick="() => OpenAsync(_page - 1)">
+                @L["Users.Previous"]
+            </button>
+            <span class="caption">@string.Format(CultureInfo.CurrentCulture, L["Users.PageOf"], _page, PageCount)</span>
+            <button class="button secondary small" type="button" disabled="@(_isLoading || _page >= PageCount)"
+                    @onclick="() => OpenAsync(_page + 1)">
+                @L["Users.Next"]
+            </button>
+        </div>
+    }
+</section>
+
+@code {
+    private const int PageSize = 20;
+    private const string ActiveStatus = "active";
+    private const string DeactivatedStatus = "deactivated";
+
+    private static readonly string[] _roles =
+        [WebRoles.Administrator, WebRoles.Manager, WebRoles.DrivingInstructor, WebRoles.TheoryInstructor, WebRoles.Student];
+
+    private string _search = string.Empty;
+    private string _role = string.Empty;
+    private string _status = string.Empty;
+    private int _page = 1;
+    private PagedListOfUserListItem? _users;
+    private bool _isLoading;
+    private bool _hasFailed;
+
+    // The number of pages, at least one, so that an empty list reads as page 1 of 1.
+    private int PageCount => _users is { TotalCount: int total and > 0 } ? (total + PageSize - 1) / PageSize : 1;
+
+    /// <inheritdoc />
+    protected override Task OnInitializedAsync() => LoadAsync();
+
+    private static string FullName(UserListItem user) =>
+        string.Join(' ', new[] { user.LastName, user.FirstName, user.MiddleName }.Where(part => !string.IsNullOrWhiteSpace(part)));
+
+    private string RoleNames(UserListItem user) =>
+        string.Join(", ", (user.Roles ?? []).OfType<UserRole>().Select(role => L.RoleName(role.ToString())));
+
+    private Task FindAsync() => OpenAsync(1);
+
+    private Task OpenAsync(int page)
+    {
+        _page = page;
+
+        return LoadAsync();
+    }
+
+    private async Task LoadAsync()
+    {
+        _isLoading = true;
+        _hasFailed = false;
+        try
+        {
+            _users = await CreateApi().Api.V1.Users.GetAsync(request =>
+            {
+                request.QueryParameters.Search = string.IsNullOrWhiteSpace(_search) ? null : _search.Trim();
+                request.QueryParameters.Role = Enum.TryParse<UserRole>(_role, out var role) ? role : null;
+                request.QueryParameters.IsActive = _status switch
+                {
+                    ActiveStatus => true,
+                    DeactivatedStatus => false,
+                    _ => null
+                };
+                request.QueryParameters.Page = _page;
+                request.QueryParameters.PageSize = PageSize;
+            });
+        }
+        catch (Exception exception) when (exception is ApiException or HttpRequestException)
+        {
+            _hasFailed = true;
+        }
+        finally
+        {
+            _isLoading = false;
+        }
+    }
+}

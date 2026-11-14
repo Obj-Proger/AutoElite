@@ -1,0 +1,10 @@
+@inject IStringLocalizer<WebTexts> L
+
+@* The sections of the site that the roles of the signed-in user may open. *@
+<nav class="menu" aria-label="@L["Menu.Label"]">
+    <NavLink class="menu-link" href="" Match="NavLinkMatch.All">@L["Menu.Overview"]</NavLink>
+    <AuthorizeView Roles="@WebRoles.Staff">
+        <NavLink class="menu-link" href="users">@L["Menu.Users"]</NavLink>
+    </AuthorizeView>
+    <NavLink class="menu-link" href="account">@L["Menu.Account"]</NavLink>
+</nav>

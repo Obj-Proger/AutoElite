@@ -61,6 +61,18 @@
   <data name="Layout.Tagline" xml:space="preserve">
     <value>Driving school</value>
   </data>
+  <data name="Menu.Account" xml:space="preserve">
+    <value>Account</value>
+  </data>
+  <data name="Menu.Label" xml:space="preserve">
+    <value>Sections</value>
+  </data>
+  <data name="Menu.Overview" xml:space="preserve">
+    <value>Overview</value>
+  </data>
+  <data name="Menu.Users" xml:space="preserve">
+    <value>Users</value>
+  </data>
   <data name="NotFound.Home" xml:space="preserve">
     <value>To the front page</value>
   </data>
@@ -117,5 +129,68 @@
   </data>
   <data name="SignIn.WrongCredentials" xml:space="preserve">
     <value>The email address or the password is wrong.</value>
+  </data>
+  <data name="Users.Active" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="Users.AnyRole" xml:space="preserve">
+    <value>Any role</value>
+  </data>
+  <data name="Users.AnyStatus" xml:space="preserve">
+    <value>Any status</value>
+  </data>
+  <data name="Users.Branch" xml:space="preserve">
+    <value>Branch</value>
+  </data>
+  <data name="Users.Deactivated" xml:space="preserve">
+    <value>Deactivated</value>
+  </data>
+  <data name="Users.Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="Users.Empty" xml:space="preserve">
+    <value>No users match the search.</value>
+  </data>
+  <data name="Users.Failed" xml:space="preserve">
+    <value>Could not load the users. Try again.</value>
+  </data>
+  <data name="Users.Find" xml:space="preserve">
+    <value>Find</value>
+  </data>
+  <data name="Users.Invited" xml:space="preserve">
+    <value>Invited</value>
+  </data>
+  <data name="Users.Lead" xml:space="preserve">
+    <value>The staff and the students of the school. A manager sees the users of their branch.</value>
+  </data>
+  <data name="Users.Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="Users.Next" xml:space="preserve">
+    <value>Next</value>
+  </data>
+  <data name="Users.PageOf" xml:space="preserve">
+    <value>Page {0} of {1}</value>
+  </data>
+  <data name="Users.Phone" xml:space="preserve">
+    <value>Phone</value>
+  </data>
+  <data name="Users.Previous" xml:space="preserve">
+    <value>Previous</value>
+  </data>
+  <data name="Users.Role" xml:space="preserve">
+    <value>Role</value>
+  </data>
+  <data name="Users.Roles" xml:space="preserve">
+    <value>Roles</value>
+  </data>
+  <data name="Users.Search" xml:space="preserve">
+    <value>Name, email or phone</value>
+  </data>
+  <data name="Users.Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="Users.Title" xml:space="preserve">
+    <value>Users</value>
   </data>
 </root>

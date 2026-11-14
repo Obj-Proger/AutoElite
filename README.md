@@ -200,6 +200,11 @@ website; the access token is kept in the memory of the page and renewed with the
 of the browser at a time, since the API accepts a refresh token once. The cookie is SameSite=Strict, so in production
 the site and the API must be on the same site, such as `school.example` and `api.school.example`, both over HTTPS.
 
+A signed-in user sees the menu of the sections their roles may open (`WebRoles`): administrators and managers find the
+users of the school by name, email address or phone, role and status (`/users`), a manager those of their branch. Every
+page but the front page and signing in needs signing in, which an architecture test checks; the menu only shows what a
+role may do, and the API checks the roles on every request.
+
 ### First start
 
 When the API starts, it applies the pending migrations, unless `Database:MigrateOnStartup` is `false` where the schema

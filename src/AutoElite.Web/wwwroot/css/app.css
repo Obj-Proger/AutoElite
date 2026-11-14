@@ -133,6 +133,47 @@ a:hover {
     padding: var(--space-xxl) var(--space-xl);
 }
 
+/* The workspace of a signed-in user: the menu of their sections beside the page. */
+.workspace {
+    display: flex;
+}
+
+.content {
+    flex: 1;
+    min-width: 0;
+}
+
+.menu {
+    display: flex;
+    flex: 0 0 220px;
+    flex-direction: column;
+    gap: var(--space-xs);
+    padding: var(--space-xl) var(--space-lg);
+    border-right: 1px solid var(--color-border);
+}
+
+.menu-link {
+    padding: var(--space-sm) var(--space-md);
+    color: var(--color-text-secondary);
+    border-radius: var(--radius-sm);
+}
+
+.menu-link:hover {
+    color: var(--color-text);
+    background: var(--color-surface);
+}
+
+.menu-link.active {
+    color: var(--color-text);
+    background: var(--color-surface-raised);
+}
+
+.page-header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+}
+
 .page.narrow {
     max-width: 440px;
 }
@@ -228,6 +269,77 @@ a:hover {
     outline: none;
 }
 
+/* Lists: the filters above a table, and the pager below it. */
+.filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-md);
+}
+
+.filters .grow {
+    flex: 1 1 240px;
+}
+
+.table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th {
+    padding: var(--space-md) var(--space-lg);
+    color: var(--color-text-muted);
+    font-size: var(--font-size-label);
+    font-weight: 500;
+    text-align: left;
+    white-space: nowrap;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.table td {
+    padding: var(--space-md) var(--space-lg);
+    vertical-align: top;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.table tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.badge {
+    display: inline-block;
+    padding: 2px var(--space-sm);
+    font-size: var(--font-size-caption);
+    font-weight: 600;
+    white-space: nowrap;
+    background: var(--color-surface-raised);
+    border-radius: var(--radius-pill);
+}
+
+.badge.success {
+    color: var(--color-success);
+}
+
+.badge.warning {
+    color: var(--color-warning);
+}
+
+.badge.muted {
+    color: var(--color-text-muted);
+}
+
+.pager {
+    display: flex;
+    gap: var(--space-md);
+    align-items: center;
+    justify-content: flex-end;
+}
+
 /* The page while the application loads, and the bar of an unexpected error. */
 .loading {
     display: grid;
@@ -251,6 +363,25 @@ a:hover {
     position: absolute;
     right: var(--space-lg);
     cursor: pointer;
+}
+
+@media (max-width: 800px) {
+    .workspace {
+        flex-direction: column;
+    }
+
+    .menu {
+        flex-basis: auto;
+        flex-direction: row;
+        padding: var(--space-sm) var(--space-page);
+        overflow-x: auto;
+        border-right: 0;
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    .menu-link {
+        white-space: nowrap;
+    }
 }
 
 @media (max-width: 600px) {
