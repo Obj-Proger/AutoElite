@@ -4,13 +4,13 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageVersion Include="AwesomeAssertions" Version="9.6.0" />
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="10.0.14" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.11.0" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="10.0.15" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.12.0" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="4.0.1" />
-    <PackageVersion Include="xunit.v3" Version="4.0.2" />
+    <PackageVersion Include="xunit.v3" Version="4.0.3" />
     <PackageVersion Include="FluentValidation" Version="12.2.0" />
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.14" />
-    <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.14" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.15" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.15" />
   </ItemGroup>
   <!-- Libraries that are part of the ASP.NET Core shared framework (configuration, logging, identity core, data
        protection) are not listed: the infrastructure references the framework, and its tests get it through it. -->
@@ -18,12 +18,12 @@
     <!-- EF Core and its relational layer are referenced directly, at one version, so that the provider does not
          bring in an older relational package than the core one. -->
     <PackageVersion Include="EFCore.NamingConventions" Version="10.0.1" />
-    <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.14" />
-    <PackageVersion Include="Microsoft.AspNetCore.DataProtection.EntityFrameworkCore" Version="10.0.14" />
-    <PackageVersion Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.14" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="10.0.14" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.14" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.14" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.15" />
+    <PackageVersion Include="Microsoft.AspNetCore.DataProtection.EntityFrameworkCore" Version="10.0.15" />
+    <PackageVersion Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.15" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="10.0.15" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.15" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.15" />
     <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.3" />
     <PackageVersion Include="Testcontainers.PostgreSql" Version="4.16.0" />
   </ItemGroup>
@@ -43,47 +43,47 @@
   </ItemGroup>
   <!-- The AWS SDK (Apache-2.0) talks to S3-compatible storages of document files (D-069). -->
   <ItemGroup Label="File storage">
-    <PackageVersion Include="AWSSDK.S3" Version="4.0.104.5" />
+    <PackageVersion Include="AWSSDK.S3" Version="4.1.0" />
   </ItemGroup>
   <!--
     The host: the OpenAPI document of the public API, which every build writes, with Scalar (MIT) to read it, and the
     health checks; the client of the API and the tests connect to the SignalR hub with its .NET client.
   -->
   <ItemGroup Label="API">
-    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="10.0.14" />
-    <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="10.0.14" />
-    <PackageVersion Include="Microsoft.AspNetCore.SignalR.Client" Version="10.0.14" />
-    <PackageVersion Include="Microsoft.Extensions.ApiDescription.Server" Version="10.0.14" />
-    <PackageVersion Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="10.0.14" />
-    <PackageVersion Include="Scalar.AspNetCore" Version="2.18.3" />
+    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="10.0.15" />
+    <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="10.0.15" />
+    <PackageVersion Include="Microsoft.AspNetCore.SignalR.Client" Version="10.0.15" />
+    <PackageVersion Include="Microsoft.Extensions.ApiDescription.Server" Version="10.0.15" />
+    <PackageVersion Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="10.0.15" />
+    <PackageVersion Include="Scalar.AspNetCore" Version="2.21.0" />
   </ItemGroup>
   <!--
     Kiota (MIT): the libraries of the client of the API that AutoElite.Client generates from the OpenAPI document; the
     client's HTTP clients come from the HTTP client factory of .NET.
   -->
   <ItemGroup Label="API client">
-    <PackageVersion Include="Microsoft.Extensions.Http" Version="10.0.14" />
-    <PackageVersion Include="Microsoft.Kiota.Bundle" Version="2.1.2" />
+    <PackageVersion Include="Microsoft.Extensions.Http" Version="10.0.15" />
+    <PackageVersion Include="Microsoft.Kiota.Bundle" Version="2.1.6" />
   </ItemGroup>
   <!--
     Blazor WebAssembly (MIT): the website of the school, served as static files, with the localization of its texts.
   -->
   <ItemGroup Label="Website">
-    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.14" />
-    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="10.0.14" />
-    <PackageVersion Include="Microsoft.Extensions.Localization" Version="10.0.14" />
+    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.15" />
+    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="10.0.15" />
+    <PackageVersion Include="Microsoft.Extensions.Localization" Version="10.0.15" />
   </ItemGroup>
   <!--
     Microsoft.Data.Sqlite (MIT), with the SQLite library (public domain) built for each platform, keeps the offline data
     of the applications on a device.
   -->
   <ItemGroup Label="Offline">
-    <PackageVersion Include="Microsoft.Data.Sqlite" Version="10.0.14" />
+    <PackageVersion Include="Microsoft.Data.Sqlite" Version="10.0.15" />
   </ItemGroup>
   <!-- .NET MAUI (MIT): the application of students and instructors for Android and Windows (D-066). -->
   <ItemGroup Label="Mobile">
-    <PackageVersion Include="Microsoft.Extensions.Logging.Debug" Version="10.0.14" />
-    <PackageVersion Include="Microsoft.Maui.Controls" Version="10.0.120" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.Debug" Version="10.0.15" />
+    <PackageVersion Include="Microsoft.Maui.Controls" Version="10.0.130" />
   </ItemGroup>
   <!--
     ClosedXML (MIT) reads the Excel workbooks of question imports (D-070) and writes the Excel reports; SkiaSharp (MIT)
@@ -91,7 +91,7 @@
   -->
   <ItemGroup Label="Import and reports">
     <PackageVersion Include="ClosedXML" Version="0.105.1" />
-    <PackageVersion Include="SkiaSharp" Version="4.154.0" />
-    <PackageVersion Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Version="4.154.0" />
+    <PackageVersion Include="SkiaSharp" Version="4.156.0" />
+    <PackageVersion Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Version="4.156.0" />
   </ItemGroup>
 </Project>
