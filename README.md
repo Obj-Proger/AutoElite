@@ -112,6 +112,10 @@ requests a minute (600 by default, counted per signed-in user or per address) an
 `RateLimiting:SensitivePermitsPerMinute` to signing in, the password reset and the public form (20 by default, per
 address); over a limit the API answers 429 with `Retry-After`.
 
+Every response tells browsers not to guess its type, not to show it in a frame and not to send the API's address in
+the Referer of a link; outside development it also asks them to reach the API only over HTTPS for a year (HSTS, sent
+over HTTPS only), and the answers of `/api/v1/auth`, which carry tokens, are never stored.
+
 The website keeps no refresh token where a script could read it. It signs in with `POST /api/v1/auth/browser/login`,
 which answers the access token only, kept in memory, and sets the refresh token as an HttpOnly, Secure,
 SameSite=Strict cookie sent only to `/api/v1/auth/browser`; `POST .../refresh` renews the session with it, when the

@@ -61,9 +61,11 @@ builder.Services.AddRequestLocalization(options =>
     options.RequestCultureProviders = [new AcceptLanguageHeaderRequestCultureProvider()];
 });
 
-// Behind a reverse proxy the client and its scheme come from the forwarded headers of the trusted proxies; the pages of
-// the web client may call the API from the browser; and every client has limits on the requests it sends.
+// Behind a reverse proxy the client and its scheme come from the forwarded headers of the trusted proxies; every
+// response tells browsers how to treat it; the pages of the web client may call the API from the browser; and every
+// client has limits on the requests it sends.
 builder.Services.AddTrustedProxies(builder.Configuration);
+builder.Services.AddSecurityHeaders();
 builder.Services.AddApiCors(builder.Configuration);
 builder.Services.AddApiRateLimiting(builder.Configuration);
 
@@ -82,6 +84,7 @@ builder.Services.AddHealthChecks().AddDbContextCheck<AutoEliteDbContext>(tags: [
 var app = builder.Build();
 
 app.UseForwardedHeaders();
+app.UseSecurityHeaders();
 app.UseExceptionHandler();
 app.UseStatusCodePages();
 app.UseCors();
