@@ -87,8 +87,10 @@ public static class AutoEliteClientServiceCollectionExtensions
         services.TryAddSingleton<IAuthSessionStore, InMemoryAuthSessionStore>();
         services.TryAddSingleton(TimeProvider.System);
 
-        var authentication = services.AddHttpClient(AuthenticationHttpClientName, http => http.BaseAddress = apiAddress());
+        var authentication = services.AddHttpClient(AuthenticationHttpClientName, http => http.BaseAddress = apiAddress())
+            .AddHttpMessageHandler(() => new AcceptLanguageHandler());
         var api = services.AddHttpClient(ApiHttpClientName, http => http.BaseAddress = apiAddress())
+            .AddHttpMessageHandler(() => new AcceptLanguageHandler())
             .AddHttpMessageHandler<AuthenticationHandler>();
         configureHttpClient?.Invoke(authentication);
         configureHttpClient?.Invoke(api);

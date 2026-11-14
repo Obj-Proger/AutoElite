@@ -47,6 +47,37 @@ public sealed class AuthSessionManager(
     }
 
     /// <summary>
+    /// Changes the password of the signed-in user. The API ends every session of the user and starts a new one for this
+    /// device, which is kept in place of the old one, so that the user stays signed in here and only here.
+    /// </summary>
+    /// <param name="currentPassword">The current password.</param>
+    /// <param name="newPassword">The new password.</param>
+    /// <param name="cancellationToken">A token that signals cancellation of the operation.</param>
+    /// <exception cref="ApiException">The API refused the change; its problem tells why.</exception>
+    /// <exception cref="InvalidOperationException">Nobody is signed in.</exception>
+    public async Task ChangePasswordAsync(string currentPassword, string newPassword, CancellationToken cancellationToken)
+    {
+        var accessToken = await GetAccessTokenAsync(cancellationToken)
+            ?? throw new InvalidOperationException("Nobody is signed in.");
+
+        // The client of the session sends no access token of its own, so the request carries the one read above.
+        var tokens = await createAuthenticationApi().Api.V1.Me.Password.PostAsync(
+            new ChangePasswordCommand { CurrentPassword = currentPassword, NewPassword = newPassword },
+            request => request.Headers.Add("Authorization", $"Bearer {accessToken}"),
+            cancellationToken);
+
+        await _renewal.WaitAsync(cancellationToken);
+        try
+        {
+            await store.SaveAsync(SessionOf(tokens), cancellationToken);
+        }
+        finally
+        {
+            _renewal.Release();
+        }
+    }
+
+    /// <summary>
     /// Signs out: forgets the session and ends it on the API; without a network it ends there when it expires.
     /// </summary>
     /// <param name="cancellationToken">A token that signals cancellation of the operation.</param>

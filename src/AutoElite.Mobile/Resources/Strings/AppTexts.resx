@@ -364,6 +364,21 @@
   <data name="Notifications.Unread" xml:space="preserve">
     <value>Notifications · {0} new</value>
   </data>
+  <data name="Password.Mismatch" xml:space="preserve">
+    <value>The passwords do not match.</value>
+  </data>
+  <data name="Password.Missing" xml:space="preserve">
+    <value>Enter the password.</value>
+  </data>
+  <data name="Password.New" xml:space="preserve">
+    <value>New password</value>
+  </data>
+  <data name="Password.Repeat" xml:space="preserve">
+    <value>The password again</value>
+  </data>
+  <data name="Password.Rules" xml:space="preserve">
+    <value>From 8 to 128 characters, with at least one letter and one digit.</value>
+  </data>
   <data name="Payments.Cancelled" xml:space="preserve">
     <value>cancelled</value>
   </data>
@@ -375,6 +390,72 @@
   </data>
   <data name="Payments.Title" xml:space="preserve">
     <value>Payments</value>
+  </data>
+  <data name="Problems.Failed" xml:space="preserve">
+    <value>Something went wrong. Try again.</value>
+  </data>
+  <data name="Problems.Unreachable" xml:space="preserve">
+    <value>The school is unreachable. Check the connection and try again.</value>
+  </data>
+  <data name="Profile.ChangePhoto" xml:space="preserve">
+    <value>Change photo</value>
+  </data>
+  <data name="Profile.ChoosePhoto" xml:space="preserve">
+    <value>Choose a photo</value>
+  </data>
+  <data name="Profile.Details" xml:space="preserve">
+    <value>Personal details</value>
+  </data>
+  <data name="Profile.FirstName" xml:space="preserve">
+    <value>First name</value>
+  </data>
+  <data name="Profile.LastName" xml:space="preserve">
+    <value>Last name</value>
+  </data>
+  <data name="Profile.MiddleName" xml:space="preserve">
+    <value>Middle name</value>
+  </data>
+  <data name="Profile.NoPhotoAccess" xml:space="preserve">
+    <value>The application may not open your photos. Allow it in the settings of the device.</value>
+  </data>
+  <data name="Profile.NotificationLanguage" xml:space="preserve">
+    <value>Language of notifications and emails</value>
+  </data>
+  <data name="Profile.OpenSecurity" xml:space="preserve">
+    <value>Password and email</value>
+  </data>
+  <data name="Profile.Phone" xml:space="preserve">
+    <value>Phone</value>
+  </data>
+  <data name="Profile.PhoneHint" xml:space="preserve">
+    <value>In international format, such as +79001234567.</value>
+  </data>
+  <data name="Profile.Photo" xml:space="preserve">
+    <value>Your photo</value>
+  </data>
+  <data name="Profile.PhotoChanged" xml:space="preserve">
+    <value>The photo is changed.</value>
+  </data>
+  <data name="Profile.PhotoRemoved" xml:space="preserve">
+    <value>The photo is removed.</value>
+  </data>
+  <data name="Profile.RemovePhoto" xml:space="preserve">
+    <value>Remove photo</value>
+  </data>
+  <data name="Profile.RemovePhotoQuestion" xml:space="preserve">
+    <value>Instructors and staff will see your initials instead.</value>
+  </data>
+  <data name="Profile.RemovePhotoTitle" xml:space="preserve">
+    <value>Remove the photo?</value>
+  </data>
+  <data name="Profile.Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="Profile.Saved" xml:space="preserve">
+    <value>Saved.</value>
+  </data>
+  <data name="Profile.SecurityHint" xml:space="preserve">
+    <value>Change your password or the email address you sign in with.</value>
   </data>
   <data name="Profile.Title" xml:space="preserve">
     <value>Profile</value>
@@ -468,6 +549,42 @@
   </data>
   <data name="School.Unreachable" xml:space="preserve">
     <value>The school could not be reached at this address. Check the address and the connection.</value>
+  </data>
+  <data name="Security.ChangeEmail" xml:space="preserve">
+    <value>Send the link</value>
+  </data>
+  <data name="Security.ChangePassword" xml:space="preserve">
+    <value>Change password</value>
+  </data>
+  <data name="Security.CurrentPassword" xml:space="preserve">
+    <value>Current password</value>
+  </data>
+  <data name="Security.Email" xml:space="preserve">
+    <value>Email address</value>
+  </data>
+  <data name="Security.EmailHint" xml:space="preserve">
+    <value>We will send a link to the new address; the address changes once you follow it.</value>
+  </data>
+  <data name="Security.EmailMissing" xml:space="preserve">
+    <value>Enter the new address and the current password.</value>
+  </data>
+  <data name="Security.EmailSent" xml:space="preserve">
+    <value>The link is sent to {0}. Follow it to change the address.</value>
+  </data>
+  <data name="Security.NewEmail" xml:space="preserve">
+    <value>New email address</value>
+  </data>
+  <data name="Security.OtherDevices" xml:space="preserve">
+    <value>Your other devices will be signed out; this one stays signed in.</value>
+  </data>
+  <data name="Security.Password" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="Security.PasswordChanged" xml:space="preserve">
+    <value>The password is changed.</value>
+  </data>
+  <data name="Security.Title" xml:space="preserve">
+    <value>Password and email</value>
   </data>
   <data name="Settings.About" xml:space="preserve">
     <value>About</value>

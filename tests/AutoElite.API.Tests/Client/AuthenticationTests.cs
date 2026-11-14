@@ -128,4 +128,47 @@ public sealed class AuthenticationTests(ApiFactory api)
         var reading = () => ReadOwnEmailAsync(services);
         (await reading.Should().ThrowAsync<ApiException>()).Which.ResponseStatusCode.Should().Be(401);
     }
+
+    [Fact]
+    public async Task ChangedPassword_KeepsTheUserSignedInHereWithTheNewSession()
+    {
+        const string newPassword = "Changed-password-2";
+        var (services, user) = await PrepareAsync();
+        await using var disposal = services;
+        var store = services.GetRequiredService<IAuthSessionStore>();
+        var sessions = services.GetRequiredService<AuthSessionManager>();
+        var before = await SignInAsync(services, user);
+
+        await sessions.ChangePasswordAsync(ApiFactory.Password, newPassword, CancellationToken);
+        var after = await store.GetAsync(CancellationToken);
+        var renewed = await sessions.RenewAsync(after!.AccessToken, CancellationToken);
+
+        after.RefreshToken.Should().NotBe(before.RefreshToken);
+        renewed.Should().NotBeNullOrEmpty();
+        (await ReadOwnEmailAsync(services)).Should().Be(user.Email);
+        var (other, _) = await PrepareAsync();
+        await using var otherDisposal = other;
+        var withOldPassword = () => other.GetRequiredService<AuthSessionManager>()
+            .SignInAsync(user.Email, ApiFactory.Password, CancellationToken);
+        (await withOldPassword.Should().ThrowAsync<ApiException>()).Which.ResponseStatusCode.Should().BeOneOf(400, 401);
+        await other.GetRequiredService<AuthSessionManager>().SignInAsync(user.Email, newPassword, CancellationToken);
+    }
+
+    [Fact]
+    public async Task WrongCurrentPassword_LeavesThePasswordAndTheSession()
+    {
+        var (services, user) = await PrepareAsync();
+        await using var disposal = services;
+        var store = services.GetRequiredService<IAuthSessionStore>();
+        var sessions = services.GetRequiredService<AuthSessionManager>();
+        var before = await SignInAsync(services, user);
+
+        var changing = () => sessions.ChangePasswordAsync("Not-the-password-1", "Changed-password-2", CancellationToken);
+
+        var problem = (await changing.Should().ThrowAsync<ApiException>()).Which;
+        problem.ResponseStatusCode.Should().BeOneOf(400, 401);
+        ApiProblems.MessagesOf(problem).Should().NotBeEmpty();
+        (await store.GetAsync(CancellationToken))!.RefreshToken.Should().Be(before.RefreshToken);
+        (await ReadOwnEmailAsync(services)).Should().Be(user.Email);
+    }
 }

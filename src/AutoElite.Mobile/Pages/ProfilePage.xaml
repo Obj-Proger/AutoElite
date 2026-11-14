@@ -11,10 +11,84 @@
     <ScrollView>
         <VerticalStackLayout Padding="{StaticResource PageMargin}" Spacing="14">
             <Border Style="{StaticResource HighlightCard}">
-                <VerticalStackLayout Spacing="4">
-                    <Label Style="{StaticResource Headline}" Text="{Binding Name}" />
-                    <Label Style="{StaticResource Secondary}" Text="{Binding Email}" />
-                    <Label Style="{StaticResource Caption}" Text="{Binding Roles}" />
+                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="14" RowDefinitions="Auto,Auto" RowSpacing="10">
+                    <Border
+                        WidthRequest="72"
+                        HeightRequest="72"
+                        StrokeThickness="0"
+                        BackgroundColor="{StaticResource Accent}"
+                        VerticalOptions="Start">
+                        <Border.StrokeShape>
+                            <Ellipse />
+                        </Border.StrokeShape>
+                        <Grid>
+                            <Label
+                                Text="{Binding Initials}"
+                                FontFamily="TextSemiBold"
+                                FontSize="26"
+                                TextColor="{StaticResource OnAccent}"
+                                HorizontalOptions="Center"
+                                VerticalOptions="Center" />
+                            <Image
+                                Source="{Binding Photo}"
+                                Aspect="AspectFill"
+                                IsVisible="{Binding HasPhoto}"
+                                SemanticProperties.Description="{l:Text Profile.Photo}" />
+                        </Grid>
+                    </Border>
+                    <VerticalStackLayout Grid.Column="1" Spacing="4" VerticalOptions="Center">
+                        <Label Style="{StaticResource Headline}" Text="{Binding Name}" />
+                        <Label Style="{StaticResource Secondary}" Text="{Binding Email}" />
+                        <Label Style="{StaticResource Caption}" Text="{Binding Roles}" />
+                    </VerticalStackLayout>
+                    <HorizontalStackLayout Grid.Row="1" Grid.ColumnSpan="2" Spacing="8">
+                        <Button
+                            Style="{StaticResource SecondaryButton}"
+                            Text="{l:Text Profile.ChangePhoto}"
+                            Command="{Binding ChangePhotoCommand}" />
+                        <Button
+                            Style="{StaticResource SecondaryButton}"
+                            Text="{l:Text Profile.RemovePhoto}"
+                            Command="{Binding RemovePhotoCommand}"
+                            IsVisible="{Binding HasPhoto}" />
+                    </HorizontalStackLayout>
+                </Grid>
+            </Border>
+
+            <Border Style="{StaticResource Card}">
+                <VerticalStackLayout Spacing="8">
+                    <Label Style="{StaticResource Overline}" Text="{l:Text Profile.Details}" />
+                    <Border Style="{StaticResource Field}">
+                        <Entry Text="{Binding LastName}" Placeholder="{l:Text Profile.LastName}" ReturnType="Next" />
+                    </Border>
+                    <Border Style="{StaticResource Field}">
+                        <Entry Text="{Binding FirstName}" Placeholder="{l:Text Profile.FirstName}" ReturnType="Next" />
+                    </Border>
+                    <Border Style="{StaticResource Field}">
+                        <Entry Text="{Binding MiddleName}" Placeholder="{l:Text Profile.MiddleName}" ReturnType="Next" />
+                    </Border>
+                    <Border Style="{StaticResource Field}">
+                        <Entry Text="{Binding Phone}" Placeholder="{l:Text Profile.Phone}" Keyboard="Telephone" ReturnType="Done" />
+                    </Border>
+                    <Label Style="{StaticResource Caption}" Text="{l:Text Profile.PhoneHint}" />
+                    <Label Style="{StaticResource Caption}" Text="{l:Text Profile.NotificationLanguage}" />
+                    <Border Style="{StaticResource Field}">
+                        <Picker ItemsSource="{Binding NotificationLanguages}" SelectedIndex="{Binding NotificationLanguageIndex}" />
+                    </Border>
+                    <Label Style="{StaticResource Secondary}" Text="{Binding Message}" IsVisible="{Binding HasMessage}" />
+                    <Button Text="{l:Text Profile.Save}" Command="{Binding SaveCommand}" />
+                    <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
+                </VerticalStackLayout>
+            </Border>
+
+            <Border Style="{StaticResource Card}">
+                <VerticalStackLayout Spacing="8">
+                    <Label Style="{StaticResource Overline}" Text="{l:Text Security.Title}" />
+                    <Label Style="{StaticResource Secondary}" Text="{l:Text Profile.SecurityHint}" />
+                    <Button
+                        Style="{StaticResource SecondaryButton}"
+                        Text="{l:Text Profile.OpenSecurity}"
+                        Command="{Binding SecurityCommand}" />
                 </VerticalStackLayout>
             </Border>
 

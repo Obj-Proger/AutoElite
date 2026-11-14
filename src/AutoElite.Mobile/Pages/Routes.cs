@@ -45,6 +45,9 @@ internal static class Routes
     /// <summary>The contracts of a student with the progress and the payments, opened over the tab of studies.</summary>
     public const string Contracts = "contracts";
 
+    /// <summary>The change of the password and of the email address, opened over the tab of the profile.</summary>
+    public const string Security = "security";
+
     // How often and how long a navigation waits for one that the shell is still finishing.
     private const int NavigationAttempts = 20;
     private static readonly TimeSpan _navigationRetryDelay = TimeSpan.FromMilliseconds(50);

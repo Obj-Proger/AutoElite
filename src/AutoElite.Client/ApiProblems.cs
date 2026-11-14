@@ -3,19 +3,20 @@ using AutoElite.Client.Api.Models;
 using Microsoft.Kiota.Abstractions;
 using Microsoft.Kiota.Abstractions.Serialization;
 
-namespace AutoElite.Web.Common;
+namespace AutoElite.Client;
 
 /// <summary>
-/// The messages of an error of the API, which the API writes in the language of the browser, as its Accept-Language
-/// header asks: the message of each field that failed validation, or else the detail of the problem.
+/// The messages of an error of the API, which the API writes in the language its Accept-Language header asks for, that
+/// of the browser or of the device: the message of each field that failed validation, or else the detail of the problem.
 /// </summary>
-internal static class ApiErrors
+public static class ApiProblems
 {
     /// <summary>Gives the messages of an error.</summary>
     /// <param name="exception">The error.</param>
     /// <returns>The messages, empty when the API gave none.</returns>
     public static IReadOnlyList<string> MessagesOf(ApiException exception)
     {
+        ArgumentNullException.ThrowIfNull(exception);
         if (exception is not ProblemDetails problem)
             return [];
 

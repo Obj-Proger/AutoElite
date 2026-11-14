@@ -364,6 +364,21 @@
   <data name="Notifications.Unread" xml:space="preserve">
     <value>Уведомления · новых: {0}</value>
   </data>
+  <data name="Password.Mismatch" xml:space="preserve">
+    <value>Пароли не совпадают.</value>
+  </data>
+  <data name="Password.Missing" xml:space="preserve">
+    <value>Введите пароль.</value>
+  </data>
+  <data name="Password.New" xml:space="preserve">
+    <value>Новый пароль</value>
+  </data>
+  <data name="Password.Repeat" xml:space="preserve">
+    <value>Пароль ещё раз</value>
+  </data>
+  <data name="Password.Rules" xml:space="preserve">
+    <value>От 8 до 128 символов, хотя бы одна буква и одна цифра.</value>
+  </data>
   <data name="Payments.Cancelled" xml:space="preserve">
     <value>отменён</value>
   </data>
@@ -375,6 +390,72 @@
   </data>
   <data name="Payments.Title" xml:space="preserve">
     <value>Платежи</value>
+  </data>
+  <data name="Problems.Failed" xml:space="preserve">
+    <value>Что-то пошло не так. Попробуйте ещё раз.</value>
+  </data>
+  <data name="Problems.Unreachable" xml:space="preserve">
+    <value>Школа недоступна. Проверьте подключение и попробуйте ещё раз.</value>
+  </data>
+  <data name="Profile.ChangePhoto" xml:space="preserve">
+    <value>Сменить фото</value>
+  </data>
+  <data name="Profile.ChoosePhoto" xml:space="preserve">
+    <value>Выберите фото</value>
+  </data>
+  <data name="Profile.Details" xml:space="preserve">
+    <value>Личные данные</value>
+  </data>
+  <data name="Profile.FirstName" xml:space="preserve">
+    <value>Имя</value>
+  </data>
+  <data name="Profile.LastName" xml:space="preserve">
+    <value>Фамилия</value>
+  </data>
+  <data name="Profile.MiddleName" xml:space="preserve">
+    <value>Отчество</value>
+  </data>
+  <data name="Profile.NoPhotoAccess" xml:space="preserve">
+    <value>Приложению не разрешено открывать фото. Разрешите это в настройках устройства.</value>
+  </data>
+  <data name="Profile.NotificationLanguage" xml:space="preserve">
+    <value>Язык уведомлений и писем</value>
+  </data>
+  <data name="Profile.OpenSecurity" xml:space="preserve">
+    <value>Пароль и почта</value>
+  </data>
+  <data name="Profile.Phone" xml:space="preserve">
+    <value>Телефон</value>
+  </data>
+  <data name="Profile.PhoneHint" xml:space="preserve">
+    <value>В международном формате, например +79001234567.</value>
+  </data>
+  <data name="Profile.Photo" xml:space="preserve">
+    <value>Ваше фото</value>
+  </data>
+  <data name="Profile.PhotoChanged" xml:space="preserve">
+    <value>Фото изменено.</value>
+  </data>
+  <data name="Profile.PhotoRemoved" xml:space="preserve">
+    <value>Фото удалено.</value>
+  </data>
+  <data name="Profile.RemovePhoto" xml:space="preserve">
+    <value>Удалить фото</value>
+  </data>
+  <data name="Profile.RemovePhotoQuestion" xml:space="preserve">
+    <value>Преподаватели и сотрудники будут видеть вместо него ваши инициалы.</value>
+  </data>
+  <data name="Profile.RemovePhotoTitle" xml:space="preserve">
+    <value>Удалить фото?</value>
+  </data>
+  <data name="Profile.Save" xml:space="preserve">
+    <value>Сохранить</value>
+  </data>
+  <data name="Profile.Saved" xml:space="preserve">
+    <value>Сохранено.</value>
+  </data>
+  <data name="Profile.SecurityHint" xml:space="preserve">
+    <value>Смените пароль или адрес почты, по которому вы входите.</value>
   </data>
   <data name="Profile.Title" xml:space="preserve">
     <value>Профиль</value>
@@ -468,6 +549,42 @@
   </data>
   <data name="School.Unreachable" xml:space="preserve">
     <value>Не удалось связаться со школой по этому адресу. Проверьте адрес и подключение.</value>
+  </data>
+  <data name="Security.ChangeEmail" xml:space="preserve">
+    <value>Отправить ссылку</value>
+  </data>
+  <data name="Security.ChangePassword" xml:space="preserve">
+    <value>Сменить пароль</value>
+  </data>
+  <data name="Security.CurrentPassword" xml:space="preserve">
+    <value>Текущий пароль</value>
+  </data>
+  <data name="Security.Email" xml:space="preserve">
+    <value>Адрес почты</value>
+  </data>
+  <data name="Security.EmailHint" xml:space="preserve">
+    <value>Мы отправим ссылку на новый адрес; адрес сменится, когда вы перейдёте по ней.</value>
+  </data>
+  <data name="Security.EmailMissing" xml:space="preserve">
+    <value>Введите новый адрес и текущий пароль.</value>
+  </data>
+  <data name="Security.EmailSent" xml:space="preserve">
+    <value>Ссылка отправлена на {0}. Перейдите по ней, чтобы сменить адрес.</value>
+  </data>
+  <data name="Security.NewEmail" xml:space="preserve">
+    <value>Новый адрес почты</value>
+  </data>
+  <data name="Security.OtherDevices" xml:space="preserve">
+    <value>На других устройствах потребуется войти заново; на этом вход сохранится.</value>
+  </data>
+  <data name="Security.Password" xml:space="preserve">
+    <value>Пароль</value>
+  </data>
+  <data name="Security.PasswordChanged" xml:space="preserve">
+    <value>Пароль изменён.</value>
+  </data>
+  <data name="Security.Title" xml:space="preserve">
+    <value>Пароль и почта</value>
   </data>
   <data name="Settings.About" xml:space="preserve">
     <value>О приложении</value>
