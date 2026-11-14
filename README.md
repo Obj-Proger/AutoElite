@@ -223,6 +223,26 @@ while the school has no active administrator: set `FirstAdministrator:Email`, `F
 administrator sets a password from the invitation; no password is ever kept in the settings. Once the school has an
 active administrator, these settings change nothing.
 
+### Demo data
+
+To see every page with something on it while developing, the API can create demo data in a new database: a branch in
+Yekaterinburg with a training ground and two cars, a course of category B with six topics, fourteen questions and a
+practice test of ten, its staff and three students with contracts, payments and a study group, theory lessons on
+Mondays, Wednesdays and Fridays and driving lessons on weekdays for the coming weeks, some of them booked. Each step is
+a command of the application sent on behalf of the user who would take it, so the data follows the rules of the school.
+It is created only in the Development environment and only when asked for, with one password for every demo user, kept
+in the user secrets like any other secret:
+
+```bash
+dotnet user-secrets --project src/AutoElite.API set "DemoData:Enabled" "true"
+dotnet user-secrets --project src/AutoElite.API set "DemoData:Password" "<8 to 128 characters with a letter and a digit>"
+```
+
+The demo users sign in with that password at `admin`, `manager`, `theory` (theory instructor), `driving` (driving
+instructor) and `student1` to `student3`, each `@autoelite.example`, a domain reserved for examples, so no email reaches
+anybody. The data is created once: a database that has it is left as it is, and a failed step is logged; drop the
+database to start again.
+
 ### Database migrations
 
 The schema is created by EF Core migrations in `src/AutoElite.Infrastructure/Persistence/Migrations`. The EF Core

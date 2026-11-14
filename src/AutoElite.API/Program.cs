@@ -1,6 +1,7 @@
 using System.Text.Json.Serialization;
 using AutoElite.API.Authentication;
 using AutoElite.API.Common;
+using AutoElite.API.DemoData;
 using AutoElite.API.Hosting;
 using AutoElite.API.OpenApi;
 using AutoElite.API.Realtime;
@@ -28,10 +29,17 @@ if (builder.Environment.IsDevelopment())
 // The application, the infrastructure, and the caller of each request for both. The build, which only writes the
 // OpenAPI document, starts the host without the infrastructure: it has no database, keys or mail.
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddScoped<ICurrentUser, HttpCurrentUser>();
+builder.Services.AddScoped<ScopeCaller>();
+builder.Services.AddScoped<ICurrentUser>(provider =>
+    provider.GetRequiredService<ScopeCaller>().User ?? new HttpCurrentUser(provider.GetRequiredService<IHttpContextAccessor>()));
 builder.Services.AddApplication();
 if (!OpenApiDocumentGeneration.IsRunning)
+{
     builder.Services.AddInfrastructure(builder.Configuration);
+
+    // Demo data for a new school in development, when asked for (README); after the migrations of the infrastructure.
+    builder.Services.AddDemoData(builder.Configuration, builder.Environment);
+}
 
 // JSON with enumerations as their names, in the controllers and in what the host writes itself, such as the OpenAPI
 // document and the problem details of exceptions; every error is problem details (ApiProblems).
