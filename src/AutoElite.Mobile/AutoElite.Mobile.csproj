@@ -30,6 +30,9 @@
     <MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#0E0F11" />
     <MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#0E0F11" BaseSize="128,128" />
 
+    <!-- The icons of the tabs and the pages, drawn for the dark theme. -->
+    <MauiImage Include="Resources\Images\*" />
+
     <!-- The fonts of the design system, shared with the website. -->
     <MauiFont Include="..\..\design\fonts\*.ttf" />
   </ItemGroup>

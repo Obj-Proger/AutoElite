@@ -244,9 +244,6 @@
   <data name="Home.SignOutTitle" xml:space="preserve">
     <value>Выйти?</value>
   </data>
-  <data name="Home.Tests" xml:space="preserve">
-    <value>Тесты и экзамены</value>
-  </data>
   <data name="Lesson.Absent" xml:space="preserve">
     <value>Пропущено</value>
   </data>
@@ -370,6 +367,9 @@
   <data name="Payments.Title" xml:space="preserve">
     <value>Платежи</value>
   </data>
+  <data name="Profile.Title" xml:space="preserve">
+    <value>Профиль</value>
+  </data>
   <data name="Rating.Five" xml:space="preserve">
     <value>5 — отлично</value>
   </data>
@@ -396,6 +396,21 @@
   </data>
   <data name="Refusal.Other" xml:space="preserve">
     <value>отклонено автошколой</value>
+  </data>
+  <data name="Role.Administrator" xml:space="preserve">
+    <value>Администратор</value>
+  </data>
+  <data name="Role.DrivingInstructor" xml:space="preserve">
+    <value>Инструктор по вождению</value>
+  </data>
+  <data name="Role.Manager" xml:space="preserve">
+    <value>Менеджер</value>
+  </data>
+  <data name="Role.Student" xml:space="preserve">
+    <value>Ученик</value>
+  </data>
+  <data name="Role.TheoryInstructor" xml:space="preserve">
+    <value>Преподаватель теории</value>
   </data>
   <data name="School.Hint" xml:space="preserve">
     <value>Введите адрес AutoElite вашей автошколы. Школа сообщает его вместе с учётной записью.</value>
@@ -441,9 +456,6 @@
   </data>
   <data name="Settings.SourceCode" xml:space="preserve">
     <value>Исходный код</value>
-  </data>
-  <data name="Settings.Title" xml:space="preserve">
-    <value>Настройки</value>
   </data>
   <data name="Settings.Version" xml:space="preserve">
     <value>AutoElite {0}</value>
@@ -501,6 +513,30 @@
   </data>
   <data name="Skill.VehicleControl" xml:space="preserve">
     <value>Управление автомобилем</value>
+  </data>
+  <data name="Study.ContractsHint" xml:space="preserve">
+    <value>Прогресс обучения, откатанные часы и платежи.</value>
+  </data>
+  <data name="Study.Tests" xml:space="preserve">
+    <value>Пробные тесты</value>
+  </data>
+  <data name="Study.TestsHint" xml:space="preserve">
+    <value>Билеты теоретического экзамена с таймером и разбором ошибок.</value>
+  </data>
+  <data name="Study.Title" xml:space="preserve">
+    <value>Учёба</value>
+  </data>
+  <data name="Tab.Chats" xml:space="preserve">
+    <value>Чаты</value>
+  </data>
+  <data name="Tab.Home" xml:space="preserve">
+    <value>Главная</value>
+  </data>
+  <data name="Tab.Profile" xml:space="preserve">
+    <value>Профиль</value>
+  </data>
+  <data name="Tab.Study" xml:space="preserve">
+    <value>Учёба</value>
   </data>
   <data name="Test.AnswerNotSent" xml:space="preserve">
     <value>Нет связи: ответ не отправлен. Выберите его ещё раз.</value>

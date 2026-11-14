@@ -244,9 +244,6 @@
   <data name="Home.SignOutTitle" xml:space="preserve">
     <value>Sign out?</value>
   </data>
-  <data name="Home.Tests" xml:space="preserve">
-    <value>Tests and exams</value>
-  </data>
   <data name="Lesson.Absent" xml:space="preserve">
     <value>Missed</value>
   </data>
@@ -370,6 +367,9 @@
   <data name="Payments.Title" xml:space="preserve">
     <value>Payments</value>
   </data>
+  <data name="Profile.Title" xml:space="preserve">
+    <value>Profile</value>
+  </data>
   <data name="Rating.Five" xml:space="preserve">
     <value>5 — excellent</value>
   </data>
@@ -396,6 +396,21 @@
   </data>
   <data name="Refusal.Other" xml:space="preserve">
     <value>refused by the school</value>
+  </data>
+  <data name="Role.Administrator" xml:space="preserve">
+    <value>Administrator</value>
+  </data>
+  <data name="Role.DrivingInstructor" xml:space="preserve">
+    <value>Driving instructor</value>
+  </data>
+  <data name="Role.Manager" xml:space="preserve">
+    <value>Manager</value>
+  </data>
+  <data name="Role.Student" xml:space="preserve">
+    <value>Student</value>
+  </data>
+  <data name="Role.TheoryInstructor" xml:space="preserve">
+    <value>Theory instructor</value>
   </data>
   <data name="School.Hint" xml:space="preserve">
     <value>Enter the address of your school's AutoElite. The school gives it to you together with your account.</value>
@@ -441,9 +456,6 @@
   </data>
   <data name="Settings.SourceCode" xml:space="preserve">
     <value>Source code</value>
-  </data>
-  <data name="Settings.Title" xml:space="preserve">
-    <value>Settings</value>
   </data>
   <data name="Settings.Version" xml:space="preserve">
     <value>AutoElite {0}</value>
@@ -501,6 +513,30 @@
   </data>
   <data name="Skill.VehicleControl" xml:space="preserve">
     <value>Vehicle control</value>
+  </data>
+  <data name="Study.ContractsHint" xml:space="preserve">
+    <value>The progress of the course, the hours driven and the payments.</value>
+  </data>
+  <data name="Study.Tests" xml:space="preserve">
+    <value>Practice tests</value>
+  </data>
+  <data name="Study.TestsHint" xml:space="preserve">
+    <value>Tickets of the theory exam with a timer and the analysis of mistakes.</value>
+  </data>
+  <data name="Study.Title" xml:space="preserve">
+    <value>Studies</value>
+  </data>
+  <data name="Tab.Chats" xml:space="preserve">
+    <value>Chats</value>
+  </data>
+  <data name="Tab.Home" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="Tab.Profile" xml:space="preserve">
+    <value>Profile</value>
+  </data>
+  <data name="Tab.Study" xml:space="preserve">
+    <value>Studies</value>
   </data>
   <data name="Test.AnswerNotSent" xml:space="preserve">
     <value>No connection: the answer was not sent. Choose it again.</value>

@@ -88,8 +88,9 @@ public static class MauiProgram
         builder.Services.AddTransient<ChatViewModel>();
         builder.Services.AddTransient<ContractsPage>();
         builder.Services.AddTransient<ContractsViewModel>();
-        builder.Services.AddTransient<SettingsPage>();
-        builder.Services.AddTransient<SettingsViewModel>();
+        builder.Services.AddTransient<ProfilePage>();
+        builder.Services.AddTransient<ProfileViewModel>();
+        builder.Services.AddTransient<StudyPage>();
 
 #if DEBUG
         builder.Logging.AddDebug();

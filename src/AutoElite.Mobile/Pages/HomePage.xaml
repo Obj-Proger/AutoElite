@@ -17,17 +17,10 @@
                     <Label Style="{StaticResource Headline}" Text="{Binding Name}" />
                 </VerticalStackLayout>
 
-                <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
-                    <Button
-                        Style="{StaticResource SecondaryButton}"
-                        Text="{Binding NotificationsText}"
-                        Command="{Binding NotificationsCommand}" />
-                    <Button
-                        Grid.Column="1"
-                        Style="{StaticResource SecondaryButton}"
-                        Text="{l:Text Chats.Title}"
-                        Command="{Binding ChatsCommand}" />
-                </Grid>
+                <Button
+                    Style="{StaticResource SecondaryButton}"
+                    Text="{Binding NotificationsText}"
+                    Command="{Binding NotificationsCommand}" />
 
                 <Border Style="{StaticResource Card}" IsVisible="{Binding HasStatus}">
                     <Label Style="{StaticResource Secondary}" Text="{Binding Status}" />
@@ -53,16 +46,6 @@
                 <VerticalStackLayout Spacing="12" IsVisible="{Binding ShowsLessons}">
                     <Label Style="{StaticResource Title}" Text="{l:Text Home.Schedule}" />
                     <Button Text="{l:Text Home.Book}" Command="{Binding BookCommand}" IsVisible="{Binding IsStudent}" />
-                    <Button
-                        Style="{StaticResource SecondaryButton}"
-                        Text="{l:Text Home.Tests}"
-                        Command="{Binding TestsCommand}"
-                        IsVisible="{Binding IsStudent}" />
-                    <Button
-                        Style="{StaticResource SecondaryButton}"
-                        Text="{l:Text Contracts.Title}"
-                        Command="{Binding ContractsCommand}"
-                        IsVisible="{Binding IsStudent}" />
                     <Label Style="{StaticResource Secondary}" Text="{l:Text Home.Empty}" IsVisible="{Binding HasNoLessons}" />
                     <VerticalStackLayout Spacing="12" BindableLayout.ItemsSource="{Binding Lessons}">
                         <BindableLayout.ItemTemplate>
@@ -90,11 +73,6 @@
                         </BindableLayout.ItemTemplate>
                     </VerticalStackLayout>
                 </VerticalStackLayout>
-
-                <Button
-                    Style="{StaticResource SecondaryButton}"
-                    Text="{l:Text Settings.Title}"
-                    Command="{Binding SettingsCommand}" />
             </VerticalStackLayout>
         </ScrollView>
     </RefreshView>

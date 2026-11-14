@@ -1,6 +1,6 @@
 namespace AutoElite.Mobile.Pages;
 
-/// <summary>The chats of the user, opened from the home page.</summary>
+/// <summary>The chats of the user, a tab of the shell.</summary>
 public partial class ChatsPage : ContentPage
 {
     private readonly ChatsViewModel _viewModel;

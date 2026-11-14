@@ -12,7 +12,7 @@ namespace AutoElite.Mobile.Pages;
 /// <summary>
 /// The home page of the signed-in user: the greeting; the lessons of a student or of an instructor, with what they can
 /// do with them (HomeViewModel.Lessons.cs); whether the data is from the device; the actions that wait to be sent and
-/// those the school did not accept; and the way to the settings.
+/// those the school did not accept; and the notifications. The other sections are tabs of the shell.
 /// </summary>
 public sealed partial class HomeViewModel : ViewModel
 {
@@ -53,14 +53,10 @@ public sealed partial class HomeViewModel : ViewModel
         _queue = queue;
         _synchronizer = synchronizer;
         _timeProvider = timeProvider;
-        SettingsCommand = new Command(async () => await Routes.OpenAsync(Routes.Settings));
         RefreshCommand = new Command(async () => await RefreshAsync());
         DismissRefusalsCommand = new Command(async () => await DismissRefusalsAsync());
         BookCommand = new Command(async () => await Routes.OpenAsync(Routes.Booking));
-        TestsCommand = new Command(async () => await Routes.OpenAsync(Routes.Tests));
         NotificationsCommand = new Command(async () => await Routes.OpenAsync(Routes.Notifications));
-        ChatsCommand = new Command(async () => await Routes.OpenAsync(Routes.Chats));
-        ContractsCommand = new Command(async () => await Routes.OpenAsync(Routes.Contracts));
     }
 
     /// <summary>Gets the greeting for the time of day.</summary>
@@ -162,26 +158,14 @@ public sealed partial class HomeViewModel : ViewModel
         set => SetProperty(ref field, value);
     }
 
-    /// <summary>Gets the command that opens the settings, where the user also signs out.</summary>
-    public Command SettingsCommand { get; }
-
     /// <summary>Gets the command that sends the waiting actions and reads everything again.</summary>
     public Command RefreshCommand { get; }
 
     /// <summary>Gets the command that opens the booking of a driving lesson.</summary>
     public Command BookCommand { get; }
 
-    /// <summary>Gets the command that opens the practice tests.</summary>
-    public Command TestsCommand { get; }
-
     /// <summary>Gets the command that opens the notifications.</summary>
     public Command NotificationsCommand { get; }
-
-    /// <summary>Gets the command that opens the chats.</summary>
-    public Command ChatsCommand { get; }
-
-    /// <summary>Gets the command that opens the contracts of a student.</summary>
-    public Command ContractsCommand { get; }
 
     /// <summary>Gets the text of the button of the notifications, with the number of unread ones.</summary>
     public string NotificationsText

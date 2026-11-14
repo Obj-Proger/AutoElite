@@ -12,8 +12,11 @@ internal static class Routes
     /// <summary>Signing in.</summary>
     public const string SignIn = "sign-in";
 
-    /// <summary>The home page of the signed-in user.</summary>
-    public const string Home = "home";
+    /// <summary>The tabs of the signed-in user.</summary>
+    public const string Main = "main";
+
+    /// <summary>The home page of the signed-in user, the first tab.</summary>
+    public const string Home = Main + "/home";
 
     /// <summary>Booking a driving lesson, opened over the home page.</summary>
     public const string Booking = "booking";
@@ -24,7 +27,7 @@ internal static class Routes
     /// <summary>Completing a driving lesson, opened over the home page with a <see cref="CompletionRequest"/>.</summary>
     public const string Completion = "completion";
 
-    /// <summary>The practice tests of a student, opened over the home page.</summary>
+    /// <summary>The practice tests of a student, opened over the tab of studies.</summary>
     public const string Tests = "tests";
 
     /// <summary>A practice test attempt, opened over the tests page with the attempt as a parameter.</summary>
@@ -33,17 +36,11 @@ internal static class Routes
     /// <summary>The notifications of the user, opened over the home page.</summary>
     public const string Notifications = "notifications";
 
-    /// <summary>The chats of the user, opened over the home page.</summary>
-    public const string Chats = "chats";
-
-    /// <summary>A chat, opened over the chats page with a <see cref="ChatRequest"/>.</summary>
+    /// <summary>A chat, opened over the tab of chats with a <see cref="ChatRequest"/>.</summary>
     public const string Chat = "chat";
 
-    /// <summary>The contracts of a student with the progress and the payments, opened over the home page.</summary>
+    /// <summary>The contracts of a student with the progress and the payments, opened over the tab of studies.</summary>
     public const string Contracts = "contracts";
-
-    /// <summary>The settings, opened over the home page.</summary>
-    public const string Settings = "settings";
 
     // How often and how long a navigation waits for one that the shell is still finishing.
     private const int NavigationAttempts = 20;

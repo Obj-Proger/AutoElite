@@ -183,18 +183,19 @@ and Windows. Building it, and so the whole solution, needs the MAUI workload: `d
 keeps the session in the secure storage of the device. On the first start it asks for the address of the school's API,
 which must use HTTPS; a debug build also takes HTTP and offers the API of the development machine:
 `http://localhost:5080` on Windows, `http://10.0.2.2:5080` from the Android emulator. Students and instructors sign in;
-the staff of the school work on its website. A student sees their driving and theory lessons on the home page, books a
-free practice slot of one of their contracts and cancels a booking, with or without a network, and takes practice tests
-and theory exams with the timer and a review of their mistakes, which need a network; rates a completed lesson; and
-follows the progress of their training with its payments; pulling the page down sends the waiting actions and reads the
-lessons again. A driving instructor sees their practice slots of the next two weeks, cancels a booking before the lesson
-and, once it has started, completes it with the hours, the grades of the student's skills and a note, or records that
-the student did not come, also without a network. A theory instructor sees their theory lessons and marks the attendance
-of a lesson that has started for the whole group at once, in a classroom without a network too. Every user reads their
-notifications, whose number on the home page changes at once through the SignalR hub, and their chats, where new
-messages appear at once and a message written without a network is sent later. The texts of the application are in
-English, with a Russian translation, in `Resources/Strings`; the device's language chooses between them unless the user
-chooses one in the settings, where they also change the school and sign out.
+the staff of the school work on its website. The tabs at the bottom lead to the home page, the studies of a student
+(their practice tests and contracts), the chats and the profile. A student sees their driving and theory lessons on the
+home page, books a free practice slot of one of their contracts and cancels a booking, with or without a network, and
+takes practice tests and theory exams with the timer and a review of their mistakes, which need a network; rates a
+completed lesson; and follows the progress of their training with its payments; pulling the page down sends the waiting
+actions and reads the lessons again. A driving instructor sees their practice slots of the next two weeks, cancels a
+booking before the lesson and, once it has started, completes it with the hours, the grades of the student's skills and
+a note, or records that the student did not come, also without a network. A theory instructor sees their theory lessons
+and marks the attendance of a lesson that has started for the whole group at once, in a classroom without a network too.
+Every user reads their notifications, whose number on the home page changes at once through the SignalR hub, and their
+chats, where new messages appear at once and a message written without a network is sent later. The texts of the
+application are in English, with a Russian translation, in `Resources/Strings`; the device's language chooses between
+them unless the user chooses one in the profile, where they also change the school and sign out.
 
 The application works without a network too (`src/AutoElite.Client.Offline`). A SQLite database in its private storage
 keeps what the user last read, shown as possibly out of date while the API cannot be reached, and the actions the user

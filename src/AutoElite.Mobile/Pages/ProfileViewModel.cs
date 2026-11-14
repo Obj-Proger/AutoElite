@@ -1,21 +1,24 @@
+using AutoElite.Client.Api.Models;
 using AutoElite.Mobile.Localization;
 using AutoElite.Mobile.Session;
+using Microsoft.Kiota.Abstractions;
 
 namespace AutoElite.Mobile.Pages;
 
 /// <summary>
-/// The settings: the school the user is signed in to, which they can change; the language of the application; what
-/// the application is; and signing out. Changing the school or signing out asks first when actions would be lost.
+/// The profile of the user: who they are, read from the API or the device; the school they are signed in to, which
+/// they can change; the language of the application; what the application is; and signing out. Changing the school or
+/// signing out asks first when actions would be lost.
 /// </summary>
-public sealed class SettingsViewModel : ViewModel
+public sealed class ProfileViewModel : ViewModel
 {
     private const string SourceCode = "https://github.com/Obj-Proger/AutoElite";
 
     private readonly UserSession _session;
 
-    /// <summary>Initializes a new instance of the <see cref="SettingsViewModel"/> class.</summary>
+    /// <summary>Initializes a new instance of the <see cref="ProfileViewModel"/> class.</summary>
     /// <param name="session">The user of the application.</param>
-    public SettingsViewModel(UserSession session)
+    public ProfileViewModel(UserSession session)
     {
         _session = session;
         Languages =
@@ -29,6 +32,27 @@ public sealed class SettingsViewModel : ViewModel
         SignOutCommand = new Command(async () => await LeaveAsync(changeSchool: false), () => !IsBusy);
         SourceCodeCommand = new Command(async () => await Launcher.Default.OpenAsync(new Uri(SourceCode)));
     }
+
+    /// <summary>Gets the full name of the user.</summary>
+    public string Name
+    {
+        get;
+        private set => SetProperty(ref field, value);
+    } = string.Empty;
+
+    /// <summary>Gets the email address of the user.</summary>
+    public string Email
+    {
+        get;
+        private set => SetProperty(ref field, value);
+    } = string.Empty;
+
+    /// <summary>Gets the roles of the user, by name.</summary>
+    public string Roles
+    {
+        get;
+        private set => SetProperty(ref field, value);
+    } = string.Empty;
 
     /// <summary>Gets the school, by the host of its API.</summary>
     public string School { get; } = ApiAddress.Current.Host;
@@ -89,6 +113,33 @@ public sealed class SettingsViewModel : ViewModel
 
     /// <summary>Gets the command that opens the source code of the application.</summary>
     public Command SourceCodeCommand { get; }
+
+    /// <summary>Reads the profile of the user from the API or, without a network, from the device.</summary>
+    /// <returns>A task that completes when the profile is shown.</returns>
+    public async Task LoadAsync()
+    {
+        try
+        {
+            var profile = (await _session.GetProfileAsync(CancellationToken.None)).Value;
+            Name = string.Join(
+                ' ', new[] { profile.LastName, profile.FirstName, profile.MiddleName }.Where(part => !string.IsNullOrWhiteSpace(part)));
+            Email = profile.Email ?? string.Empty;
+            Roles = string.Join(", ", (profile.Roles ?? []).OfType<UserRole>().Select(RoleName));
+        }
+        catch (Exception exception) when (exception is ApiException or HttpRequestException)
+        {
+            // Nothing to show yet: the rest of the page works without the profile.
+        }
+    }
+
+    private static string RoleName(UserRole role) => role switch
+    {
+        UserRole.Student => AppTexts.Get("Role.Student"),
+        UserRole.DrivingInstructor => AppTexts.Get("Role.DrivingInstructor"),
+        UserRole.TheoryInstructor => AppTexts.Get("Role.TheoryInstructor"),
+        UserRole.Manager => AppTexts.Get("Role.Manager"),
+        _ => AppTexts.Get("Role.Administrator")
+    };
 
     private async Task LeaveAsync(bool changeSchool)
     {

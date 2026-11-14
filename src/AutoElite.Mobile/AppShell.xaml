@@ -3,13 +3,31 @@
     x:Class="AutoElite.Mobile.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:l="clr-namespace:AutoElite.Mobile.Localization"
     xmlns:pages="clr-namespace:AutoElite.Mobile.Pages"
     Shell.FlyoutBehavior="Disabled">
 
-    <!-- The start page comes first and moves on to one of the others; the pages replace each other. -->
+    <!--
+        The start page comes first and moves on to the address of the school, signing in or the tabs of the signed-in
+        user, which replace each other; the other pages open over a tab. The tab of studies is a student's.
+    -->
     <ShellContent ContentTemplate="{DataTemplate pages:StartPage}" Route="start" />
     <ShellContent ContentTemplate="{DataTemplate pages:SchoolPage}" Route="school" />
     <ShellContent ContentTemplate="{DataTemplate pages:SignInPage}" Route="sign-in" />
-    <ShellContent ContentTemplate="{DataTemplate pages:HomePage}" Route="home" />
+
+    <TabBar Route="main">
+        <Tab Title="{l:Text Tab.Home}" Icon="tab_home.png" Route="home">
+            <ShellContent ContentTemplate="{DataTemplate pages:HomePage}" />
+        </Tab>
+        <Tab x:Name="StudyTab" Title="{l:Text Tab.Study}" Icon="tab_study.png" Route="study" IsVisible="False">
+            <ShellContent ContentTemplate="{DataTemplate pages:StudyPage}" />
+        </Tab>
+        <Tab Title="{l:Text Tab.Chats}" Icon="tab_chats.png" Route="chats">
+            <ShellContent ContentTemplate="{DataTemplate pages:ChatsPage}" />
+        </Tab>
+        <Tab Title="{l:Text Tab.Profile}" Icon="tab_profile.png" Route="profile">
+            <ShellContent ContentTemplate="{DataTemplate pages:ProfilePage}" />
+        </Tab>
+    </TabBar>
 
 </Shell>
