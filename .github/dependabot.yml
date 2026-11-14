@@ -1,0 +1,23 @@
+# Dependabot opens pull requests that update the dependencies, so that a fix of a vulnerability arrives on its own:
+# the NuGet packages of Directory.Packages.props and the local tools of .config/dotnet-tools.json, and the actions of
+# the workflows, which are pinned by commit and updated together with the version in their comment.
+version: 2
+updates:
+  - package-ecosystem: nuget
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 10
+    groups:
+      minor-and-patch:
+        update-types: [minor, patch]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    groups:
+      actions:
+        patterns: ["*"]

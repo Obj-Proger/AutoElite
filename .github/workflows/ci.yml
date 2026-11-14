@@ -5,6 +5,10 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+  # Weekly as well, so that a vulnerability found in a package since the last change fails the build.
+  schedule:
+    - cron: '41 3 * * 1'
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -20,18 +24,39 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
-      - uses: actions/setup-dotnet@v4
+      - uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73 # v6.1.0
         with:
           global-json-file: global.json
 
-      # GitHub Actions sets CI=true, so Directory.Build.props turns every warning into an error.
+      # GitHub Actions sets CI=true, so Directory.Build.props turns every warning into an error, including those of
+      # NuGet Audit about a package with a known vulnerability.
       - name: Build
         run: |
           for project in tests/*/*.csproj src/AutoElite.Web/AutoElite.Web.csproj; do
             dotnet build "$project" --configuration Release
           done
+
+      # The packages with a known vulnerability, direct or transitive, listed by name; any of them fails the job.
+      - name: Check for vulnerable packages
+        run: |
+          found=0
+          for project in tests/*/*.csproj src/AutoElite.Web/AutoElite.Web.csproj; do
+            report=$(dotnet list "$project" package --vulnerable --include-transitive --format json)
+            vulnerable=$(echo "$report" | jq -r '.projects[].frameworks[]?
+              | (.topLevelPackages[]?, .transitivePackages[]?)
+              | select(.vulnerabilities != null and (.vulnerabilities | length) > 0)
+              | "\(.id) \(.resolvedVersion): \([.vulnerabilities[].severity] | join(", "))"')
+            if [ -n "$vulnerable" ]; then
+              echo "::error title=Vulnerable packages in $project::${vulnerable//$'\n'/%0A}"
+              echo "$vulnerable"
+              found=1
+            fi
+          done
+          exit $found
 
       - name: Test
         run: |
@@ -43,9 +68,11 @@ jobs:
   mobile:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
-      - uses: actions/setup-dotnet@v4
+      - uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73 # v6.1.0
         with:
           global-json-file: global.json
 

@@ -24,4 +24,12 @@
     <!-- The default (neutral) resources are English; satellite assemblies hold the other cultures. -->
     <NeutralLanguage>en</NeutralLanguage>
   </PropertyGroup>
+
+  <!-- NuGet Audit checks every package, direct or transitive, against the advisories of GitHub on restore and warns about
+       one with a known vulnerability of any severity; in CI the warning is an error, so it fails the build. -->
+  <PropertyGroup>
+    <NuGetAudit>true</NuGetAudit>
+    <NuGetAuditMode>all</NuGetAuditMode>
+    <NuGetAuditLevel>low</NuGetAuditLevel>
+  </PropertyGroup>
 </Project>

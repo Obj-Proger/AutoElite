@@ -243,6 +243,13 @@ tests/   one test project per layer (xUnit v3, AwesomeAssertions), plus architec
 design/  Noir Modern, the design system of the mobile application and the website: tokens and fonts
 ```
 
+## Security
+
+Please report a vulnerability privately, as [SECURITY.md](SECURITY.md) describes, never in a public issue. Dependabot
+keeps the packages and the actions up to date, CodeQL analyses the code, NuGet Audit and a check of vulnerable packages
+fail the build on a package with a known vulnerability, the actions are pinned by commit and packages come from
+nuget.org only.
+
 ## License
 
 [GPL-3.0](LICENSE)
