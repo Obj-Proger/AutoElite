@@ -7,7 +7,8 @@ namespace AutoElite.Client.Offline;
 /// <summary>
 /// Keeps what the user last read from the API, so that the application shows it without a network: each read asks the
 /// API first and keeps its answer under a key; when the API cannot be reached, the kept answer is given instead. The
-/// answers are kept as the JSON of the models of the generated client.
+/// answers are kept as the JSON of the models of the generated client, encrypted; an answer that cannot be decrypted
+/// is dropped, as if nothing were kept.
 /// </summary>
 public sealed class OfflineCache
 {
@@ -123,13 +124,27 @@ public sealed class OfflineCache
     private Task<Kept?> ReadAsync(string key, CancellationToken cancellationToken) =>
         _database.RunAsync<Kept?>(connection =>
         {
-            using var command = OfflineDatabase.Command(
-                connection, "SELECT content, saved_at FROM snapshots WHERE key = $key", ("$key", key));
-            using var reader = command.ExecuteReader();
+            byte[] encrypted;
+            long savedAt;
+            using (var command = OfflineDatabase.Command(
+                connection, "SELECT content, saved_at FROM snapshots WHERE key = $key", ("$key", key)))
+            using (var reader = command.ExecuteReader())
+            {
+                if (!reader.Read())
+                    return null;
 
-            return reader.Read()
-                ? new Kept(reader.GetString(0), DateTimeOffset.FromUnixTimeMilliseconds(reader.GetInt64(1)))
-                : null;
+                encrypted = reader.GetFieldValue<byte[]>(0);
+                savedAt = reader.GetInt64(1);
+            }
+
+            if (_database.Decrypt(encrypted, Place(key)) is not { } content)
+            {
+                OfflineDatabase.Execute(connection, "DELETE FROM snapshots WHERE key = $key", ("$key", key));
+
+                return null;
+            }
+
+            return new Kept(content, DateTimeOffset.FromUnixTimeMilliseconds(savedAt));
         }, cancellationToken);
 
     private Task<DateTimeOffset> SaveAsync(string key, string content, CancellationToken cancellationToken)
@@ -146,12 +161,15 @@ public sealed class OfflineCache
                 ON CONFLICT (key) DO UPDATE SET content = excluded.content, saved_at = excluded.saved_at
                 """,
                 ("$key", key),
-                ("$content", content),
+                ("$content", _database.Encrypt(content, Place(key))),
                 ("$savedAt", savedAt.ToUnixTimeMilliseconds()));
 
             return savedAt;
         }, cancellationToken);
     }
+
+    // The place of an answer, which binds it to its key.
+    private static string Place(string key) => "snapshots/" + key;
 
     // An answer kept on the device.
     private sealed record Kept(string Content, DateTimeOffset SavedAt);

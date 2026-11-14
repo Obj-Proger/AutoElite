@@ -7,13 +7,17 @@ namespace AutoElite.Client.Offline;
 /// The actions the user took that wait to be sent to the API, in the order they were taken, kept in the offline
 /// database so that they survive a restart of the application. <see cref="OfflineSynchronizer"/> sends them; an action
 /// the API refuses stays in the queue, marked as rejected, until the user has seen it and dismisses it. An action that
-/// this version of the application cannot read, such as one of a later version, is dropped.
+/// this version of the application cannot read, such as one of a later version or one that cannot be decrypted, is
+/// dropped. The actions are kept encrypted.
 /// </summary>
 /// <param name="database">The offline database.</param>
 /// <param name="timeProvider">The clock.</param>
 public sealed class OfflineQueue(OfflineDatabase database, TimeProvider timeProvider)
 {
     private const string Columns = "id, content, queued_at, attempts, rejected_with_status";
+
+    /// <summary>The place of the actions, which binds their encrypted content to the queue.</summary>
+    internal const string Place = "pending_actions";
 
     /// <summary>Occurs when an action is added, sent, rejected or dismissed, on the thread that changed the queue.</summary>
     public event EventHandler? Changed;
@@ -32,7 +36,7 @@ public sealed class OfflineQueue(OfflineDatabase database, TimeProvider timeProv
             connection => (long)OfflineDatabase.Scalar(
                 connection,
                 "INSERT INTO pending_actions (content, queued_at) VALUES ($content, $queuedAt) RETURNING id",
-                ("$content", content),
+                ("$content", database.Encrypt(content, Place)),
                 ("$queuedAt", queuedAt))!,
             cancellationToken);
         Changed?.Invoke(this, EventArgs.Empty);
@@ -111,7 +115,7 @@ public sealed class OfflineQueue(OfflineDatabase database, TimeProvider timeProv
     }
 
     // Reads the actions of a query and drops those that cannot be read.
-    private static List<PendingAction> Read(SqliteConnection connection, string query)
+    private List<PendingAction> Read(SqliteConnection connection, string query)
     {
         var actions = new List<PendingAction>();
         var unreadable = new List<long>();
@@ -121,7 +125,8 @@ public sealed class OfflineQueue(OfflineDatabase database, TimeProvider timeProv
             while (reader.Read())
             {
                 var id = reader.GetInt64(0);
-                if (Deserialize(reader.GetString(1)) is not { } action)
+                if (database.Decrypt(reader.GetFieldValue<byte[]>(1), Place) is not { } content
+                    || Deserialize(content) is not { } action)
                 {
                     unreadable.Add(id);
                     continue;

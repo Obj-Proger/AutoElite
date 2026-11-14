@@ -70,27 +70,4 @@ public sealed class SecretAuthSessionStoreTests
         (await store.GetAsync(CancellationToken)).Should().BeNull();
         (await secrets.GetAsync(SecretAuthSessionStore.Key)).Should().BeNull();
     }
-
-    private sealed class MemorySecretStore : ISecretStore
-    {
-        private readonly Dictionary<string, string> _secrets = [];
-
-        public int Reads { get; private set; }
-
-        public Task<string?> GetAsync(string key)
-        {
-            Reads++;
-
-            return Task.FromResult(_secrets.GetValueOrDefault(key));
-        }
-
-        public Task SetAsync(string key, string value)
-        {
-            _secrets[key] = value;
-
-            return Task.CompletedTask;
-        }
-
-        public bool Remove(string key) => _secrets.Remove(key);
-    }
 }

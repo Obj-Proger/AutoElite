@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-  <!-- No backups: the keys of the secure storage stay on the device, so a restored session could not be read. -->
+  <!--
+    No backups: the keys of the secure storage stay on the device, so a restored session or offline data could not be
+    read. The configuration of the network depends on the build and is set by MainApplication.
+  -->
   <application
       android:allowBackup="false"
       android:icon="@mipmap/appicon"
       android:roundIcon="@mipmap/appicon_round"
-      android:supportsRtl="true"
-      android:networkSecurityConfig="@xml/network_security_config" />
+      android:supportsRtl="true" />
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
   <uses-permission android:name="android.permission.INTERNET" />
 </manifest>

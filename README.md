@@ -171,9 +171,12 @@ The application works without a network too (`src/AutoElite.Client.Offline`). A 
 keeps what the user last read, shown as possibly out of date while the API cannot be reached, and the actions the user
 takes, such as booking a practice slot, wait in a queue that is sent in order when the device connects to a network or
 the application comes back to the foreground. The API decides each action when it receives it: one it refuses, such as
-the booking of a slot that another student took meanwhile, stays in the queue for the user to see. The data on the
-device belongs to one user: `OfflineDatabase.ClaimAsync` forgets the data of another user when a user signs in, and
-`ForgetAsync` forgets everything when the user signs out.
+the booking of a slot that another student took meanwhile, stays in the queue for the user to see. What the database
+keeps is encrypted with AES-GCM under a key in the secure storage of the device, so a copy of the file alone cannot be
+read, and each content is bound to its place. The data on the device belongs to one user: `OfflineDatabase.ClaimAsync`
+forgets the data of another user, with its key, when a user signs in, and `ForgetAsync` forgets everything when the user
+signs out. Android backups are turned off, and only a debug build may reach the API of the development machine over
+HTTP.
 
 ### The website
 

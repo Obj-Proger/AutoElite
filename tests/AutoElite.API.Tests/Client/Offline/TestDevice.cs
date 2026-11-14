@@ -21,6 +21,7 @@ internal sealed class TestDevice : IAsyncDisposable
             .AddAutoEliteClient(
                 api.Server.BaseAddress,
                 http => http.ConfigurePrimaryHttpMessageHandler(() => new NetworkSwitch(this, api.Server.CreateHandler())))
+            .AddSingleton<ISecretStore>(new MemorySecretStore())
             .AddAutoEliteOffline(_databasePath)
             .BuildServiceProvider();
 

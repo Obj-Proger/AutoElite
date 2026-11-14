@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- HTTPS everywhere, except the API of the development machine, which the emulator reaches at 10.0.2.2 over HTTP. -->
+<!-- HTTPS only, with the certificate authorities of the system. A debug build uses network_security_config_debug. -->
 <network-security-config>
-  <base-config cleartextTrafficPermitted="false" />
-  <domain-config cleartextTrafficPermitted="true">
-    <domain includeSubdomains="false">10.0.2.2</domain>
-  </domain-config>
+  <base-config cleartextTrafficPermitted="false">
+    <trust-anchors>
+      <certificates src="system" />
+    </trust-anchors>
+  </base-config>
 </network-security-config>
