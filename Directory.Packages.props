@@ -78,7 +78,7 @@
     of the applications on a device.
   -->
   <ItemGroup Label="Offline">
-    <PackageVersion Include="Microsoft.Data.Sqlite" Version="10.0.14" />
+    <PackageVersion Include="Microsoft.Data.Sqlite" Version="11.0.0" />
   </ItemGroup>
   <!-- .NET MAUI (MIT): the application of students and instructors for Android and Windows (D-066). -->
   <ItemGroup Label="Mobile">
