@@ -1,0 +1,119 @@
+@page "/sign-in"
+@using AutoElite.Client.Authentication
+@using Microsoft.Kiota.Abstractions
+@inject BrowserSession Session
+@inject NavigationManager Navigation
+@inject IStringLocalizer<WebTexts> L
+
+@* Signing in with the email address and the password; the session is kept in the cookie of the API. *@
+<PageTitle>@L["SignIn.Title"] · AutoElite</PageTitle>
+
+<section class="page narrow">
+    <h1 class="headline">@L["SignIn.Title"]</h1>
+    <p class="secondary">@L["SignIn.Lead"]</p>
+    <EditForm class="form" Model="_form" OnSubmit="SignInAsync">
+        <label class="label" for="email">@L["SignIn.Email"]</label>
+        <InputText id="email" class="field" type="email" autocomplete="username" @bind-Value="_form.Email" />
+        <label class="label" for="password">@L["SignIn.Password"]</label>
+        <InputText id="password" class="field" type="password" autocomplete="current-password" @bind-Value="_form.Password" />
+        @if (_problem is { } problem)
+        {
+            <p class="error" role="alert">@ProblemText(problem)</p>
+        }
+        <button class="button" type="submit" disabled="@_isBusy">@L["SignIn.Submit"]</button>
+    </EditForm>
+</section>
+
+@code {
+    private readonly Credentials _form = new();
+    private Problem? _problem;
+    private bool _isBusy;
+
+    /// <summary>Gets or sets the page of the site to open after signing in.</summary>
+    [SupplyParameterFromQuery]
+    public string? ReturnUrl { get; set; }
+
+    /// <inheritdoc />
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            if (await Session.RestoreAsync(CancellationToken.None))
+                Navigation.NavigateTo(SafeReturnUrl(), replace: true);
+        }
+        catch (HttpRequestException)
+        {
+            // The form stays; signing in tells the user that the server cannot be reached.
+        }
+    }
+
+    private async Task SignInAsync()
+    {
+        if (string.IsNullOrWhiteSpace(_form.Email) || string.IsNullOrEmpty(_form.Password))
+        {
+            _problem = Problem.Missing;
+
+            return;
+        }
+
+        _isBusy = true;
+        _problem = null;
+        try
+        {
+            await Session.SignInAsync(_form.Email.Trim(), _form.Password, CancellationToken.None);
+            _form.Password = string.Empty;
+            Navigation.NavigateTo(SafeReturnUrl());
+        }
+        catch (ApiException exception)
+        {
+            _problem = exception.ResponseStatusCode switch
+            {
+                400 or 401 => Problem.WrongCredentials,
+                403 => Problem.Blocked,
+                429 => Problem.TooManyAttempts,
+                >= 500 => Problem.Unreachable,
+                _ => Problem.Failed
+            };
+            _form.Password = string.Empty;
+        }
+        catch (HttpRequestException)
+        {
+            _problem = Problem.Unreachable;
+        }
+        finally
+        {
+            _isBusy = false;
+        }
+    }
+
+    // A page of this site only, so that a link to the sign-in page cannot send the user to another site.
+    private string SafeReturnUrl() =>
+        ReturnUrl is { Length: > 1 } url && url[0] == '/' && url[1] is not '/' and not '\\' ? url : "/";
+
+    private string ProblemText(Problem problem) => problem switch
+    {
+        Problem.Missing => L["SignIn.Missing"],
+        Problem.WrongCredentials => L["SignIn.WrongCredentials"],
+        Problem.Blocked => L["SignIn.Blocked"],
+        Problem.TooManyAttempts => L["SignIn.TooManyAttempts"],
+        Problem.Unreachable => L["SignIn.Unreachable"],
+        _ => L["SignIn.Failed"]
+    };
+
+    private enum Problem
+    {
+        Missing,
+        WrongCredentials,
+        Blocked,
+        TooManyAttempts,
+        Unreachable,
+        Failed
+    }
+
+    private sealed class Credentials
+    {
+        public string Email { get; set; } = string.Empty;
+
+        public string Password { get; set; } = string.Empty;
+    }
+}

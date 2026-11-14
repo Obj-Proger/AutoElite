@@ -88,7 +88,7 @@ a:hover {
 .topbar {
     display: flex;
     gap: var(--space-lg);
-    align-items: baseline;
+    align-items: center;
     padding: var(--space-lg) var(--space-xl);
     border-bottom: 1px solid var(--color-border);
 }
@@ -105,6 +105,25 @@ a:hover {
     font-size: var(--font-size-label);
 }
 
+.topbar-actions {
+    display: flex;
+    gap: var(--space-md);
+    align-items: center;
+    margin-left: auto;
+}
+
+.topbar-link {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-label);
+}
+
+.banner {
+    margin: 0;
+    padding: var(--space-md) var(--space-xl);
+    background: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+}
+
 .page {
     display: flex;
     flex-direction: column;
@@ -112,6 +131,10 @@ a:hover {
     max-width: 1080px;
     margin: 0 auto;
     padding: var(--space-xxl) var(--space-xl);
+}
+
+.page.narrow {
+    max-width: 440px;
 }
 
 .hero {
@@ -152,6 +175,12 @@ a:hover {
     cursor: pointer;
 }
 
+.button.small {
+    min-height: 36px;
+    padding: 0 var(--space-lg);
+    font-size: var(--font-size-label);
+}
+
 .button:hover {
     color: var(--color-on-accent);
     background: var(--color-accent-hover);
@@ -176,6 +205,22 @@ a:hover {
     background: var(--color-surface);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-md);
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+.form .button {
+    margin-top: var(--space-sm);
+}
+
+.label {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-label);
+    font-weight: 500;
 }
 
 .field:focus {
@@ -209,6 +254,15 @@ a:hover {
 }
 
 @media (max-width: 600px) {
+    .topbar {
+        padding: var(--space-md) var(--space-page);
+    }
+
+    .topbar-note,
+    .topbar-link {
+        display: none;
+    }
+
     .page {
         padding: var(--space-xl) var(--space-page);
     }

@@ -1,0 +1,32 @@
+@page "/account"
+@attribute [Authorize]
+@using System.Security.Claims
+@inject IStringLocalizer<WebTexts> L
+
+@* The account of the signed-in user: their name, email address and roles. *@
+<PageTitle>@L["Account.Overline"] · AutoElite</PageTitle>
+
+<AuthorizeView>
+    <section class="page">
+        <span class="overline">@L["Account.Overline"]</span>
+        <h1 class="headline">@context.User.Identity?.Name</h1>
+        <div class="card">
+            <span class="caption">@L["Account.Email"]</span>
+            <span>@context.User.FindFirst(ClaimTypes.Email)?.Value</span>
+            <span class="caption">@L["Account.Roles"]</span>
+            <span>@string.Join(", ", context.User.FindAll(ClaimTypes.Role).Select(role => RoleName(role.Value)))</span>
+        </div>
+    </section>
+</AuthorizeView>
+
+@code {
+    private string RoleName(string role) => role switch
+    {
+        "Administrator" => L["Role.Administrator"],
+        "Manager" => L["Role.Manager"],
+        "DrivingInstructor" => L["Role.DrivingInstructor"],
+        "TheoryInstructor" => L["Role.TheoryInstructor"],
+        "Student" => L["Role.Student"],
+        _ => role
+    };
+}

@@ -1,8 +1,32 @@
 @inject IStringLocalizer<WebTexts> L
-@* The routes of the site; a page that does not exist is shown in the layout of the site. *@
+@*
+    The routes of the site. A page that needs signing in sends a visitor who is not signed in to the sign-in page, and
+    tells a signed-in user without access that the page is not for them; a page that does not exist is shown in the
+    layout of the site.
+*@
 <Router AppAssembly="typeof(App).Assembly">
     <Found Context="routeData">
-        <RouteView RouteData="routeData" DefaultLayout="typeof(MainLayout)" />
+        <AuthorizeRouteView RouteData="routeData" DefaultLayout="typeof(MainLayout)">
+            <NotAuthorized>
+                @if (context.User.Identity?.IsAuthenticated == true)
+                {
+                    <section class="page">
+                        <h1 class="headline">@L["Forbidden.Title"]</h1>
+                        <p class="secondary">@L["Forbidden.Text"]</p>
+                        <a class="button" href="">@L["NotFound.Home"]</a>
+                    </section>
+                }
+                else
+                {
+                    <RedirectToSignIn />
+                }
+            </NotAuthorized>
+            <Authorizing>
+                <section class="page">
+                    <p class="secondary">@L["Layout.Loading"]</p>
+                </section>
+            </Authorizing>
+        </AuthorizeRouteView>
         <FocusOnNavigate RouteData="routeData" Selector="h1" />
     </Found>
     <NotFound>

@@ -194,6 +194,12 @@ dotnet run --project src/AutoElite.Web
 
 and open `http://localhost:5173`, the `Client:BaseUrl` of the API, whose pages the API lets call it.
 
+Users of every role sign in on the website (`/sign-in`). The refresh token of its session stays in an HttpOnly cookie of
+the API that no script of the page can read, sent only to the endpoints of the browser session with the header of the
+website; the access token is kept in the memory of the page and renewed with the cookie (`BrowserSession`), by one tab
+of the browser at a time, since the API accepts a refresh token once. The cookie is SameSite=Strict, so in production
+the site and the API must be on the same site, such as `school.example` and `api.school.example`, both over HTTPS.
+
 ### First start
 
 When the API starts, it applies the pending migrations, unless `Database:MigrateOnStartup` is `false` where the schema

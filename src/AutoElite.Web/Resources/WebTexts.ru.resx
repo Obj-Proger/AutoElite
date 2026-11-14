@@ -13,8 +13,26 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Account.Email" xml:space="preserve">
+    <value>Электронная почта</value>
+  </data>
+  <data name="Account.Overline" xml:space="preserve">
+    <value>Учётная запись</value>
+  </data>
+  <data name="Account.Roles" xml:space="preserve">
+    <value>Роли</value>
+  </data>
+  <data name="Forbidden.Text" xml:space="preserve">
+    <value>Эта страница недоступна вашей учётной записи.</value>
+  </data>
+  <data name="Forbidden.Title" xml:space="preserve">
+    <value>Нет доступа</value>
+  </data>
+  <data name="Home.Account" xml:space="preserve">
+    <value>Моя учётная запись</value>
+  </data>
   <data name="Home.ComingText" xml:space="preserve">
-    <value>Скоро здесь появятся вход и страницы учеников и сотрудников.</value>
+    <value>Скоро здесь появятся страницы учеников и сотрудников.</value>
   </data>
   <data name="Home.ComingTitle" xml:space="preserve">
     <value>Скоро</value>
@@ -24,6 +42,21 @@
   </data>
   <data name="Home.Overline" xml:space="preserve">
     <value>Автошкола</value>
+  </data>
+  <data name="Home.SignedIn" xml:space="preserve">
+    <value>Вы вошли как</value>
+  </data>
+  <data name="Layout.Loading" xml:space="preserve">
+    <value>Загрузка…</value>
+  </data>
+  <data name="Layout.SignIn" xml:space="preserve">
+    <value>Войти</value>
+  </data>
+  <data name="Layout.SignOut" xml:space="preserve">
+    <value>Выйти</value>
+  </data>
+  <data name="Layout.SignOutFailed" xml:space="preserve">
+    <value>Не удалось выйти: сервер недоступен. Попробуйте ещё раз.</value>
   </data>
   <data name="Layout.Tagline" xml:space="preserve">
     <value>Автошкола</value>
@@ -36,5 +69,53 @@
   </data>
   <data name="NotFound.Title" xml:space="preserve">
     <value>Страница не найдена</value>
+  </data>
+  <data name="Role.Administrator" xml:space="preserve">
+    <value>Администратор</value>
+  </data>
+  <data name="Role.DrivingInstructor" xml:space="preserve">
+    <value>Инструктор по вождению</value>
+  </data>
+  <data name="Role.Manager" xml:space="preserve">
+    <value>Менеджер</value>
+  </data>
+  <data name="Role.Student" xml:space="preserve">
+    <value>Ученик</value>
+  </data>
+  <data name="Role.TheoryInstructor" xml:space="preserve">
+    <value>Преподаватель теории</value>
+  </data>
+  <data name="SignIn.Blocked" xml:space="preserve">
+    <value>Учётная запись заблокирована. Обратитесь в автошколу.</value>
+  </data>
+  <data name="SignIn.Email" xml:space="preserve">
+    <value>Электронная почта</value>
+  </data>
+  <data name="SignIn.Failed" xml:space="preserve">
+    <value>Не удалось войти. Попробуйте ещё раз.</value>
+  </data>
+  <data name="SignIn.Lead" xml:space="preserve">
+    <value>По адресу почты и паролю вашей учётной записи в автошколе.</value>
+  </data>
+  <data name="SignIn.Missing" xml:space="preserve">
+    <value>Введите адрес почты и пароль.</value>
+  </data>
+  <data name="SignIn.Password" xml:space="preserve">
+    <value>Пароль</value>
+  </data>
+  <data name="SignIn.Submit" xml:space="preserve">
+    <value>Войти</value>
+  </data>
+  <data name="SignIn.Title" xml:space="preserve">
+    <value>Вход</value>
+  </data>
+  <data name="SignIn.TooManyAttempts" xml:space="preserve">
+    <value>Слишком много попыток. Попробуйте позже.</value>
+  </data>
+  <data name="SignIn.Unreachable" xml:space="preserve">
+    <value>Сервер недоступен. Проверьте подключение и попробуйте ещё раз.</value>
+  </data>
+  <data name="SignIn.WrongCredentials" xml:space="preserve">
+    <value>Неверный адрес почты или пароль.</value>
   </data>
 </root>

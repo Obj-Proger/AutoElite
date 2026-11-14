@@ -1,0 +1,11 @@
+@inject NavigationManager Navigation
+
+@* Sends a visitor who is not signed in to the sign-in page, which brings them back to the page they asked for. *@
+@code {
+    /// <inheritdoc />
+    protected override void OnInitialized()
+    {
+        var returnUrl = "/" + Navigation.ToBaseRelativePath(Navigation.Uri);
+        Navigation.NavigateTo($"sign-in?returnUrl={Uri.EscapeDataString(returnUrl)}", replace: true);
+    }
+}

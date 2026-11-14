@@ -32,6 +32,45 @@ public static class AutoEliteClientServiceCollectionExtensions
     }
 
     /// <summary>
+    /// Registers the client of the API for the website, as
+    /// <see cref="AddAutoEliteClient(IServiceCollection, Uri, Action{IHttpClientBuilder})"/> does, with
+    /// <see cref="BrowserSession"/> as the source of the access tokens: the refresh token stays in the cookie of the API,
+    /// and the requests of the session carry the header of the website. The website lets those requests send the cookies
+    /// of the browser and registers an <see cref="ISessionRenewalLock"/> across its tabs, if it has one.
+    /// </summary>
+    /// <param name="services">The services of the website.</param>
+    /// <param name="apiAddress">The address of the API.</param>
+    /// <param name="configureAuthenticationHttpClient">
+    /// Configures the HTTP client of signing in, renewing the session and signing out further, for example so that it
+    /// sends the cookies of the browser.
+    /// </param>
+    /// <param name="configureHttpClient">Configures both HTTP clients further, for example their primary handler.</param>
+    /// <returns>The services, for chaining.</returns>
+    public static IServiceCollection AddAutoEliteWebsiteClient(
+        this IServiceCollection services,
+        Uri apiAddress,
+        Action<IHttpClientBuilder>? configureAuthenticationHttpClient = null,
+        Action<IHttpClientBuilder>? configureHttpClient = null)
+    {
+        ArgumentNullException.ThrowIfNull(apiAddress);
+
+        services.TryAddSingleton(TimeProvider.System);
+        services.AddSingleton(provider => new BrowserSession(
+            () => AutoEliteApiClientFactory.Create(
+                provider.GetRequiredService<IHttpClientFactory>().CreateClient(AuthenticationHttpClientName)),
+            provider.GetRequiredService<TimeProvider>(),
+            provider.GetService<ISessionRenewalLock>()));
+        services.TryAddSingleton<IAccessTokens>(provider => provider.GetRequiredService<BrowserSession>());
+        services.AddAutoEliteClient(apiAddress, configureHttpClient);
+
+        var authentication = services.AddHttpClient(AuthenticationHttpClientName)
+            .AddHttpMessageHandler(() => new WebsiteHeaderHandler());
+        configureAuthenticationHttpClient?.Invoke(authentication);
+
+        return services;
+    }
+
+    /// <summary>
     /// Registers the client of the API, as <see cref="AddAutoEliteClient(IServiceCollection, Uri, Action{IHttpClientBuilder})"/>
     /// does, for an application whose user chooses the API, such as the API of their school: the address is read again
     /// for every client of the API that is created.

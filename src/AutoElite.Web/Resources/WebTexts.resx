@@ -13,8 +13,26 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Account.Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="Account.Overline" xml:space="preserve">
+    <value>Account</value>
+  </data>
+  <data name="Account.Roles" xml:space="preserve">
+    <value>Roles</value>
+  </data>
+  <data name="Forbidden.Text" xml:space="preserve">
+    <value>This page is not available to your account.</value>
+  </data>
+  <data name="Forbidden.Title" xml:space="preserve">
+    <value>No access</value>
+  </data>
+  <data name="Home.Account" xml:space="preserve">
+    <value>My account</value>
+  </data>
   <data name="Home.ComingText" xml:space="preserve">
-    <value>Signing in and the pages of students and staff come next.</value>
+    <value>The pages of students and staff come next.</value>
   </data>
   <data name="Home.ComingTitle" xml:space="preserve">
     <value>Coming soon</value>
@@ -24,6 +42,21 @@
   </data>
   <data name="Home.Overline" xml:space="preserve">
     <value>Driving school</value>
+  </data>
+  <data name="Home.SignedIn" xml:space="preserve">
+    <value>Signed in as</value>
+  </data>
+  <data name="Layout.Loading" xml:space="preserve">
+    <value>Loading…</value>
+  </data>
+  <data name="Layout.SignIn" xml:space="preserve">
+    <value>Sign in</value>
+  </data>
+  <data name="Layout.SignOut" xml:space="preserve">
+    <value>Sign out</value>
+  </data>
+  <data name="Layout.SignOutFailed" xml:space="preserve">
+    <value>Could not sign out: the server cannot be reached. Try again.</value>
   </data>
   <data name="Layout.Tagline" xml:space="preserve">
     <value>Driving school</value>
@@ -36,5 +69,53 @@
   </data>
   <data name="NotFound.Title" xml:space="preserve">
     <value>Page not found</value>
+  </data>
+  <data name="Role.Administrator" xml:space="preserve">
+    <value>Administrator</value>
+  </data>
+  <data name="Role.DrivingInstructor" xml:space="preserve">
+    <value>Driving instructor</value>
+  </data>
+  <data name="Role.Manager" xml:space="preserve">
+    <value>Manager</value>
+  </data>
+  <data name="Role.Student" xml:space="preserve">
+    <value>Student</value>
+  </data>
+  <data name="Role.TheoryInstructor" xml:space="preserve">
+    <value>Theory instructor</value>
+  </data>
+  <data name="SignIn.Blocked" xml:space="preserve">
+    <value>The account is blocked. Contact the school.</value>
+  </data>
+  <data name="SignIn.Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="SignIn.Failed" xml:space="preserve">
+    <value>Could not sign in. Try again.</value>
+  </data>
+  <data name="SignIn.Lead" xml:space="preserve">
+    <value>With the email address and the password of your account at the school.</value>
+  </data>
+  <data name="SignIn.Missing" xml:space="preserve">
+    <value>Enter the email address and the password.</value>
+  </data>
+  <data name="SignIn.Password" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="SignIn.Submit" xml:space="preserve">
+    <value>Sign in</value>
+  </data>
+  <data name="SignIn.Title" xml:space="preserve">
+    <value>Sign in</value>
+  </data>
+  <data name="SignIn.TooManyAttempts" xml:space="preserve">
+    <value>Too many attempts. Try again later.</value>
+  </data>
+  <data name="SignIn.Unreachable" xml:space="preserve">
+    <value>The server cannot be reached. Check the connection and try again.</value>
+  </data>
+  <data name="SignIn.WrongCredentials" xml:space="preserve">
+    <value>The email address or the password is wrong.</value>
   </data>
 </root>
