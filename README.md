@@ -94,6 +94,14 @@ down` stops PostgreSQL, and with `-v` also deletes its data, so that the next st
 Linux and macOS the scripts run in PowerShell 7 as well; start the API and the website with `dotnet run --project
 src/AutoElite.API` and `dotnet run --project src/AutoElite.Web`.
 
+Windows PowerShell runs no script of a file until it is allowed once for the user: `Set-ExecutionPolicy -Scope
+CurrentUser RemoteSigned` lets local scripts run and still stops unsigned ones downloaded from the internet.
+
+With a PostgreSQL server that already runs, such as one on another machine or behind a Docker context of a remote host,
+pass `-ExistingDatabase` to both scripts: the first asks for the connection string without showing it, keeps it in the
+user secrets and starts nothing in Docker. The API creates the database when it first starts, if the user of the
+connection string may create databases; otherwise create an empty one first.
+
 ### Running the API
 
 Without the scripts above, the API needs PostgreSQL and a few settings and secrets of the machine, which stay out of
