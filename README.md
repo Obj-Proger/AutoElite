@@ -73,10 +73,31 @@ $env:AUTOELITE_TEST_S3 = "ServiceUrl=http://...:8333;AccessKey=...;SecretKey=...
 dotnet test
 ```
 
+### Quick start
+
+The quickest way to run the API and the website on Windows, with PostgreSQL in Docker and the [demo data](#demo-data),
+needs the .NET 10 SDK, Docker Desktop and PowerShell:
+
+```powershell
+.\scripts\Initialize-DevEnvironment.ps1   # once: the database, the keys and the settings; asks for the demo password
+.\scripts\Start-DevEnvironment.ps1        # each time: the database, then the API and the website in two windows
+```
+
+The first script writes a random password of the database to `.env`, which git ignores, starts PostgreSQL 18 from
+`compose.dev.yaml` at `localhost:5433`, reachable from this machine only, and keeps everything else in the user secrets
+of the API: random keys of the tokens and of the chats, the folders of the files and of the emails under
+`%LOCALAPPDATA%\AutoElite`, the address of the website and the demo data with the password it asks for. It keeps what is
+already set, so it may be run again, except the connection string, which it points to the database in Docker. The API
+then answers at `http://localhost:5080/scalar` and the website at `http://localhost:5173`; emails, such as invitations,
+are `.eml` files in `%LOCALAPPDATA%\AutoElite\mail`, which any mail program opens. `docker compose -f compose.dev.yaml
+down` stops PostgreSQL, and with `-v` also deletes its data, so that the next start creates the demo data again. On
+Linux and macOS the scripts run in PowerShell 7 as well; start the API and the website with `dotnet run --project
+src/AutoElite.API` and `dotnet run --project src/AutoElite.Web`.
+
 ### Running the API
 
-The API needs PostgreSQL and a few settings and secrets of the machine, which stay out of the repository in user
-secrets. Generate each key once (in PowerShell: `[Convert]::ToBase64String([Security.Cryptography.RandomNumberGenerator]::GetBytes(32))`):
+Without the scripts above, the API needs PostgreSQL and a few settings and secrets of the machine, which stay out of
+the repository in user secrets. Generate each key once (in PowerShell: `[Convert]::ToBase64String([Security.Cryptography.RandomNumberGenerator]::GetBytes(32))`):
 
 ```shell
 dotnet user-secrets set "ConnectionStrings:AutoElite" "Host=...;Database=autoelite;Username=...;Password=..." --project src/AutoElite.API
@@ -242,6 +263,25 @@ The demo users sign in with that password at `admin`, `manager`, `theory` (theor
 instructor) and `student1` to `student3`, each `@autoelite.example`, a domain reserved for examples, so no email reaches
 anybody. The data is created once: a database that has it is left as it is, and a failed step is logged; drop the
 database to start again.
+
+### A tour of the demo
+
+With the demo data, sign in as each kind of user to see what they do:
+
+- **Administrator** (`admin@autoelite.example`, on the website): the users of the school, finding them, inviting a new
+  one and opening the invitation from the mail folder to set their password, correcting a user, granting a role,
+  moving a user between branches, deactivating and reactivating a user. The API reference at `/scalar` and the
+  background jobs at `/jobs` show what the website does not yet.
+- **Manager** (`manager@autoelite.example`, on the website): the users of their branch only; they invite students.
+- **Student** (`student1@autoelite.example`, in the mobile application, at `http://10.0.2.2:5080` from the Android
+  emulator or `http://localhost:5080` on Windows): the theory lessons and the booked driving lessons on the home page,
+  booking and cancelling a slot, the practice test of ten questions, the contract with its payments and progress, the
+  chats and the notifications. Turned offline, the application shows what it last read and sends a booking once the
+  network is back. `student2` has paid part of the price, `student3` nothing and trains on the automatic car.
+- **Driving instructor** (`driving@autoelite.example`, in the application): the schedule of slots with the bookings of
+  the students; a lesson is completed, with the grades of the skills, or marked missed once it has started.
+- **Theory instructor** (`theory@autoelite.example`, in the application): the lessons of the group, whose attendance
+  is marked once a lesson has started.
 
 ### Database migrations
 

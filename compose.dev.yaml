@@ -1,0 +1,24 @@
+# PostgreSQL for developing AutoElite on this machine, reachable from this machine only, at localhost:5433 so as not to
+# take the port of a PostgreSQL installed locally. The password is in .env, which git ignores and
+# scripts/Initialize-DevEnvironment.ps1 writes; it is never committed.
+name: autoelite-dev
+
+services:
+  postgres:
+    image: postgres:18
+    environment:
+      POSTGRES_DB: autoelite
+      POSTGRES_USER: autoelite
+      POSTGRES_PASSWORD: ${AUTOELITE_DB_PASSWORD:?run scripts/Initialize-DevEnvironment.ps1 first, which writes it to .env}
+    ports:
+      - "127.0.0.1:5433:5432"
+    volumes:
+      - postgres:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U autoelite -d autoelite"]
+      interval: 2s
+      timeout: 5s
+      retries: 30
+
+volumes:
+  postgres:
