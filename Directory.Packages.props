@@ -39,7 +39,7 @@
   </ItemGroup>
   <!-- MailKit (MIT) sends the queued emails over SMTP. -->
   <ItemGroup Label="Email">
-    <PackageVersion Include="MailKit" Version="4.18.2" />
+    <PackageVersion Include="MailKit" Version="5.0.0" />
   </ItemGroup>
   <!-- The AWS SDK (Apache-2.0) talks to S3-compatible storages of document files (D-069). -->
   <ItemGroup Label="File storage">
