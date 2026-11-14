@@ -46,6 +46,42 @@
   <data name="Home.SignedIn" xml:space="preserve">
     <value>Вы вошли как</value>
   </data>
+  <data name="Invite.Back" xml:space="preserve">
+    <value>← Пользователи</value>
+  </data>
+  <data name="Invite.Language" xml:space="preserve">
+    <value>Язык писем</value>
+  </data>
+  <data name="Invite.Lead" xml:space="preserve">
+    <value>Пользователь получит письмо со ссылкой для создания пароля; ссылка действует ограниченное время, её можно отправить повторно.</value>
+  </data>
+  <data name="Invite.Missing" xml:space="preserve">
+    <value>Укажите фамилию, имя и адрес почты и выберите роль.</value>
+  </data>
+  <data name="Invite.NoBranch" xml:space="preserve">
+    <value>Без филиала</value>
+  </data>
+  <data name="Invite.OwnBranch" xml:space="preserve">
+    <value>Мой филиал</value>
+  </data>
+  <data name="Invite.Roles" xml:space="preserve">
+    <value>Роли</value>
+  </data>
+  <data name="Invite.StudentsOnly" xml:space="preserve">
+    <value>Менеджер приглашает учеников.</value>
+  </data>
+  <data name="Invite.Submit" xml:space="preserve">
+    <value>Отправить приглашение</value>
+  </data>
+  <data name="Invite.Title" xml:space="preserve">
+    <value>Приглашение пользователя</value>
+  </data>
+  <data name="Language.English" xml:space="preserve">
+    <value>Английский</value>
+  </data>
+  <data name="Language.Russian" xml:space="preserve">
+    <value>Русский</value>
+  </data>
   <data name="Layout.Loading" xml:space="preserve">
     <value>Загрузка…</value>
   </data>
@@ -81,6 +117,30 @@
   </data>
   <data name="NotFound.Title" xml:space="preserve">
     <value>Страница не найдена</value>
+  </data>
+  <data name="Person.Branch" xml:space="preserve">
+    <value>Филиал</value>
+  </data>
+  <data name="Person.Email" xml:space="preserve">
+    <value>Электронная почта</value>
+  </data>
+  <data name="Person.FirstName" xml:space="preserve">
+    <value>Имя</value>
+  </data>
+  <data name="Person.LastName" xml:space="preserve">
+    <value>Фамилия</value>
+  </data>
+  <data name="Person.MiddleName" xml:space="preserve">
+    <value>Отчество</value>
+  </data>
+  <data name="Person.Phone" xml:space="preserve">
+    <value>Телефон</value>
+  </data>
+  <data name="Problems.Failed" xml:space="preserve">
+    <value>Что-то пошло не так. Попробуйте ещё раз.</value>
+  </data>
+  <data name="Problems.Unreachable" xml:space="preserve">
+    <value>Сервер недоступен. Проверьте подключение и попробуйте ещё раз.</value>
   </data>
   <data name="Role.Administrator" xml:space="preserve">
     <value>Администратор</value>
@@ -130,6 +190,63 @@
   <data name="SignIn.WrongCredentials" xml:space="preserve">
     <value>Неверный адрес почты или пароль.</value>
   </data>
+  <data name="UserCard.Access" xml:space="preserve">
+    <value>Доступ</value>
+  </data>
+  <data name="UserCard.Cancel" xml:space="preserve">
+    <value>Отмена</value>
+  </data>
+  <data name="UserCard.ConfirmDeactivate" xml:space="preserve">
+    <value>Да, отключить</value>
+  </data>
+  <data name="UserCard.Deactivate" xml:space="preserve">
+    <value>Отключить</value>
+  </data>
+  <data name="UserCard.DeactivateText" xml:space="preserve">
+    <value>Отключённый пользователь не сможет войти, а его сеансы сразу завершатся.</value>
+  </data>
+  <data name="UserCard.Deactivated" xml:space="preserve">
+    <value>Пользователь отключён.</value>
+  </data>
+  <data name="UserCard.Details" xml:space="preserve">
+    <value>Имя и телефон</value>
+  </data>
+  <data name="UserCard.NotAccepted" xml:space="preserve">
+    <value>Пользователь ещё не создал пароль.</value>
+  </data>
+  <data name="UserCard.Reactivate" xml:space="preserve">
+    <value>Включить</value>
+  </data>
+  <data name="UserCard.ReactivateText" xml:space="preserve">
+    <value>Пользователь отключён и не может войти.</value>
+  </data>
+  <data name="UserCard.Reactivated" xml:space="preserve">
+    <value>Пользователь снова включён.</value>
+  </data>
+  <data name="UserCard.Resend" xml:space="preserve">
+    <value>Отправить приглашение ещё раз</value>
+  </data>
+  <data name="UserCard.Resent" xml:space="preserve">
+    <value>Приглашение отправлено повторно.</value>
+  </data>
+  <data name="UserCard.RoleGranted" xml:space="preserve">
+    <value>Роль выдана.</value>
+  </data>
+  <data name="UserCard.RoleRevoked" xml:space="preserve">
+    <value>Роль снята.</value>
+  </data>
+  <data name="UserCard.Save" xml:space="preserve">
+    <value>Сохранить</value>
+  </data>
+  <data name="UserCard.Saved" xml:space="preserve">
+    <value>Сохранено.</value>
+  </data>
+  <data name="UserCard.Since" xml:space="preserve">
+    <value>В автошколе с {0}</value>
+  </data>
+  <data name="UserCard.Title" xml:space="preserve">
+    <value>Пользователь</value>
+  </data>
   <data name="Users.Active" xml:space="preserve">
     <value>Активен</value>
   </data>
@@ -156,6 +273,9 @@
   </data>
   <data name="Users.Find" xml:space="preserve">
     <value>Найти</value>
+  </data>
+  <data name="Users.Invite" xml:space="preserve">
+    <value>Пригласить</value>
   </data>
   <data name="Users.Invited" xml:space="preserve">
     <value>Приглашён</value>

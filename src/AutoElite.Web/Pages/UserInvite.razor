@@ -1,0 +1,173 @@
+@page "/users/new"
+@attribute [Authorize(Roles = WebRoles.Staff)]
+@using System.Globalization
+@using AutoElite.Client.Api
+@using AutoElite.Client.Api.Models
+@inject Func<AutoEliteApiClient> CreateApi
+@inject NavigationManager Navigation
+@inject IStringLocalizer<WebTexts> L
+
+@*
+    Inviting a user: the API registers them with their roles and emails them a link to set a password. An administrator
+    invites anyone, into any branch; a manager invites students, into their own branch unless they choose another.
+*@
+<PageTitle>@L["Invite.Title"] · AutoElite</PageTitle>
+
+<section class="page narrow">
+    <div class="page-header">
+        <a class="caption" href="users">@L["Invite.Back"]</a>
+        <h1 class="headline">@L["Invite.Title"]</h1>
+        <p class="secondary">@L["Invite.Lead"]</p>
+    </div>
+
+    <EditForm class="form" Model="_form" OnSubmit="InviteAsync">
+        <label class="label" for="last-name">@L["Person.LastName"]</label>
+        <InputText id="last-name" class="field" autocomplete="off" @bind-Value="_form.LastName" />
+        <label class="label" for="first-name">@L["Person.FirstName"]</label>
+        <InputText id="first-name" class="field" autocomplete="off" @bind-Value="_form.FirstName" />
+        <label class="label" for="middle-name">@L["Person.MiddleName"]</label>
+        <InputText id="middle-name" class="field" autocomplete="off" @bind-Value="_form.MiddleName" />
+        <label class="label" for="email">@L["Person.Email"]</label>
+        <InputText id="email" class="field" type="email" autocomplete="off" @bind-Value="_form.Email" />
+        <label class="label" for="phone">@L["Person.Phone"]</label>
+        <InputText id="phone" class="field" type="tel" placeholder="+79991234567" autocomplete="off" @bind-Value="_form.Phone" />
+
+        <fieldset class="choices">
+            <legend class="label">@L["Invite.Roles"]</legend>
+            @if (_isAdministrator)
+            {
+                foreach (var role in _roles)
+                {
+                    <label class="choice">
+                        <input type="checkbox" checked="@_form.Roles.Contains(role)" @onchange="() => Toggle(role)" />
+                        @L.RoleName(role)
+                    </label>
+                }
+            }
+            else
+            {
+                <p class="secondary">@L["Invite.StudentsOnly"]</p>
+            }
+        </fieldset>
+
+        <label class="label" for="branch">@L["Person.Branch"]</label>
+        <select id="branch" class="field" @bind="_form.BranchId">
+            <option value="">@(_isAdministrator ? L["Invite.NoBranch"] : L["Invite.OwnBranch"])</option>
+            @foreach (var branch in _branches)
+            {
+                <option value="@branch.Id">@branch.Name</option>
+            }
+        </select>
+
+        <label class="label" for="language">@L["Invite.Language"]</label>
+        <select id="language" class="field" @bind="_form.Language">
+            <option value="@nameof(Language.Russian)">@L["Language.Russian"]</option>
+            <option value="@nameof(Language.English)">@L["Language.English"]</option>
+        </select>
+
+        @if (_isMissing)
+        {
+            <p class="error" role="alert">@L["Invite.Missing"]</p>
+        }
+        <Problems Failure="_failure" />
+        <button class="button" type="submit" disabled="@_isBusy">@L["Invite.Submit"]</button>
+    </EditForm>
+</section>
+
+@code {
+    private static readonly string[] _roles =
+        [WebRoles.Administrator, WebRoles.Manager, WebRoles.DrivingInstructor, WebRoles.TheoryInstructor, WebRoles.Student];
+
+    private readonly Invitation _form = new();
+    private List<BranchItem> _branches = [];
+    private bool _isAdministrator;
+    private bool _isMissing;
+    private bool _isBusy;
+    private Exception? _failure;
+
+    /// <summary>Gets or sets the signed-in user.</summary>
+    [CascadingParameter]
+    public Task<AuthenticationState>? AuthenticationState { get; set; }
+
+    /// <inheritdoc />
+    protected override async Task OnInitializedAsync()
+    {
+        _isAdministrator = AuthenticationState is not null
+            && (await AuthenticationState).User.IsInRole(WebRoles.Administrator);
+        _form.Language = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "ru"
+            ? nameof(Language.Russian)
+            : nameof(Language.English);
+        if (!_isAdministrator)
+            _form.Roles.Add(WebRoles.Student);
+
+        try
+        {
+            _branches = await CreateApi().Api.V1.Branches.GetAsync(request => request.QueryParameters.IsActive = true) ?? [];
+        }
+        catch (Exception exception) when (exception is ApiException or HttpRequestException)
+        {
+            _failure = exception;
+        }
+    }
+
+    private void Toggle(string role)
+    {
+        if (!_form.Roles.Remove(role))
+            _form.Roles.Add(role);
+    }
+
+    private async Task InviteAsync()
+    {
+        _isMissing = string.IsNullOrWhiteSpace(_form.LastName) || string.IsNullOrWhiteSpace(_form.FirstName)
+            || string.IsNullOrWhiteSpace(_form.Email) || _form.Roles.Count == 0;
+        _failure = null;
+        if (_isMissing)
+            return;
+
+        _isBusy = true;
+        try
+        {
+            var created = await CreateApi().Api.V1.Users.PostAsync(new InviteUserCommand
+            {
+                LastName = _form.LastName.Trim(),
+                FirstName = _form.FirstName.Trim(),
+                MiddleName = Optional(_form.MiddleName),
+                Email = _form.Email.Trim(),
+                Phone = Optional(_form.Phone),
+                BranchId = Guid.TryParse(_form.BranchId, out var branchId) ? branchId : null,
+                Roles = [.. _roles.Where(_form.Roles.Contains).Select(role => (UserRole?)Enum.Parse<UserRole>(role))],
+                PreferredLanguage = Enum.Parse<Language>(_form.Language)
+            });
+            Navigation.NavigateTo($"users/{created?.Id}");
+        }
+        catch (Exception exception) when (exception is ApiException or HttpRequestException)
+        {
+            _failure = exception;
+        }
+        finally
+        {
+            _isBusy = false;
+        }
+    }
+
+    private static string? Optional(string text) => string.IsNullOrWhiteSpace(text) ? null : text.Trim();
+
+    private sealed class Invitation
+    {
+        public string LastName { get; set; } = string.Empty;
+
+        public string FirstName { get; set; } = string.Empty;
+
+        public string MiddleName { get; set; } = string.Empty;
+
+        public string Email { get; set; } = string.Empty;
+
+        public string Phone { get; set; } = string.Empty;
+
+        public string BranchId { get; set; } = string.Empty;
+
+        public string Language { get; set; } = string.Empty;
+
+        public HashSet<string> Roles { get; } = [];
+    }
+}

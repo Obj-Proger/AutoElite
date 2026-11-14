@@ -3,7 +3,6 @@
 @using System.Globalization
 @using AutoElite.Client.Api
 @using AutoElite.Client.Api.Models
-@using Microsoft.Kiota.Abstractions
 @inject Func<AutoEliteApiClient> CreateApi
 @inject IStringLocalizer<WebTexts> L
 
@@ -14,9 +13,12 @@
 <PageTitle>@L["Users.Title"] · AutoElite</PageTitle>
 
 <section class="page">
-    <div class="page-header">
-        <h1 class="headline">@L["Users.Title"]</h1>
-        <p class="secondary">@L["Users.Lead"]</p>
+    <div class="page-header with-action">
+        <div>
+            <h1 class="headline">@L["Users.Title"]</h1>
+            <p class="secondary">@L["Users.Lead"]</p>
+        </div>
+        <a class="button" href="users/new">@L["Users.Invite"]</a>
     </div>
 
     <form class="filters" @onsubmit="FindAsync">
@@ -67,7 +69,7 @@
                     @foreach (var user in items)
                     {
                         <tr>
-                            <td>@FullName(user)</td>
+                            <td><a href="users/@user.Id">@People.FullName(user.LastName, user.FirstName, user.MiddleName)</a></td>
                             <td>@user.Email</td>
                             <td>@user.Phone</td>
                             <td>@RoleNames(user)</td>
@@ -127,9 +129,6 @@
 
     /// <inheritdoc />
     protected override Task OnInitializedAsync() => LoadAsync();
-
-    private static string FullName(UserListItem user) =>
-        string.Join(' ', new[] { user.LastName, user.FirstName, user.MiddleName }.Where(part => !string.IsNullOrWhiteSpace(part)));
 
     private string RoleNames(UserListItem user) =>
         string.Join(", ", (user.Roles ?? []).OfType<UserRole>().Select(role => L.RoleName(role.ToString())));

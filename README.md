@@ -200,10 +200,13 @@ website; the access token is kept in the memory of the page and renewed with the
 of the browser at a time, since the API accepts a refresh token once. The cookie is SameSite=Strict, so in production
 the site and the API must be on the same site, such as `school.example` and `api.school.example`, both over HTTPS.
 
-A signed-in user sees the menu of the sections their roles may open (`WebRoles`): administrators and managers find the
-users of the school by name, email address or phone, role and status (`/users`), a manager those of their branch. Every
-page but the front page and signing in needs signing in, which an architecture test checks; the menu only shows what a
-role may do, and the API checks the roles on every request.
+A signed-in user sees the menu of the sections their roles may open (`WebRoles`). Administrators and managers find the
+users of the school by name, email address or phone, role and status (`/users`), invite them (`/users/new`), and on the
+card of a user correct their name and phone, send the invitation again and deactivate or reactivate them; an
+administrator also grants and revokes roles and moves users between branches. A manager works with the students of their
+branch, as the API decides, and the errors of the API are shown in the language of the browser. Every page but the front
+page and signing in needs signing in, which an architecture test checks; the menu only shows what a role may do, and the
+API checks the roles on every request.
 
 ### First start
 

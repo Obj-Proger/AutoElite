@@ -1,0 +1,284 @@
+@page "/users/{UserId:guid}"
+@attribute [Authorize(Roles = WebRoles.Staff)]
+@using System.Globalization
+@using AutoElite.Client.Api
+@using AutoElite.Client.Api.Models
+@inject Func<AutoEliteApiClient> CreateApi
+@inject IStringLocalizer<WebTexts> L
+
+@*
+    The card of a user for administrators and managers: their name and phone, which both correct; their roles and branch,
+    which an administrator changes; and their access: the invitation sent again, and deactivating or reactivating them.
+    The API decides whom a manager may change.
+*@
+<PageTitle>@(_user is null ? L["UserCard.Title"] : FullName) · AutoElite</PageTitle>
+
+<section class="page">
+    <a class="caption" href="users">@L["Invite.Back"]</a>
+
+    @if (_user is null)
+    {
+        @if (_loadFailure is null)
+        {
+            <p class="secondary">@L["Layout.Loading"]</p>
+        }
+        else
+        {
+            <Problems Failure="_loadFailure" />
+        }
+    }
+    else
+    {
+        <div class="page-header">
+            <h1 class="headline">@FullName</h1>
+            <p class="secondary">
+                @_user.Email ·
+                @if (_user.IsActive != true)
+                {
+                    <span class="badge muted">@L["Users.Deactivated"]</span>
+                }
+                else if (_user.HasAcceptedInvitation != true)
+                {
+                    <span class="badge warning">@L["Users.Invited"]</span>
+                }
+                else
+                {
+                    <span class="badge success">@L["Users.Active"]</span>
+                }
+            </p>
+            @if (_user.CreatedAtUtc is { } createdAt)
+            {
+                <span class="caption">@string.Format(CultureInfo.CurrentCulture, L["UserCard.Since"], DateOf(createdAt))</span>
+            }
+        </div>
+
+        @if (_notice is { } notice)
+        {
+            <p class="notice" role="status">@notice</p>
+        }
+        <Problems Failure="_failure" />
+
+        <div class="cards">
+            <div class="card">
+                <h2 class="title">@L["UserCard.Details"]</h2>
+                <EditForm class="form" Model="_details" OnSubmit="SaveDetailsAsync">
+                    <label class="label" for="last-name">@L["Person.LastName"]</label>
+                    <InputText id="last-name" class="field" autocomplete="off" @bind-Value="_details.LastName" />
+                    <label class="label" for="first-name">@L["Person.FirstName"]</label>
+                    <InputText id="first-name" class="field" autocomplete="off" @bind-Value="_details.FirstName" />
+                    <label class="label" for="middle-name">@L["Person.MiddleName"]</label>
+                    <InputText id="middle-name" class="field" autocomplete="off" @bind-Value="_details.MiddleName" />
+                    <label class="label" for="phone">@L["Person.Phone"]</label>
+                    <InputText id="phone" class="field" type="tel" placeholder="+79991234567" autocomplete="off"
+                               @bind-Value="_details.Phone" />
+                    <button class="button" type="submit" disabled="@_isBusy">@L["UserCard.Save"]</button>
+                </EditForm>
+            </div>
+
+            <div class="card">
+                <h2 class="title">@L["Users.Roles"]</h2>
+                @if (_isAdministrator)
+                {
+                    foreach (var role in _roles)
+                    {
+                        <label class="choice">
+                            <input type="checkbox" checked="@HasRole(role)" disabled="@_isBusy"
+                                   @onchange="() => ToggleRoleAsync(role)" />
+                            @L.RoleName(role)
+                        </label>
+                    }
+                }
+                else
+                {
+                    <p>@string.Join(", ", _roles.Where(HasRole).Select(role => L.RoleName(role)))</p>
+                }
+
+                <h2 class="title">@L["Person.Branch"]</h2>
+                @if (_isAdministrator)
+                {
+                    <div class="inline">
+                        <select class="field grow" aria-label="@L["Person.Branch"]" @bind="_branchId">
+                            <option value="">@L["Invite.NoBranch"]</option>
+                            @foreach (var branch in _branches)
+                            {
+                                <option value="@branch.Id">@branch.Name</option>
+                            }
+                        </select>
+                        <button class="button secondary" type="button" disabled="@_isBusy" @onclick="SaveBranchAsync">
+                            @L["UserCard.Save"]
+                        </button>
+                    </div>
+                }
+                else
+                {
+                    <p>@(_user.BranchName ?? L["Invite.NoBranch"])</p>
+                }
+            </div>
+
+            <div class="card">
+                <h2 class="title">@L["UserCard.Access"]</h2>
+                @if (_user.HasAcceptedInvitation != true && _user.IsActive == true)
+                {
+                    <p class="secondary">@L["UserCard.NotAccepted"]</p>
+                    <button class="button secondary" type="button" disabled="@_isBusy" @onclick="ResendInvitationAsync">
+                        @L["UserCard.Resend"]
+                    </button>
+                }
+                @if (_user.IsActive == true)
+                {
+                    <p class="secondary">@L["UserCard.DeactivateText"]</p>
+                    @if (_isConfirmingDeactivation)
+                    {
+                        <div class="inline">
+                            <button class="button danger" type="button" disabled="@_isBusy" @onclick="DeactivateAsync">
+                                @L["UserCard.ConfirmDeactivate"]
+                            </button>
+                            <button class="button secondary" type="button" @onclick="() => _isConfirmingDeactivation = false">
+                                @L["UserCard.Cancel"]
+                            </button>
+                        </div>
+                    }
+                    else
+                    {
+                        <button class="button secondary" type="button" disabled="@_isBusy"
+                                @onclick="() => _isConfirmingDeactivation = true">
+                            @L["UserCard.Deactivate"]
+                        </button>
+                    }
+                }
+                else
+                {
+                    <p class="secondary">@L["UserCard.ReactivateText"]</p>
+                    <button class="button" type="button" disabled="@_isBusy" @onclick="ReactivateAsync">
+                        @L["UserCard.Reactivate"]
+                    </button>
+                }
+            </div>
+        </div>
+    }
+</section>
+
+@code {
+    private static readonly string[] _roles =
+        [WebRoles.Administrator, WebRoles.Manager, WebRoles.DrivingInstructor, WebRoles.TheoryInstructor, WebRoles.Student];
+
+    private readonly Details _details = new();
+    private UserDetails? _user;
+    private List<BranchItem> _branches = [];
+    private string _branchId = string.Empty;
+    private bool _isAdministrator;
+    private bool _isBusy;
+    private bool _isConfirmingDeactivation;
+    private string? _notice;
+    private Exception? _loadFailure;
+    private Exception? _failure;
+
+    /// <summary>Gets or sets the user.</summary>
+    [Parameter]
+    public Guid UserId { get; set; }
+
+    /// <summary>Gets or sets the signed-in user.</summary>
+    [CascadingParameter]
+    public Task<AuthenticationState>? AuthenticationState { get; set; }
+
+    private string FullName => _user is null ? string.Empty : People.FullName(_user.LastName, _user.FirstName, _user.MiddleName);
+
+    /// <inheritdoc />
+    protected override async Task OnParametersSetAsync()
+    {
+        _isAdministrator = AuthenticationState is not null
+            && (await AuthenticationState).User.IsInRole(WebRoles.Administrator);
+        _loadFailure = null;
+        try
+        {
+            await LoadAsync();
+            if (_isAdministrator)
+                _branches = await CreateApi().Api.V1.Branches.GetAsync() ?? [];
+        }
+        catch (Exception exception) when (exception is ApiException or HttpRequestException)
+        {
+            _loadFailure = exception;
+        }
+    }
+
+    private static string DateOf(DateTimeOffset moment) => moment.ToLocalTime().ToString("d", CultureInfo.CurrentCulture);
+
+    private bool HasRole(string role) => _user?.Roles?.Exists(granted => granted?.ToString() == role) == true;
+
+    private async Task LoadAsync()
+    {
+        _user = await CreateApi().Api.V1.Users[UserId].GetAsync();
+        _details.LastName = _user?.LastName ?? string.Empty;
+        _details.FirstName = _user?.FirstName ?? string.Empty;
+        _details.MiddleName = _user?.MiddleName ?? string.Empty;
+        _details.Phone = _user?.Phone ?? string.Empty;
+        _branchId = _user?.BranchId?.ToString() ?? string.Empty;
+    }
+
+    // Runs a change, reads the user again and tells how it went.
+    private async Task ChangeAsync(Func<Task> change, string notice)
+    {
+        _isBusy = true;
+        _failure = null;
+        _notice = null;
+        try
+        {
+            await change();
+            await LoadAsync();
+            _notice = notice;
+        }
+        catch (Exception exception) when (exception is ApiException or HttpRequestException)
+        {
+            _failure = exception;
+        }
+        finally
+        {
+            _isBusy = false;
+            _isConfirmingDeactivation = false;
+        }
+    }
+
+    private Task SaveDetailsAsync() =>
+        ChangeAsync(
+            () => CreateApi().Api.V1.Users[UserId].PutAsync(new UpdateUserDetailsCommand
+            {
+                UserId = UserId,
+                LastName = _details.LastName.Trim(),
+                FirstName = _details.FirstName.Trim(),
+                MiddleName = _details.MiddleName.Trim(),
+                Phone = _details.Phone.Trim()
+            }),
+            L["UserCard.Saved"]);
+
+    private Task ToggleRoleAsync(string role) =>
+        HasRole(role)
+            ? ChangeAsync(() => CreateApi().Api.V1.Users[UserId].Roles[role].DeleteAsync(), L["UserCard.RoleRevoked"])
+            : ChangeAsync(() => CreateApi().Api.V1.Users[UserId].Roles[role].PutAsync(), L["UserCard.RoleGranted"]);
+
+    private Task SaveBranchAsync() =>
+        ChangeAsync(
+            () => CreateApi().Api.V1.Users[UserId].Branch.PutAsync(new ChangeUserBranchCommand
+            {
+                UserId = UserId,
+                BranchId = Guid.TryParse(_branchId, out var branchId) ? branchId : null
+            }),
+            L["UserCard.Saved"]);
+
+    private Task ResendInvitationAsync() =>
+        ChangeAsync(() => CreateApi().Api.V1.Users[UserId].Invitation.PostAsync(), L["UserCard.Resent"]);
+
+    private Task DeactivateAsync() => ChangeAsync(() => CreateApi().Api.V1.Users[UserId].Deactivate.PostAsync(), L["UserCard.Deactivated"]);
+
+    private Task ReactivateAsync() => ChangeAsync(() => CreateApi().Api.V1.Users[UserId].Reactivate.PostAsync(), L["UserCard.Reactivated"]);
+
+    private sealed class Details
+    {
+        public string LastName { get; set; } = string.Empty;
+
+        public string FirstName { get; set; } = string.Empty;
+
+        public string MiddleName { get; set; } = string.Empty;
+
+        public string Phone { get; set; } = string.Empty;
+    }
+}

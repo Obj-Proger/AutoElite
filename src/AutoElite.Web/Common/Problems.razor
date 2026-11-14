@@ -1,0 +1,29 @@
+@inject IStringLocalizer<WebTexts> L
+
+@* The messages of a failed request: those of the API, or that the server cannot be reached or that something failed. *@
+@if (Failure is not null)
+{
+    <div class="error" role="alert">
+        @if (Failure is ApiException apiException && ApiErrors.MessagesOf(apiException) is { Count: > 0 } messages)
+        {
+            foreach (var message in messages)
+            {
+                <p class="problem">@message</p>
+            }
+        }
+        else if (Failure is HttpRequestException)
+        {
+            <p class="problem">@L["Problems.Unreachable"]</p>
+        }
+        else
+        {
+            <p class="problem">@L["Problems.Failed"]</p>
+        }
+    </div>
+}
+
+@code {
+    /// <summary>Gets or sets the failure of the request, or <see langword="null"/> when nothing failed.</summary>
+    [Parameter]
+    public Exception? Failure { get; set; }
+}

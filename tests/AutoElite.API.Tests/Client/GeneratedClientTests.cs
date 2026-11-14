@@ -2,6 +2,10 @@ using System.Globalization;
 using AutoElite.Client;
 using AutoElite.Domain.Enums;
 using Microsoft.Kiota.Abstractions;
+using Microsoft.Kiota.Abstractions.Serialization;
+using InviteUser = AutoElite.Client.Api.Models.InviteUserCommand;
+using Problem = AutoElite.Client.Api.Models.ProblemDetails;
+using Role = AutoElite.Client.Api.Models.UserRole;
 using LeadRequest = AutoElite.Client.Api.Models.SubmitLeadRequestCommand;
 
 namespace AutoElite.API.Tests.Client;
@@ -47,5 +51,25 @@ public sealed class GeneratedClientTests(ApiFactory api)
         var reading = () => client.Api.V1.Branches.GetAsync(cancellationToken: CancellationToken);
 
         (await reading.Should().ThrowAsync<ApiException>()).Which.ResponseStatusCode.Should().Be(401);
+    }
+
+    [Fact]
+    public async Task InvalidRequest_FailsWithTheProblem_AndTheMessagesOfItsFields()
+    {
+        using var administrator = await api.SignedInClientAsync(UserRole.Administrator);
+        var client = AutoEliteApiClientFactory.Create(administrator);
+
+        var inviting = () => client.Api.V1.Users.PostAsync(
+            new InviteUser { LastName = "Смирнов", FirstName = "Олег", Email = "not-an-email", Roles = [Role.Student] },
+            cancellationToken: CancellationToken);
+
+        var problem = (await inviting.Should().ThrowAsync<Problem>()).Which;
+        problem.ResponseStatusCode.Should().Be(400);
+        problem.Detail.Should().NotBeNullOrEmpty();
+        var fields = problem.AdditionalData["errors"].Should().BeOfType<UntypedArray>().Which.GetValue()
+            .Select(error => error.Should().BeOfType<UntypedObject>().Which.GetValue())
+            .Select(error => (Field: ((UntypedString)error["field"]).GetValue(), Message: ((UntypedString)error["message"]).GetValue()))
+            .ToList();
+        fields.Should().Contain(error => error.Field == "email" && !string.IsNullOrEmpty(error.Message));
     }
 }
