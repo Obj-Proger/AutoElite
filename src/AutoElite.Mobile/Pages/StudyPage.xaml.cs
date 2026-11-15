@@ -5,8 +5,8 @@ using Microsoft.Kiota.Abstractions;
 namespace AutoElite.Mobile.Pages;
 
 /// <summary>
-/// The studies, a tab of the shell: for a student their practice tests and contracts, for a theory instructor the
-/// questions of the school for the tests.
+/// The studies, a tab of the shell: for a student their practice tests, contracts and documents, for a theory
+/// instructor the questions of the school for the tests.
 /// </summary>
 public partial class StudyPage : ContentPage
 {
@@ -48,6 +48,9 @@ public partial class StudyPage : ContentPage
 
     /// <summary>Gets the command that opens the contracts.</summary>
     public Command OpenContractsCommand { get; } = new(async () => await Routes.OpenAsync(Routes.Contracts));
+
+    /// <summary>Gets the command that opens the documents of the student.</summary>
+    public Command OpenDocumentsCommand { get; } = new(async () => await Routes.OpenAsync(Routes.Documents));
 
     /// <summary>Gets the command that opens the questions of the school.</summary>
     public Command OpenQuestionsCommand { get; } = new(async () => await Routes.OpenAsync(Routes.Questions));

@@ -44,6 +44,15 @@ internal static class Routes
     /// <summary>A result of an exam to record or correct, opened over the exam with an <see cref="ExamResultRequest"/>.</summary>
     public const string ExamResult = "exam-result";
 
+    /// <summary>The tasks of a member of the staff, opened over the home page.</summary>
+    public const string Tasks = "tasks";
+
+    /// <summary>A task of the staff, opened over the tasks with its identifier.</summary>
+    public const string StaffTask = "task";
+
+    /// <summary>The documents of a student, opened over the tab of studies.</summary>
+    public const string Documents = "documents";
+
     /// <summary>Booking a driving lesson, opened over the home page.</summary>
     public const string Booking = "booking";
 

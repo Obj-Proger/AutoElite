@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="AutoElite.Mobile.Pages.TaskPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:l="clr-namespace:AutoElite.Mobile.Localization"
+    xmlns:pages="clr-namespace:AutoElite.Mobile.Pages"
+    x:DataType="pages:TaskViewModel"
+    Title="{l:Text Task.Title}">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="{StaticResource PageMargin}" Spacing="14">
+            <Border Style="{StaticResource HighlightCard}">
+                <VerticalStackLayout Spacing="4">
+                    <Label Style="{StaticResource Headline}" Text="{Binding Title}" />
+                    <Label Style="{StaticResource Secondary}" Text="{Binding Due}" />
+                    <Label Style="{StaticResource Caption}" Text="{Binding Status}" />
+                </VerticalStackLayout>
+            </Border>
+
+            <Border Style="{StaticResource Card}" IsVisible="{Binding HasDescription}">
+                <Label Style="{StaticResource BodyLarge}" Text="{Binding Description}" />
+            </Border>
+            <Label Style="{StaticResource Caption}" Text="{Binding Origin}" />
+
+            <Label Style="{StaticResource ErrorText}" Text="{Binding Message}" IsVisible="{Binding HasMessage}" />
+            <Button
+                Style="{StaticResource SecondaryButton}"
+                Text="{l:Text Task.Start}"
+                Command="{Binding StartCommand}"
+                IsVisible="{Binding CanStart}" />
+            <Button Text="{l:Text Task.Complete}" Command="{Binding CompleteCommand}" IsVisible="{Binding CanComplete}" />
+            <Button
+                Style="{StaticResource SecondaryButton}"
+                Text="{l:Text Task.Reopen}"
+                Command="{Binding ReopenCommand}"
+                IsVisible="{Binding CanReopen}" />
+            <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

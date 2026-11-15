@@ -218,7 +218,11 @@ student's own with their result, the practice exams of a driving instructor's br
 instructor's groups. An exam opens with the current members of its group (`members` of `GET /api/v1/exams/{id}`) and
 their results; once a practice exam has begun, a driving instructor records each result, and a recorded result is
 corrected with a reason, a practice one by a driving instructor and a theory one by the instructor responsible for the
-group. The texts of the application are in English, with a Russian translation, in `Resources/Strings`; the device's
+group. A member of the staff sees on the home page how many of their tasks are open and overdue; the tasks open by their
+deadline, and the assignee starts a task, marks it done, after which a recurring one comes back, and opens it again. In
+the tab of studies, a student opens the documents of their contracts and adds their own, such as a scan of their
+passport, with a description, and deletes those they added; an opened file is kept in the cache of the device until they
+sign out. The texts of the application are in English, with a Russian translation, in `Resources/Strings`; the device's
 language chooses between them unless the user chooses one in the profile, where they also change the school and sign
 out.
 

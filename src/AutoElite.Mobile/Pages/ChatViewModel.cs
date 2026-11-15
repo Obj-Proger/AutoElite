@@ -26,6 +26,7 @@ public sealed class ChatViewModel : ViewModel, IQueryAttributable
     private const int MaxFiles = 10;
 
     private readonly Chats _chats;
+    private readonly DocumentFiles _documentFiles;
     private readonly UserSession _session;
     private readonly OfflineQueue _queue;
     private readonly OfflineSynchronizer _synchronizer;
@@ -40,14 +41,21 @@ public sealed class ChatViewModel : ViewModel, IQueryAttributable
 
     /// <summary>Initializes a new instance of the <see cref="ChatViewModel"/> class.</summary>
     /// <param name="chats">The chats.</param>
+    /// <param name="files">Opens the files of the messages.</param>
     /// <param name="session">The user, whose messages stand on the right.</param>
     /// <param name="queue">The messages that wait to be sent.</param>
     /// <param name="synchronizer">Sends the messages.</param>
     /// <param name="realtime">The connection through which new messages arrive at once.</param>
     public ChatViewModel(
-        Chats chats, UserSession session, OfflineQueue queue, OfflineSynchronizer synchronizer, RealtimeConnection realtime)
+        Chats chats,
+        DocumentFiles files,
+        UserSession session,
+        OfflineQueue queue,
+        OfflineSynchronizer synchronizer,
+        RealtimeConnection realtime)
     {
         _chats = chats;
+        _documentFiles = files;
         _session = session;
         _queue = queue;
         _synchronizer = synchronizer;
@@ -282,8 +290,7 @@ public sealed class ChatViewModel : ViewModel, IQueryAttributable
     {
         try
         {
-            var path = await _chats.DownloadAsync(documentId, name, CancellationToken.None);
-            await Launcher.Default.OpenAsync(new OpenFileRequest(name, new ReadOnlyFile(path)));
+            await _documentFiles.OpenAsync(documentId, name, CancellationToken.None);
         }
         catch (Exception exception) when (exception is ApiException or HttpRequestException or TaskCanceledException
             or InvalidOperationException or IOException)

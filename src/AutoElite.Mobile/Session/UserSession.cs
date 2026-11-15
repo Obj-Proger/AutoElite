@@ -99,7 +99,7 @@ public sealed class UserSession(
     public async Task<int> CountWaitingActionsAsync(CancellationToken cancellationToken) =>
         (await queue.ListAsync(cancellationToken)).Count(action => !action.IsRejected);
 
-    /// <summary>Signs out, closes the connection to the hub and forgets the offline data and the files opened in chats.</summary>
+    /// <summary>Signs out, closes the connection to the hub and forgets the offline data and the files opened.</summary>
     /// <param name="cancellationToken">A token that signals cancellation of the operation.</param>
     /// <returns>A task that completes when the user is signed out.</returns>
     public async Task SignOutAsync(CancellationToken cancellationToken)
@@ -107,7 +107,7 @@ public sealed class UserSession(
         await realtime.StopAsync(cancellationToken);
         await sessions.SignOutAsync(cancellationToken);
         await offline.ForgetAsync(cancellationToken);
-        Chats.ForgetFiles();
+        DocumentFiles.Forget();
     }
 
     /// <summary>Signs out, forgets the offline data and the address of the school, so that the user gives another one.</summary>

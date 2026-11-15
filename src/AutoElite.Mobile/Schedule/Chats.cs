@@ -10,31 +10,14 @@ namespace AutoElite.Mobile.Schedule;
 /// The chats of the signed-in user and their latest messages, read from the API or, without a network, from the
 /// device, and the read position of the user in a chat; the people they can start a personal chat with; turning the
 /// notifications of a chat off, leaving a group chat and deleting a message. Text messages are sent through the
-/// offline queue; files need the network: each is attached to the chat first and then sent with one message. Opened
-/// files are kept in the cache of the application until the user signs out.
+/// offline queue; files need the network: each is attached to the chat first and then sent with one message. Files
+/// are opened through <see cref="DocumentFiles"/>.
 /// </summary>
 /// <param name="cache">What the user last read.</param>
 /// <param name="createApi">Creates the client of the API.</param>
 public sealed class Chats(OfflineCache cache, Func<AutoEliteApiClient> createApi)
 {
     private const int Latest = 50;
-
-    /// <summary>Gets the folder of the files the user opened, in the cache of the application.</summary>
-    public static string FilesFolder => Path.Combine(FileSystem.CacheDirectory, "chat-files");
-
-    /// <summary>Deletes the files the user opened, so that the next user of the device does not find them.</summary>
-    public static void ForgetFiles()
-    {
-        try
-        {
-            if (Directory.Exists(FilesFolder))
-                Directory.Delete(FilesFolder, recursive: true);
-        }
-        catch (IOException)
-        {
-            // A file still open elsewhere stays until the next sign-out; the cache is private to the application.
-        }
-    }
 
     /// <summary>Reads the chats, the one with the latest message first.</summary>
     /// <param name="cancellationToken">A token that signals cancellation of the operation.</param>
@@ -172,34 +155,4 @@ public sealed class Chats(OfflineCache cache, Func<AutoEliteApiClient> createApi
                 AttachmentIds = [.. documentIds.Select(id => (Guid?)id)]
             },
             cancellationToken: cancellationToken);
-
-    /// <summary>
-    /// Downloads a file of a chat into the cache of the application, once, and gives its path, so that another
-    /// application can open it.
-    /// </summary>
-    /// <param name="documentId">The document of the file.</param>
-    /// <param name="fileName">The name of the file.</param>
-    /// <param name="cancellationToken">A token that signals cancellation of the operation.</param>
-    /// <returns>The path of the file.</returns>
-    public async Task<string> DownloadAsync(Guid documentId, string fileName, CancellationToken cancellationToken)
-    {
-        // The name comes from another user: only its last part, without characters the file system refuses.
-        var invalid = Path.GetInvalidFileNameChars();
-        var name = string.Concat(Path.GetFileName(fileName).Select(c => invalid.Contains(c) ? '_' : c));
-        var folder = Path.Combine(FilesFolder, documentId.ToString("N", CultureInfo.InvariantCulture));
-        var path = Path.Combine(folder, string.IsNullOrWhiteSpace(name) ? "file" : name);
-        if (File.Exists(path))
-            return path;
-
-        Directory.CreateDirectory(folder);
-        await using var content = await createApi().Api.V1.Documents[documentId].GetAsync(cancellationToken: cancellationToken)
-            ?? throw new InvalidOperationException("The API answered without the file.");
-        var partial = path + ".part";
-        await using (var target = File.Create(partial))
-            await content.CopyToAsync(target, cancellationToken);
-
-        File.Move(partial, path, overwrite: true);
-
-        return path;
-    }
 }

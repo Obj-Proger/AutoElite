@@ -43,6 +43,16 @@
                     </VerticalStackLayout>
                 </Border>
 
+                <Border Style="{StaticResource Card}" IsVisible="{Binding IsStaff}">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding OpenTasksCommand}" />
+                    </Border.GestureRecognizers>
+                    <VerticalStackLayout Spacing="4">
+                        <Label Style="{StaticResource Title}" Text="{l:Text Tasks.Title}" />
+                        <Label Style="{StaticResource Secondary}" Text="{Binding TasksSummary}" />
+                    </VerticalStackLayout>
+                </Border>
+
                 <VerticalStackLayout Spacing="12" IsVisible="{Binding ShowsLessons}">
                     <Label Style="{StaticResource Title}" Text="{l:Text Home.Schedule}" />
                     <Button Text="{l:Text Home.Book}" Command="{Binding BookCommand}" IsVisible="{Binding IsStudent}" />

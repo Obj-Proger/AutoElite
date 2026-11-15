@@ -232,6 +232,39 @@
   <data name="Contracts.Unavailable" xml:space="preserve">
     <value>Не удалось загрузить договоры: нет связи с автошколой.</value>
   </data>
+  <data name="Documents.Add" xml:space="preserve">
+    <value>Добавить документ</value>
+  </data>
+  <data name="Documents.Choose" xml:space="preserve">
+    <value>Выберите документ</value>
+  </data>
+  <data name="Documents.Delete" xml:space="preserve">
+    <value>Удалить</value>
+  </data>
+  <data name="Documents.DeleteTitle" xml:space="preserve">
+    <value>Удалить документ?</value>
+  </data>
+  <data name="Documents.DescriptionQuestion" xml:space="preserve">
+    <value>Например, паспорт или медицинская справка; можно оставить пустым.</value>
+  </data>
+  <data name="Documents.DescriptionTitle" xml:space="preserve">
+    <value>Что это за документ?</value>
+  </data>
+  <data name="Documents.Mine" xml:space="preserve">
+    <value>Ваши документы</value>
+  </data>
+  <data name="Documents.MineHint" xml:space="preserve">
+    <value>Добавьте то, что просит школа: например, скан паспорта или медицинскую справку.</value>
+  </data>
+  <data name="Documents.NoneOfMine" xml:space="preserve">
+    <value>Вы пока не добавили документов.</value>
+  </data>
+  <data name="Documents.Offline" xml:space="preserve">
+    <value>Нет связи. Данные на {0}.</value>
+  </data>
+  <data name="Documents.Title" xml:space="preserve">
+    <value>Документы</value>
+  </data>
   <data name="Exam.Correct" xml:space="preserve">
     <value>Исправить</value>
   </data>
@@ -358,6 +391,9 @@
   <data name="Home.Morning" xml:space="preserve">
     <value>Доброе утро,</value>
   </data>
+  <data name="Home.NoTasks" xml:space="preserve">
+    <value>Открытых задач нет</value>
+  </data>
   <data name="Home.Offline" xml:space="preserve">
     <value>Нет связи. Данные на {0}.</value>
   </data>
@@ -381,6 +417,12 @@
   </data>
   <data name="Home.SignOutTitle" xml:space="preserve">
     <value>Выйти?</value>
+  </data>
+  <data name="Home.Tasks" xml:space="preserve">
+    <value>Открыто: {0}</value>
+  </data>
+  <data name="Home.TasksOverdue" xml:space="preserve">
+    <value>Открыто: {0}, просрочено: {1}</value>
   </data>
   <data name="Lesson.Absent" xml:space="preserve">
     <value>Пропущено</value>
@@ -1144,6 +1186,9 @@
   <data name="Study.ContractsHint" xml:space="preserve">
     <value>Прогресс обучения, откатанные часы и платежи.</value>
   </data>
+  <data name="Study.DocumentsHint" xml:space="preserve">
+    <value>Ваши документы и документы договоров.</value>
+  </data>
   <data name="Study.QuestionsHint" xml:space="preserve">
     <value>Составляйте и исправляйте вопросы школы для тренировочных тестов.</value>
   </data>
@@ -1170,6 +1215,66 @@
   </data>
   <data name="Tab.Study" xml:space="preserve">
     <value>Учёба</value>
+  </data>
+  <data name="Task.Complete" xml:space="preserve">
+    <value>Отметить выполненной</value>
+  </data>
+  <data name="Task.Completed" xml:space="preserve">
+    <value>выполнена {0}</value>
+  </data>
+  <data name="Task.Created" xml:space="preserve">
+    <value>Поставлена {0}, {1}</value>
+  </data>
+  <data name="Task.Daily" xml:space="preserve">
+    <value>ежедневно</value>
+  </data>
+  <data name="Task.Done" xml:space="preserve">
+    <value>выполнена</value>
+  </data>
+  <data name="Task.Due" xml:space="preserve">
+    <value>Срок: {0}</value>
+  </data>
+  <data name="Task.InProgress" xml:space="preserve">
+    <value>в работе</value>
+  </data>
+  <data name="Task.Monthly" xml:space="preserve">
+    <value>ежемесячно</value>
+  </data>
+  <data name="Task.New" xml:space="preserve">
+    <value>новая</value>
+  </data>
+  <data name="Task.Overdue" xml:space="preserve">
+    <value>просрочена</value>
+  </data>
+  <data name="Task.Reopen" xml:space="preserve">
+    <value>Вернуть в работу</value>
+  </data>
+  <data name="Task.Start" xml:space="preserve">
+    <value>Взять в работу</value>
+  </data>
+  <data name="Task.Title" xml:space="preserve">
+    <value>Задача</value>
+  </data>
+  <data name="Task.Weekly" xml:space="preserve">
+    <value>еженедельно</value>
+  </data>
+  <data name="Tasks.Done" xml:space="preserve">
+    <value>Выполненные</value>
+  </data>
+  <data name="Tasks.NoneDone" xml:space="preserve">
+    <value>Выполненных задач пока нет.</value>
+  </data>
+  <data name="Tasks.NoneOpen" xml:space="preserve">
+    <value>Открытых задач нет.</value>
+  </data>
+  <data name="Tasks.Offline" xml:space="preserve">
+    <value>Нет связи. Данные на {0}.</value>
+  </data>
+  <data name="Tasks.Open" xml:space="preserve">
+    <value>Открытые</value>
+  </data>
+  <data name="Tasks.Title" xml:space="preserve">
+    <value>Задачи</value>
   </data>
   <data name="Test.AnswerNotSent" xml:space="preserve">
     <value>Нет связи: ответ не отправлен. Выберите его ещё раз.</value>

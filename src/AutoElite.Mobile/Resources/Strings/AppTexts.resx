@@ -232,6 +232,39 @@
   <data name="Contracts.Unavailable" xml:space="preserve">
     <value>The contracts could not be read: no connection to the school.</value>
   </data>
+  <data name="Documents.Add" xml:space="preserve">
+    <value>Add a document</value>
+  </data>
+  <data name="Documents.Choose" xml:space="preserve">
+    <value>Choose a document</value>
+  </data>
+  <data name="Documents.Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Documents.DeleteTitle" xml:space="preserve">
+    <value>Delete the document?</value>
+  </data>
+  <data name="Documents.DescriptionQuestion" xml:space="preserve">
+    <value>For example, a passport or a medical certificate; you can leave it empty.</value>
+  </data>
+  <data name="Documents.DescriptionTitle" xml:space="preserve">
+    <value>What is the document?</value>
+  </data>
+  <data name="Documents.Mine" xml:space="preserve">
+    <value>Your documents</value>
+  </data>
+  <data name="Documents.MineHint" xml:space="preserve">
+    <value>Add what the school asks for, such as a scan of your passport or a medical certificate.</value>
+  </data>
+  <data name="Documents.NoneOfMine" xml:space="preserve">
+    <value>You have not added documents yet.</value>
+  </data>
+  <data name="Documents.Offline" xml:space="preserve">
+    <value>No connection. The data is as of {0}.</value>
+  </data>
+  <data name="Documents.Title" xml:space="preserve">
+    <value>Documents</value>
+  </data>
   <data name="Exam.Correct" xml:space="preserve">
     <value>Correct</value>
   </data>
@@ -358,6 +391,9 @@
   <data name="Home.Morning" xml:space="preserve">
     <value>Good morning,</value>
   </data>
+  <data name="Home.NoTasks" xml:space="preserve">
+    <value>No open tasks</value>
+  </data>
   <data name="Home.Offline" xml:space="preserve">
     <value>No connection. The data is as of {0}.</value>
   </data>
@@ -381,6 +417,12 @@
   </data>
   <data name="Home.SignOutTitle" xml:space="preserve">
     <value>Sign out?</value>
+  </data>
+  <data name="Home.Tasks" xml:space="preserve">
+    <value>Open: {0}</value>
+  </data>
+  <data name="Home.TasksOverdue" xml:space="preserve">
+    <value>Open: {0}, overdue: {1}</value>
   </data>
   <data name="Lesson.Absent" xml:space="preserve">
     <value>Missed</value>
@@ -1144,6 +1186,9 @@
   <data name="Study.ContractsHint" xml:space="preserve">
     <value>The progress of the course, the hours driven and the payments.</value>
   </data>
+  <data name="Study.DocumentsHint" xml:space="preserve">
+    <value>Your documents and those of your contracts.</value>
+  </data>
   <data name="Study.QuestionsHint" xml:space="preserve">
     <value>Write and correct the questions of the school for the practice tests.</value>
   </data>
@@ -1170,6 +1215,66 @@
   </data>
   <data name="Tab.Study" xml:space="preserve">
     <value>Studies</value>
+  </data>
+  <data name="Task.Complete" xml:space="preserve">
+    <value>Mark done</value>
+  </data>
+  <data name="Task.Completed" xml:space="preserve">
+    <value>done on {0}</value>
+  </data>
+  <data name="Task.Created" xml:space="preserve">
+    <value>Set on {0} by {1}</value>
+  </data>
+  <data name="Task.Daily" xml:space="preserve">
+    <value>every day</value>
+  </data>
+  <data name="Task.Done" xml:space="preserve">
+    <value>done</value>
+  </data>
+  <data name="Task.Due" xml:space="preserve">
+    <value>Due {0}</value>
+  </data>
+  <data name="Task.InProgress" xml:space="preserve">
+    <value>in progress</value>
+  </data>
+  <data name="Task.Monthly" xml:space="preserve">
+    <value>every month</value>
+  </data>
+  <data name="Task.New" xml:space="preserve">
+    <value>new</value>
+  </data>
+  <data name="Task.Overdue" xml:space="preserve">
+    <value>overdue</value>
+  </data>
+  <data name="Task.Reopen" xml:space="preserve">
+    <value>Open again</value>
+  </data>
+  <data name="Task.Start" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="Task.Title" xml:space="preserve">
+    <value>Task</value>
+  </data>
+  <data name="Task.Weekly" xml:space="preserve">
+    <value>every week</value>
+  </data>
+  <data name="Tasks.Done" xml:space="preserve">
+    <value>Done</value>
+  </data>
+  <data name="Tasks.NoneDone" xml:space="preserve">
+    <value>No tasks done yet.</value>
+  </data>
+  <data name="Tasks.NoneOpen" xml:space="preserve">
+    <value>No open tasks.</value>
+  </data>
+  <data name="Tasks.Offline" xml:space="preserve">
+    <value>No connection. The data is as of {0}.</value>
+  </data>
+  <data name="Tasks.Open" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="Tasks.Title" xml:space="preserve">
+    <value>Tasks</value>
   </data>
   <data name="Test.AnswerNotSent" xml:space="preserve">
     <value>No connection: the answer was not sent. Choose it again.</value>

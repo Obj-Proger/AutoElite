@@ -25,6 +25,7 @@ public sealed partial class HomeViewModel : ViewModel
     private readonly OfflineSynchronizer _synchronizer;
     private readonly TimeProvider _timeProvider;
     private readonly LessonEntries _entries;
+    private readonly StaffTasks _tasks;
 
     /// <summary>Initializes a new instance of the <see cref="HomeViewModel"/> class.</summary>
     /// <param name="session">The user of the application.</param>
@@ -36,6 +37,7 @@ public sealed partial class HomeViewModel : ViewModel
     /// <param name="synchronizer">Sends the actions.</param>
     /// <param name="timeProvider">The clock.</param>
     /// <param name="entries">Makes the cards of the lessons, with what the user can do with them.</param>
+    /// <param name="tasks">The tasks the school gives a member of its staff.</param>
     public HomeViewModel(
         UserSession session,
         StudentSchedule schedule,
@@ -45,7 +47,8 @@ public sealed partial class HomeViewModel : ViewModel
         OfflineQueue queue,
         OfflineSynchronizer synchronizer,
         TimeProvider timeProvider,
-        LessonEntries entries)
+        LessonEntries entries,
+        StaffTasks tasks)
     {
         _session = session;
         _schedule = schedule;
@@ -58,6 +61,8 @@ public sealed partial class HomeViewModel : ViewModel
         _timeProvider = timeProvider;
         _entries = entries;
         _entries.Changed = LoadAsync;
+        _tasks = tasks;
+        OpenTasksCommand = new Command(async () => await Routes.OpenAsync(Routes.Tasks));
         RefreshCommand = new Command(async () => await RefreshAsync());
         DismissRefusalsCommand = new Command(async () => await DismissRefusalsAsync());
         BookCommand = new Command(async () => await Routes.OpenAsync(Routes.Booking));
@@ -163,6 +168,23 @@ public sealed partial class HomeViewModel : ViewModel
         set => SetProperty(ref field, value);
     }
 
+    /// <summary>Gets a value indicating whether the user is a member of the staff, who has tasks.</summary>
+    public bool IsStaff
+    {
+        get;
+        private set => SetProperty(ref field, value);
+    }
+
+    /// <summary>Gets how many tasks are open and overdue.</summary>
+    public string TasksSummary
+    {
+        get;
+        private set => SetProperty(ref field, value);
+    } = string.Empty;
+
+    /// <summary>Gets the command that opens the tasks.</summary>
+    public Command OpenTasksCommand { get; }
+
     /// <summary>Gets the command that sends the waiting actions and reads everything again.</summary>
     public Command RefreshCommand { get; }
 
@@ -201,6 +223,8 @@ public sealed partial class HomeViewModel : ViewModel
             IsStudent = profile.Value.Roles?.Contains(UserRole.Student) == true;
             IsDrivingInstructor = profile.Value.Roles?.Contains(UserRole.DrivingInstructor) == true;
             IsTheoryInstructor = profile.Value.Roles?.Contains(UserRole.TheoryInstructor) == true;
+            IsStaff = profile.Value.Roles?.Any(role => role is UserRole.Administrator or UserRole.Manager
+                or UserRole.DrivingInstructor or UserRole.TheoryInstructor) == true;
             if (profile.IsFromCache)
                 offlineSince = profile.SavedAt;
         }
@@ -238,12 +262,33 @@ public sealed partial class HomeViewModel : ViewModel
             lines.Add(AppTexts.Format("Home.Pending", waitingCount));
 
         Status = lines.Count > 0 ? string.Join(Environment.NewLine, lines) : null;
+        if (IsStaff)
+            await CountTasksAsync();
+
         await CountUnreadAsync();
         await ConnectAsync();
     }
 
     private static DateTimeOffset? Earliest(DateTimeOffset? first, DateTimeOffset? second) =>
         first is { } a && second is { } b ? (a < b ? a : b) : first ?? second;
+
+    // Shows how many tasks are open and how many of them are overdue; without a network the last numbers stay.
+    private async Task CountTasksAsync()
+    {
+        try
+        {
+            var (open, _) = await _tasks.ReadOpenAsync(CancellationToken.None);
+            var now = _timeProvider.GetUtcNow();
+            var overdue = open.Count(task => task.DueAtUtc < now);
+            TasksSummary = open.Count == 0
+                ? AppTexts.Get("Home.NoTasks")
+                : overdue > 0 ? AppTexts.Format("Home.TasksOverdue", open.Count, overdue) : AppTexts.Format("Home.Tasks", open.Count);
+        }
+        catch (Exception exception) when (exception is ApiException or HttpRequestException)
+        {
+            // The numbers are shown once the tasks can be read.
+        }
+    }
 
     // Shows the number of unread notifications; without a network the button keeps the last number.
     private async Task CountUnreadAsync()
