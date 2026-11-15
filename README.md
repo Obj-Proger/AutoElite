@@ -210,9 +210,12 @@ files, which need a network and open in another application from the cache of th
 out; the user deletes their own messages, turns the notifications of a chat off and leaves a group chat. In the profile
 the user corrects their name, phone and the language of their notifications and emails, sets or removes their photo,
 changes their password, which signs out their other devices, and asks for a new email address, which changes once they
-follow the link sent to it. The texts of the application are in English, with a Russian translation, in
-`Resources/Strings`; the device's language chooses between them unless the user chooses one in the profile, where they
-also change the school and sign out.
+follow the link sent to it. An instructor opens the progress of a student they teach from a lesson or a personal chat
+(`GET /api/v1/students/{id}/progress`, without the money of the contracts): the practice hours, the driving lessons, the
+attendance of the group, the tests and the exams, and for a driving instructor the lessons with them, with the hours,
+the grade and the note; they write to or call the student from there. The texts of the application are in English, with
+a Russian translation, in `Resources/Strings`; the device's language chooses between them unless the user chooses one in
+the profile, where they also change the school and sign out.
 
 The application works without a network too (`src/AutoElite.Client.Offline`). A SQLite database in its private storage
 keeps what the user last read, shown as possibly out of date while the API cannot be reached, and the actions the user

@@ -15,7 +15,7 @@ namespace AutoElite.Mobile.Pages;
 /// without a network, from the device; the messages the user sent that wait in the offline queue; and sending a
 /// message, with up to ten files, which need the network. A new message of the chat reads it again at once, and the
 /// messages shown count as read. The user deletes their own messages, turns the notifications of the chat off and
-/// leaves a group chat.
+/// leaves a group chat; an instructor opens the progress of the student of a personal chat.
 /// </summary>
 public sealed class ChatViewModel : ViewModel, IQueryAttributable
 {
@@ -35,6 +35,8 @@ public sealed class ChatViewModel : ViewModel, IQueryAttributable
     private Guid _chatId;
     private bool _isGroup;
     private bool _isMuted;
+    private Guid? _counterpartId;
+    private bool _isInstructor;
 
     /// <summary>Initializes a new instance of the <see cref="ChatViewModel"/> class.</summary>
     /// <param name="chats">The chats.</param>
@@ -162,6 +164,9 @@ public sealed class ChatViewModel : ViewModel, IQueryAttributable
             var chat = (await _chats.ReadChatsAsync(CancellationToken.None)).Value.FirstOrDefault(item => item.Id == _chatId);
             _isGroup = chat?.Kind == ChatKind.Group;
             _isMuted = chat?.IsMuted == true;
+            _counterpartId = chat?.CounterpartId;
+            var roles = (await _session.GetProfileAsync(CancellationToken.None)).Value.Roles ?? [];
+            _isInstructor = roles.Contains(UserRole.DrivingInstructor) || roles.Contains(UserRole.TheoryInstructor);
         }
         catch (Exception exception) when (exception is ApiException or HttpRequestException)
         {
@@ -310,8 +315,19 @@ public sealed class ChatViewModel : ViewModel, IQueryAttributable
     {
         var mute = _isMuted ? AppTexts.Get("Chat.Unmute") : AppTexts.Get("Chat.Mute");
         var leave = AppTexts.Get("Chat.Leave");
+        var student = AppTexts.Get("Chat.Student");
+        string[] choices = _isInstructor && !_isGroup && _counterpartId is not null ? [mute, student] : [mute];
         var choice = await Shell.Current.DisplayActionSheetAsync(
-            Title, AppTexts.Get("Common.Cancel"), _isGroup ? leave : null, mute);
+            Title, AppTexts.Get("Common.Cancel"), _isGroup ? leave : null, choices);
+        if (choice == student && _counterpartId is { } studentId)
+        {
+            await Routes.OpenAsync(
+                Routes.Student,
+                new Dictionary<string, object> { [StudentViewModel.StudentParameter] = new StudentRequest(studentId, Title) });
+
+            return;
+        }
+
         try
         {
             if (choice == mute)

@@ -22,6 +22,26 @@ internal sealed class StudentCardQueries(
     IExamQueries examQueries) : IStudentCardQueries
 {
     /// <inheritdoc />
+    public async Task<bool> IsTaughtByAsync(Guid studentId, Guid instructorId, CancellationToken cancellationToken = default) =>
+        await (
+                from slot in dbContext.Set<DrivingSlot>().AsNoTracking()
+                from booking in slot.Bookings
+                where slot.InstructorId == instructorId
+                    && booking.StudentId == studentId
+                    && booking.Status != DrivingBookingStatus.Cancelled
+                select booking)
+            .AnyAsync(cancellationToken)
+        || await (
+                from studyGroup in dbContext.Set<StudyGroup>().AsNoTracking()
+                from enrollment in studyGroup.Enrollments
+                where studyGroup.TheoryInstructorId == instructorId
+                    && studyGroup.IsActive
+                    && enrollment.StudentId == studentId
+                    && enrollment.WithdrawnAtUtc == null
+                select enrollment)
+            .AnyAsync(cancellationToken);
+
+    /// <inheritdoc />
     public async Task<StudentCard?> GetAsync(Guid studentId, DateTime utcNow, CancellationToken cancellationToken = default)
     {
         var student = await dbContext.Set<User>().AsNoTracking()

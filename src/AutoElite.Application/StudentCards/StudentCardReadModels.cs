@@ -64,3 +64,54 @@ public sealed record StudentCardDriving(int Completed, int NoShows, int Upcoming
 /// <param name="Failed">The attempts failed.</param>
 /// <param name="LastAttempt">The latest attempt, if any; its counts are hidden while it is in progress.</param>
 public sealed record StudentCardTests(int Attempts, int Passed, int Failed, TestSessionItem? LastAttempt);
+
+/// <summary>
+/// The progress of a student that their instructors read: who they are and how each contract advances, without the
+/// money of the contracts.
+/// </summary>
+/// <param name="StudentId">The student.</param>
+/// <param name="LastName">The last name.</param>
+/// <param name="FirstName">The first name.</param>
+/// <param name="MiddleName">The middle name, if any.</param>
+/// <param name="Email">The email address.</param>
+/// <param name="Phone">The phone, if any.</param>
+/// <param name="PhotoDocumentId">The photo, if any.</param>
+/// <param name="Contracts">The contracts, the latest first.</param>
+public sealed record StudentProgress(
+    Guid StudentId,
+    string LastName,
+    string FirstName,
+    string? MiddleName,
+    string Email,
+    string? Phone,
+    Guid? PhotoDocumentId,
+    IReadOnlyList<StudentProgressContract> Contracts);
+
+/// <summary>How a contract of a student advances.</summary>
+/// <param name="ContractId">The contract.</param>
+/// <param name="CourseName">The course.</param>
+/// <param name="Category">The licence category.</param>
+/// <param name="Transmission">The gearbox the student learns on.</param>
+/// <param name="Status">The status of the contract.</param>
+/// <param name="StartDate">The first day of the training.</param>
+/// <param name="EndDate">The last day of the training.</param>
+/// <param name="CompletedPracticeHours">The practice hours driven.</param>
+/// <param name="CoursePracticeHours">The practice hours of the course.</param>
+/// <param name="Group">The current study group with the attendance, if any.</param>
+/// <param name="Driving">The driving lessons.</param>
+/// <param name="Tests">The practice tests and theory exams taken, without the counts of one in progress.</param>
+/// <param name="Exams">The school exams with the results.</param>
+public sealed record StudentProgressContract(
+    Guid ContractId,
+    string CourseName,
+    LicenseCategory Category,
+    Transmission Transmission,
+    ContractStatus Status,
+    DateOnly StartDate,
+    DateOnly EndDate,
+    decimal CompletedPracticeHours,
+    int CoursePracticeHours,
+    StudentCardGroup? Group,
+    StudentCardDriving Driving,
+    StudentCardTests Tests,
+    IReadOnlyList<StudentExamItem> Exams);

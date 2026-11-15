@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="AutoElite.Mobile.Pages.StudentPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:l="clr-namespace:AutoElite.Mobile.Localization"
+    xmlns:pages="clr-namespace:AutoElite.Mobile.Pages"
+    x:DataType="pages:StudentViewModel"
+    Title="{l:Text Student.Title}">
+
+    <!-- The student: how to reach them, each contract with its progress, then the lessons with the instructor. -->
+    <ScrollView>
+        <VerticalStackLayout Padding="{StaticResource PageMargin}" Spacing="14">
+            <Border Style="{StaticResource HighlightCard}">
+                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="14" RowDefinitions="Auto,Auto" RowSpacing="10">
+                    <Border
+                        WidthRequest="56"
+                        HeightRequest="56"
+                        StrokeThickness="0"
+                        BackgroundColor="{StaticResource Accent}"
+                        VerticalOptions="Start">
+                        <Border.StrokeShape>
+                            <Ellipse />
+                        </Border.StrokeShape>
+                        <Label
+                            Text="{Binding Initials}"
+                            FontFamily="TextSemiBold"
+                            FontSize="20"
+                            TextColor="{StaticResource OnAccent}"
+                            HorizontalOptions="Center"
+                            VerticalOptions="Center" />
+                    </Border>
+                    <VerticalStackLayout Grid.Column="1" Spacing="4" VerticalOptions="Center">
+                        <Label Style="{StaticResource Headline}" Text="{Binding Name}" />
+                        <Label Style="{StaticResource Secondary}" Text="{Binding Contacts}" />
+                    </VerticalStackLayout>
+                    <HorizontalStackLayout Grid.Row="1" Grid.ColumnSpan="2" Spacing="8">
+                        <Button Text="{l:Text Student.Write}" Command="{Binding WriteCommand}" />
+                        <Button
+                            Style="{StaticResource SecondaryButton}"
+                            Text="{l:Text Student.Call}"
+                            Command="{Binding CallCommand}"
+                            IsVisible="{Binding HasPhone}" />
+                    </HorizontalStackLayout>
+                </Grid>
+            </Border>
+
+            <Label Style="{StaticResource Caption}" Text="{Binding Notice}" IsVisible="{Binding HasNotice}" />
+
+            <VerticalStackLayout Spacing="14" BindableLayout.ItemsSource="{Binding ContractEntries}">
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate x:DataType="pages:StudentContractEntry">
+                        <Border Style="{StaticResource Card}">
+                            <VerticalStackLayout Spacing="6">
+                                <Label Style="{StaticResource Title}" Text="{Binding Course}" />
+                                <Label Style="{StaticResource Caption}" Text="{Binding State}" />
+                                <Label Style="{StaticResource BodyLarge}" Text="{Binding Practice}" />
+                                <ProgressBar Progress="{Binding PracticeProgress}" />
+                                <Label Style="{StaticResource Secondary}" Text="{Binding Driving}" />
+                                <Label Style="{StaticResource Secondary}" Text="{Binding Group}" IsVisible="{Binding HasGroup}" />
+                                <Label Style="{StaticResource Secondary}" Text="{Binding Tests}" />
+                                <VerticalStackLayout Spacing="2" IsVisible="{Binding HasExams}">
+                                    <Label Style="{StaticResource Overline}" Text="{l:Text Student.Exams}" />
+                                    <VerticalStackLayout BindableLayout.ItemsSource="{Binding Exams}">
+                                        <BindableLayout.ItemTemplate>
+                                            <DataTemplate x:DataType="x:String">
+                                                <Label Style="{StaticResource Secondary}" Text="{Binding .}" />
+                                            </DataTemplate>
+                                        </BindableLayout.ItemTemplate>
+                                    </VerticalStackLayout>
+                                </VerticalStackLayout>
+                            </VerticalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Spacing="10" IsVisible="{Binding HasLessons}">
+                <Label Style="{StaticResource Overline}" Text="{l:Text Student.Lessons}" />
+                <VerticalStackLayout Spacing="10" BindableLayout.ItemsSource="{Binding Lessons}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="pages:StudentLessonEntry">
+                            <Border Style="{StaticResource Card}">
+                                <VerticalStackLayout Spacing="4">
+                                    <Label Style="{StaticResource BodyLarge}" Text="{Binding Time}" />
+                                    <Label Style="{StaticResource Secondary}" Text="{Binding Outcome}" />
+                                    <Label Style="{StaticResource Caption}" Text="{Binding Note}" IsVisible="{Binding HasNote}" />
+                                </VerticalStackLayout>
+                            </Border>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

@@ -186,6 +186,15 @@ public sealed class LessonEntries(
             }
         }
 
+        if (booking is { StudentId: { } studentId, Status: not DrivingBookingStatus.Cancelled })
+        {
+            var request = new StudentRequest(studentId, student);
+            actions.Add(new EntryAction(
+                AppTexts.Get("Lesson.Student"),
+                new Command(async () => await Routes.OpenAsync(
+                    Routes.Student, new Dictionary<string, object> { [StudentViewModel.StudentParameter] = request }))));
+        }
+
         if (start > now && !isWaiting && slotStatus is DrivingSlotStatus.Available or DrivingSlotStatus.Booked)
         {
             var isBookedNow = booking?.Status == DrivingBookingStatus.Active;

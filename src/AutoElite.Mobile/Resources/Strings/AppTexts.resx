@@ -145,6 +145,9 @@
   <data name="Chat.Sending" xml:space="preserve">
     <value>Waiting to be sent</value>
   </data>
+  <data name="Chat.Student" xml:space="preserve">
+    <value>Student's progress</value>
+  </data>
   <data name="Chat.TooManyFiles" xml:space="preserve">
     <value>A message carries up to {0} files.</value>
   </data>
@@ -408,6 +411,9 @@
   </data>
   <data name="Lesson.RateTitle" xml:space="preserve">
     <value>How was the lesson?</value>
+  </data>
+  <data name="Lesson.Student" xml:space="preserve">
+    <value>Student's progress</value>
   </data>
   <data name="Lesson.StudentNoShow" xml:space="preserve">
     <value>The student did not come</value>
@@ -1005,6 +1011,60 @@
   </data>
   <data name="Skill.VehicleControl" xml:space="preserve">
     <value>Vehicle control</value>
+  </data>
+  <data name="Student.Call" xml:space="preserve">
+    <value>Call</value>
+  </data>
+  <data name="Student.Driving" xml:space="preserve">
+    <value>Driving: {0} completed, {1} missed, {2} coming</value>
+  </data>
+  <data name="Student.ExamCancelled" xml:space="preserve">
+    <value>cancelled</value>
+  </data>
+  <data name="Student.ExamComing" xml:space="preserve">
+    <value>coming</value>
+  </data>
+  <data name="Student.ExamFailed" xml:space="preserve">
+    <value>not passed</value>
+  </data>
+  <data name="Student.ExamPassed" xml:space="preserve">
+    <value>passed</value>
+  </data>
+  <data name="Student.Exams" xml:space="preserve">
+    <value>Exams</value>
+  </data>
+  <data name="Student.Grade" xml:space="preserve">
+    <value>grade {0}</value>
+  </data>
+  <data name="Student.Group" xml:space="preserve">
+    <value>Group {0}: attended {1} of {2} lessons</value>
+  </data>
+  <data name="Student.LessonComing" xml:space="preserve">
+    <value>Coming</value>
+  </data>
+  <data name="Student.Lessons" xml:space="preserve">
+    <value>Lessons with you</value>
+  </data>
+  <data name="Student.Offline" xml:space="preserve">
+    <value>No connection. The data is as of {0}.</value>
+  </data>
+  <data name="Student.PracticeExam" xml:space="preserve">
+    <value>Driving exam</value>
+  </data>
+  <data name="Student.Rating" xml:space="preserve">
+    <value>rated {0} by the student</value>
+  </data>
+  <data name="Student.Tests" xml:space="preserve">
+    <value>Practice tests: {0}, passed {1}</value>
+  </data>
+  <data name="Student.TheoryExam" xml:space="preserve">
+    <value>Theory exam</value>
+  </data>
+  <data name="Student.Title" xml:space="preserve">
+    <value>Student</value>
+  </data>
+  <data name="Student.Write" xml:space="preserve">
+    <value>Write</value>
   </data>
   <data name="Study.ContractsHint" xml:space="preserve">
     <value>The progress of the course, the hours driven and the payments.</value>

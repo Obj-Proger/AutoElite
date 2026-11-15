@@ -145,6 +145,9 @@
   <data name="Chat.Sending" xml:space="preserve">
     <value>Ждёт отправки</value>
   </data>
+  <data name="Chat.Student" xml:space="preserve">
+    <value>Карточка ученика</value>
+  </data>
   <data name="Chat.TooManyFiles" xml:space="preserve">
     <value>В одном сообщении — не больше {0} файлов.</value>
   </data>
@@ -408,6 +411,9 @@
   </data>
   <data name="Lesson.RateTitle" xml:space="preserve">
     <value>Как прошло занятие?</value>
+  </data>
+  <data name="Lesson.Student" xml:space="preserve">
+    <value>Карточка ученика</value>
   </data>
   <data name="Lesson.StudentNoShow" xml:space="preserve">
     <value>Ученик не пришёл</value>
@@ -1005,6 +1011,60 @@
   </data>
   <data name="Skill.VehicleControl" xml:space="preserve">
     <value>Управление автомобилем</value>
+  </data>
+  <data name="Student.Call" xml:space="preserve">
+    <value>Позвонить</value>
+  </data>
+  <data name="Student.Driving" xml:space="preserve">
+    <value>Вождение: проведено {0}, пропущено {1}, впереди {2}</value>
+  </data>
+  <data name="Student.ExamCancelled" xml:space="preserve">
+    <value>отменён</value>
+  </data>
+  <data name="Student.ExamComing" xml:space="preserve">
+    <value>предстоит</value>
+  </data>
+  <data name="Student.ExamFailed" xml:space="preserve">
+    <value>не сдан</value>
+  </data>
+  <data name="Student.ExamPassed" xml:space="preserve">
+    <value>сдан</value>
+  </data>
+  <data name="Student.Exams" xml:space="preserve">
+    <value>Экзамены</value>
+  </data>
+  <data name="Student.Grade" xml:space="preserve">
+    <value>оценка {0}</value>
+  </data>
+  <data name="Student.Group" xml:space="preserve">
+    <value>Группа {0}: посещено {1} из {2} занятий</value>
+  </data>
+  <data name="Student.LessonComing" xml:space="preserve">
+    <value>Предстоит</value>
+  </data>
+  <data name="Student.Lessons" xml:space="preserve">
+    <value>Занятия с вами</value>
+  </data>
+  <data name="Student.Offline" xml:space="preserve">
+    <value>Нет связи. Данные на {0}.</value>
+  </data>
+  <data name="Student.PracticeExam" xml:space="preserve">
+    <value>Экзамен по вождению</value>
+  </data>
+  <data name="Student.Rating" xml:space="preserve">
+    <value>оценка ученика {0}</value>
+  </data>
+  <data name="Student.Tests" xml:space="preserve">
+    <value>Тренировочные тесты: {0}, сдано {1}</value>
+  </data>
+  <data name="Student.TheoryExam" xml:space="preserve">
+    <value>Экзамен по теории</value>
+  </data>
+  <data name="Student.Title" xml:space="preserve">
+    <value>Ученик</value>
+  </data>
+  <data name="Student.Write" xml:space="preserve">
+    <value>Написать</value>
   </data>
   <data name="Study.ContractsHint" xml:space="preserve">
     <value>Прогресс обучения, откатанные часы и платежи.</value>

@@ -9,6 +9,8 @@ internal sealed class FakeStudentCardQueries : IStudentCardQueries
 
     public DateTime? LastUtcNow { get; private set; }
 
+    public HashSet<(Guid StudentId, Guid InstructorId)> Taught { get; } = [];
+
     public void Seed(StudentCard card) => _cards.Add(card.StudentId, card);
 
     public Task<StudentCard?> GetAsync(Guid studentId, DateTime utcNow, CancellationToken cancellationToken = default)
@@ -17,4 +19,7 @@ internal sealed class FakeStudentCardQueries : IStudentCardQueries
 
         return Task.FromResult(_cards.GetValueOrDefault(studentId));
     }
+
+    public Task<bool> IsTaughtByAsync(Guid studentId, Guid instructorId, CancellationToken cancellationToken = default) =>
+        Task.FromResult(Taught.Contains((studentId, instructorId)));
 }

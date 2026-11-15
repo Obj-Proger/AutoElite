@@ -35,6 +35,9 @@ internal static class Routes
     /// <summary>A question to write, or to correct with its identifier as a parameter, opened over the questions.</summary>
     public const string Question = "question";
 
+    /// <summary>The progress of a student for their instructor, opened with a <see cref="StudentRequest"/>.</summary>
+    public const string Student = "student";
+
     /// <summary>Booking a driving lesson, opened over the home page.</summary>
     public const string Booking = "booking";
 
