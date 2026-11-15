@@ -26,6 +26,7 @@ public sealed class ScheduleViewModel : ViewModel
     private readonly OfflineSynchronizer _synchronizer;
     private readonly LessonEntries _entries;
     private readonly SlotOffers _offers;
+    private readonly ExamBook _exams;
     private readonly TimeProvider _timeProvider;
     private DateOnly? _loadedWeek;
 
@@ -38,6 +39,7 @@ public sealed class ScheduleViewModel : ViewModel
     /// <param name="synchronizer">Sends the actions.</param>
     /// <param name="entries">Makes the cards of the lessons, with what the user can do with them.</param>
     /// <param name="offers">The slots a driving instructor offers.</param>
+    /// <param name="exams">The exams of the student or of the groups of the instructor.</param>
     /// <param name="timeProvider">The clock.</param>
     public ScheduleViewModel(
         UserSession session,
@@ -48,6 +50,7 @@ public sealed class ScheduleViewModel : ViewModel
         OfflineSynchronizer synchronizer,
         LessonEntries entries,
         SlotOffers offers,
+        ExamBook exams,
         TimeProvider timeProvider)
     {
         _session = session;
@@ -59,6 +62,7 @@ public sealed class ScheduleViewModel : ViewModel
         _entries = entries;
         _entries.Changed = ReloadAsync;
         _offers = offers;
+        _exams = exams;
         _timeProvider = timeProvider;
         SelectedDay = Today;
         PreviousCommand = new Command(async () => await MoveAsync(-1));
@@ -368,6 +372,8 @@ public sealed class ScheduleViewModel : ViewModel
                 entries.AddRange(lessons.Value.Select(lesson => _entries.TheoryLesson(lesson, waiting)).OfType<ScheduleEntry>());
                 offlineSince = Earliest(offlineSince, lessons.IsFromCache ? lessons.SavedAt : null);
             }
+
+            offlineSince = Earliest(offlineSince, await ReadExamsAsync(week, roles, entries));
         }
         catch (Exception exception) when (exception is ApiException or HttpRequestException)
         {
@@ -391,6 +397,36 @@ public sealed class ScheduleViewModel : ViewModel
             : offlineSince is { } savedAt
                 ? AppTexts.Format("Schedule.Offline", savedAt.ToLocalTime().ToString("g", CultureInfo.CurrentCulture))
                 : null;
+    }
+
+    // Adds the exams of the week: a student's own, the practice exams of a driving instructor's branch and the exams of
+    // a theory instructor's groups; gives when they were read, if they come from the device.
+    private async Task<DateTimeOffset?> ReadExamsAsync(DateOnly week, HashSet<UserRole> roles, List<ScheduleEntry> entries)
+    {
+        DateTimeOffset? offlineSince = null;
+        if (roles.Contains(UserRole.Student))
+        {
+            var (from, to) = (ScheduleWeek.StartOf(week), ScheduleWeek.StartOf(week.AddDays(ScheduleWeek.Days)));
+            var mine = await _exams.ReadMineAsync(CancellationToken.None);
+            entries.AddRange(mine.Value
+                .Where(item => item.Exam?.ScheduledAtUtc is { } at && at >= from && at < to)
+                .Select(LessonEntries.StudentExam)
+                .OfType<ScheduleEntry>());
+            offlineSince = mine.IsFromCache ? mine.SavedAt : null;
+        }
+
+        var isTheory = roles.Contains(UserRole.TheoryInstructor);
+        if (isTheory || roles.Contains(UserRole.DrivingInstructor))
+        {
+            var exams = await _exams.ReadWeekAsync(week, CancellationToken.None);
+            entries.AddRange(exams.Value
+                .Where(exam => isTheory || exam.Kind == ExamKind.Practice)
+                .Select(LessonEntries.Exam)
+                .OfType<ScheduleEntry>());
+            offlineSince = Earliest(offlineSince, exams.IsFromCache ? exams.SavedAt : null);
+        }
+
+        return offlineSince;
     }
 
     // Adds the lessons of a student and the free slots their contracts can book; gives when they were read, if they

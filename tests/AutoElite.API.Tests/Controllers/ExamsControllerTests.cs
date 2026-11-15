@@ -74,6 +74,9 @@ public sealed class ExamsControllerTests(ApiFactory api)
         details.GetProperty("exam").GetProperty("kind").GetString().Should().Be(nameof(ExamKind.Practice));
         details.GetProperty("exam").GetProperty("scheduledAtUtc").GetDateTime().Should().Be(scheduledAt.AddDays(1));
         details.GetProperty("results").EnumerateArray().Should().BeEmpty();
+        var member = details.GetProperty("members").EnumerateArray().Should().ContainSingle().Which;
+        member.GetProperty("contractId").GetGuid().Should().Be(contractId);
+        member.GetProperty("studentId").GetGuid().Should().Be(studentUser.UserId);
         ofGroup.EnumerateArray().Select(item => item.GetProperty("id").GetGuid()).Should().Equal(examId);
         schedule.EnumerateArray().Select(item => item.GetProperty("id").GetGuid()).Should().Equal(examId);
         var studentExam = own.EnumerateArray().Should().ContainSingle().Which;

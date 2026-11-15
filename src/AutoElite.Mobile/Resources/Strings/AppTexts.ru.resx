@@ -232,6 +232,81 @@
   <data name="Contracts.Unavailable" xml:space="preserve">
     <value>Не удалось загрузить договоры: нет связи с автошколой.</value>
   </data>
+  <data name="Exam.Correct" xml:space="preserve">
+    <value>Исправить</value>
+  </data>
+  <data name="Exam.Corrected" xml:space="preserve">
+    <value>исправлен</value>
+  </data>
+  <data name="Exam.Kind" xml:space="preserve">
+    <value>Экзамен</value>
+  </data>
+  <data name="Exam.Members" xml:space="preserve">
+    <value>Ученики</value>
+  </data>
+  <data name="Exam.NoMembers" xml:space="preserve">
+    <value>В группе нет учеников.</value>
+  </data>
+  <data name="Exam.NoResult" xml:space="preserve">
+    <value>Результата пока нет</value>
+  </data>
+  <data name="Exam.NotBegun" xml:space="preserve">
+    <value>Экзамен ещё не начался; результаты вносятся после начала.</value>
+  </data>
+  <data name="Exam.Offline" xml:space="preserve">
+    <value>Нет связи. Данные на {0}.</value>
+  </data>
+  <data name="Exam.Open" xml:space="preserve">
+    <value>Открыть экзамен</value>
+  </data>
+  <data name="Exam.OpenTests" xml:space="preserve">
+    <value>Открыть тесты</value>
+  </data>
+  <data name="Exam.Record" xml:space="preserve">
+    <value>Внести</value>
+  </data>
+  <data name="Exam.ResultCount" xml:space="preserve">
+    <value>Результатов: {0}</value>
+  </data>
+  <data name="Exam.TheoryResults" xml:space="preserve">
+    <value>Результаты по теории приходят из тестов, которые сдают ученики.</value>
+  </data>
+  <data name="ExamResult.BadScore" xml:space="preserve">
+    <value>Баллы — целое число от 0 до {0}.</value>
+  </data>
+  <data name="ExamResult.ChoosePassed" xml:space="preserve">
+    <value>Выберите, сдал ли ученик.</value>
+  </data>
+  <data name="ExamResult.Comment" xml:space="preserve">
+    <value>Комментарий, если нужен</value>
+  </data>
+  <data name="ExamResult.CorrectTitle" xml:space="preserve">
+    <value>Исправление результата</value>
+  </data>
+  <data name="ExamResult.Failed" xml:space="preserve">
+    <value>Не сдал</value>
+  </data>
+  <data name="ExamResult.NeedReason" xml:space="preserve">
+    <value>Укажите причину исправления.</value>
+  </data>
+  <data name="ExamResult.Outcome" xml:space="preserve">
+    <value>Результат</value>
+  </data>
+  <data name="ExamResult.Passed" xml:space="preserve">
+    <value>Сдал</value>
+  </data>
+  <data name="ExamResult.Reason" xml:space="preserve">
+    <value>Причина исправления</value>
+  </data>
+  <data name="ExamResult.RecordTitle" xml:space="preserve">
+    <value>Результат экзамена</value>
+  </data>
+  <data name="ExamResult.Save" xml:space="preserve">
+    <value>Сохранить</value>
+  </data>
+  <data name="ExamResult.Score" xml:space="preserve">
+    <value>Баллы, если школа их ставит</value>
+  </data>
   <data name="Exams.ConfirmMessage" xml:space="preserve">
     <value>Экзамен сдаётся один раз, и таймер начнётся сразу.</value>
   </data>

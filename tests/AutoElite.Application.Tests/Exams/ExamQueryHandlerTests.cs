@@ -22,7 +22,7 @@ public class ExamQueryHandlerTests
 
     private ExamDetails SeedDetails(Guid responsibleInstructorId, Guid? branchId = null)
     {
-        var details = new ExamDetails(Item(responsibleInstructorId, branchId), []);
+        var details = new ExamDetails(Item(responsibleInstructorId, branchId), [], []);
         _queries.Seed(details);
 
         return details;

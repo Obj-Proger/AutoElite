@@ -67,10 +67,18 @@ public sealed record ExamResultItem(
 /// <param name="Exams">All exams of the group, cancelled ones included, the earliest first.</param>
 public sealed record GroupExams(Guid? BranchId, Guid ResponsibleInstructorId, IReadOnlyList<ExamItem> Exams);
 
-/// <summary>The card of an exam with the results of the students.</summary>
+/// <summary>The card of an exam with the results of the students and the current members of the group.</summary>
 /// <param name="Exam">The exam.</param>
 /// <param name="Results">The results, by student name.</param>
-public sealed record ExamDetails(ExamItem Exam, IReadOnlyList<ExamResultItem> Results);
+/// <param name="Members">The current members of the group, by student name, whose practice results are recorded.</param>
+public sealed record ExamDetails(ExamItem Exam, IReadOnlyList<ExamResultItem> Results, IReadOnlyList<ExamMember> Members);
+
+/// <summary>A current member of the group of an exam.</summary>
+/// <param name="ContractId">The contract of the student.</param>
+/// <param name="ContractNumber">The contract number.</param>
+/// <param name="StudentId">The student.</param>
+/// <param name="StudentName">The full name of the student.</param>
+public sealed record ExamMember(Guid ContractId, string ContractNumber, Guid StudentId, string StudentName);
 
 /// <summary>An exam of a student with the student's own result.</summary>
 /// <param name="Exam">The exam.</param>

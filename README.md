@@ -213,9 +213,14 @@ changes their password, which signs out their other devices, and asks for a new 
 follow the link sent to it. An instructor opens the progress of a student they teach from a lesson or a personal chat
 (`GET /api/v1/students/{id}/progress`, without the money of the contracts): the practice hours, the driving lessons, the
 attendance of the group, the tests and the exams, and for a driving instructor the lessons with them, with the hours,
-the grade and the note; they write to or call the student from there. The texts of the application are in English, with
-a Russian translation, in `Resources/Strings`; the device's language chooses between them unless the user chooses one in
-the profile, where they also change the school and sign out.
+the grade and the note; they write to or call the student from there. The schedule shows the school exams too: a
+student's own with their result, the practice exams of a driving instructor's branch and the exams of a theory
+instructor's groups. An exam opens with the current members of its group (`members` of `GET /api/v1/exams/{id}`) and
+their results; once a practice exam has begun, a driving instructor records each result, and a recorded result is
+corrected with a reason, a practice one by a driving instructor and a theory one by the instructor responsible for the
+group. The texts of the application are in English, with a Russian translation, in `Resources/Strings`; the device's
+language chooses between them unless the user chooses one in the profile, where they also change the school and sign
+out.
 
 The application works without a network too (`src/AutoElite.Client.Offline`). A SQLite database in its private storage
 keeps what the user last read, shown as possibly out of date while the API cannot be reached, and the actions the user

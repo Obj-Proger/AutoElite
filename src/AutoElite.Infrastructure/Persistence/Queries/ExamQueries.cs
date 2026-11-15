@@ -85,6 +85,24 @@ internal sealed class ExamQueries(AutoEliteDbContext dbContext) : IExamQueries
         var results = await Results(result => EF.Property<Guid>(result, ExamConfiguration.ExamKey) == examId)
             .ToListAsync(cancellationToken);
 
+        var members = await (
+                from studyGroup in dbContext.Set<StudyGroup>().AsNoTracking()
+                where studyGroup.Id == row.GroupId
+                from enrollment in studyGroup.Enrollments
+                where enrollment.WithdrawnAtUtc == null
+                join contract in dbContext.Set<Contract>().AsNoTracking() on enrollment.ContractId equals contract.Id
+                join student in dbContext.Set<User>().AsNoTracking() on enrollment.StudentId equals student.Id
+                select new
+                {
+                    enrollment.ContractId,
+                    contract.Number,
+                    enrollment.StudentId,
+                    student.FullName.LastName,
+                    student.FullName.FirstName,
+                    student.FullName.MiddleName
+                })
+            .ToListAsync(cancellationToken);
+
         return new ExamDetails(
             ToItem(row),
             [
@@ -92,6 +110,16 @@ internal sealed class ExamQueries(AutoEliteDbContext dbContext) : IExamQueries
                     .Select(ToResultItem)
                     .OrderBy(result => result.StudentName, StringComparer.CurrentCulture)
                     .ThenBy(result => result.ContractNumber, StringComparer.Ordinal)
+            ],
+            [
+                .. members
+                    .Select(member => new ExamMember(
+                        member.ContractId,
+                        member.Number,
+                        member.StudentId,
+                        PersonNames.Format(member.LastName, member.FirstName, member.MiddleName)!))
+                    .OrderBy(member => member.StudentName, StringComparer.CurrentCulture)
+                    .ThenBy(member => member.ContractNumber, StringComparer.Ordinal)
             ]);
     }
 

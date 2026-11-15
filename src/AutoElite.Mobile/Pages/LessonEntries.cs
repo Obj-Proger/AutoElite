@@ -73,6 +73,69 @@ public sealed class LessonEntries(
         };
     }
 
+    /// <summary>
+    /// Makes the card of an exam of a student, an hour long on the schedule, with their result; a theory exam is taken
+    /// on the page of the tests.
+    /// </summary>
+    /// <param name="item">The exam with the result of the student.</param>
+    /// <returns>The card, or <see langword="null"/> for an exam without its time.</returns>
+    public static ScheduleEntry? StudentExam(StudentExamItem item)
+    {
+        if (item is not { Exam: { ScheduledAtUtc: { } start } exam })
+            return null;
+
+        List<EntryAction> actions = [];
+        if (exam.Kind == ExamKind.Theory && exam.Status != ExamStatus.Cancelled)
+            actions.Add(new EntryAction(AppTexts.Get("Exam.OpenTests"), new Command(async () => await Routes.OpenAsync(Routes.Tests))));
+
+        return new ScheduleEntry
+        {
+            Kind = AppTexts.Get("Exam.Kind"),
+            Category = exam.Status == ExamStatus.Cancelled ? ScheduleCategory.Inactive : ScheduleCategory.Exam,
+            Title = ExamTexts.TitleOf(exam),
+            Time = LessonTexts.TimeOf(start, start + ExamTexts.ShownLength),
+            Details = exam.GroupName ?? string.Empty,
+            Status = exam.Status == ExamStatus.Cancelled
+                ? LessonTexts.DetailsOf(AppTexts.Get("Lesson.Cancelled"), exam.CancellationReason)
+                : item.Result is { } result ? ExamTexts.ResultOf(result) : null,
+            Actions = actions,
+            Start = start,
+            End = start + ExamTexts.ShownLength
+        };
+    }
+
+    /// <summary>Makes the card of an exam an instructor sees, which opens the exam with its members and results.</summary>
+    /// <param name="exam">The exam.</param>
+    /// <returns>The card, or <see langword="null"/> for an exam without its time.</returns>
+    public static ScheduleEntry? Exam(ExamItem exam)
+    {
+        if (exam is not { Id: { } examId, ScheduledAtUtc: { } start })
+            return null;
+
+        var isCancelled = exam.Status == ExamStatus.Cancelled;
+
+        return new ScheduleEntry
+        {
+            Kind = AppTexts.Get("Exam.Kind"),
+            Category = isCancelled ? ScheduleCategory.Inactive : ScheduleCategory.Exam,
+            Title = ExamTexts.TitleOf(exam),
+            Time = LessonTexts.TimeOf(start, start + ExamTexts.ShownLength),
+            Details = exam.GroupName ?? string.Empty,
+            Status = isCancelled
+                ? LessonTexts.DetailsOf(AppTexts.Get("Lesson.Cancelled"), exam.CancellationReason)
+                : AppTexts.Format("Exam.ResultCount", exam.ResultCount ?? 0),
+            Actions =
+            [
+                new EntryAction(
+                    AppTexts.Get("Exam.Open"),
+                    new Command(async () => await Routes.OpenAsync(
+                        Routes.Exam, new Dictionary<string, object> { [ExamViewModel.ExamParameter] = examId })))
+            ],
+            Start = start,
+            End = start + ExamTexts.ShownLength
+        };
+    }
+
     /// <summary>Makes the card of a driving lesson of a student.</summary>
     /// <param name="lesson">The lesson with its booking.</param>
     /// <param name="waiting">The slots and lessons with a change that waits to be sent.</param>

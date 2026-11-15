@@ -238,6 +238,7 @@ public sealed class ScheduleGrid : ContentView
             ScheduleCategory.Driving => (ColorOf("Accent"), ColorOf("Accent"), ColorOf("OnAccent")),
             ScheduleCategory.Theory => (ColorOf("SurfaceRaised"), ColorOf("TextSecondary"), ColorOf("Text")),
             ScheduleCategory.Free => (Colors.Transparent, ColorOf("Accent"), ColorOf("Accent")),
+            ScheduleCategory.Exam => (ColorOf("Surface"), ColorOf("Warning"), ColorOf("Warning")),
             _ => (ColorOf("Surface"), ColorOf("Border"), ColorOf("TextMuted"))
         };
 

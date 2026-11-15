@@ -232,6 +232,81 @@
   <data name="Contracts.Unavailable" xml:space="preserve">
     <value>The contracts could not be read: no connection to the school.</value>
   </data>
+  <data name="Exam.Correct" xml:space="preserve">
+    <value>Correct</value>
+  </data>
+  <data name="Exam.Corrected" xml:space="preserve">
+    <value>corrected</value>
+  </data>
+  <data name="Exam.Kind" xml:space="preserve">
+    <value>Exam</value>
+  </data>
+  <data name="Exam.Members" xml:space="preserve">
+    <value>Students</value>
+  </data>
+  <data name="Exam.NoMembers" xml:space="preserve">
+    <value>The group has no students.</value>
+  </data>
+  <data name="Exam.NoResult" xml:space="preserve">
+    <value>No result yet</value>
+  </data>
+  <data name="Exam.NotBegun" xml:space="preserve">
+    <value>The exam has not begun; results are recorded once it has.</value>
+  </data>
+  <data name="Exam.Offline" xml:space="preserve">
+    <value>No connection. The data is as of {0}.</value>
+  </data>
+  <data name="Exam.Open" xml:space="preserve">
+    <value>Open the exam</value>
+  </data>
+  <data name="Exam.OpenTests" xml:space="preserve">
+    <value>Open the tests</value>
+  </data>
+  <data name="Exam.Record" xml:space="preserve">
+    <value>Record</value>
+  </data>
+  <data name="Exam.ResultCount" xml:space="preserve">
+    <value>Results: {0}</value>
+  </data>
+  <data name="Exam.TheoryResults" xml:space="preserve">
+    <value>Theory results come from the tests the students take.</value>
+  </data>
+  <data name="ExamResult.BadScore" xml:space="preserve">
+    <value>The score is a whole number from 0 to {0}.</value>
+  </data>
+  <data name="ExamResult.ChoosePassed" xml:space="preserve">
+    <value>Choose whether the student passed.</value>
+  </data>
+  <data name="ExamResult.Comment" xml:space="preserve">
+    <value>Comment, if any</value>
+  </data>
+  <data name="ExamResult.CorrectTitle" xml:space="preserve">
+    <value>Correct the result</value>
+  </data>
+  <data name="ExamResult.Failed" xml:space="preserve">
+    <value>Not passed</value>
+  </data>
+  <data name="ExamResult.NeedReason" xml:space="preserve">
+    <value>Give the reason of the correction.</value>
+  </data>
+  <data name="ExamResult.Outcome" xml:space="preserve">
+    <value>Result</value>
+  </data>
+  <data name="ExamResult.Passed" xml:space="preserve">
+    <value>Passed</value>
+  </data>
+  <data name="ExamResult.Reason" xml:space="preserve">
+    <value>Reason of the correction</value>
+  </data>
+  <data name="ExamResult.RecordTitle" xml:space="preserve">
+    <value>Record the result</value>
+  </data>
+  <data name="ExamResult.Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="ExamResult.Score" xml:space="preserve">
+    <value>Score, if the school uses one</value>
+  </data>
   <data name="Exams.ConfirmMessage" xml:space="preserve">
     <value>The exam is taken once, and its timer starts at once.</value>
   </data>

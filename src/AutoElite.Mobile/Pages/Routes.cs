@@ -38,6 +38,12 @@ internal static class Routes
     /// <summary>The progress of a student for their instructor, opened with a <see cref="StudentRequest"/>.</summary>
     public const string Student = "student";
 
+    /// <summary>An exam with its members and results, opened over the schedule with its identifier.</summary>
+    public const string Exam = "exam";
+
+    /// <summary>A result of an exam to record or correct, opened over the exam with an <see cref="ExamResultRequest"/>.</summary>
+    public const string ExamResult = "exam-result";
+
     /// <summary>Booking a driving lesson, opened over the home page.</summary>
     public const string Booking = "booking";
 

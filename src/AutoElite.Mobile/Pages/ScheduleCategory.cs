@@ -13,5 +13,8 @@ public enum ScheduleCategory
     Free,
 
     /// <summary>A cancelled lesson or one the student did not come to.</summary>
-    Inactive
+    Inactive,
+
+    /// <summary>A school exam.</summary>
+    Exam
 }
