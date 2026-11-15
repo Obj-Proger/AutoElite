@@ -658,6 +658,120 @@
   <data name="Profile.Title" xml:space="preserve">
     <value>Profile</value>
   </data>
+  <data name="Question.AddOption" xml:space="preserve">
+    <value>Add an option</value>
+  </data>
+  <data name="Question.Categories" xml:space="preserve">
+    <value>Licence categories the question applies to</value>
+  </data>
+  <data name="Question.ChangeImage" xml:space="preserve">
+    <value>Choose an illustration</value>
+  </data>
+  <data name="Question.ChooseCategory" xml:space="preserve">
+    <value>Choose at least one category.</value>
+  </data>
+  <data name="Question.ChooseCorrect" xml:space="preserve">
+    <value>Mark the correct answer.</value>
+  </data>
+  <data name="Question.ChooseImage" xml:space="preserve">
+    <value>Choose an illustration</value>
+  </data>
+  <data name="Question.ChooseTopic" xml:space="preserve">
+    <value>Choose the course and the topic.</value>
+  </data>
+  <data name="Question.Course" xml:space="preserve">
+    <value>Course</value>
+  </data>
+  <data name="Question.Deactivate" xml:space="preserve">
+    <value>Take out of new tests</value>
+  </data>
+  <data name="Question.DeactivateQuestion" xml:space="preserve">
+    <value>Tests already taken keep it; you can put it back later.</value>
+  </data>
+  <data name="Question.DeactivateTitle" xml:space="preserve">
+    <value>Take the question out of new tests?</value>
+  </data>
+  <data name="Question.EditTitle" xml:space="preserve">
+    <value>Question</value>
+  </data>
+  <data name="Question.Explanation" xml:space="preserve">
+    <value>Explanation</value>
+  </data>
+  <data name="Question.ExplanationPlaceholder" xml:space="preserve">
+    <value>Shown after the test, such as the rule it follows</value>
+  </data>
+  <data name="Question.Image" xml:space="preserve">
+    <value>Illustration of the question</value>
+  </data>
+  <data name="Question.InactiveNote" xml:space="preserve">
+    <value>This question is out of new tests. Put it back to correct it.</value>
+  </data>
+  <data name="Question.MarkCorrect" xml:space="preserve">
+    <value>Mark as the correct answer</value>
+  </data>
+  <data name="Question.NewTitle" xml:space="preserve">
+    <value>New question</value>
+  </data>
+  <data name="Question.NoImageAccess" xml:space="preserve">
+    <value>The application may not open your photos. Allow it in the settings of the device.</value>
+  </data>
+  <data name="Question.OptionPlaceholder" xml:space="preserve">
+    <value>Option</value>
+  </data>
+  <data name="Question.Options" xml:space="preserve">
+    <value>Answer options</value>
+  </data>
+  <data name="Question.OptionsHint" xml:space="preserve">
+    <value>From 2 to 6 options; tap the number of the correct one.</value>
+  </data>
+  <data name="Question.Reactivate" xml:space="preserve">
+    <value>Put back into tests</value>
+  </data>
+  <data name="Question.RemoveImage" xml:space="preserve">
+    <value>Remove the illustration</value>
+  </data>
+  <data name="Question.RemoveOption" xml:space="preserve">
+    <value>Remove the option</value>
+  </data>
+  <data name="Question.Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="Question.Text" xml:space="preserve">
+    <value>Question</value>
+  </data>
+  <data name="Question.TextPlaceholder" xml:space="preserve">
+    <value>What is asked</value>
+  </data>
+  <data name="Question.Topic" xml:space="preserve">
+    <value>Topic</value>
+  </data>
+  <data name="Question.Where" xml:space="preserve">
+    <value>Topic and categories</value>
+  </data>
+  <data name="Questions.Count" xml:space="preserve">
+    <value>Questions: {0}</value>
+  </data>
+  <data name="Questions.HasImage" xml:space="preserve">
+    <value>with an illustration</value>
+  </data>
+  <data name="Questions.Inactive" xml:space="preserve">
+    <value>out of new tests</value>
+  </data>
+  <data name="Questions.More" xml:space="preserve">
+    <value>Show more</value>
+  </data>
+  <data name="Questions.New" xml:space="preserve">
+    <value>New question</value>
+  </data>
+  <data name="Questions.None" xml:space="preserve">
+    <value>No questions found.</value>
+  </data>
+  <data name="Questions.Search" xml:space="preserve">
+    <value>Find in the questions</value>
+  </data>
+  <data name="Questions.Title" xml:space="preserve">
+    <value>Test questions</value>
+  </data>
   <data name="Rating.Five" xml:space="preserve">
     <value>5 — excellent</value>
   </data>
@@ -894,6 +1008,9 @@
   </data>
   <data name="Study.ContractsHint" xml:space="preserve">
     <value>The progress of the course, the hours driven and the payments.</value>
+  </data>
+  <data name="Study.QuestionsHint" xml:space="preserve">
+    <value>Write and correct the questions of the school for the practice tests.</value>
   </data>
   <data name="Study.Tests" xml:space="preserve">
     <value>Practice tests</value>

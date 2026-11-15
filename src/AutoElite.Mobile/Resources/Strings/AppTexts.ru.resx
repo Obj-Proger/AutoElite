@@ -658,6 +658,120 @@
   <data name="Profile.Title" xml:space="preserve">
     <value>Профиль</value>
   </data>
+  <data name="Question.AddOption" xml:space="preserve">
+    <value>Добавить вариант</value>
+  </data>
+  <data name="Question.Categories" xml:space="preserve">
+    <value>Категории прав, к которым относится вопрос</value>
+  </data>
+  <data name="Question.ChangeImage" xml:space="preserve">
+    <value>Выбрать иллюстрацию</value>
+  </data>
+  <data name="Question.ChooseCategory" xml:space="preserve">
+    <value>Выберите хотя бы одну категорию.</value>
+  </data>
+  <data name="Question.ChooseCorrect" xml:space="preserve">
+    <value>Отметьте правильный ответ.</value>
+  </data>
+  <data name="Question.ChooseImage" xml:space="preserve">
+    <value>Выберите иллюстрацию</value>
+  </data>
+  <data name="Question.ChooseTopic" xml:space="preserve">
+    <value>Выберите курс и тему.</value>
+  </data>
+  <data name="Question.Course" xml:space="preserve">
+    <value>Курс</value>
+  </data>
+  <data name="Question.Deactivate" xml:space="preserve">
+    <value>Убрать из тестов</value>
+  </data>
+  <data name="Question.DeactivateQuestion" xml:space="preserve">
+    <value>Пройденные тесты его сохранят; вернуть вопрос можно позже.</value>
+  </data>
+  <data name="Question.DeactivateTitle" xml:space="preserve">
+    <value>Убрать вопрос из тестов?</value>
+  </data>
+  <data name="Question.EditTitle" xml:space="preserve">
+    <value>Вопрос</value>
+  </data>
+  <data name="Question.Explanation" xml:space="preserve">
+    <value>Пояснение</value>
+  </data>
+  <data name="Question.ExplanationPlaceholder" xml:space="preserve">
+    <value>Показывается после теста, например пункт ПДД</value>
+  </data>
+  <data name="Question.Image" xml:space="preserve">
+    <value>Иллюстрация к вопросу</value>
+  </data>
+  <data name="Question.InactiveNote" xml:space="preserve">
+    <value>Вопрос не используется в новых тестах. Верните его, чтобы исправить.</value>
+  </data>
+  <data name="Question.MarkCorrect" xml:space="preserve">
+    <value>Отметить как правильный</value>
+  </data>
+  <data name="Question.NewTitle" xml:space="preserve">
+    <value>Новый вопрос</value>
+  </data>
+  <data name="Question.NoImageAccess" xml:space="preserve">
+    <value>Приложению не разрешено открывать фото. Разрешите это в настройках устройства.</value>
+  </data>
+  <data name="Question.OptionPlaceholder" xml:space="preserve">
+    <value>Вариант ответа</value>
+  </data>
+  <data name="Question.Options" xml:space="preserve">
+    <value>Варианты ответа</value>
+  </data>
+  <data name="Question.OptionsHint" xml:space="preserve">
+    <value>От 2 до 6 вариантов; нажмите номер правильного.</value>
+  </data>
+  <data name="Question.Reactivate" xml:space="preserve">
+    <value>Вернуть в тесты</value>
+  </data>
+  <data name="Question.RemoveImage" xml:space="preserve">
+    <value>Убрать иллюстрацию</value>
+  </data>
+  <data name="Question.RemoveOption" xml:space="preserve">
+    <value>Удалить вариант</value>
+  </data>
+  <data name="Question.Save" xml:space="preserve">
+    <value>Сохранить</value>
+  </data>
+  <data name="Question.Text" xml:space="preserve">
+    <value>Вопрос</value>
+  </data>
+  <data name="Question.TextPlaceholder" xml:space="preserve">
+    <value>Текст вопроса</value>
+  </data>
+  <data name="Question.Topic" xml:space="preserve">
+    <value>Тема</value>
+  </data>
+  <data name="Question.Where" xml:space="preserve">
+    <value>Тема и категории</value>
+  </data>
+  <data name="Questions.Count" xml:space="preserve">
+    <value>Вопросов: {0}</value>
+  </data>
+  <data name="Questions.HasImage" xml:space="preserve">
+    <value>с иллюстрацией</value>
+  </data>
+  <data name="Questions.Inactive" xml:space="preserve">
+    <value>не используется в тестах</value>
+  </data>
+  <data name="Questions.More" xml:space="preserve">
+    <value>Показать ещё</value>
+  </data>
+  <data name="Questions.New" xml:space="preserve">
+    <value>Новый вопрос</value>
+  </data>
+  <data name="Questions.None" xml:space="preserve">
+    <value>Вопросы не найдены.</value>
+  </data>
+  <data name="Questions.Search" xml:space="preserve">
+    <value>Поиск по тексту вопроса</value>
+  </data>
+  <data name="Questions.Title" xml:space="preserve">
+    <value>Вопросы для тестов</value>
+  </data>
   <data name="Rating.Five" xml:space="preserve">
     <value>5 — отлично</value>
   </data>
@@ -894,6 +1008,9 @@
   </data>
   <data name="Study.ContractsHint" xml:space="preserve">
     <value>Прогресс обучения, откатанные часы и платежи.</value>
+  </data>
+  <data name="Study.QuestionsHint" xml:space="preserve">
+    <value>Составляйте и исправляйте вопросы школы для тренировочных тестов.</value>
   </data>
   <data name="Study.Tests" xml:space="preserve">
     <value>Пробные тесты</value>

@@ -29,6 +29,12 @@ internal static class Routes
     /// </summary>
     public const string PlanTheory = "plan-theory";
 
+    /// <summary>The questions of the school for the practice tests, opened over the tab of studies.</summary>
+    public const string Questions = "questions";
+
+    /// <summary>A question to write, or to correct with its identifier as a parameter, opened over the questions.</summary>
+    public const string Question = "question";
+
     /// <summary>Booking a driving lesson, opened over the home page.</summary>
     public const string Booking = "booking";
 

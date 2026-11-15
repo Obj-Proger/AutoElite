@@ -8,10 +8,13 @@
     x:DataType="pages:StudyPage"
     Title="{l:Text Study.Title}">
 
-    <!-- The studies of a student: the practice tests and the contracts with their progress and payments. -->
+    <!--
+        The studies: of a student, the practice tests and the contracts with their progress and payments; of a theory
+        instructor, the questions of the school for the tests.
+    -->
     <ScrollView>
         <VerticalStackLayout Padding="{StaticResource PageMargin}" Spacing="14">
-            <Border Style="{StaticResource Card}">
+            <Border Style="{StaticResource Card}" IsVisible="{Binding IsStudent}">
                 <Border.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding OpenTestsCommand}" />
                 </Border.GestureRecognizers>
@@ -21,13 +24,23 @@
                 </VerticalStackLayout>
             </Border>
 
-            <Border Style="{StaticResource Card}">
+            <Border Style="{StaticResource Card}" IsVisible="{Binding IsStudent}">
                 <Border.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding OpenContractsCommand}" />
                 </Border.GestureRecognizers>
                 <VerticalStackLayout Spacing="4">
                     <Label Style="{StaticResource Title}" Text="{l:Text Contracts.Title}" />
                     <Label Style="{StaticResource Secondary}" Text="{l:Text Study.ContractsHint}" />
+                </VerticalStackLayout>
+            </Border>
+
+            <Border Style="{StaticResource Card}" IsVisible="{Binding IsTheoryInstructor}">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding OpenQuestionsCommand}" />
+                </Border.GestureRecognizers>
+                <VerticalStackLayout Spacing="4">
+                    <Label Style="{StaticResource Title}" Text="{l:Text Questions.Title}" />
+                    <Label Style="{StaticResource Secondary}" Text="{l:Text Study.QuestionsHint}" />
                 </VerticalStackLayout>
             </Border>
         </VerticalStackLayout>

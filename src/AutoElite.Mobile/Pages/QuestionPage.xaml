@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="AutoElite.Mobile.Pages.QuestionPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:l="clr-namespace:AutoElite.Mobile.Localization"
+    xmlns:pages="clr-namespace:AutoElite.Mobile.Pages"
+    x:DataType="pages:QuestionViewModel"
+    Title="{Binding Title}">
+
+    <!--
+        A question: its text and illustration, the topic and the categories, the options with the correct one marked,
+        the explanation, then saving and taking it out of new tests.
+    -->
+    <ScrollView>
+        <VerticalStackLayout Padding="{StaticResource PageMargin}" Spacing="14">
+            <Label Style="{StaticResource ErrorText}" Text="{Binding Message}" IsVisible="{Binding HasMessage}" />
+
+            <Border Style="{StaticResource Card}">
+                <VerticalStackLayout Spacing="8">
+                    <Label Style="{StaticResource Overline}" Text="{l:Text Question.Text}" />
+                    <Border Style="{StaticResource Field}">
+                        <Editor
+                            Text="{Binding Text}"
+                            Placeholder="{l:Text Question.TextPlaceholder}"
+                            AutoSize="TextChanges"
+                            MaxLength="2000" />
+                    </Border>
+                    <Border
+                        StrokeThickness="0"
+                        StrokeShape="RoundRectangle 12"
+                        BackgroundColor="{StaticResource SurfaceRaised}"
+                        IsVisible="{Binding HasImage}">
+                        <Image
+                            Source="{Binding Image}"
+                            Aspect="AspectFit"
+                            MaximumHeightRequest="220"
+                            SemanticProperties.Description="{l:Text Question.Image}" />
+                    </Border>
+                    <HorizontalStackLayout Spacing="8">
+                        <Button
+                            Style="{StaticResource SecondaryButton}"
+                            Text="{l:Text Question.ChangeImage}"
+                            Command="{Binding ChangeImageCommand}" />
+                        <Button
+                            Style="{StaticResource SecondaryButton}"
+                            Text="{l:Text Question.RemoveImage}"
+                            Command="{Binding RemoveImageCommand}"
+                            IsVisible="{Binding HasImage}" />
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Border>
+
+            <Border Style="{StaticResource Card}">
+                <VerticalStackLayout Spacing="8">
+                    <Label Style="{StaticResource Overline}" Text="{l:Text Question.Where}" />
+                    <Border Style="{StaticResource Field}">
+                        <Picker Title="{l:Text Question.Course}" ItemsSource="{Binding Courses}" SelectedIndex="{Binding CourseIndex}" />
+                    </Border>
+                    <Border Style="{StaticResource Field}">
+                        <Picker Title="{l:Text Question.Topic}" ItemsSource="{Binding Topics}" SelectedIndex="{Binding TopicIndex}" />
+                    </Border>
+                    <Label Style="{StaticResource Caption}" Text="{l:Text Question.Categories}" />
+                    <FlexLayout Wrap="Wrap" BindableLayout.ItemsSource="{Binding Categories}">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate x:DataType="pages:CategoryEntry">
+                                <Border
+                                    Margin="0,0,6,6"
+                                    Padding="12,6"
+                                    StrokeThickness="1"
+                                    Stroke="{StaticResource Border}"
+                                    StrokeShape="RoundRectangle 14"
+                                    BackgroundColor="Transparent">
+                                    <Border.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding ToggleCommand}" />
+                                    </Border.GestureRecognizers>
+                                    <Border.Triggers>
+                                        <DataTrigger TargetType="Border" Binding="{Binding IsSelected}" Value="True">
+                                            <Setter Property="BackgroundColor" Value="{StaticResource Accent}" />
+                                            <Setter Property="Stroke" Value="{StaticResource Accent}" />
+                                        </DataTrigger>
+                                    </Border.Triggers>
+                                    <Label Text="{Binding Name}" FontFamily="TextSemiBold">
+                                        <Label.Triggers>
+                                            <DataTrigger TargetType="Label" Binding="{Binding IsSelected}" Value="True">
+                                                <Setter Property="TextColor" Value="{StaticResource OnAccent}" />
+                                            </DataTrigger>
+                                        </Label.Triggers>
+                                    </Label>
+                                </Border>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </FlexLayout>
+                </VerticalStackLayout>
+            </Border>
+
+            <Border Style="{StaticResource Card}">
+                <VerticalStackLayout Spacing="8">
+                    <Label Style="{StaticResource Overline}" Text="{l:Text Question.Options}" />
+                    <Label Style="{StaticResource Caption}" Text="{l:Text Question.OptionsHint}" />
+                    <VerticalStackLayout Spacing="8" BindableLayout.ItemsSource="{Binding Options}">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate x:DataType="pages:OptionEntry">
+                                <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="8">
+                                    <Button
+                                        Style="{StaticResource SecondaryButton}"
+                                        Text="{Binding Number}"
+                                        WidthRequest="44"
+                                        Padding="0"
+                                        Command="{Binding CorrectCommand}"
+                                        SemanticProperties.Description="{l:Text Question.MarkCorrect}">
+                                        <Button.Triggers>
+                                            <DataTrigger TargetType="Button" Binding="{Binding IsCorrect}" Value="True">
+                                                <Setter Property="Text" Value="✓" />
+                                                <Setter Property="BackgroundColor" Value="{StaticResource Accent}" />
+                                                <Setter Property="TextColor" Value="{StaticResource OnAccent}" />
+                                            </DataTrigger>
+                                        </Button.Triggers>
+                                    </Button>
+                                    <Border Grid.Column="1" Style="{StaticResource Field}">
+                                        <Entry Text="{Binding Text}" Placeholder="{l:Text Question.OptionPlaceholder}" MaxLength="1000" />
+                                    </Border>
+                                    <Button
+                                        Grid.Column="2"
+                                        Style="{StaticResource SecondaryButton}"
+                                        Text="✕"
+                                        WidthRequest="44"
+                                        Padding="0"
+                                        Command="{Binding RemoveCommand}"
+                                        SemanticProperties.Description="{l:Text Question.RemoveOption}" />
+                                </Grid>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </VerticalStackLayout>
+                    <Button
+                        Style="{StaticResource SecondaryButton}"
+                        Text="{l:Text Question.AddOption}"
+                        Command="{Binding AddOptionCommand}" />
+                </VerticalStackLayout>
+            </Border>
+
+            <Border Style="{StaticResource Card}">
+                <VerticalStackLayout Spacing="8">
+                    <Label Style="{StaticResource Overline}" Text="{l:Text Question.Explanation}" />
+                    <Border Style="{StaticResource Field}">
+                        <Editor
+                            Text="{Binding Explanation}"
+                            Placeholder="{l:Text Question.ExplanationPlaceholder}"
+                            AutoSize="TextChanges"
+                            MaxLength="4000" />
+                    </Border>
+                </VerticalStackLayout>
+            </Border>
+
+            <Button Text="{l:Text Question.Save}" Command="{Binding SaveCommand}" />
+            <Button
+                Style="{StaticResource SecondaryButton}"
+                Text="{Binding ActiveText}"
+                Command="{Binding ToggleActiveCommand}"
+                IsVisible="{Binding IsExisting}" />
+            <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

@@ -62,6 +62,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<UserAccount>();
         builder.Services.AddSingleton<SlotOffers>();
         builder.Services.AddSingleton<TheoryPlans>();
+        builder.Services.AddSingleton<QuestionBank>();
         builder.Services.AddSingleton<StudentContracts>();
         builder.Services.AddSingleton(provider => new RealtimeConnection(
             () => ApiAddress.Current, provider.GetRequiredService<AuthSessionManager>()));
@@ -104,6 +105,10 @@ public static class MauiProgram
         builder.Services.AddTransient<OfferSlotViewModel>();
         builder.Services.AddTransient<PlanTheoryPage>();
         builder.Services.AddTransient<PlanTheoryViewModel>();
+        builder.Services.AddTransient<QuestionsPage>();
+        builder.Services.AddTransient<QuestionsViewModel>();
+        builder.Services.AddTransient<QuestionPage>();
+        builder.Services.AddTransient<QuestionViewModel>();
         builder.Services.AddTransient<LessonEntries>();
 
 #if DEBUG

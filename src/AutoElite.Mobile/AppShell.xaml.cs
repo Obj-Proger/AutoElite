@@ -26,6 +26,8 @@ public partial class AppShell : Shell
         Routing.RegisterRoute(Routes.Booking, typeof(BookingPage));
         Routing.RegisterRoute(Routes.OfferSlot, typeof(OfferSlotPage));
         Routing.RegisterRoute(Routes.PlanTheory, typeof(PlanTheoryPage));
+        Routing.RegisterRoute(Routes.Questions, typeof(QuestionsPage));
+        Routing.RegisterRoute(Routes.Question, typeof(QuestionPage));
         Routing.RegisterRoute(Routes.Attendance, typeof(AttendancePage));
         Routing.RegisterRoute(Routes.Completion, typeof(CompletionPage));
         Routing.RegisterRoute(Routes.Tests, typeof(TestsPage));
@@ -64,7 +66,7 @@ public partial class AppShell : Shell
         try
         {
             var roles = (await _session.GetProfileAsync(CancellationToken.None)).Value.Roles ?? [];
-            StudyTab.IsVisible = roles.Contains(UserRole.Student);
+            StudyTab.IsVisible = roles.Contains(UserRole.Student) || roles.Contains(UserRole.TheoryInstructor);
         }
         catch (Exception exception) when (exception is ApiException or HttpRequestException)
         {
