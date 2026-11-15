@@ -4,6 +4,7 @@ using AutoElite.Application.Chats.AddChatMember;
 using AutoElite.Application.Chats.ChangeChatMemberRole;
 using AutoElite.Application.Chats.CreateGroupChat;
 using AutoElite.Application.Chats.DeleteChatMessage;
+using AutoElite.Application.Chats.GetChatContacts;
 using AutoElite.Application.Chats.GetChatMembers;
 using AutoElite.Application.Chats.GetChatMessages;
 using AutoElite.Application.Chats.GetMyChats;
@@ -39,6 +40,17 @@ public sealed class ChatsController(IDispatcher dispatcher) : ApiControllerBase
     [ProducesResponseType<IReadOnlyList<ChatListItem>>(StatusCodes.Status200OK)]
     public async Task<IActionResult> GetChats(CancellationToken cancellationToken) =>
         Respond(await dispatcher.Send(new GetMyChatsQuery(), cancellationToken));
+
+    /// <summary>
+    /// Lists the people the signed-in user studies or teaches with, by name: a student's driving and theory instructors,
+    /// an instructor's students. A personal chat is opened with one of them through POST /direct.
+    /// </summary>
+    /// <param name="cancellationToken">A token that signals cancellation of the request.</param>
+    /// <returns>The contacts.</returns>
+    [HttpGet("contacts")]
+    [ProducesResponseType<IReadOnlyList<ChatContactItem>>(StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetContacts(CancellationToken cancellationToken) =>
+        Respond(await dispatcher.Send(new GetChatContactsQuery(), cancellationToken));
 
     /// <summary>
     /// Creates a group chat with the signed-in staff member as its administrator; the Location header leads to its

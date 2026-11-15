@@ -246,7 +246,7 @@ public sealed class ProfileViewModel : ViewModel
             ' ', new[] { profile.LastName, profile.FirstName, profile.MiddleName }.Where(part => !string.IsNullOrWhiteSpace(part)));
         Initials = InitialsOf(profile.FirstName, profile.LastName);
         Email = profile.Email ?? string.Empty;
-        Roles = string.Join(", ", (profile.Roles ?? []).OfType<UserRole>().Select(RoleName));
+        Roles = string.Join(", ", (profile.Roles ?? []).OfType<UserRole>().Select(RoleTexts.Of));
         LastName = profile.LastName ?? string.Empty;
         FirstName = profile.FirstName ?? string.Empty;
         MiddleName = profile.MiddleName ?? string.Empty;
@@ -353,15 +353,6 @@ public sealed class ProfileViewModel : ViewModel
 
         await ChangeAsync(() => _account.RemovePhotoAsync(CancellationToken.None), AppTexts.Get("Profile.PhotoRemoved"));
     }
-
-    private static string RoleName(UserRole role) => role switch
-    {
-        UserRole.Student => AppTexts.Get("Role.Student"),
-        UserRole.DrivingInstructor => AppTexts.Get("Role.DrivingInstructor"),
-        UserRole.TheoryInstructor => AppTexts.Get("Role.TheoryInstructor"),
-        UserRole.Manager => AppTexts.Get("Role.Manager"),
-        _ => AppTexts.Get("Role.Administrator")
-    };
 
     private async Task LeaveAsync(bool changeSchool)
     {

@@ -49,3 +49,13 @@ public sealed record ChatMessageItem(
 /// <param name="JoinedAtUtc">When the user joined the chat.</param>
 /// <param name="LastReadAtUtc">The read position of the user, if any.</param>
 public sealed record ChatMemberItem(Guid UserId, string FullName, ChatMemberRole Role, DateTime JoinedAtUtc, DateTime? LastReadAtUtc);
+
+/// <summary>
+/// A person the signed-in user studies or teaches with, whom they can write to: an instructor of a student, or a
+/// student of an instructor.
+/// </summary>
+/// <param name="UserId">The user.</param>
+/// <param name="FullName">The full name of the user.</param>
+/// <param name="Roles">How the user works with the signed-in user: as their driving or theory instructor, or student.</param>
+/// <param name="PhotoDocumentId">The photo of the user, if any.</param>
+public sealed record ChatContactItem(Guid UserId, string FullName, IReadOnlyList<UserRole> Roles, Guid? PhotoDocumentId);

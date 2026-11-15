@@ -11,7 +11,7 @@ public sealed class ChatEntry
     /// <summary>Gets the latest message, if any.</summary>
     public string? LastMessage { get; init; }
 
-    /// <summary>Gets when the latest message was sent, in the time zone of the device.</summary>
+    /// <summary>Gets when the latest message was sent, in the time zone of the device, and whether the chat is muted.</summary>
     public string? Time { get; init; }
 
     /// <summary>Gets the number of unread messages, or <see langword="null"/> when all are read.</summary>

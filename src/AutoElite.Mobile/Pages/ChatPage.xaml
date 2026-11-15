@@ -8,7 +8,11 @@
     x:DataType="pages:ChatViewModel"
     Title="{Binding Title}">
 
-    <Grid RowDefinitions="*,Auto">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="{l:Text Chat.Actions}" Command="{Binding ActionsCommand}" />
+    </ContentPage.ToolbarItems>
+
+    <Grid RowDefinitions="*,Auto,Auto">
         <ScrollView x:Name="Scroller">
             <VerticalStackLayout x:Name="MessageList" Padding="{StaticResource PageMargin}" Spacing="10">
                 <Border Style="{StaticResource Card}" IsVisible="{Binding HasNotice}">
@@ -18,9 +22,41 @@
                     <BindableLayout.ItemTemplate>
                         <DataTemplate x:DataType="pages:MessageEntry">
                             <Border Style="{StaticResource Card}" HorizontalOptions="{Binding Alignment}" MaximumWidthRequest="320">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding TapCommand}" />
+                                </Border.GestureRecognizers>
                                 <VerticalStackLayout Spacing="4">
                                     <Label Style="{StaticResource Caption}" Text="{Binding Sender}" IsVisible="{Binding IsTheirs}" />
-                                    <Label Style="{StaticResource BodyLarge}" Text="{Binding Text}" />
+                                    <Label Style="{StaticResource BodyLarge}" Text="{Binding Text}" IsVisible="{Binding HasText}" />
+                                    <VerticalStackLayout
+                                        Spacing="6"
+                                        IsVisible="{Binding HasFiles}"
+                                        BindableLayout.ItemsSource="{Binding Files}">
+                                        <BindableLayout.ItemTemplate>
+                                            <DataTemplate x:DataType="pages:FileEntry">
+                                                <Border
+                                                    BackgroundColor="{StaticResource SurfaceRaised}"
+                                                    StrokeThickness="0"
+                                                    StrokeShape="RoundRectangle 8"
+                                                    Padding="10,6"
+                                                    SemanticProperties.Description="{Binding Name}">
+                                                    <Border.GestureRecognizers>
+                                                        <TapGestureRecognizer Command="{Binding Command}" />
+                                                    </Border.GestureRecognizers>
+                                                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
+                                                        <Image Source="icon_attach.png" WidthRequest="18" HeightRequest="18" />
+                                                        <VerticalStackLayout Grid.Column="1">
+                                                            <Label
+                                                                Text="{Binding Name}"
+                                                                TextColor="{StaticResource Accent}"
+                                                                LineBreakMode="MiddleTruncation" />
+                                                            <Label Style="{StaticResource Caption}" Text="{Binding Details}" />
+                                                        </VerticalStackLayout>
+                                                    </Grid>
+                                                </Border>
+                                            </DataTemplate>
+                                        </BindableLayout.ItemTemplate>
+                                    </VerticalStackLayout>
                                     <Label Style="{StaticResource Caption}" Text="{Binding Time}" />
                                 </VerticalStackLayout>
                             </Border>
@@ -30,8 +66,45 @@
             </VerticalStackLayout>
         </ScrollView>
 
-        <Grid Grid.Row="1" ColumnDefinitions="*,Auto" ColumnSpacing="10" Padding="16,10">
-            <Border Style="{StaticResource Field}">
+        <ScrollView Grid.Row="1" Orientation="Horizontal" IsVisible="{Binding HasPending}" Padding="16,6,16,0">
+            <HorizontalStackLayout Spacing="8" BindableLayout.ItemsSource="{Binding Pending}">
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate x:DataType="pages:FileEntry">
+                        <Border
+                            BackgroundColor="{StaticResource SurfaceRaised}"
+                            StrokeThickness="0"
+                            StrokeShape="RoundRectangle 16"
+                            Padding="12,4,4,4">
+                            <HorizontalStackLayout Spacing="4">
+                                <Label
+                                    Text="{Binding Name}"
+                                    MaximumWidthRequest="180"
+                                    LineBreakMode="MiddleTruncation"
+                                    VerticalOptions="Center" />
+                                <Button
+                                    Style="{StaticResource SecondaryButton}"
+                                    Text="✕"
+                                    Padding="8,0"
+                                    MinimumHeightRequest="32"
+                                    Command="{Binding Command}"
+                                    SemanticProperties.Description="{l:Text Chat.RemoveFile}" />
+                            </HorizontalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
+            </HorizontalStackLayout>
+        </ScrollView>
+
+        <Grid Grid.Row="2" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10" Padding="16,10">
+            <ImageButton
+                Source="icon_attach.png"
+                WidthRequest="44"
+                HeightRequest="44"
+                Padding="10"
+                VerticalOptions="End"
+                Command="{Binding AttachCommand}"
+                SemanticProperties.Description="{l:Text Chat.Attach}" />
+            <Border Grid.Column="1" Style="{StaticResource Field}">
                 <Editor
                     Text="{Binding Text}"
                     Placeholder="{l:Text Chat.Placeholder}"
@@ -39,7 +112,14 @@
                     MaxLength="4000"
                     MaximumHeightRequest="140" />
             </Border>
-            <Button Grid.Column="1" Text="{l:Text Chat.Send}" Command="{Binding SendCommand}" VerticalOptions="End" />
+            <Button Grid.Column="2" Text="{l:Text Chat.Send}" Command="{Binding SendCommand}" VerticalOptions="End" />
+            <ActivityIndicator
+                IsRunning="{Binding IsBusy}"
+                IsVisible="{Binding IsBusy}"
+                WidthRequest="24"
+                HeightRequest="24"
+                VerticalOptions="End"
+                Margin="0,0,0,10" />
         </Grid>
     </Grid>
 

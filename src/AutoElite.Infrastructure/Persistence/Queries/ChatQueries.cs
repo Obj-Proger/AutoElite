@@ -155,6 +155,76 @@ internal sealed class ChatQueries(AutoEliteDbContext dbContext) : IChatQueries
         ];
     }
 
+    /// <inheritdoc />
+    public async Task<IReadOnlyList<ChatContactItem>> GetContactsAsync(Guid userId, CancellationToken cancellationToken = default)
+    {
+        var slots = dbContext.Set<DrivingSlot>().AsNoTracking();
+        var groups = dbContext.Set<StudyGroup>().AsNoTracking().Where(group => group.IsActive);
+
+        // Four small reads rather than one union, each a join the indexes of bookings and enrollments serve.
+        var drivingInstructors = await (
+                from slot in slots
+                from booking in slot.Bookings
+                where booking.StudentId == userId && booking.Status != DrivingBookingStatus.Cancelled
+                select slot.InstructorId)
+            .Distinct()
+            .ToListAsync(cancellationToken);
+        var theoryInstructors = await (
+                from studyGroup in groups
+                from enrollment in studyGroup.Enrollments
+                where enrollment.StudentId == userId && enrollment.WithdrawnAtUtc == null
+                select studyGroup.TheoryInstructorId)
+            .Distinct()
+            .ToListAsync(cancellationToken);
+        var drivingStudents = await (
+                from slot in slots
+                from booking in slot.Bookings
+                where slot.InstructorId == userId && booking.Status != DrivingBookingStatus.Cancelled
+                select booking.StudentId)
+            .Distinct()
+            .ToListAsync(cancellationToken);
+        var groupStudents = await (
+                from studyGroup in groups
+                from enrollment in studyGroup.Enrollments
+                where studyGroup.TheoryInstructorId == userId && enrollment.WithdrawnAtUtc == null
+                select enrollment.StudentId)
+            .Distinct()
+            .ToListAsync(cancellationToken);
+
+        var roles = new[]
+            {
+                (Ids: drivingInstructors, Role: UserRole.DrivingInstructor),
+                (Ids: theoryInstructors, Role: UserRole.TheoryInstructor),
+                (Ids: drivingStudents, Role: UserRole.Student),
+                (Ids: groupStudents, Role: UserRole.Student)
+            }
+            .SelectMany(link => link.Ids.Select(id => (Id: id, link.Role)))
+            .Where(link => link.Id != userId)
+            .GroupBy(link => link.Id)
+            .ToDictionary(links => links.Key, links => links.Select(link => link.Role).Distinct().Order().ToList());
+        List<Guid> ids = [.. roles.Keys];
+        var users = await dbContext.Set<User>().AsNoTracking()
+            .Where(user => ids.Contains(user.Id) && user.IsActive)
+            .Select(user => new
+            {
+                user.Id,
+                user.FullName.LastName,
+                user.FullName.FirstName,
+                user.FullName.MiddleName,
+                user.PhotoDocumentId
+            })
+            .ToListAsync(cancellationToken);
+
+        return
+        [
+            .. users
+                .Select(user => new ChatContactItem(
+                    user.Id, PersonNames.Format(user.LastName, user.FirstName, user.MiddleName)!, roles[user.Id], user.PhotoDocumentId))
+                .OrderBy(contact => contact.FullName, StringComparer.CurrentCulture)
+                .ThenBy(contact => contact.UserId)
+        ];
+    }
+
     private IQueryable<ChatMember> CurrentMembers(Guid chatId) =>
         dbContext.Set<ChatMember>().AsNoTracking()
             .Where(member => EF.Property<Guid>(member, ChatConfiguration.ChatKey) == chatId && member.LeftAtUtc == null);

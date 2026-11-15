@@ -3,6 +3,7 @@ using AutoElite.Client.Api.Models;
 using AutoElite.Client.Authentication;
 using AutoElite.Client.Offline;
 using AutoElite.Client.Realtime;
+using AutoElite.Mobile.Schedule;
 using Microsoft.Kiota.Abstractions;
 
 namespace AutoElite.Mobile.Session;
@@ -98,7 +99,7 @@ public sealed class UserSession(
     public async Task<int> CountWaitingActionsAsync(CancellationToken cancellationToken) =>
         (await queue.ListAsync(cancellationToken)).Count(action => !action.IsRejected);
 
-    /// <summary>Signs out, closes the connection to the hub and forgets the offline data.</summary>
+    /// <summary>Signs out, closes the connection to the hub and forgets the offline data and the files opened in chats.</summary>
     /// <param name="cancellationToken">A token that signals cancellation of the operation.</param>
     /// <returns>A task that completes when the user is signed out.</returns>
     public async Task SignOutAsync(CancellationToken cancellationToken)
@@ -106,6 +107,7 @@ public sealed class UserSession(
         await realtime.StopAsync(cancellationToken);
         await sessions.SignOutAsync(cancellationToken);
         await offline.ForgetAsync(cancellationToken);
+        Chats.ForgetFiles();
     }
 
     /// <summary>Signs out, forgets the offline data and the address of the school, so that the user gives another one.</summary>

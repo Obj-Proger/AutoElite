@@ -9,6 +9,8 @@ internal sealed class FakeChatQueries : IChatQueries
 
     public List<ChatListItem> Chats { get; } = [];
 
+    public List<ChatContactItem> Contacts { get; } = [];
+
     public (Guid ChatId, Guid? BeforeMessageId, int Limit)? LastMessagesCall { get; private set; }
 
     public Guid? LastUserId { get; private set; }
@@ -33,4 +35,11 @@ internal sealed class FakeChatQueries : IChatQueries
 
     public Task<IReadOnlyList<ChatMemberItem>> GetMembersAsync(Guid chatId, CancellationToken cancellationToken = default) =>
         Task.FromResult<IReadOnlyList<ChatMemberItem>>([]);
+
+    public Task<IReadOnlyList<ChatContactItem>> GetContactsAsync(Guid userId, CancellationToken cancellationToken = default)
+    {
+        LastUserId = userId;
+
+        return Task.FromResult<IReadOnlyList<ChatContactItem>>([.. Contacts]);
+    }
 }

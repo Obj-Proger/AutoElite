@@ -7,6 +7,60 @@ namespace AutoElite.API.Tests.Controllers;
 [Collection(nameof(ApiCollection))]
 public sealed class ChatsControllerTests(ApiFactory api)
 {
+    private static readonly DateOnly _contractStart = new(2026, 10, 1);
+
+    private static DateOnly Today => DateOnly.FromDateTime(DateTime.UtcNow);
+
+    // A student with a contract of category B, enrolled in a group of the theory instructor and booked on a practice
+    // slot of the driving instructor.
+    private static async Task ConnectAsync(
+        HttpClient admin, HttpClient student, Guid studentId, HttpClient driving, Guid theoryId)
+    {
+        var courseId = await admin.CreateAsync("/api/v1/courses", new
+        {
+            Name = $"Категория B {Guid.NewGuid():N}",
+            Category = LicenseCategory.B,
+            PriceAmount = 45000m,
+            TheoryHours = 134,
+            PracticeHours = 56
+        });
+        var contractId = await admin.CreateAsync("/api/v1/contracts", new
+        {
+            StudentId = studentId,
+            CourseId = courseId,
+            Transmission = Transmission.Manual,
+            StartDate = _contractStart,
+            EndDate = _contractStart.AddMonths(6)
+        });
+        var groupId = await admin.CreateAsync("/api/v1/study-groups", new
+        {
+            Name = $"Группа {Guid.NewGuid():N}",
+            CourseId = courseId,
+            TheoryInstructorId = theoryId,
+            StartDate = Today,
+            EndDate = Today.AddMonths(3),
+            Capacity = 10
+        });
+        using var enrolled = await admin.SendJsonAsync(
+            HttpMethod.Post, $"/api/v1/study-groups/{groupId}/members", new { ContractId = contractId });
+        enrolled.EnsureSuccessStatusCode();
+        var vehicleId = await admin.CreateAsync("/api/v1/vehicles", new
+        {
+            Plate = "C" + Guid.NewGuid().ToString("N")[..8].ToUpperInvariant(),
+            Make = "Lada",
+            Model = "Vesta",
+            Year = 2023,
+            Category = LicenseCategory.B,
+            Transmission = Transmission.Manual
+        });
+        var start = DateTime.UtcNow.Date.AddDays(3).AddHours(10);
+        var slotId = await driving.CreateAsync(
+            "/api/v1/driving-slots", new { VehicleId = vehicleId, StartUtc = start, EndUtc = start.AddHours(2) });
+        using var booked = await student.SendJsonAsync(
+            HttpMethod.Post, $"/api/v1/driving-slots/{slotId}/book", new { ContractId = contractId });
+        booked.EnsureSuccessStatusCode();
+    }
+
     [Fact]
     public async Task Instructor_LeadsAGroupChat_WhoseMembersReadAndAnswer()
     {
@@ -84,5 +138,37 @@ public sealed class ChatsControllerTests(ApiFactory api)
         chat.GetProperty("kind").GetString().Should().Be(nameof(ChatKind.Direct));
         chat.GetProperty("counterpartId").GetGuid().Should().Be(senderUser.UserId);
         chat.GetProperty("lastMessageText").GetString().Should().Be("Можно перенести занятие?");
+    }
+
+    [Fact]
+    public async Task Contacts_AreThePeopleTheUserStudiesOrTeachesWith()
+    {
+        using var admin = await api.SignedInClientAsync(UserRole.Administrator);
+        var (student, studentUser) = await api.SignInAsync(UserRole.Student);
+        using var studentClient = student;
+        var (driving, drivingUser) = await api.SignInAsync(UserRole.DrivingInstructor);
+        using var drivingClient = driving;
+        var (theory, theoryUser) = await api.SignInAsync(UserRole.TheoryInstructor);
+        using var theoryClient = theory;
+        using var stranger = await api.SignedInClientAsync(UserRole.Student);
+        await ConnectAsync(admin, student, studentUser.UserId, driving, theoryUser.UserId);
+
+        var ofStudent = await student.GetJsonAsync("/api/v1/chats/contacts");
+        var ofDriving = await driving.GetJsonAsync("/api/v1/chats/contacts");
+        var ofTheory = await theory.GetJsonAsync("/api/v1/chats/contacts");
+        var ofStranger = await stranger.GetJsonAsync("/api/v1/chats/contacts");
+
+        ofStudent.EnumerateArray()
+            .Select(contact => (contact.GetProperty("userId").GetGuid(), contact.GetProperty("roles")[0].GetString()))
+            .Should().BeEquivalentTo(new[]
+            {
+                (drivingUser.UserId, nameof(UserRole.DrivingInstructor)),
+                (theoryUser.UserId, nameof(UserRole.TheoryInstructor))
+            });
+        ofDriving.EnumerateArray().Should().ContainSingle()
+            .Which.GetProperty("userId").GetGuid().Should().Be(studentUser.UserId);
+        ofTheory.EnumerateArray().Should().ContainSingle()
+            .Which.GetProperty("roles")[0].GetString().Should().Be(nameof(UserRole.Student));
+        ofStranger.EnumerateArray().Should().BeEmpty();
     }
 }

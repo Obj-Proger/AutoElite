@@ -1,4 +1,5 @@
 using AutoElite.Application.Chats;
+using AutoElite.Application.Chats.GetChatContacts;
 using AutoElite.Application.Chats.GetChatMembers;
 using AutoElite.Application.Chats.GetChatMessages;
 using AutoElite.Application.Chats.GetMyChats;
@@ -29,6 +30,19 @@ public class ChatQueryHandlerTests
             .Handle(new GetMyChatsQuery(), TestContext.Current.CancellationToken);
 
         result.Value.Should().Equal(chat);
+        _queries.LastUserId.Should().Be(_caller.UserId);
+    }
+
+    [Fact]
+    public async Task GetContacts_SignedInUser_ReadsThePeopleTheyStudyWith()
+    {
+        var contact = new ChatContactItem(Guid.CreateVersion7(), "Ivanov Ivan", [UserRole.DrivingInstructor], null);
+        _queries.Contacts.Add(contact);
+
+        var result = await new GetChatContactsQueryHandler(_queries, _caller)
+            .Handle(new GetChatContactsQuery(), TestContext.Current.CancellationToken);
+
+        result.Value.Should().Equal(contact);
         _queries.LastUserId.Should().Be(_caller.UserId);
     }
 

@@ -8,8 +8,9 @@ using Microsoft.Kiota.Abstractions;
 namespace AutoElite.Mobile.Pages;
 
 /// <summary>
-/// The chats of the user, the one with the latest message first, each with its latest message and the number of
-/// unread ones, from the API or, without a network, from the device; a new message reads them again at once.
+/// The chats of the user, the one with the latest message first, each with its latest message, the number of unread
+/// ones and whether its notifications are off, from the API or, without a network, from the device; a new message
+/// reads them again at once. A new personal chat starts from the people the user studies or teaches with.
 /// </summary>
 public sealed class ChatsViewModel : ViewModel
 {
@@ -24,6 +25,7 @@ public sealed class ChatsViewModel : ViewModel
         _chats = chats;
         _realtime = realtime;
         RefreshCommand = new Command(async () => await RefreshAsync());
+        NewChatCommand = new Command(async () => await Routes.OpenAsync(Routes.NewChat));
     }
 
     /// <summary>Gets the chats.</summary>
@@ -56,6 +58,9 @@ public sealed class ChatsViewModel : ViewModel
 
     /// <summary>Gets the command that reads the chats again.</summary>
     public Command RefreshCommand { get; }
+
+    /// <summary>Gets the command that opens the people to start a personal chat with.</summary>
+    public Command NewChatCommand { get; }
 
     /// <summary>Starts reading the chats again whenever a message arrives, while the page is shown.</summary>
     public void StartListening() => _realtime.ChatMessageReceived += OnMessageReceived;
@@ -96,7 +101,13 @@ public sealed class ChatsViewModel : ViewModel
         {
             Title = title,
             LastMessage = chat.LastMessageText,
-            Time = chat.LastMessageAtUtc?.ToLocalTime().ToString("g", CultureInfo.CurrentCulture),
+            Time = string.Join(
+                " · ",
+                new[]
+                {
+                    chat.LastMessageAtUtc?.ToLocalTime().ToString("g", CultureInfo.CurrentCulture),
+                    chat.IsMuted == true ? AppTexts.Get("Chats.Muted") : null
+                }.OfType<string>()),
             Unread = chat.UnreadCount is { } unread and > 0 ? unread.ToString(CultureInfo.CurrentCulture) : null,
             OpenCommand = new Command(async () => await Routes.OpenAsync(
                 Routes.Chat,

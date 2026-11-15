@@ -32,4 +32,13 @@ public interface IChatQueries
     /// <param name="chatId">The identifier of the chat.</param>
     /// <param name="cancellationToken">A token that signals cancellation of the operation.</param>
     Task<IReadOnlyList<ChatMemberItem>> GetMembersAsync(Guid chatId, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Reads the active users the user studies or teaches with, by name: for a student, the driving instructors of their
+    /// bookings and the theory instructors of their active groups; for an instructor, the students who booked their slots
+    /// and the students of their active groups. Cancelled bookings and withdrawn students do not count.
+    /// </summary>
+    /// <param name="userId">The identifier of the user.</param>
+    /// <param name="cancellationToken">A token that signals cancellation of the operation.</param>
+    Task<IReadOnlyList<ChatContactItem>> GetContactsAsync(Guid userId, CancellationToken cancellationToken = default);
 }

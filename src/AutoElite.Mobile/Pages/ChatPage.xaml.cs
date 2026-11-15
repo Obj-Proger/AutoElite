@@ -23,6 +23,7 @@ public partial class ChatPage : ContentPage
     {
         base.OnAppearing();
         _viewModel.StartListening();
+        await _viewModel.LoadChatAsync();
         await _viewModel.LoadAsync();
     }
 

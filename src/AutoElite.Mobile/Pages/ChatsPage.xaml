@@ -11,6 +11,7 @@
     <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}" RefreshColor="{StaticResource Accent}">
         <ScrollView>
             <VerticalStackLayout Padding="{StaticResource PageMargin}" Spacing="10">
+                <Button Style="{StaticResource SecondaryButton}" Text="{l:Text Chats.New}" Command="{Binding NewChatCommand}" />
                 <Border Style="{StaticResource Card}" IsVisible="{Binding HasNotice}">
                     <Label Style="{StaticResource Secondary}" Text="{Binding Notice}" />
                 </Border>

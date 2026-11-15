@@ -30,6 +30,7 @@ public partial class AppShell : Shell
         Routing.RegisterRoute(Routes.TestSession, typeof(TestSessionPage));
         Routing.RegisterRoute(Routes.Notifications, typeof(NotificationsPage));
         Routing.RegisterRoute(Routes.Chat, typeof(ChatPage));
+        Routing.RegisterRoute(Routes.NewChat, typeof(NewChatPage));
         Routing.RegisterRoute(Routes.Contracts, typeof(ContractsPage));
         Routing.RegisterRoute(Routes.Security, typeof(SecurityPage));
         sessions.SessionEnded += (_, _) => Dispatcher.Dispatch(async () => await Routes.GoToAsync(Routes.SignIn));

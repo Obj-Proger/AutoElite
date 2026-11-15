@@ -42,6 +42,9 @@ internal static class Routes
     /// <summary>A chat, opened over the tab of chats with a <see cref="ChatRequest"/>.</summary>
     public const string Chat = "chat";
 
+    /// <summary>The people to start a personal chat with, opened over the tab of chats.</summary>
+    public const string NewChat = "new-chat";
+
     /// <summary>The contracts of a student with the progress and the payments, opened over the tab of studies.</summary>
     public const string Contracts = "contracts";
 
@@ -88,4 +91,14 @@ internal static class Routes
     /// <returns>A task that completes when the page is shown.</returns>
     public static Task OpenAsync(string route, IDictionary<string, object> parameters) =>
         Shell.Current.GoToAsync(route, parameters);
+
+    /// <summary>
+    /// Shows a page in place of the one opened over the tabs, with its parameters, so that the back button skips the
+    /// page that chose it.
+    /// </summary>
+    /// <param name="route">The route of the page.</param>
+    /// <param name="parameters">The parameters, which the page receives in <see cref="IQueryAttributable"/>.</param>
+    /// <returns>A task that completes when the page is shown.</returns>
+    public static Task ReplaceAsync(string route, IDictionary<string, object> parameters) =>
+        Shell.Current.GoToAsync("../" + route, parameters);
 }

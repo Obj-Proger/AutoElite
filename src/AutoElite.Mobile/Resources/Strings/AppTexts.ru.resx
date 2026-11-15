@@ -94,14 +94,50 @@
   <data name="Booking.Unavailable" xml:space="preserve">
     <value>Не удалось загрузить слоты: нет связи с автошколой.</value>
   </data>
-  <data name="Chat.Attachments" xml:space="preserve">
-    <value>Прикреплены файлы, откройте их на сайте</value>
+  <data name="Chat.Actions" xml:space="preserve">
+    <value>Ещё</value>
+  </data>
+  <data name="Chat.Attach" xml:space="preserve">
+    <value>Прикрепить файлы</value>
+  </data>
+  <data name="Chat.ChooseFiles" xml:space="preserve">
+    <value>Выберите файлы</value>
+  </data>
+  <data name="Chat.DeleteMessage" xml:space="preserve">
+    <value>Удалить у всех</value>
   </data>
   <data name="Chat.Deleted" xml:space="preserve">
     <value>Сообщение удалено</value>
   </data>
+  <data name="Chat.File" xml:space="preserve">
+    <value>Файл</value>
+  </data>
+  <data name="Chat.Leave" xml:space="preserve">
+    <value>Покинуть чат</value>
+  </data>
+  <data name="Chat.LeaveQuestion" xml:space="preserve">
+    <value>Вы больше не будете видеть его новые сообщения.</value>
+  </data>
+  <data name="Chat.LeaveTitle" xml:space="preserve">
+    <value>Покинуть чат?</value>
+  </data>
+  <data name="Chat.MessageActions" xml:space="preserve">
+    <value>Сообщение</value>
+  </data>
+  <data name="Chat.Mute" xml:space="preserve">
+    <value>Отключить уведомления</value>
+  </data>
+  <data name="Chat.Muted" xml:space="preserve">
+    <value>Уведомления этого чата отключены.</value>
+  </data>
+  <data name="Chat.NoFileAccess" xml:space="preserve">
+    <value>Приложению не разрешено открывать файлы. Разрешите это в настройках устройства.</value>
+  </data>
   <data name="Chat.Placeholder" xml:space="preserve">
     <value>Сообщение</value>
+  </data>
+  <data name="Chat.RemoveFile" xml:space="preserve">
+    <value>Убрать файл</value>
   </data>
   <data name="Chat.Send" xml:space="preserve">
     <value>Отправить</value>
@@ -109,8 +145,23 @@
   <data name="Chat.Sending" xml:space="preserve">
     <value>Ждёт отправки</value>
   </data>
+  <data name="Chat.TooManyFiles" xml:space="preserve">
+    <value>В одном сообщении — не больше {0} файлов.</value>
+  </data>
+  <data name="Chat.Unmute" xml:space="preserve">
+    <value>Включить уведомления</value>
+  </data>
+  <data name="Chat.Unmuted" xml:space="preserve">
+    <value>Уведомления этого чата включены.</value>
+  </data>
   <data name="Chats.Empty" xml:space="preserve">
-    <value>Чатов пока нет. Здесь пишут ваши инструкторы и группы.</value>
+    <value>Чатов пока нет. Начните разговор кнопкой «Новый чат»; здесь пишут и ваши инструкторы и группы.</value>
+  </data>
+  <data name="Chats.Muted" xml:space="preserve">
+    <value>без звука</value>
+  </data>
+  <data name="Chats.New" xml:space="preserve">
+    <value>Новый чат</value>
   </data>
   <data name="Chats.Offline" xml:space="preserve">
     <value>Нет связи. Сообщения на {0}.</value>
@@ -201,6 +252,15 @@
   </data>
   <data name="Exams.Title" xml:space="preserve">
     <value>Экзамены</value>
+  </data>
+  <data name="Files.Bytes" xml:space="preserve">
+    <value>{0} Б</value>
+  </data>
+  <data name="Files.Kilobytes" xml:space="preserve">
+    <value>{0} КБ</value>
+  </data>
+  <data name="Files.Megabytes" xml:space="preserve">
+    <value>{0} МБ</value>
   </data>
   <data name="Home.Afternoon" xml:space="preserve">
     <value>Добрый день,</value>
@@ -345,6 +405,15 @@
   </data>
   <data name="Lesson.Waiting" xml:space="preserve">
     <value>Изменение ждёт отправки</value>
+  </data>
+  <data name="NewChat.Empty" xml:space="preserve">
+    <value>Здесь появятся ваши преподаватели или ученики, когда начнутся совместные занятия.</value>
+  </data>
+  <data name="NewChat.Search" xml:space="preserve">
+    <value>Поиск по имени</value>
+  </data>
+  <data name="NewChat.Title" xml:space="preserve">
+    <value>Новый чат</value>
   </data>
   <data name="Notifications.Empty" xml:space="preserve">
     <value>Уведомлений пока нет.</value>
