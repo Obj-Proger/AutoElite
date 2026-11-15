@@ -946,14 +946,20 @@
   <data name="Schedule.Empty" xml:space="preserve">
     <value>Занятий нет</value>
   </data>
+  <data name="Schedule.Free" xml:space="preserve">
+    <value>Свободно {0}–{1}</value>
+  </data>
   <data name="Schedule.Next" xml:space="preserve">
     <value>Вперёд</value>
+  </data>
+  <data name="Schedule.Now" xml:space="preserve">
+    <value>Сейчас {0}</value>
   </data>
   <data name="Schedule.Offer" xml:space="preserve">
     <value>Новый слот</value>
   </data>
   <data name="Schedule.OfferHint" xml:space="preserve">
-    <value>Нажмите на свободное время в сетке, чтобы запланировать на это время.</value>
+    <value>Нажмите на свободное время, чтобы запланировать на это время.</value>
   </data>
   <data name="Schedule.Offline" xml:space="preserve">
     <value>Расписание на {0}; оно могло устареть.</value>

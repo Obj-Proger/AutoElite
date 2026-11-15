@@ -7,10 +7,11 @@ using Microsoft.Maui.Layouts;
 namespace AutoElite.Mobile.Controls;
 
 /// <summary>
-/// The schedule as a grid of hours: one column for a day or seven for a week, with the hours down the side and each
-/// lesson a block from its start to its end, coloured by its kind; lessons at the same time share the width of their
-/// column. A line marks the present moment on today. Tapping a block runs <see cref="EntryCommand"/> with its lesson;
-/// tapping free time runs <see cref="EmptyCommand"/> with its start, to the half hour, in the time zone of the device.
+/// The schedule as a grid of hours: one column for a day or seven equal ones for a week under the names of their days,
+/// with the hours down the side and each lesson a block from its start to its end, coloured by its kind; lessons at the
+/// same time share the width of their column. A line marks the present moment on today. Tapping a block runs
+/// <see cref="EntryCommand"/> with its lesson; tapping free time runs <see cref="EmptyCommand"/> with its start, to the
+/// half hour, in the time zone of the device; tapping the name of a day runs <see cref="DayCommand"/> with the day.
 /// </summary>
 public sealed class ScheduleGrid : ContentView
 {
@@ -37,11 +38,16 @@ public sealed class ScheduleGrid : ContentView
     public static readonly BindableProperty EmptyCommandProperty = BindableProperty.Create(
         nameof(EmptyCommand), typeof(ICommand), typeof(ScheduleGrid), propertyChanged: OnLayoutChanged);
 
+    /// <summary>Identifies the <see cref="DayCommand"/> property.</summary>
+    public static readonly BindableProperty DayCommandProperty = BindableProperty.Create(
+        nameof(DayCommand), typeof(ICommand), typeof(ScheduleGrid), propertyChanged: OnLayoutChanged);
+
     // The hours shown at least, widened to the lessons of the days shown.
     private const int EarliestHour = 8;
     private const int LatestHour = 21;
     private const double HoursWidth = 44;
-    private const double MinimumBlockHeight = 30;
+    private const double MinimumBlockHeight = 36;
+    private const double ColumnSpacing = 4;
 
     /// <summary>Gets or sets the lessons; those outside the days shown are left out.</summary>
     public IReadOnlyList<ScheduleEntry>? Entries
@@ -79,6 +85,13 @@ public sealed class ScheduleGrid : ContentView
     {
         get => (ICommand?)GetValue(EmptyCommandProperty);
         set => SetValue(EmptyCommandProperty, value);
+    }
+
+    /// <summary>Gets or sets the command that the tapped name of a day runs, with the day as a <see cref="DateOnly"/>.</summary>
+    public ICommand? DayCommand
+    {
+        get => (ICommand?)GetValue(DayCommandProperty);
+        set => SetValue(DayCommandProperty, value);
     }
 
     private static void OnLayoutChanged(BindableObject bindable, object oldValue, object newValue) =>
@@ -146,10 +159,8 @@ public sealed class ScheduleGrid : ContentView
         lastHour = Math.Min(24, Math.Max(lastHour, firstHour + 1));
         var height = (lastHour - firstHour) * HourHeight;
 
-        var grid = new Grid { ColumnSpacing = 4, HeightRequest = height };
-        grid.ColumnDefinitions.Add(new ColumnDefinition(new GridLength(HoursWidth)));
-        for (var day = 0; day < days; day++)
-            grid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
+        var grid = new Grid { ColumnSpacing = ColumnSpacing, HeightRequest = height };
+        AddColumns(grid, days);
 
         var hours = new AbsoluteLayout();
         for (var hour = firstHour; hour < lastHour; hour++)
@@ -197,7 +208,61 @@ public sealed class ScheduleGrid : ContentView
             grid.Add(column, index + 1, 0);
         }
 
-        Content = grid;
+        if (days == 1)
+        {
+            Content = grid;
+
+            return;
+        }
+
+        var week = new VerticalStackLayout { Spacing = 12 };
+        week.Add(HeaderOf(days, now));
+        week.Add(grid);
+        Content = week;
+    }
+
+    // The column of the hours and one equal column for each day, the same in the header and in the grid.
+    private static void AddColumns(Grid grid, int days)
+    {
+        grid.ColumnDefinitions.Add(new ColumnDefinition(new GridLength(HoursWidth)));
+        for (var day = 0; day < days; day++)
+            grid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
+    }
+
+    // The names and numbers of the days over their columns, today in the accent colour.
+    private Grid HeaderOf(int days, DateTimeOffset now)
+    {
+        var culture = CultureInfo.CurrentCulture;
+        var header = new Grid { ColumnSpacing = ColumnSpacing };
+        AddColumns(header, days);
+        for (var index = 0; index < days; index++)
+        {
+            var day = FirstDay.AddDays(index);
+            var color = DayOf(now) == day ? ColorOf("Accent") : ColorOf("Text");
+            var cell = new VerticalStackLayout { Spacing = 0, BackgroundColor = Colors.Transparent };
+            cell.Add(new Label
+            {
+                Text = day.ToString("ddd", culture),
+                FontSize = 12,
+                TextColor = DayOf(now) == day ? color : ColorOf("TextMuted"),
+                HorizontalTextAlignment = TextAlignment.Center
+            });
+            cell.Add(new Label
+            {
+                Text = day.Day.ToString(culture),
+                FontFamily = "TextSemiBold",
+                FontSize = 18,
+                TextColor = color,
+                HorizontalTextAlignment = TextAlignment.Center
+            });
+            SemanticProperties.SetDescription(cell, day.ToString("D", culture));
+            if (DayCommand is { } command)
+                cell.GestureRecognizers.Add(new TapGestureRecognizer { Command = command, CommandParameter = day });
+
+            header.Add(cell, index + 1, 0);
+        }
+
+        return header;
     }
 
     // Runs the command with the half hour tapped, unless a lesson is there; the column needs a background to be tapped.
@@ -255,9 +320,9 @@ public sealed class ScheduleGrid : ContentView
         {
             Text = entry.Title,
             FontFamily = "TextSemiBold",
-            FontSize = 13,
+            FontSize = isDay ? 13 : 12,
             TextColor = text,
-            MaxLines = isDay ? 2 : 3,
+            MaxLines = 2,
             LineBreakMode = LineBreakMode.TailTruncation
         });
         if (isDay)

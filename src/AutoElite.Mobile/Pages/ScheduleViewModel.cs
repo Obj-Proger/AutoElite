@@ -9,12 +9,13 @@ using Microsoft.Kiota.Abstractions;
 namespace AutoElite.Mobile.Pages;
 
 /// <summary>
-/// The schedule of the signed-in user as a grid: a day, chosen in the strip of its week, or the whole week, moved by
-/// the arrows or a swipe. It shows what the roles of the user have: the lessons of a student with the free slots they
-/// can book, the practice slots of a driving instructor, the theory lessons of a theory instructor. A week is read
-/// from the API or, without a network, from the device; tapping a lesson shows it with what the user can do with it.
-/// A driving instructor offers a slot by tapping free time or the button, and repeats the slots of the week shown on
-/// the next weeks; a theory instructor schedules a lesson of a group the same way.
+/// The schedule of the signed-in user: a day, chosen in the strip of its week, as a list of its lessons, or the whole
+/// week, as a list by days or, on a wide screen, as a grid of hours, moved by the arrows or a swipe. It shows what the
+/// roles of the user have: the lessons of a student with the free slots they can book, the practice slots of a driving
+/// instructor, the theory lessons of a theory instructor. A week is read from the API or, without a network, from the
+/// device; tapping a lesson shows it with what the user can do with it. A driving instructor offers a slot by tapping
+/// free time or the button, and repeats the slots of the week shown on the next weeks; a theory instructor schedules a
+/// lesson of a group the same way.
 /// </summary>
 public sealed class ScheduleViewModel : ViewModel
 {
@@ -70,6 +71,7 @@ public sealed class ScheduleViewModel : ViewModel
         TodayCommand = new Command(async () => await ShowAsync(Today));
         ShowDayCommand = new Command(() => IsWeekView = false);
         ShowWeekCommand = new Command(() => IsWeekView = true);
+        ShowDayOfCommand = new Command<DateOnly>(async day => await ShowDayOfAsync(day));
         RefreshCommand = new Command(async () => await RefreshAsync());
         OpenEntryCommand = new Command<ScheduleEntry>(async entry => await OpenAsync(entry));
         PlanAtCommand = new Command<DateTimeOffset>(async start => await PlanAtAsync(start), _ => CanPlan);
@@ -92,6 +94,7 @@ public sealed class ScheduleViewModel : ViewModel
             OnPropertyChanged(nameof(Period));
             Days = DaysOf(Entries);
             OnPropertyChanged(nameof(IsEmpty));
+            OnPropertyChanged(nameof(IsGridEmpty));
         }
     }
 
@@ -109,8 +112,38 @@ public sealed class ScheduleViewModel : ViewModel
             OnPropertyChanged(nameof(GridDayCount));
             OnPropertyChanged(nameof(Period));
             OnPropertyChanged(nameof(IsEmpty));
+            OnPropertyChanged(nameof(ShowsGrid));
+            OnPropertyChanged(nameof(ShowsList));
+            OnPropertyChanged(nameof(IsGridEmpty));
         }
     }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether the page is wide enough for the week as a grid of hours, with seven
+    /// readable columns; the page sets it from its width.
+    /// </summary>
+    public bool IsWide
+    {
+        get;
+        set
+        {
+            if (!SetProperty(ref field, value))
+                return;
+
+            OnPropertyChanged(nameof(ShowsGrid));
+            OnPropertyChanged(nameof(ShowsList));
+            OnPropertyChanged(nameof(IsGridEmpty));
+        }
+    }
+
+    /// <summary>Gets a value indicating whether the week is shown as a grid of hours.</summary>
+    public bool ShowsGrid => IsWeekView && IsWide;
+
+    /// <summary>Gets a value indicating whether the period is shown as a list: always a day, and a week on a narrow screen.</summary>
+    public bool ShowsList => !ShowsGrid;
+
+    /// <summary>Gets a value indicating whether the grid of the week is shown and has no lessons; the list says so itself.</summary>
+    public bool IsGridEmpty => ShowsGrid && IsEmpty;
 
     /// <summary>Gets a value indicating whether a day is shown.</summary>
     public bool IsDayView => !IsWeekView;
@@ -161,6 +194,7 @@ public sealed class ScheduleViewModel : ViewModel
 
             Days = DaysOf(value);
             OnPropertyChanged(nameof(IsEmpty));
+            OnPropertyChanged(nameof(IsGridEmpty));
         }
     } = [];
 
@@ -214,6 +248,9 @@ public sealed class ScheduleViewModel : ViewModel
 
     /// <summary>Gets the command that shows the whole week.</summary>
     public Command ShowWeekCommand { get; }
+
+    /// <summary>Gets the command that shows a day of the week, tapped by its name, as a day.</summary>
+    public Command<DateOnly> ShowDayOfCommand { get; }
 
     /// <summary>Gets the command that sends the waiting actions and reads the week again.</summary>
     public Command RefreshCommand { get; }
@@ -312,6 +349,12 @@ public sealed class ScheduleViewModel : ViewModel
     }
 
     private Task MoveAsync(int direction) => ShowAsync(SelectedDay.AddDays(direction * GridDayCount));
+
+    private async Task ShowDayOfAsync(DateOnly day)
+    {
+        IsWeekView = false;
+        await ShowAsync(day);
+    }
 
     private async Task ShowAsync(DateOnly day)
     {

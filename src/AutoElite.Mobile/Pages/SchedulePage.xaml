@@ -13,8 +13,9 @@
 
     <!--
         The schedule: the period with the arrows and today, the switch between a day and the week, the strip of the days
-        of the week, the planning of an instructor, then the grid of hours, which a swipe moves to the next or previous
-        day or week; an instructor taps free time on it to offer a slot or schedule a lesson.
+        of the week for a day, the planning of an instructor, then the lessons, which a swipe moves to the next or
+        previous day or week: a day as a list, a week as a list by days or, on a wide page, as a grid of hours. An
+        instructor taps free time to offer a slot or schedule a lesson; the name of a day of the week shows that day.
     -->
     <Grid Padding="16,16,16,0" RowDefinitions="Auto,Auto,Auto,Auto,Auto,*" RowSpacing="10">
         <Grid ColumnDefinitions="*,Auto,Auto,Auto" ColumnSpacing="6">
@@ -66,7 +67,12 @@
             </Button>
         </Grid>
 
-        <CollectionView Grid.Row="2" ItemsSource="{Binding Days}" SelectionMode="None" HeightRequest="72">
+        <CollectionView
+            Grid.Row="2"
+            ItemsSource="{Binding Days}"
+            SelectionMode="None"
+            HeightRequest="72"
+            IsVisible="{Binding IsDayView}">
             <CollectionView.ItemsLayout>
                 <GridItemsLayout Orientation="Vertical" Span="7" />
             </CollectionView.ItemsLayout>
@@ -142,19 +148,31 @@
             </Grid.GestureRecognizers>
             <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}">
                 <ScrollView>
-                    <controls:ScheduleGrid
-                        Margin="0,8,0,24"
-                        Entries="{Binding Entries}"
-                        FirstDay="{Binding GridFirstDay}"
-                        DayCount="{Binding GridDayCount}"
-                        EntryCommand="{Binding OpenEntryCommand}"
-                        EmptyCommand="{Binding PlanAtCommand}" />
+                    <Grid Margin="0,8,0,24">
+                        <controls:ScheduleAgenda
+                            IsVisible="{Binding ShowsList}"
+                            Entries="{Binding Entries}"
+                            FirstDay="{Binding GridFirstDay}"
+                            DayCount="{Binding GridDayCount}"
+                            ShowsFreeTime="{Binding CanPlan}"
+                            EntryCommand="{Binding OpenEntryCommand}"
+                            EmptyCommand="{Binding PlanAtCommand}"
+                            DayCommand="{Binding ShowDayOfCommand}" />
+                        <controls:ScheduleGrid
+                            IsVisible="{Binding ShowsGrid}"
+                            Entries="{Binding Entries}"
+                            FirstDay="{Binding GridFirstDay}"
+                            DayCount="{Binding GridDayCount}"
+                            EntryCommand="{Binding OpenEntryCommand}"
+                            EmptyCommand="{Binding PlanAtCommand}"
+                            DayCommand="{Binding ShowDayOfCommand}" />
+                    </Grid>
                 </ScrollView>
             </RefreshView>
             <Label
                 Style="{StaticResource Secondary}"
                 Text="{l:Text Schedule.Empty}"
-                IsVisible="{Binding IsEmpty}"
+                IsVisible="{Binding IsGridEmpty}"
                 InputTransparent="True"
                 HorizontalOptions="Center"
                 VerticalOptions="Start"

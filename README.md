@@ -184,10 +184,12 @@ and Windows. Building it, and so the whole solution, needs the MAUI workload: `d
 keeps the session in the secure storage of the device. On the first start it asks for the address of the school's API,
 which must use HTTPS; a debug build also takes HTTP and offers the API of the development machine:
 `http://localhost:5080` on Windows, `http://10.0.2.2:5080` from the Android emulator. Students and instructors sign in;
-the staff of the school work on its website. The tabs at the bottom lead to the home page, the schedule, the studies of
-a student (their practice tests and contracts), the chats and the profile. The schedule is a grid of hours for a day,
-chosen in the strip of its week, or for the whole week, moved by arrows or a swipe; it shows the lessons of each role of
-the user, a student also the free slots they can book, and tapping a lesson shows what the user can do with it, such as
+the staff of the school work on its website. The tabs, at the bottom on Android and in a strip of equal parts at the top
+on Windows, so that all of them stay in view at any width, lead to the home page, the schedule, the studies of a student
+(their practice tests and contracts), the chats and the profile. The schedule shows a day, chosen in the strip of its
+week, as a list of cards with the free time of an instructor between them, or the whole week as a list by days or, on a
+wide window, as a grid of hours; it is moved by arrows or a swipe and shows the lessons of each role of the user, a
+student also the free slots they can book, and tapping a lesson shows what the user can do with it, such as
 booking, cancelling, completing or marking the attendance. A student sees their driving and theory lessons on the home
 page, books a free practice slot of one of their contracts and cancels a booking, with or without a network, and takes
 practice tests and theory exams with the timer and a review of their mistakes, which need a network; rates a completed

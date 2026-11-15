@@ -946,14 +946,20 @@
   <data name="Schedule.Empty" xml:space="preserve">
     <value>No lessons</value>
   </data>
+  <data name="Schedule.Free" xml:space="preserve">
+    <value>Free {0}–{1}</value>
+  </data>
   <data name="Schedule.Next" xml:space="preserve">
     <value>Next</value>
+  </data>
+  <data name="Schedule.Now" xml:space="preserve">
+    <value>Now {0}</value>
   </data>
   <data name="Schedule.Offer" xml:space="preserve">
     <value>New slot</value>
   </data>
   <data name="Schedule.OfferHint" xml:space="preserve">
-    <value>Tap free time on the grid to plan at that time.</value>
+    <value>Tap free time to plan at that time.</value>
   </data>
   <data name="Schedule.Offline" xml:space="preserve">
     <value>The schedule as of {0}; it may be out of date.</value>
