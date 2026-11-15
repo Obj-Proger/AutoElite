@@ -14,7 +14,7 @@ namespace AutoElite.Mobile.Pages;
 /// can book, the practice slots of a driving instructor, the theory lessons of a theory instructor. A week is read
 /// from the API or, without a network, from the device; tapping a lesson shows it with what the user can do with it.
 /// A driving instructor offers a slot by tapping free time or the button, and repeats the slots of the week shown on
-/// the next weeks.
+/// the next weeks; a theory instructor schedules a lesson of a group the same way.
 /// </summary>
 public sealed class ScheduleViewModel : ViewModel
 {
@@ -68,8 +68,9 @@ public sealed class ScheduleViewModel : ViewModel
         ShowWeekCommand = new Command(() => IsWeekView = true);
         RefreshCommand = new Command(async () => await RefreshAsync());
         OpenEntryCommand = new Command<ScheduleEntry>(async entry => await OpenAsync(entry));
-        OfferAtCommand = new Command<DateTimeOffset>(async start => await OfferAsync(start), _ => IsDrivingInstructor);
+        PlanAtCommand = new Command<DateTimeOffset>(async start => await PlanAtAsync(start), _ => CanPlan);
         OfferCommand = new Command(async () => await OfferAsync(NextStart()));
+        PlanTheoryCommand = new Command(async () => await PlanTheoryAsync(NextStart()));
         RepeatWeekCommand = new Command(async () => await RepeatWeekAsync(), () => !IsRepeating);
         Days = DaysOf([]);
     }
@@ -222,10 +223,30 @@ public sealed class ScheduleViewModel : ViewModel
         get;
         private set
         {
-            if (SetProperty(ref field, value))
-                OfferAtCommand.ChangeCanExecute();
+            if (!SetProperty(ref field, value))
+                return;
+
+            OnPropertyChanged(nameof(CanPlan));
+            PlanAtCommand.ChangeCanExecute();
         }
     }
+
+    /// <summary>Gets a value indicating whether the user is a theory instructor, who schedules lessons of their groups.</summary>
+    public bool IsTheoryInstructor
+    {
+        get;
+        private set
+        {
+            if (!SetProperty(ref field, value))
+                return;
+
+            OnPropertyChanged(nameof(CanPlan));
+            PlanAtCommand.ChangeCanExecute();
+        }
+    }
+
+    /// <summary>Gets a value indicating whether the user plans lessons or slots on the schedule.</summary>
+    public bool CanPlan => IsDrivingInstructor || IsTheoryInstructor;
 
     /// <summary>Gets a value indicating whether the slots of the week are being repeated.</summary>
     public bool IsRepeating
@@ -238,8 +259,11 @@ public sealed class ScheduleViewModel : ViewModel
         }
     }
 
-    /// <summary>Gets the command that offers a slot at the free time tapped on the grid.</summary>
-    public Command<DateTimeOffset> OfferAtCommand { get; }
+    /// <summary>Gets the command that offers a slot or schedules a lesson at the free time tapped on the grid.</summary>
+    public Command<DateTimeOffset> PlanAtCommand { get; }
+
+    /// <summary>Gets the command that schedules a theory lesson on the day shown, at the next full hour.</summary>
+    public Command PlanTheoryCommand { get; }
 
     /// <summary>Gets the command that offers a slot on the day shown, at the next full hour.</summary>
     public Command OfferCommand { get; }
@@ -360,6 +384,7 @@ public sealed class ScheduleViewModel : ViewModel
 
         _loadedWeek = week;
         IsDrivingInstructor = roles.Contains(UserRole.DrivingInstructor);
+        IsTheoryInstructor = roles.Contains(UserRole.TheoryInstructor);
         Entries = [.. entries.OrderBy(entry => entry.Start)];
         Notice = isIncomplete
             ? AppTexts.Get("Schedule.Unavailable")
@@ -412,6 +437,36 @@ public sealed class ScheduleViewModel : ViewModel
 
         return new DateTimeOffset(start);
     }
+
+    // A slot for a driving instructor, a lesson for a theory instructor; a user who is both chooses.
+    private async Task PlanAtAsync(DateTimeOffset start)
+    {
+        if (!IsTheoryInstructor)
+        {
+            await OfferAsync(start);
+
+            return;
+        }
+
+        if (!IsDrivingInstructor)
+        {
+            await PlanTheoryAsync(start);
+
+            return;
+        }
+
+        var slot = AppTexts.Get("Schedule.Offer");
+        var lesson = AppTexts.Get("Schedule.PlanTheory");
+        var choice = await Shell.Current.DisplayActionSheetAsync(null, AppTexts.Get("Common.Cancel"), null, slot, lesson);
+        if (choice == slot)
+            await OfferAsync(start);
+        else if (choice == lesson)
+            await PlanTheoryAsync(start);
+    }
+
+    private static Task PlanTheoryAsync(DateTimeOffset start) =>
+        Routes.OpenAsync(
+            Routes.PlanTheory, new Dictionary<string, object> { [PlanTheoryViewModel.LessonParameter] = new TheoryLessonRequest(start) });
 
     private static Task OfferAsync(DateTimeOffset start) =>
         Routes.OpenAsync(Routes.OfferSlot, new Dictionary<string, object> { [OfferSlotViewModel.SlotParameter] = new SlotRequest(start) });

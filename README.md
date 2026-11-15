@@ -196,18 +196,20 @@ and reads the lessons again. A driving instructor offers a practice slot by tapp
 length, vehicle and training ground, repeats the slots of a week on up to four next weeks, leaving out those that would
 overlap, withdraws a slot with a reason, which needs a network, sees their slots of the next two weeks, cancels a
 booking before the lesson and, once it has started, completes it with the hours, the grades of the student's skills and
-a note, or records that the student did not come, also without a network. A theory instructor sees their theory lessons
-and marks the attendance of a lesson that has started for the whole group at once, in a classroom without a network too.
-Every user reads their notifications, whose number on the home page changes at once through the SignalR hub, and their
-chats, where new messages appear at once and a message written without a network is sent later. A personal chat starts
-from the people the user studies or teaches with (`GET /api/v1/chats/contacts`): a student's instructors, an
-instructor's students. A message carries up to ten files, which need a network and open in another application from the
-cache of the device, emptied when the user signs out; the user deletes their own messages, turns the notifications of a
-chat off and leaves a group chat. In the profile the user corrects their name, phone and the language of their
-notifications and emails, sets or removes their photo, changes their password, which signs out their other devices, and
-asks for a new email address, which changes once they follow the link sent to it. The texts of the application are in
-English, with a Russian translation, in `Resources/Strings`; the device's language chooses between them unless the user
-chooses one in the profile, where they also change the school and sign out.
+a note, or records that the student did not come, also without a network. A theory instructor schedules a lesson of one
+of their groups on a topic of its course by tapping free time on the schedule, moves or cancels a lesson before it
+starts, with the students notified, which needs a network, sees their theory lessons and marks the attendance of a
+lesson that has started for the whole group at once, in a classroom without a network too. Every user reads their
+notifications, whose number on the home page changes at once through the SignalR hub, and their chats, where new
+messages appear at once and a message written without a network is sent later. A personal chat starts from the people
+the user studies or teaches with (`GET /api/v1/chats/contacts`): a student's instructors, an instructor's students. A
+message carries up to ten files, which need a network and open in another application from the cache of the device,
+emptied when the user signs out; the user deletes their own messages, turns the notifications of a chat off and leaves a
+group chat. In the profile the user corrects their name, phone and the language of their notifications and emails, sets
+or removes their photo, changes their password, which signs out their other devices, and asks for a new email address,
+which changes once they follow the link sent to it. The texts of the application are in English, with a Russian
+translation, in `Resources/Strings`; the device's language chooses between them unless the user chooses one in the
+profile, where they also change the school and sign out.
 
 The application works without a network too (`src/AutoElite.Client.Offline`). A SQLite database in its private storage
 keeps what the user last read, shown as possibly out of date while the API cannot be reached, and the actions the user

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="AutoElite.Mobile.Pages.PlanTheoryPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:l="clr-namespace:AutoElite.Mobile.Localization"
+    xmlns:pages="clr-namespace:AutoElite.Mobile.Pages"
+    x:DataType="pages:PlanTheoryViewModel"
+    Title="{Binding Title}">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="{StaticResource PageMargin}" Spacing="14">
+            <Border Style="{StaticResource Card}" IsVisible="{Binding IsNew}">
+                <VerticalStackLayout Spacing="8">
+                    <Label Style="{StaticResource Overline}" Text="{l:Text PlanTheory.What}" />
+                    <Border Style="{StaticResource Field}">
+                        <Picker
+                            Title="{l:Text PlanTheory.Group}"
+                            ItemsSource="{Binding Groups}"
+                            SelectedIndex="{Binding GroupIndex}" />
+                    </Border>
+                    <Border Style="{StaticResource Field}">
+                        <Picker
+                            Title="{l:Text PlanTheory.Topic}"
+                            ItemsSource="{Binding Topics}"
+                            SelectedIndex="{Binding TopicIndex}" />
+                    </Border>
+                </VerticalStackLayout>
+            </Border>
+
+            <Border Style="{StaticResource HighlightCard}" IsVisible="{Binding IsMove}">
+                <Label Style="{StaticResource BodyLarge}" Text="{Binding Moved}" />
+            </Border>
+
+            <Border Style="{StaticResource Card}">
+                <VerticalStackLayout Spacing="8">
+                    <Label Style="{StaticResource Overline}" Text="{l:Text PlanTheory.When}" />
+                    <Border Style="{StaticResource Field}">
+                        <Picker Title="{l:Text PlanTheory.Day}" ItemsSource="{Binding Days}" SelectedIndex="{Binding DayIndex}" />
+                    </Border>
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+                        <Border Style="{StaticResource Field}">
+                            <Picker
+                                Title="{l:Text PlanTheory.Start}"
+                                ItemsSource="{Binding Times}"
+                                SelectedIndex="{Binding TimeIndex}" />
+                        </Border>
+                        <Border Grid.Column="1" Style="{StaticResource Field}">
+                            <Picker
+                                Title="{l:Text PlanTheory.Length}"
+                                ItemsSource="{Binding Lengths}"
+                                SelectedIndex="{Binding LengthIndex}" />
+                        </Border>
+                    </Grid>
+                    <Label Style="{StaticResource Caption}" Text="{l:Text PlanTheory.Notified}" />
+                </VerticalStackLayout>
+            </Border>
+
+            <Label Style="{StaticResource ErrorText}" Text="{Binding Message}" IsVisible="{Binding HasMessage}" />
+            <Button Text="{l:Text PlanTheory.Save}" Command="{Binding SaveCommand}" />
+            <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

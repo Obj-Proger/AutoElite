@@ -12,8 +12,8 @@
 
     <!--
         The schedule: the period with the arrows and today, the switch between a day and the week, the strip of the days
-        of the week, the slots of a driving instructor, then the grid of hours, which a swipe moves to the next or
-        previous day or week; a driving instructor taps free time on it to offer a slot.
+        of the week, the planning of an instructor, then the grid of hours, which a swipe moves to the next or previous
+        day or week; an instructor taps free time on it to offer a slot or schedule a lesson.
     -->
     <Grid Padding="16,16,16,0" RowDefinitions="Auto,Auto,Auto,Auto,Auto,*" RowSpacing="10">
         <Grid ColumnDefinitions="*,Auto,Auto,Auto" ColumnSpacing="6">
@@ -116,8 +116,8 @@
             </CollectionView.ItemTemplate>
         </CollectionView>
 
-        <VerticalStackLayout Grid.Row="3" Spacing="6" IsVisible="{Binding IsDrivingInstructor}">
-            <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+        <VerticalStackLayout Grid.Row="3" Spacing="6" IsVisible="{Binding CanPlan}">
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="8" IsVisible="{Binding IsDrivingInstructor}">
                 <Button Text="{l:Text Schedule.Offer}" Command="{Binding OfferCommand}" />
                 <Button
                     Grid.Column="1"
@@ -125,6 +125,10 @@
                     Text="{l:Text Schedule.Repeat}"
                     Command="{Binding RepeatWeekCommand}" />
             </Grid>
+            <Button
+                Text="{l:Text Schedule.PlanTheory}"
+                Command="{Binding PlanTheoryCommand}"
+                IsVisible="{Binding IsTheoryInstructor}" />
             <Label Style="{StaticResource Caption}" Text="{l:Text Schedule.OfferHint}" />
         </VerticalStackLayout>
 
@@ -143,7 +147,7 @@
                         FirstDay="{Binding GridFirstDay}"
                         DayCount="{Binding GridDayCount}"
                         EntryCommand="{Binding OpenEntryCommand}"
-                        EmptyCommand="{Binding OfferAtCommand}" />
+                        EmptyCommand="{Binding PlanAtCommand}" />
                 </ScrollView>
             </RefreshView>
             <Label

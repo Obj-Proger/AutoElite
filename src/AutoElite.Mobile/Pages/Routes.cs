@@ -24,6 +24,11 @@ internal static class Routes
     /// <summary>A new practice slot of a driving instructor, opened over the schedule with a <see cref="SlotRequest"/>.</summary>
     public const string OfferSlot = "offer-slot";
 
+    /// <summary>
+    /// A theory lesson to schedule or move, opened over the schedule or the home page with a <see cref="TheoryLessonRequest"/>.
+    /// </summary>
+    public const string PlanTheory = "plan-theory";
+
     /// <summary>Booking a driving lesson, opened over the home page.</summary>
     public const string Booking = "booking";
 

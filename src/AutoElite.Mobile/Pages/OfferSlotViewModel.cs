@@ -16,16 +16,12 @@ public sealed class OfferSlotViewModel : ViewModel, IQueryAttributable
     /// <summary>The navigation parameter that carries the <see cref="SlotRequest"/>.</summary>
     public const string SlotParameter = "slot";
 
-    // The days ahead a slot can be offered on, the hours of the day it can start at, and the lengths it can have.
-    private const int DaysAhead = 60;
-    private const int FirstHour = 6;
-    private const int LastHour = 22;
+    // The lengths a slot can have, in minutes.
     private static readonly int[] _lengths = [60, 90, 120, 180, 240];
 
     private readonly SlotOffers _offers;
     private readonly TimeProvider _timeProvider;
-    private IReadOnlyList<DateOnly> _days = [];
-    private IReadOnlyList<TimeOnly> _times = [];
+    private StartChoices? _starts;
     private IReadOnlyList<Guid> _vehicleIds = [];
     private IReadOnlyList<Guid?> _groundIds = [];
 
@@ -186,24 +182,11 @@ public sealed class OfferSlotViewModel : ViewModel, IQueryAttributable
     // Fills the days and times so that the start chosen on the schedule is among them, at the nearest half hour allowed.
     private void Choose(DateTimeOffset start)
     {
-        var culture = CultureInfo.CurrentCulture;
-        var today = DateOnly.FromDateTime(_timeProvider.GetLocalNow().DateTime);
-        var local = start.ToLocalTime();
-        var day = DateOnly.FromDateTime(local.DateTime);
-        if (day < today)
-            day = today;
-
-        _days = [.. Enumerable.Range(0, Math.Max(DaysAhead, day.DayNumber - today.DayNumber + 1)).Select(today.AddDays)];
-        Days = [.. _days.Select(date => date.ToString("ddd, d MMMM", culture))];
-        DayIndex = day.DayNumber - today.DayNumber;
-
-        _times =
-        [
-            .. Enumerable.Range(0, ((LastHour - FirstHour) * 2) + 1).Select(half => new TimeOnly(FirstHour, 0).AddMinutes(half * 30))
-        ];
-        Times = [.. _times.Select(time => time.ToString("t", culture))];
-        var halfHours = ((local.Hour * 60) + local.Minute) / 30;
-        TimeIndex = Math.Clamp(halfHours - (FirstHour * 2), 0, _times.Count - 1);
+        _starts = StartChoices.Around(start, DateOnly.FromDateTime(_timeProvider.GetLocalNow().DateTime));
+        Days = _starts.DayNames;
+        DayIndex = _starts.DayIndex;
+        Times = _starts.TimeNames;
+        TimeIndex = _starts.TimeIndex;
     }
 
     private async Task OfferAsync()
@@ -215,8 +198,7 @@ public sealed class OfferSlotViewModel : ViewModel, IQueryAttributable
             return;
         }
 
-        var startLocal = _days[Math.Max(0, DayIndex)].ToDateTime(_times[Math.Max(0, TimeIndex)]);
-        var start = new DateTimeOffset(startLocal);
+        var start = _starts!.StartAt(DayIndex, TimeIndex);
         var end = start.AddMinutes(_lengths[Math.Max(0, LengthIndex)]);
         if (start <= _timeProvider.GetUtcNow())
         {

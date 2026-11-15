@@ -25,6 +25,7 @@ public partial class AppShell : Shell
         _session = session;
         Routing.RegisterRoute(Routes.Booking, typeof(BookingPage));
         Routing.RegisterRoute(Routes.OfferSlot, typeof(OfferSlotPage));
+        Routing.RegisterRoute(Routes.PlanTheory, typeof(PlanTheoryPage));
         Routing.RegisterRoute(Routes.Attendance, typeof(AttendancePage));
         Routing.RegisterRoute(Routes.Completion, typeof(CompletionPage));
         Routing.RegisterRoute(Routes.Tests, typeof(TestsPage));

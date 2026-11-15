@@ -319,6 +319,15 @@
   <data name="Lesson.CancelConfirm" xml:space="preserve">
     <value>Cancel lesson</value>
   </data>
+  <data name="Lesson.CancelLesson" xml:space="preserve">
+    <value>Cancel the lesson</value>
+  </data>
+  <data name="Lesson.CancelLessonReason" xml:space="preserve">
+    <value>The students will read the reason. Why is the lesson cancelled?</value>
+  </data>
+  <data name="Lesson.CancelLessonTitle" xml:space="preserve">
+    <value>Cancel the lesson</value>
+  </data>
   <data name="Lesson.CancelReason" xml:space="preserve">
     <value>Tell why the lesson is cancelled.</value>
   </data>
@@ -372,6 +381,9 @@
   </data>
   <data name="Lesson.MarkNoShow" xml:space="preserve">
     <value>Did not come</value>
+  </data>
+  <data name="Lesson.Move" xml:space="preserve">
+    <value>Move</value>
   </data>
   <data name="Lesson.NoComment" xml:space="preserve">
     <value>Without a comment</value>
@@ -526,6 +538,57 @@
   <data name="Payments.Title" xml:space="preserve">
     <value>Payments</value>
   </data>
+  <data name="PlanTheory.ChooseGroupAndTopic" xml:space="preserve">
+    <value>Choose the group and the topic.</value>
+  </data>
+  <data name="PlanTheory.Day" xml:space="preserve">
+    <value>Day</value>
+  </data>
+  <data name="PlanTheory.Group" xml:space="preserve">
+    <value>Group</value>
+  </data>
+  <data name="PlanTheory.InThePast" xml:space="preserve">
+    <value>The lesson must start in the future.</value>
+  </data>
+  <data name="PlanTheory.Length" xml:space="preserve">
+    <value>Length</value>
+  </data>
+  <data name="PlanTheory.Minutes" xml:space="preserve">
+    <value>{0} min</value>
+  </data>
+  <data name="PlanTheory.MoveTitle" xml:space="preserve">
+    <value>Move the lesson</value>
+  </data>
+  <data name="PlanTheory.NewTitle" xml:space="preserve">
+    <value>New lesson</value>
+  </data>
+  <data name="PlanTheory.NoGroups" xml:space="preserve">
+    <value>You have no active groups. The school assigns them on the website.</value>
+  </data>
+  <data name="PlanTheory.NoTopics" xml:space="preserve">
+    <value>The course of this group has no topics yet.</value>
+  </data>
+  <data name="PlanTheory.Notified" xml:space="preserve">
+    <value>The students of the group are notified.</value>
+  </data>
+  <data name="PlanTheory.Offline" xml:space="preserve">
+    <value>The groups were read earlier; planning a lesson needs the network.</value>
+  </data>
+  <data name="PlanTheory.Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="PlanTheory.Start" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="PlanTheory.Topic" xml:space="preserve">
+    <value>Topic</value>
+  </data>
+  <data name="PlanTheory.What" xml:space="preserve">
+    <value>Group and topic</value>
+  </data>
+  <data name="PlanTheory.When" xml:space="preserve">
+    <value>When</value>
+  </data>
   <data name="Problems.Failed" xml:space="preserve">
     <value>Something went wrong. Try again.</value>
   </data>
@@ -653,10 +716,13 @@
     <value>New slot</value>
   </data>
   <data name="Schedule.OfferHint" xml:space="preserve">
-    <value>Tap free time on the grid to offer a slot at that time.</value>
+    <value>Tap free time on the grid to plan at that time.</value>
   </data>
   <data name="Schedule.Offline" xml:space="preserve">
     <value>The schedule as of {0}; it may be out of date.</value>
+  </data>
+  <data name="Schedule.PlanTheory" xml:space="preserve">
+    <value>New lesson</value>
   </data>
   <data name="Schedule.Previous" xml:space="preserve">
     <value>Previous</value>

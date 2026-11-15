@@ -13,14 +13,17 @@ namespace AutoElite.Mobile.Pages;
 /// of a student, whose driving booking can be cancelled before the lesson and rated after it, and the free slots they
 /// can book; the practice slots of a driving instructor, who cancels a booking before the lesson and completes it or
 /// records that the student did not come once it has started, and withdraws a slot that has not started; and the theory
-/// lessons of a theory instructor, who marks the attendance once a lesson has started. Every change but withdrawing,
-/// which needs the network, goes through the offline queue; a lesson with a change that waits to be sent shows it and
-/// offers nothing more until it is sent. After a change, <see cref="Changed"/> reads the page again.
+/// lessons of a theory instructor, who moves or cancels a lesson before it starts and marks the attendance once it has
+/// started. Every change but withdrawing, moving and cancelling, which need the network, goes through the offline
+/// queue; a lesson with a change that waits to be sent shows it and offers nothing more until it is sent. After a
+/// change, <see cref="Changed"/> reads the page again.
 /// </summary>
 /// <param name="synchronizer">Sends the actions, at once or once the API can be reached.</param>
 /// <param name="offers">Withdraws the slots of a driving instructor.</param>
+/// <param name="plans">Cancels the theory lessons of a theory instructor.</param>
 /// <param name="timeProvider">The clock.</param>
-public sealed class LessonEntries(OfflineSynchronizer synchronizer, SlotOffers offers, TimeProvider timeProvider)
+public sealed class LessonEntries(
+    OfflineSynchronizer synchronizer, SlotOffers offers, TheoryPlans plans, TimeProvider timeProvider)
 {
     private const int MaxNoteLength = 2000;
 
@@ -239,6 +242,18 @@ public sealed class LessonEntries(OfflineSynchronizer synchronizer, SlotOffers o
             actions.Add(new EntryAction(AppTexts.Get("Lesson.MarkAttendance"), new Command(async () => await Routes.OpenAsync(route))));
         }
 
+        if (status == TheoryLessonStatus.Scheduled && start > now && !isWaiting)
+        {
+            var title = LessonTexts.DetailsOf(lesson.TopicTitle, lesson.GroupName);
+            var request = new TheoryLessonRequest(start.ToLocalTime(), end.ToLocalTime(), lessonId, title);
+            actions.Add(new EntryAction(
+                AppTexts.Get("Lesson.Move"),
+                new Command(async () => await Routes.OpenAsync(
+                    Routes.PlanTheory, new Dictionary<string, object> { [PlanTheoryViewModel.LessonParameter] = request }))));
+            actions.Add(new EntryAction(
+                AppTexts.Get("Lesson.CancelLesson"), new Command(async () => await CancelTheoryAsync(lessonId))));
+        }
+
         return new ScheduleEntry
         {
             Kind = AppTexts.Get("Lesson.Theory"),
@@ -321,6 +336,34 @@ public sealed class LessonEntries(OfflineSynchronizer synchronizer, SlotOffers o
         {
             await Shell.Current.DisplayAlertAsync(
                 AppTexts.Get("Lesson.WithdrawTitle"), ProblemTexts.Of(exception), AppTexts.Get("Common.Ok"));
+
+            return;
+        }
+
+        if (Changed is { } changed)
+            await changed();
+    }
+
+    // The instructor gives the reason, which the students of the group read.
+    private async Task CancelTheoryAsync(Guid lessonId)
+    {
+        var reason = await Shell.Current.DisplayPromptAsync(
+            AppTexts.Get("Lesson.CancelLessonTitle"),
+            AppTexts.Get("Lesson.CancelLessonReason"),
+            AppTexts.Get("Lesson.CancelLesson"),
+            AppTexts.Get("Lesson.Keep"),
+            maxLength: MaxNoteLength);
+        if (string.IsNullOrWhiteSpace(reason))
+            return;
+
+        try
+        {
+            await plans.CancelAsync(lessonId, reason.Trim(), CancellationToken.None);
+        }
+        catch (Exception exception) when (exception is ApiException or HttpRequestException or TaskCanceledException)
+        {
+            await Shell.Current.DisplayAlertAsync(
+                AppTexts.Get("Lesson.CancelLessonTitle"), ProblemTexts.Of(exception), AppTexts.Get("Common.Ok"));
 
             return;
         }
