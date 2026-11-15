@@ -9,7 +9,8 @@ namespace AutoElite.Mobile.Controls;
 /// <summary>
 /// The schedule as a grid of hours: one column for a day or seven for a week, with the hours down the side and each
 /// lesson a block from its start to its end, coloured by its kind; lessons at the same time share the width of their
-/// column. A line marks the present moment on today. Tapping a block runs <see cref="EntryCommand"/> with its lesson.
+/// column. A line marks the present moment on today. Tapping a block runs <see cref="EntryCommand"/> with its lesson;
+/// tapping free time runs <see cref="EmptyCommand"/> with its start, to the half hour, in the time zone of the device.
 /// </summary>
 public sealed class ScheduleGrid : ContentView
 {
@@ -31,6 +32,10 @@ public sealed class ScheduleGrid : ContentView
     /// <summary>Identifies the <see cref="EntryCommand"/> property.</summary>
     public static readonly BindableProperty EntryCommandProperty = BindableProperty.Create(
         nameof(EntryCommand), typeof(ICommand), typeof(ScheduleGrid), propertyChanged: OnLayoutChanged);
+
+    /// <summary>Identifies the <see cref="EmptyCommand"/> property.</summary>
+    public static readonly BindableProperty EmptyCommandProperty = BindableProperty.Create(
+        nameof(EmptyCommand), typeof(ICommand), typeof(ScheduleGrid), propertyChanged: OnLayoutChanged);
 
     // The hours shown at least, widened to the lessons of the days shown.
     private const int EarliestHour = 8;
@@ -64,6 +69,16 @@ public sealed class ScheduleGrid : ContentView
     {
         get => (ICommand?)GetValue(EntryCommandProperty);
         set => SetValue(EntryCommandProperty, value);
+    }
+
+    /// <summary>
+    /// Gets or sets the command that tapped free time runs, with its start as a <see cref="DateTimeOffset"/>; free time
+    /// is not tappable when it is <see langword="null"/>.
+    /// </summary>
+    public ICommand? EmptyCommand
+    {
+        get => (ICommand?)GetValue(EmptyCommandProperty);
+        set => SetValue(EmptyCommandProperty, value);
     }
 
     private static void OnLayoutChanged(BindableObject bindable, object oldValue, object newValue) =>
@@ -176,10 +191,34 @@ public sealed class ScheduleGrid : ContentView
                 AbsoluteLayout.SetLayoutFlags(block, AbsoluteLayoutFlags.XProportional | AbsoluteLayoutFlags.WidthProportional);
             }
 
+            if (EmptyCommand is { } emptyCommand)
+                AddFreeTimeTap(column, day, firstHour, [.. lessons.Where(lesson => DayOf(lesson.Start) == day)], emptyCommand);
+
             grid.Add(column, index + 1, 0);
         }
 
         Content = grid;
+    }
+
+    // Runs the command with the half hour tapped, unless a lesson is there; the column needs a background to be tapped.
+    private static void AddFreeTimeTap(
+        AbsoluteLayout column, DateOnly day, int firstHour, IReadOnlyList<Placed> dayLessons, ICommand command)
+    {
+        column.BackgroundColor = Colors.Transparent;
+        var tap = new TapGestureRecognizer();
+        tap.Tapped += (_, args) =>
+        {
+            if (args.GetPosition(column) is not { } point || point.Y < 0)
+                return;
+
+            var halfHours = (int)(point.Y / (HourHeight / 2));
+            var start = new DateTimeOffset(day.ToDateTime(TimeOnly.MinValue).AddHours(firstHour).AddMinutes(halfHours * 30));
+            if (dayLessons.Any(lesson => lesson.Start <= start && start < lesson.End) || !command.CanExecute(start))
+                return;
+
+            command.Execute(start);
+        };
+        column.GestureRecognizers.Add(tap);
     }
 
     private static void AddLine(AbsoluteLayout column, double top, Color color, double thickness)

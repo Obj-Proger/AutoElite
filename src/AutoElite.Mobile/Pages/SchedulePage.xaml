@@ -12,9 +12,10 @@
 
     <!--
         The schedule: the period with the arrows and today, the switch between a day and the week, the strip of the days
-        of the week, then the grid of hours, which a swipe moves to the next or previous day or week.
+        of the week, the slots of a driving instructor, then the grid of hours, which a swipe moves to the next or
+        previous day or week; a driving instructor taps free time on it to offer a slot.
     -->
-    <Grid Padding="16,16,16,0" RowDefinitions="Auto,Auto,Auto,Auto,*" RowSpacing="10">
+    <Grid Padding="16,16,16,0" RowDefinitions="Auto,Auto,Auto,Auto,Auto,*" RowSpacing="10">
         <Grid ColumnDefinitions="*,Auto,Auto,Auto" ColumnSpacing="6">
             <Label Style="{StaticResource Title}" Text="{Binding Period}" VerticalOptions="Center" LineBreakMode="TailTruncation" />
             <Button
@@ -115,9 +116,21 @@
             </CollectionView.ItemTemplate>
         </CollectionView>
 
-        <Label Grid.Row="3" Style="{StaticResource Caption}" Text="{Binding Notice}" IsVisible="{Binding HasNotice}" />
+        <VerticalStackLayout Grid.Row="3" Spacing="6" IsVisible="{Binding IsDrivingInstructor}">
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+                <Button Text="{l:Text Schedule.Offer}" Command="{Binding OfferCommand}" />
+                <Button
+                    Grid.Column="1"
+                    Style="{StaticResource SecondaryButton}"
+                    Text="{l:Text Schedule.Repeat}"
+                    Command="{Binding RepeatWeekCommand}" />
+            </Grid>
+            <Label Style="{StaticResource Caption}" Text="{l:Text Schedule.OfferHint}" />
+        </VerticalStackLayout>
 
-        <Grid Grid.Row="4">
+        <Label Grid.Row="4" Style="{StaticResource Caption}" Text="{Binding Notice}" IsVisible="{Binding HasNotice}" />
+
+        <Grid Grid.Row="5">
             <Grid.GestureRecognizers>
                 <SwipeGestureRecognizer Direction="Left" Command="{Binding NextCommand}" />
                 <SwipeGestureRecognizer Direction="Right" Command="{Binding PreviousCommand}" />
@@ -129,7 +142,8 @@
                         Entries="{Binding Entries}"
                         FirstDay="{Binding GridFirstDay}"
                         DayCount="{Binding GridDayCount}"
-                        EntryCommand="{Binding OpenEntryCommand}" />
+                        EntryCommand="{Binding OpenEntryCommand}"
+                        EmptyCommand="{Binding OfferAtCommand}" />
                 </ScrollView>
             </RefreshView>
             <Label

@@ -21,6 +21,9 @@ internal static class Routes
     /// <summary>The schedule of the signed-in user, a tab.</summary>
     public const string Schedule = Main + "/schedule";
 
+    /// <summary>A new practice slot of a driving instructor, opened over the schedule with a <see cref="SlotRequest"/>.</summary>
+    public const string OfferSlot = "offer-slot";
+
     /// <summary>Booking a driving lesson, opened over the home page.</summary>
     public const string Booking = "booking";
 

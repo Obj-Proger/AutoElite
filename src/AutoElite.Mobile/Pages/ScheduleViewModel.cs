@@ -13,6 +13,8 @@ namespace AutoElite.Mobile.Pages;
 /// the arrows or a swipe. It shows what the roles of the user have: the lessons of a student with the free slots they
 /// can book, the practice slots of a driving instructor, the theory lessons of a theory instructor. A week is read
 /// from the API or, without a network, from the device; tapping a lesson shows it with what the user can do with it.
+/// A driving instructor offers a slot by tapping free time or the button, and repeats the slots of the week shown on
+/// the next weeks.
 /// </summary>
 public sealed class ScheduleViewModel : ViewModel
 {
@@ -23,6 +25,7 @@ public sealed class ScheduleViewModel : ViewModel
     private readonly OfflineQueue _queue;
     private readonly OfflineSynchronizer _synchronizer;
     private readonly LessonEntries _entries;
+    private readonly SlotOffers _offers;
     private readonly TimeProvider _timeProvider;
     private DateOnly? _loadedWeek;
 
@@ -34,6 +37,7 @@ public sealed class ScheduleViewModel : ViewModel
     /// <param name="queue">The actions that wait to be sent.</param>
     /// <param name="synchronizer">Sends the actions.</param>
     /// <param name="entries">Makes the cards of the lessons, with what the user can do with them.</param>
+    /// <param name="offers">The slots a driving instructor offers.</param>
     /// <param name="timeProvider">The clock.</param>
     public ScheduleViewModel(
         UserSession session,
@@ -43,6 +47,7 @@ public sealed class ScheduleViewModel : ViewModel
         OfflineQueue queue,
         OfflineSynchronizer synchronizer,
         LessonEntries entries,
+        SlotOffers offers,
         TimeProvider timeProvider)
     {
         _session = session;
@@ -53,6 +58,7 @@ public sealed class ScheduleViewModel : ViewModel
         _synchronizer = synchronizer;
         _entries = entries;
         _entries.Changed = ReloadAsync;
+        _offers = offers;
         _timeProvider = timeProvider;
         SelectedDay = Today;
         PreviousCommand = new Command(async () => await MoveAsync(-1));
@@ -62,6 +68,9 @@ public sealed class ScheduleViewModel : ViewModel
         ShowWeekCommand = new Command(() => IsWeekView = true);
         RefreshCommand = new Command(async () => await RefreshAsync());
         OpenEntryCommand = new Command<ScheduleEntry>(async entry => await OpenAsync(entry));
+        OfferAtCommand = new Command<DateTimeOffset>(async start => await OfferAsync(start), _ => IsDrivingInstructor);
+        OfferCommand = new Command(async () => await OfferAsync(NextStart()));
+        RepeatWeekCommand = new Command(async () => await RepeatWeekAsync(), () => !IsRepeating);
         Days = DaysOf([]);
     }
 
@@ -207,6 +216,37 @@ public sealed class ScheduleViewModel : ViewModel
     /// <summary>Gets the command that shows a lesson with what the user can do with it.</summary>
     public Command<ScheduleEntry> OpenEntryCommand { get; }
 
+    /// <summary>Gets a value indicating whether the user is a driving instructor, who offers slots.</summary>
+    public bool IsDrivingInstructor
+    {
+        get;
+        private set
+        {
+            if (SetProperty(ref field, value))
+                OfferAtCommand.ChangeCanExecute();
+        }
+    }
+
+    /// <summary>Gets a value indicating whether the slots of the week are being repeated.</summary>
+    public bool IsRepeating
+    {
+        get;
+        private set
+        {
+            if (SetProperty(ref field, value))
+                RepeatWeekCommand.ChangeCanExecute();
+        }
+    }
+
+    /// <summary>Gets the command that offers a slot at the free time tapped on the grid.</summary>
+    public Command<DateTimeOffset> OfferAtCommand { get; }
+
+    /// <summary>Gets the command that offers a slot on the day shown, at the next full hour.</summary>
+    public Command OfferCommand { get; }
+
+    /// <summary>Gets the command that repeats the slots of the week shown on the next weeks.</summary>
+    public Command RepeatWeekCommand { get; }
+
     private DateOnly Today => DateOnly.FromDateTime(_timeProvider.GetLocalNow().DateTime);
 
     /// <summary>Reads the week of the selected day again, each time the page appears, since lessons may have changed.</summary>
@@ -319,6 +359,7 @@ public sealed class ScheduleViewModel : ViewModel
         }
 
         _loadedWeek = week;
+        IsDrivingInstructor = roles.Contains(UserRole.DrivingInstructor);
         Entries = [.. entries.OrderBy(entry => entry.Start)];
         Notice = isIncomplete
             ? AppTexts.Get("Schedule.Unavailable")
@@ -359,6 +400,52 @@ public sealed class ScheduleViewModel : ViewModel
         return Earliest(
             lessons.Driving.IsFromCache ? lessons.Driving.SavedAt : null,
             lessons.Theory.IsFromCache ? lessons.Theory.SavedAt : null);
+    }
+
+    // The next full hour on the day shown, or the morning of a later day; the page of the slot keeps it in the future.
+    private DateTimeOffset NextStart()
+    {
+        var now = _timeProvider.GetLocalNow();
+        var start = SelectedDay > Today
+            ? SelectedDay.ToDateTime(new TimeOnly(9, 0))
+            : now.DateTime.Date.AddHours(now.Hour + 1);
+
+        return new DateTimeOffset(start);
+    }
+
+    private static Task OfferAsync(DateTimeOffset start) =>
+        Routes.OpenAsync(Routes.OfferSlot, new Dictionary<string, object> { [OfferSlotViewModel.SlotParameter] = new SlotRequest(start) });
+
+    // Asks for how many weeks, repeats the slots of the week shown on them and tells how many were offered.
+    private async Task RepeatWeekAsync()
+    {
+        var week = ScheduleWeek.FirstDayOf(SelectedDay);
+        string[] choices = [.. Enumerable.Range(1, 4).Select(weeks => AppTexts.Format("Schedule.RepeatWeeks", weeks))];
+        var choice = await Shell.Current.DisplayActionSheetAsync(
+            AppTexts.Get("Schedule.RepeatTitle"), AppTexts.Get("Common.Cancel"), null, choices);
+        var weeksAhead = Array.IndexOf(choices, choice) + 1;
+        if (weeksAhead <= 0)
+            return;
+
+        IsRepeating = true;
+        string message;
+        try
+        {
+            var (offered, skipped) = await _offers.RepeatWeekAsync(week, weeksAhead, CancellationToken.None);
+            message = skipped == 0
+                ? AppTexts.Format("Schedule.Repeated", offered)
+                : AppTexts.Format("Schedule.RepeatedSkipped", offered, skipped);
+        }
+        catch (Exception exception) when (exception is ApiException or HttpRequestException or TaskCanceledException)
+        {
+            message = ProblemTexts.Of(exception);
+        }
+        finally
+        {
+            IsRepeating = false;
+        }
+
+        await Shell.Current.DisplayAlertAsync(AppTexts.Get("Schedule.RepeatTitle"), message, AppTexts.Get("Common.Ok"));
     }
 
     // Shows a lesson with its details and what the user can do with it, and does what they choose.

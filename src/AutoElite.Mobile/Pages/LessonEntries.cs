@@ -3,6 +3,8 @@ using AutoElite.Client.Api.Models;
 using AutoElite.Client.Offline;
 using AutoElite.Client.Offline.Actions;
 using AutoElite.Mobile.Localization;
+using AutoElite.Mobile.Schedule;
+using Microsoft.Kiota.Abstractions;
 
 namespace AutoElite.Mobile.Pages;
 
@@ -10,14 +12,15 @@ namespace AutoElite.Mobile.Pages;
 /// Makes the cards of the lessons, with what the user can do with them, for the home page and the schedule: the lessons
 /// of a student, whose driving booking can be cancelled before the lesson and rated after it, and the free slots they
 /// can book; the practice slots of a driving instructor, who cancels a booking before the lesson and completes it or
-/// records that the student did not come once it has started; and the theory lessons of a theory instructor, who marks
-/// the attendance once a lesson has started. Every change goes through the offline queue; a lesson with a change that
-/// waits to be sent shows it and offers nothing more until it is sent. After a change, <see cref="Changed"/> reads the
-/// page again.
+/// records that the student did not come once it has started, and withdraws a slot that has not started; and the theory
+/// lessons of a theory instructor, who marks the attendance once a lesson has started. Every change but withdrawing,
+/// which needs the network, goes through the offline queue; a lesson with a change that waits to be sent shows it and
+/// offers nothing more until it is sent. After a change, <see cref="Changed"/> reads the page again.
 /// </summary>
 /// <param name="synchronizer">Sends the actions, at once or once the API can be reached.</param>
+/// <param name="offers">Withdraws the slots of a driving instructor.</param>
 /// <param name="timeProvider">The clock.</param>
-public sealed class LessonEntries(OfflineSynchronizer synchronizer, TimeProvider timeProvider)
+public sealed class LessonEntries(OfflineSynchronizer synchronizer, SlotOffers offers, TimeProvider timeProvider)
 {
     private const int MaxNoteLength = 2000;
 
@@ -180,6 +183,13 @@ public sealed class LessonEntries(OfflineSynchronizer synchronizer, TimeProvider
             }
         }
 
+        if (start > now && !isWaiting && slotStatus is DrivingSlotStatus.Available or DrivingSlotStatus.Booked)
+        {
+            var isBookedNow = booking?.Status == DrivingBookingStatus.Active;
+            actions.Add(new EntryAction(
+                AppTexts.Get("Lesson.Withdraw"), new Command(async () => await WithdrawAsync(slotId, isBookedNow))));
+        }
+
         string? status = null;
         if (isWaiting)
             status = AppTexts.Get("Lesson.Waiting");
@@ -289,6 +299,34 @@ public sealed class LessonEntries(OfflineSynchronizer synchronizer, TimeProvider
             maxLength: MaxNoteLength);
         if (!string.IsNullOrWhiteSpace(reason))
             await SubmitAsync(new CancelDrivingBooking(slotId, reason.Trim()));
+    }
+
+    // The instructor gives the reason, which a booked student reads; the slot is gone from the schedule once withdrawn.
+    private async Task WithdrawAsync(Guid slotId, bool isBooked)
+    {
+        var reason = await Shell.Current.DisplayPromptAsync(
+            AppTexts.Get("Lesson.WithdrawTitle"),
+            isBooked ? AppTexts.Get("Lesson.WithdrawBookedReason") : AppTexts.Get("Lesson.WithdrawReason"),
+            AppTexts.Get("Lesson.Withdraw"),
+            AppTexts.Get("Lesson.Keep"),
+            maxLength: MaxNoteLength);
+        if (string.IsNullOrWhiteSpace(reason))
+            return;
+
+        try
+        {
+            await offers.WithdrawAsync(slotId, reason.Trim(), CancellationToken.None);
+        }
+        catch (Exception exception) when (exception is ApiException or HttpRequestException or TaskCanceledException)
+        {
+            await Shell.Current.DisplayAlertAsync(
+                AppTexts.Get("Lesson.WithdrawTitle"), ProblemTexts.Of(exception), AppTexts.Get("Common.Ok"));
+
+            return;
+        }
+
+        if (Changed is { } changed)
+            await changed();
     }
 
     // The student chooses from 5 down to 1 and may add a comment; a low rating reaches the managers of the school.

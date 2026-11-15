@@ -406,6 +406,18 @@
   <data name="Lesson.Waiting" xml:space="preserve">
     <value>Изменение ждёт отправки</value>
   </data>
+  <data name="Lesson.Withdraw" xml:space="preserve">
+    <value>Снять слот</value>
+  </data>
+  <data name="Lesson.WithdrawBookedReason" xml:space="preserve">
+    <value>На слот записан ученик, он увидит причину. Почему слот снимается?</value>
+  </data>
+  <data name="Lesson.WithdrawReason" xml:space="preserve">
+    <value>Почему слот снимается?</value>
+  </data>
+  <data name="Lesson.WithdrawTitle" xml:space="preserve">
+    <value>Снять слот</value>
+  </data>
   <data name="NewChat.Empty" xml:space="preserve">
     <value>Здесь появятся ваши преподаватели или ученики, когда начнутся совместные занятия.</value>
   </data>
@@ -432,6 +444,60 @@
   </data>
   <data name="Notifications.Unread" xml:space="preserve">
     <value>Уведомления · новых: {0}</value>
+  </data>
+  <data name="OfferSlot.Automatic" xml:space="preserve">
+    <value>АКПП</value>
+  </data>
+  <data name="OfferSlot.ChooseVehicle" xml:space="preserve">
+    <value>Выберите автомобиль.</value>
+  </data>
+  <data name="OfferSlot.Day" xml:space="preserve">
+    <value>День</value>
+  </data>
+  <data name="OfferSlot.Ground" xml:space="preserve">
+    <value>Площадка</value>
+  </data>
+  <data name="OfferSlot.Hours" xml:space="preserve">
+    <value>{0} ч</value>
+  </data>
+  <data name="OfferSlot.InThePast" xml:space="preserve">
+    <value>Слот должен начинаться в будущем.</value>
+  </data>
+  <data name="OfferSlot.Length" xml:space="preserve">
+    <value>Длительность</value>
+  </data>
+  <data name="OfferSlot.Manual" xml:space="preserve">
+    <value>МКПП</value>
+  </data>
+  <data name="OfferSlot.NoGround" xml:space="preserve">
+    <value>Без площадки</value>
+  </data>
+  <data name="OfferSlot.NoVehicles" xml:space="preserve">
+    <value>Нет доступных автомобилей. Попросите школу добавить автомобиль.</value>
+  </data>
+  <data name="OfferSlot.Offer" xml:space="preserve">
+    <value>Открыть слот</value>
+  </data>
+  <data name="OfferSlot.Offline" xml:space="preserve">
+    <value>Список автомобилей загружен ранее; чтобы открыть слот, нужна сеть.</value>
+  </data>
+  <data name="OfferSlot.Start" xml:space="preserve">
+    <value>Начало</value>
+  </data>
+  <data name="OfferSlot.Title" xml:space="preserve">
+    <value>Новый слот</value>
+  </data>
+  <data name="OfferSlot.Vehicle" xml:space="preserve">
+    <value>Автомобиль</value>
+  </data>
+  <data name="OfferSlot.VehicleHint" xml:space="preserve">
+    <value>Записаться смогут ученики, у которых в договоре та же категория и коробка передач, что у автомобиля.</value>
+  </data>
+  <data name="OfferSlot.When" xml:space="preserve">
+    <value>Когда</value>
+  </data>
+  <data name="OfferSlot.Where" xml:space="preserve">
+    <value>Автомобиль и место</value>
   </data>
   <data name="Password.Mismatch" xml:space="preserve">
     <value>Пароли не совпадают.</value>
@@ -583,11 +649,32 @@
   <data name="Schedule.Next" xml:space="preserve">
     <value>Вперёд</value>
   </data>
+  <data name="Schedule.Offer" xml:space="preserve">
+    <value>Новый слот</value>
+  </data>
+  <data name="Schedule.OfferHint" xml:space="preserve">
+    <value>Нажмите на свободное время в сетке, чтобы открыть слот на это время.</value>
+  </data>
   <data name="Schedule.Offline" xml:space="preserve">
     <value>Расписание на {0}; оно могло устареть.</value>
   </data>
   <data name="Schedule.Previous" xml:space="preserve">
     <value>Назад</value>
+  </data>
+  <data name="Schedule.Repeat" xml:space="preserve">
+    <value>Повторить неделю</value>
+  </data>
+  <data name="Schedule.RepeatTitle" xml:space="preserve">
+    <value>Повторить слоты этой недели</value>
+  </data>
+  <data name="Schedule.RepeatWeeks" xml:space="preserve">
+    <value>Недель вперёд: {0}</value>
+  </data>
+  <data name="Schedule.Repeated" xml:space="preserve">
+    <value>Открыто слотов: {0}.</value>
+  </data>
+  <data name="Schedule.RepeatedSkipped" xml:space="preserve">
+    <value>Открыто слотов: {0}. Пропущено: {1} — они пересекаются с другими слотами, уже в прошлом или автомобиль занят.</value>
   </data>
   <data name="Schedule.Title" xml:space="preserve">
     <value>Расписание</value>

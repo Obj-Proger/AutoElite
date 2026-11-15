@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="AutoElite.Mobile.Pages.OfferSlotPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:l="clr-namespace:AutoElite.Mobile.Localization"
+    xmlns:pages="clr-namespace:AutoElite.Mobile.Pages"
+    x:DataType="pages:OfferSlotViewModel"
+    Title="{l:Text OfferSlot.Title}">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="{StaticResource PageMargin}" Spacing="14">
+            <Border Style="{StaticResource Card}">
+                <VerticalStackLayout Spacing="8">
+                    <Label Style="{StaticResource Overline}" Text="{l:Text OfferSlot.When}" />
+                    <Border Style="{StaticResource Field}">
+                        <Picker Title="{l:Text OfferSlot.Day}" ItemsSource="{Binding Days}" SelectedIndex="{Binding DayIndex}" />
+                    </Border>
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+                        <Border Style="{StaticResource Field}">
+                            <Picker
+                                Title="{l:Text OfferSlot.Start}"
+                                ItemsSource="{Binding Times}"
+                                SelectedIndex="{Binding TimeIndex}" />
+                        </Border>
+                        <Border Grid.Column="1" Style="{StaticResource Field}">
+                            <Picker
+                                Title="{l:Text OfferSlot.Length}"
+                                ItemsSource="{Binding Lengths}"
+                                SelectedIndex="{Binding LengthIndex}" />
+                        </Border>
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+
+            <Border Style="{StaticResource Card}">
+                <VerticalStackLayout Spacing="8">
+                    <Label Style="{StaticResource Overline}" Text="{l:Text OfferSlot.Where}" />
+                    <Border Style="{StaticResource Field}">
+                        <Picker
+                            Title="{l:Text OfferSlot.Vehicle}"
+                            ItemsSource="{Binding Vehicles}"
+                            SelectedIndex="{Binding VehicleIndex}" />
+                    </Border>
+                    <Label Style="{StaticResource Caption}" Text="{l:Text OfferSlot.VehicleHint}" />
+                    <Border Style="{StaticResource Field}">
+                        <Picker
+                            Title="{l:Text OfferSlot.Ground}"
+                            ItemsSource="{Binding Grounds}"
+                            SelectedIndex="{Binding GroundIndex}" />
+                    </Border>
+                </VerticalStackLayout>
+            </Border>
+
+            <Label Style="{StaticResource ErrorText}" Text="{Binding Message}" IsVisible="{Binding HasMessage}" />
+            <Button Text="{l:Text OfferSlot.Offer}" Command="{Binding OfferCommand}" />
+            <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
