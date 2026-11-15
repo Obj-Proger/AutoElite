@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Net;
 using AutoElite.Domain.Enums;
 
@@ -115,6 +116,31 @@ public sealed class ChatsControllerTests(ApiFactory api)
         var reply = history.EnumerateArray().Single(message => message.GetProperty("id").GetGuid() == replyId);
         reply.GetProperty("isDeleted").GetBoolean().Should().BeTrue();
         history.EnumerateArray().Select(message => message.GetProperty("id").GetGuid()).Should().Contain(messageId);
+    }
+
+    [Fact]
+    public async Task ReadPosition_TakesATimeWithAnOffset_AsTheGeneratedClientWritesIt()
+    {
+        using var instructor = await api.SignedInClientAsync(UserRole.TheoryInstructor);
+        var (student, studentUser) = await api.SignInAsync(UserRole.Student);
+        using var studentClient = student;
+        using var created = await instructor.SendJsonAsync(
+            HttpMethod.Post, "/api/v1/chats", new { Title = "Группа Б-14", MemberIds = new[] { studentUser.UserId } });
+        var chat = $"/api/v1/chats/{(await created.ReadJsonAsync()).GetProperty("id").GetGuid()}";
+        var sentAt = DateTimeOffset.UtcNow.AddMinutes(-1);
+
+        using var utc = await student.SendJsonAsync(
+            HttpMethod.Put, $"{chat}/read-position", new { ReadUpToUtc = sentAt.ToString("O", CultureInfo.InvariantCulture) });
+        using var local = await student.SendJsonAsync(
+            HttpMethod.Put,
+            $"{chat}/read-position",
+            new { ReadUpToUtc = sentAt.ToOffset(TimeSpan.FromHours(5)).ToString("O", CultureInfo.InvariantCulture) });
+        using var unspecified = await student.SendJsonAsync(
+            HttpMethod.Put, $"{chat}/read-position", new { ReadUpToUtc = "2026-11-16T09:00:00" });
+
+        utc.StatusCode.Should().Be(HttpStatusCode.NoContent);
+        local.StatusCode.Should().Be(HttpStatusCode.NoContent);
+        unspecified.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 
     [Fact]

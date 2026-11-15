@@ -42,9 +42,15 @@ if (!OpenApiDocumentGeneration.IsRunning)
 }
 
 // JSON with enumerations as their names, in the controllers and in what the host writes itself, such as the OpenAPI
-// document and the problem details of exceptions; every error is problem details (ApiProblems).
+// document and the problem details of exceptions; every error is problem details (ApiProblems). The controllers also
+// read the times of requests with an offset in UTC; the OpenAPI document, built from the options of the host, keeps
+// describing them as times.
 builder.Services.AddControllers()
-    .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()))
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+        options.JsonSerializerOptions.Converters.Add(new UtcDateTimeJsonConverter());
+    })
     .ConfigureApiBehaviorOptions(options =>
     {
         options.InvalidModelStateResponseFactory = ApiProblems.FromModelState;
