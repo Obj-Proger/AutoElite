@@ -13,8 +13,27 @@
     <x:Double x:Key="PageMargin">22</x:Double>
     <x:Double x:Key="TouchTarget">48</x:Double>
 
+    <!--
+        On Windows the tab bar of the shell hides the tabs that do not fit behind a menu, so it is hidden there, and the
+        pages of the tabs take the TabPage template, whose strip of AppTabs keeps every tab in view; those pages hide the
+        navigation bar of the shell on Windows too, as the strip names the page. Android keeps the tabs of the shell.
+    -->
+    <OnPlatform x:Key="NotOnWindows" x:TypeArguments="x:Boolean" Default="True">
+        <On Platform="WinUI" Value="False" />
+    </OnPlatform>
+    <OnPlatform x:Key="OnWindows" x:TypeArguments="x:Boolean" Default="False">
+        <On Platform="WinUI" Value="True" />
+    </OnPlatform>
+    <ControlTemplate x:Key="TabPage">
+        <Grid RowDefinitions="Auto,*">
+            <controls:AppTabs IsVisible="{StaticResource OnWindows}" />
+            <ContentPresenter Grid.Row="1" />
+        </Grid>
+    </ControlTemplate>
+
     <Style TargetType="Page" ApplyToDerivedTypes="True">
         <Setter Property="BackgroundColor" Value="{StaticResource Background}" />
+        <Setter Property="Shell.TabBarIsVisible" Value="{StaticResource NotOnWindows}" />
     </Style>
 
     <Style TargetType="Shell" ApplyToDerivedTypes="True">

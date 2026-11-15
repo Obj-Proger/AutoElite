@@ -6,7 +6,8 @@
     xmlns:l="clr-namespace:AutoElite.Mobile.Localization"
     xmlns:pages="clr-namespace:AutoElite.Mobile.Pages"
     x:DataType="pages:HomeViewModel"
-    Shell.NavBarIsVisible="False">
+    Shell.NavBarIsVisible="False"
+    ControlTemplate="{StaticResource TabPage}">
 
     <!-- Pulling the page down sends the waiting actions and reads everything again. -->
     <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}" RefreshColor="{StaticResource Accent}">

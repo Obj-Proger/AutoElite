@@ -8,7 +8,8 @@
     xmlns:pages="clr-namespace:AutoElite.Mobile.Pages"
     x:DataType="pages:ScheduleViewModel"
     Title="{l:Text Schedule.Title}"
-    Shell.NavBarIsVisible="False">
+    Shell.NavBarIsVisible="False"
+    ControlTemplate="{StaticResource TabPage}">
 
     <!--
         The schedule: the period with the arrows and today, the switch between a day and the week, the strip of the days

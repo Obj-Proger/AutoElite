@@ -6,7 +6,9 @@
     xmlns:l="clr-namespace:AutoElite.Mobile.Localization"
     xmlns:pages="clr-namespace:AutoElite.Mobile.Pages"
     x:DataType="pages:StudyPage"
-    Title="{l:Text Study.Title}">
+    Title="{l:Text Study.Title}"
+    ControlTemplate="{StaticResource TabPage}"
+    Shell.NavBarIsVisible="{StaticResource NotOnWindows}">
 
     <!--
         The studies: of a student, the practice tests, the contracts with their progress and payments, and the

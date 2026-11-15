@@ -6,7 +6,9 @@
     xmlns:l="clr-namespace:AutoElite.Mobile.Localization"
     xmlns:pages="clr-namespace:AutoElite.Mobile.Pages"
     x:DataType="pages:ProfileViewModel"
-    Title="{l:Text Profile.Title}">
+    Title="{l:Text Profile.Title}"
+    ControlTemplate="{StaticResource TabPage}"
+    Shell.NavBarIsVisible="{StaticResource NotOnWindows}">
 
     <ScrollView>
         <VerticalStackLayout Padding="{StaticResource PageMargin}" Spacing="14">
