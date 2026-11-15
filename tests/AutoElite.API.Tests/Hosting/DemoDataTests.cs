@@ -10,9 +10,9 @@ using Microsoft.Extensions.Options;
 namespace AutoElite.API.Tests.Hosting;
 
 /// <summary>
-/// The demo data of development: every step is a command of the application on behalf of a demo user, so a step the
-/// rules refuse would leave the data incomplete; the test runs the seeder on the test server and signs in as the demo
-/// students.
+/// The demo data of development: every step is a command of the application on behalf of a demo user, the past ones
+/// with the demo clock turned back, so a step the rules refuse would leave the data incomplete; the test runs the
+/// seeder on the test server and signs in as the demo users.
 /// </summary>
 [Collection(nameof(ApiCollection))]
 public sealed class DemoDataTests(ApiFactory api)
@@ -33,12 +33,12 @@ public sealed class DemoDataTests(ApiFactory api)
         return client;
     }
 
-    private static string Period()
+    private static string Period(int fromDays, int toDays)
     {
         var now = DateTime.UtcNow;
 
-        return $"fromUtc={Uri.EscapeDataString(now.ToString("O", CultureInfo.InvariantCulture))}"
-            + $"&toUtc={Uri.EscapeDataString(now.AddDays(60).ToString("O", CultureInfo.InvariantCulture))}";
+        return $"fromUtc={Uri.EscapeDataString(now.AddDays(fromDays).ToString("O", CultureInfo.InvariantCulture))}"
+            + $"&toUtc={Uri.EscapeDataString(now.AddDays(toDays).ToString("O", CultureInfo.InvariantCulture))}";
     }
 
     [Fact]
@@ -48,18 +48,24 @@ public sealed class DemoDataTests(ApiFactory api)
         var seeder = new DemoDataSeeder(
             api.Services.GetRequiredService<IServiceScopeFactory>(),
             Options.Create(new DemoDataOptions { Enabled = true, Password = Password }),
-            TimeProvider.System,
+            api.Services.GetRequiredService<DemoClock>(),
             logger);
 
         await seeder.StartAsync(CancellationToken);
         await seeder.StartAsync(CancellationToken);
 
         logger.Errors.Should().BeEmpty();
+        api.Services.GetRequiredService<DemoClock>().GetUtcNow().Should().BeCloseTo(DateTimeOffset.UtcNow, TimeSpan.FromMinutes(1));
         using var first = await SignInAsync("student1");
         using var third = await SignInAsync("student3");
-        (await first.GetJsonAsync($"/api/v1/me/driving-lessons?{Period()}")).GetArrayLength().Should().Be(3);
-        (await third.GetJsonAsync($"/api/v1/me/driving-lessons?{Period()}")).GetArrayLength().Should().Be(1);
-        (await first.GetJsonAsync($"/api/v1/me/theory-lessons?{Period()}")).GetArrayLength().Should().Be(9);
+        using var driving = await SignInAsync("driving");
+        (await first.GetJsonAsync($"/api/v1/me/driving-lessons?{Period(0, 60)}")).GetArrayLength().Should().Be(3);
+        (await third.GetJsonAsync($"/api/v1/me/driving-lessons?{Period(0, 60)}")).GetArrayLength().Should().Be(1);
+        (await first.GetJsonAsync($"/api/v1/me/theory-lessons?{Period(0, 60)}")).GetArrayLength().Should().Be(9);
+        (await first.GetJsonAsync($"/api/v1/me/driving-lessons?{Period(-30, 0)}")).EnumerateArray()
+            .Should().Contain(lesson => lesson.GetProperty("booking").GetProperty("status").GetString() == "Completed");
+        (await first.GetJsonAsync("/api/v1/me/exams")).GetArrayLength().Should().Be(3);
+        (await driving.GetJsonAsync("/api/v1/me/staff-tasks?status=New")).GetProperty("items").GetArrayLength().Should().Be(2);
     }
 
     // Keeps the errors the seeder logs, which tell the step that failed.

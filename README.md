@@ -284,13 +284,20 @@ active administrator, these settings change nothing.
 
 ### Demo data
 
-To see every page with something on it while developing, the API can create demo data in a new database: a branch in
-Yekaterinburg with a training ground and two cars, a course of category B with six topics, fourteen questions and a
-practice test of ten, its staff and three students with contracts, payments and a study group, theory lessons on
-Mondays, Wednesdays and Fridays and driving lessons on weekdays for the coming weeks, some of them booked. Each step is
-a command of the application sent on behalf of the user who would take it, so the data follows the rules of the school.
-It is created only in the Development environment and only when asked for, with one password for every demo user, kept
-in the user secrets like any other secret:
+To see every part of the system in use while developing, the API can create demo data in a new database: a school three
+weeks into the training of a group. A branch in Yekaterinburg with a training ground and two cars, a course of category
+B with six topics, fourteen questions and a practice test of ten, its staff and three students with contracts, payments,
+scanned contracts and a study group. Behind them: theory lessons on Mondays, Wednesdays and Fridays with the attendance
+marked, driving lessons completed with grades and notes, one missed, rated by the first student, practice tests passed
+and failed, a theory exam three days ago with its results, personal chats with a file, a medical certificate among the
+documents of the first student, and the tasks the manager gave the instructors, one overdue, one started, one recurring
+and one done. Today: two driving lessons that have begun and wait for the instructor, and a practice exam that began two
+hours ago, with one result recorded. Ahead: theory lessons for three weeks, driving lessons on weekdays for two, some of
+them booked, and a theory exam. Each step is a command of the application sent on behalf of the user who would take it,
+so the data follows the rules of the school; the past is created with the clock of the host turned back to when it
+happened, and the clock is the system clock again before the API answers. It is created only in the Development
+environment and only when asked for, with one password for every demo user, kept in the user secrets like any other
+secret:
 
 ```bash
 dotnet user-secrets --project src/AutoElite.API set "DemoData:Enabled" "true"
@@ -300,26 +307,32 @@ dotnet user-secrets --project src/AutoElite.API set "DemoData:Password" "<8 to 1
 The demo users sign in with that password at `admin`, `manager`, `theory` (theory instructor), `driving` (driving
 instructor) and `student1` to `student3`, each `@autoelite.example`, a domain reserved for examples, so no email reaches
 anybody. The data is created once: a database that has it is left as it is, and a failed step is logged; drop the
-database to start again.
+database to start again, which also moves the past and the future of the demo to the new day.
 
 ### A tour of the demo
 
 With the demo data, sign in as each kind of user to see what they do:
 
 - **Administrator** (`admin@autoelite.example`, on the website): the users of the school, finding them, inviting a new
-  one and opening the invitation from the mail folder to set their password, correcting a user, granting a role,
-  moving a user between branches, deactivating and reactivating a user. The API reference at `/scalar` and the
-  background jobs at `/jobs` show what the website does not yet.
+  one and opening the invitation from the mail folder to set their password, correcting a user, granting a role, moving
+  a user between branches, deactivating and reactivating a user. The API reference at `/scalar` and the background jobs
+  at `/jobs` show what the website does not yet.
 - **Manager** (`manager@autoelite.example`, on the website): the users of their branch only; they invite students.
 - **Student** (`student1@autoelite.example`, in the mobile application, at `http://10.0.2.2:5080` from the Android
-  emulator or `http://localhost:5080` on Windows): the theory lessons and the booked driving lessons on the home page,
-  booking and cancelling a slot, the practice test of ten questions, the contract with its payments and progress, the
-  chats and the notifications. Turned offline, the application shows what it last read and sends a booking once the
-  network is back. `student2` has paid part of the price, `student3` nothing and trains on the automatic car.
+  emulator or `http://localhost:5080` on Windows): the lessons of the day on the home page and the week on the schedule,
+  with the theory exam behind and the one ahead; booking and cancelling a slot and rating a lesson; the practice tests
+  with the attempts behind and the exam result; the contract with its payments and progress and the documents, with the
+  scanned contract and the medical certificate; the chat with the driving instructor, with the route of a lesson, and
+  the notifications; the profile with the photo, the password and the email. Turned offline, the application shows what
+  it last read and sends a booking once the network is back. `student2` has paid part of the price, missed a lesson and
+  failed the theory exam; `student3` has paid nothing and trains on the automatic car.
 - **Driving instructor** (`driving@autoelite.example`, in the application): the schedule of slots with the bookings of
-  the students; a lesson is completed, with the grades of the skills, or marked missed once it has started.
-- **Theory instructor** (`theory@autoelite.example`, in the application): the lessons of the group, whose attendance
-  is marked once a lesson has started.
+  the students; offering a slot by tapping free time, repeating the week, withdrawing a slot; a lesson completed with
+  the grades of the skills or marked missed; the progress of a student from a booked lesson or the chat; the practice
+  exam of today, recording the results of the second and third students; the tasks on the home page, one overdue.
+- **Theory instructor** (`theory@autoelite.example`, in the application): the lessons of the group, scheduling, moving
+  and cancelling one, the attendance marked once a lesson has started; the exams of the group, correcting a theory
+  result; the questions of the tests in the tab of studies; the chat with the second student; the tasks.
 
 ### Database migrations
 

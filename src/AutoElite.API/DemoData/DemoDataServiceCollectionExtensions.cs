@@ -4,8 +4,9 @@ namespace AutoElite.API.DemoData;
 internal static class DemoDataServiceCollectionExtensions
 {
     /// <summary>
-    /// Registers <see cref="DemoDataSeeder"/>, which creates the demo data when the host starts, when the environment is
-    /// Development and <c>DemoData:Enabled</c> is set; in any other environment nothing is registered.
+    /// Registers <see cref="DemoDataSeeder"/>, which creates the demo data when the host starts, and the
+    /// <see cref="DemoClock"/> it turns back to create the past, when the environment is Development and
+    /// <c>DemoData:Enabled</c> is set; in any other environment nothing is registered.
     /// </summary>
     /// <param name="services">The services of the host.</param>
     /// <param name="configuration">The configuration of the host.</param>
@@ -19,6 +20,7 @@ internal static class DemoDataServiceCollectionExtensions
             return services;
 
         services.AddOptions<DemoDataOptions>().Bind(section);
+        DemoClock.Register(services);
         services.AddHostedService<DemoDataSeeder>();
 
         return services;

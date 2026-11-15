@@ -1,5 +1,6 @@
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using AutoElite.API.DemoData;
 using AutoElite.Application.Common.Abstractions;
 using AutoElite.Application.Users;
 using AutoElite.Application.Users.Authentication;
@@ -8,6 +9,7 @@ using AutoElite.Domain.Enums;
 using AutoElite.Domain.ValueObjects;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AutoElite.API.Tests;
@@ -149,6 +151,9 @@ public sealed class ApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
 
         // One Hangfire worker is enough for the tests and keeps the connections to the database few.
         builder.UseSetting("BackgroundJobs:WorkerCount", "1");
+
+        // The clock of the demo data, which the system clock is but while the demo seeder creates the past.
+        builder.ConfigureTestServices(DemoClock.Register);
     }
 }
 
