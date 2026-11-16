@@ -83,7 +83,7 @@
   </ItemGroup>
   <!-- .NET MAUI (MIT): the application of students and instructors for Android and Windows (D-066). -->
   <ItemGroup Label="Mobile">
-    <PackageVersion Include="Microsoft.Extensions.Logging.Debug" Version="10.0.14" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.Debug" Version="11.0.0" />
     <PackageVersion Include="Microsoft.Maui.Controls" Version="10.0.120" />
   </ItemGroup>
   <!--
