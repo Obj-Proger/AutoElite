@@ -299,14 +299,15 @@ B with six topics, fourteen questions and a practice test of ten, its staff and 
 scanned contracts and a study group. Behind them: theory lessons on Mondays, Wednesdays and Fridays with the attendance
 marked, driving lessons completed with grades and notes, one missed, rated by the first student, practice tests passed
 and failed, a theory exam three days ago with its results, personal chats with a file, a medical certificate among the
-documents of the first student, and the tasks the manager gave the instructors, one overdue, one started, one recurring
-and one done. Today: two driving lessons that have begun and wait for the instructor, and a practice exam that began two
-hours ago, with one result recorded. Ahead: theory lessons for three weeks, driving lessons on weekdays for two, some of
-them booked, and a theory exam. Each step is a command of the application sent on behalf of the user who would take it,
-so the data follows the rules of the school; the past is created with the clock of the host turned back to when it
-happened, and the clock is the system clock again before the API answers. It is created only in the Development
-environment and only when asked for, with one password for every demo user, kept in the user secrets like any other
-secret:
+documents of the first student, the tasks the manager gave the instructors, one overdue, one started, one recurring and
+one done, and the leads of the last days, new from the website and the phone, one the manager works on and one lost,
+with a payment of the second student that waits for its money. Today: two driving lessons that have begun and wait for
+the instructor, and a practice exam that began two hours ago, with one result recorded. Ahead: theory lessons for three
+weeks, driving lessons on weekdays for two, some of them booked, and a theory exam. Each step is a command of the
+application sent on behalf of the user who would take it, so the data follows the rules of the school; the past is
+created with the clock of the host turned back to when it happened, and the clock is the system clock again before the
+API answers. It is created only in the Development environment and only when asked for, with one password for every demo
+user, kept in the user secrets like any other secret:
 
 ```bash
 dotnet user-secrets --project src/AutoElite.API set "DemoData:Enabled" "true"
@@ -326,7 +327,10 @@ With the demo data, sign in as each kind of user to see what they do:
   one and opening the invitation from the mail folder to set their password, correcting a user, granting a role, moving
   a user between branches, deactivating and reactivating a user. The API reference at `/scalar` and the background jobs
   at `/jobs` show what the website does not yet.
-- **Manager** (`manager@autoelite.example`, on the website): the users of their branch only; they invite students.
+- **Manager** (`manager@autoelite.example`, on the website): the users of their branch only; they invite students. In
+  the application: the schedule of every instructor, narrowed to one, booking a student on a free slot; the tab of
+  students with the card of a student, recording a payment and confirming the waiting one of `student2`; the leads from
+  the home page, taking a new one on, a note, marking one lost.
 - **Student** (`student1@autoelite.example`, in the mobile application, at `http://10.0.2.2:5080` from the Android
   emulator or `http://localhost:5080` on Windows): the lessons of the day on the home page and the week on the schedule,
   with the theory exam behind and the one ahead; booking and cancelling a slot and rating a lesson; the practice tests

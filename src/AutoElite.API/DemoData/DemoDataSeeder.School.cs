@@ -111,6 +111,7 @@ internal sealed partial class DemoDataSeeder
         await PlanTasksAsync(manager, drivingInstructor, theoryInstructor, groupId, manualId, today, zone, past, cancellationToken);
         PlanTests(students, contractIds, templateId, today, zone, past, cancellationToken);
         PlanChats(drivingInstructor, theoryInstructor, students, today, zone, past, cancellationToken);
+        PlanOffice(administrator, manager, branchId, contractIds, today, zone, past, cancellationToken);
 
         // What happened since, in the order it happened, each at its moment.
         foreach (var (at, step) in past.OrderBy(planned => planned.At))

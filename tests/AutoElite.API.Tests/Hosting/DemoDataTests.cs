@@ -59,6 +59,7 @@ public sealed class DemoDataTests(ApiFactory api)
         using var first = await SignInAsync("student1");
         using var third = await SignInAsync("student3");
         using var driving = await SignInAsync("driving");
+        using var manager = await SignInAsync("manager");
         (await first.GetJsonAsync($"/api/v1/me/driving-lessons?{Period(0, 60)}")).GetArrayLength().Should().Be(3);
         (await third.GetJsonAsync($"/api/v1/me/driving-lessons?{Period(0, 60)}")).GetArrayLength().Should().Be(1);
         (await first.GetJsonAsync($"/api/v1/me/theory-lessons?{Period(0, 60)}")).GetArrayLength().Should().Be(9);
@@ -66,6 +67,10 @@ public sealed class DemoDataTests(ApiFactory api)
             .Should().Contain(lesson => lesson.GetProperty("booking").GetProperty("status").GetString() == "Completed");
         (await first.GetJsonAsync("/api/v1/me/exams")).GetArrayLength().Should().Be(3);
         (await driving.GetJsonAsync("/api/v1/me/staff-tasks?status=New")).GetProperty("items").GetArrayLength().Should().Be(2);
+        var newLead = await manager.GetJsonAsync($"/api/v1/leads?status=New&search={Uri.EscapeDataString("Ковалёва")}");
+        newLead.GetProperty("items").GetArrayLength().Should().Be(1);
+        var lostLead = await manager.GetJsonAsync($"/api/v1/leads?status=Lost&search={Uri.EscapeDataString("Белов Игорь")}");
+        lostLead.GetProperty("items").GetArrayLength().Should().Be(1);
     }
 
     // Keeps the errors the seeder logs, which tell the step that failed.
