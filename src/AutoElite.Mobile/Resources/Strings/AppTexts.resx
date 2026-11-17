@@ -407,7 +407,7 @@
     <value>Good evening,</value>
   </data>
   <data name="Home.Leads" xml:space="preserve">
-    <value>New: {0} · yours in progress: {1}</value>
+    <value>New: {0} · yours in progress: {1} of {2}</value>
   </data>
   <data name="Home.Morning" xml:space="preserve">
     <value>Good morning,</value>
@@ -528,6 +528,9 @@
   </data>
   <data name="Leads.Mine" xml:space="preserve">
     <value>Yours in progress</value>
+  </data>
+  <data name="Leads.MineOf" xml:space="preserve">
+    <value>Yours in progress: {0} of {1}</value>
   </data>
   <data name="Leads.New" xml:space="preserve">
     <value>New</value>

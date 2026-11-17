@@ -1,4 +1,6 @@
 using AutoElite.API.Common;
+using AutoElite.Application.Leads;
+using AutoElite.Application.Leads.GetMyLeadWorkload;
 using AutoElite.Application.Users;
 using AutoElite.Application.Users.Authentication;
 using AutoElite.Application.Users.ChangePassword;
@@ -23,6 +25,14 @@ public sealed class MeController(IDispatcher dispatcher) : ApiControllerBase
     [ProducesResponseType<UserProfile>(StatusCodes.Status200OK)]
     public async Task<IActionResult> GetProfile(CancellationToken cancellationToken) =>
         Respond(await dispatcher.Send(new GetMyProfileQuery(), cancellationToken));
+
+    /// <summary>Reads how many leads the signed-in manager works on and how many their limit allows.</summary>
+    /// <param name="cancellationToken">A token that signals cancellation of the request.</param>
+    /// <returns>The leads in progress and the limit.</returns>
+    [HttpGet("lead-workload")]
+    [ProducesResponseType<LeadWorkload>(StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetLeadWorkload(CancellationToken cancellationToken) =>
+        Respond(await dispatcher.Send(new GetMyLeadWorkloadQuery(), cancellationToken));
 
     /// <summary>Changes the name, the phone and the language of the signed-in user.</summary>
     /// <param name="command">The name, the phone and the language.</param>

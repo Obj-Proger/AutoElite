@@ -27,7 +27,6 @@ public sealed partial class HomeViewModel : ViewModel
     private readonly LessonEntries _entries;
     private readonly StaffTasks _tasks;
     private readonly LeadBook _leads;
-    private Guid? _userId;
 
     /// <summary>Initializes a new instance of the <see cref="HomeViewModel"/> class.</summary>
     /// <param name="session">The user of the application.</param>
@@ -249,7 +248,6 @@ public sealed partial class HomeViewModel : ViewModel
             IsStaff = profile.Value.Roles?.Any(role => role is UserRole.Administrator or UserRole.Manager
                 or UserRole.DrivingInstructor or UserRole.TheoryInstructor) == true;
             IsManager = profile.Value.Roles?.Any(role => role is UserRole.Administrator or UserRole.Manager) == true;
-            _userId = profile.Value.Id;
             if (profile.IsFromCache)
                 offlineSince = profile.SavedAt;
         }
@@ -318,14 +316,18 @@ public sealed partial class HomeViewModel : ViewModel
         }
     }
 
-    // Shows how many leads are new and how many the user is working on; without a network the last numbers stay.
+    // Shows how many leads are new and how many the user is working on of the number their limit allows; without a network
+    // the last numbers stay.
     private async Task CountLeadsAsync()
     {
         try
         {
             var fresh = (await _leads.ReadNewAsync(CancellationToken.None)).Value.Count;
-            var mine = _userId is { } userId ? (await _leads.ReadInProgressAsync(userId, CancellationToken.None)).Value.Count : 0;
-            LeadsSummary = fresh + mine == 0 ? AppTexts.Get("Home.NoLeads") : AppTexts.Format("Home.Leads", fresh, mine);
+            var workload = (await _leads.ReadWorkloadAsync(CancellationToken.None)).Value;
+            var mine = workload.InProgress ?? 0;
+            LeadsSummary = fresh + mine == 0
+                ? AppTexts.Get("Home.NoLeads")
+                : AppTexts.Format("Home.Leads", fresh, mine, workload.Limit ?? 0);
         }
         catch (Exception exception) when (exception is ApiException or HttpRequestException)
         {

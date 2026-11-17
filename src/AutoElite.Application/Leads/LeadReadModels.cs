@@ -94,3 +94,11 @@ public sealed record LeadDetails(
     DateTime CreatedAtUtc,
     IReadOnlyList<LeadNoteItem> Notes,
     IReadOnlyList<LeadStatusChangeItem> StatusHistory);
+
+/// <summary>How many leads a manager works on and how many they may work on at a time.</summary>
+/// <param name="InProgress">The leads in progress that the manager is responsible for.</param>
+/// <param name="Limit">
+/// The leads in progress the manager may take on; an administrator may give them more, so that the number in progress can
+/// be above it.
+/// </param>
+public sealed record LeadWorkload(int InProgress, int Limit);

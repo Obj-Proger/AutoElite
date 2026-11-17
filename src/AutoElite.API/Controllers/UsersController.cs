@@ -10,6 +10,7 @@ using AutoElite.Application.Users.InviteUser;
 using AutoElite.Application.Users.ReactivateUser;
 using AutoElite.Application.Users.ResendInvitation;
 using AutoElite.Application.Users.RevokeRole;
+using AutoElite.Application.Users.SetLeadLimit;
 using AutoElite.Application.Users.UpdateUserDetails;
 using Microsoft.AspNetCore.Mvc;
 
@@ -83,6 +84,18 @@ public sealed class UsersController(IDispatcher dispatcher) : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound, "application/problem+json")]
     public async Task<IActionResult> ChangeBranch(Guid userId, ChangeUserBranchCommand command, CancellationToken cancellationToken) =>
+        Respond(await dispatcher.Send(command with { UserId = userId }, cancellationToken));
+
+    /// <summary>
+    /// Sets how many leads a manager may work on at a time (administrators only); an administrator may still give them more.
+    /// </summary>
+    /// <param name="userId">The user; it takes the place of the one in the body.</param>
+    /// <param name="command">The limit.</param>
+    /// <param name="cancellationToken">A token that signals cancellation of the request.</param>
+    [HttpPut("{userId:guid}/lead-limit")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound, "application/problem+json")]
+    public async Task<IActionResult> SetLeadLimit(Guid userId, SetLeadLimitCommand command, CancellationToken cancellationToken) =>
         Respond(await dispatcher.Send(command with { UserId = userId }, cancellationToken));
 
     /// <summary>Grants a role (administrators only).</summary>

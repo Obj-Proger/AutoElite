@@ -95,6 +95,53 @@ public sealed class LeadsAndContractsControllerTests(ApiFactory api)
     }
 
     [Fact]
+    public async Task Manager_TakesOnLeadsUpToTheLimitThatTheAdministratorSets()
+    {
+        using var admin = await api.SignedInClientAsync(UserRole.Administrator);
+        var (manager, managerUser) = await api.SignInAsync(UserRole.Manager);
+        using var managerClient = manager;
+        var first = await admin.CreateAsync(
+            "/api/v1/leads", new { ContactName = "Пётр Первый", Phone = "+79990003344", Source = LeadSource.PhoneCall });
+        var second = await admin.CreateAsync(
+            "/api/v1/leads", new { ContactName = "Павел Второй", Phone = "+79990003355", Source = LeadSource.PhoneCall });
+
+        using var limited = await admin.SendJsonAsync(
+            HttpMethod.Put, $"/api/v1/users/{managerUser.UserId}/lead-limit", new { LeadLimit = 1 });
+        using var taken = await manager.SendJsonAsync(HttpMethod.Post, $"/api/v1/leads/{first}/start-work");
+        using var refused = await manager.SendJsonAsync(HttpMethod.Post, $"/api/v1/leads/{second}/start-work");
+        using var given = await admin.SendJsonAsync(
+            HttpMethod.Put, $"/api/v1/leads/{second}/manager", new { ManagerId = managerUser.UserId });
+        using var startedByAdministrator = await admin.SendJsonAsync(HttpMethod.Post, $"/api/v1/leads/{second}/start-work");
+        var workload = await manager.GetJsonAsync("/api/v1/me/lead-workload");
+        var card = await admin.GetJsonAsync($"/api/v1/users/{managerUser.UserId}");
+        var firstLead = await admin.GetJsonAsync($"/api/v1/leads/{first}");
+
+        limited.StatusCode.Should().Be(HttpStatusCode.NoContent);
+        taken.StatusCode.Should().Be(HttpStatusCode.NoContent);
+        firstLead.GetProperty("managerId").GetGuid().Should().Be(managerUser.UserId);
+        refused.StatusCode.Should().Be(HttpStatusCode.Conflict);
+        (await refused.ReadJsonAsync()).GetProperty("code").GetString().Should().Be("Lead.ManagerAtLimit");
+        given.StatusCode.Should().Be(HttpStatusCode.NoContent);
+        startedByAdministrator.StatusCode.Should().Be(HttpStatusCode.NoContent);
+        workload.GetProperty("inProgress").GetInt32().Should().Be(2);
+        workload.GetProperty("limit").GetInt32().Should().Be(1);
+        card.GetProperty("leadLimit").GetInt32().Should().Be(1);
+        card.GetProperty("leadsInProgress").GetInt32().Should().Be(2);
+    }
+
+    [Fact]
+    public async Task Manager_CannotChangeALeadLimit()
+    {
+        var (manager, managerUser) = await api.SignInAsync(UserRole.Manager);
+        using var managerClient = manager;
+
+        using var response = await manager.SendJsonAsync(
+            HttpMethod.Put, $"/api/v1/users/{managerUser.UserId}/lead-limit", new { LeadLimit = 100 });
+
+        response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
+    }
+
+    [Fact]
     public async Task Manager_ChangesTheTermsOfAContractAndTerminatesIt()
     {
         using var admin = await api.SignedInClientAsync(UserRole.Administrator);

@@ -1,4 +1,5 @@
 using AutoElite.Application.Users.ChangeUserBranch;
+using AutoElite.Application.Users.SetLeadLimit;
 using AutoElite.Application.Users.UpdateUserDetails;
 using AutoElite.Domain.Entities;
 using AutoElite.Domain.Enums;
@@ -16,6 +17,42 @@ public class UserDetailsCommandHandlerTests
     private Task<Result> UpdateDetails(UpdateUserDetailsCommand command, FakeCurrentUser caller) =>
         new UpdateUserDetailsCommandHandler(_fixture.CreateManagedUsers(caller))
             .Handle(command, TestContext.Current.CancellationToken);
+
+    private Task<Result> SetLeadLimit(Guid userId, int limit, FakeCurrentUser caller) =>
+        new SetLeadLimitCommandHandler(_fixture.CreateManagedUsers(caller))
+            .Handle(new SetLeadLimitCommand(userId, limit), TestContext.Current.CancellationToken);
+
+    [Fact]
+    public async Task SetLeadLimit_Administrator_SetsTheLimitOfTheManager()
+    {
+        var caller = _fixture.SeedAdministrator();
+        var user = _fixture.SeedUser("ivan@example.com", null, UserRole.Manager);
+
+        var result = await SetLeadLimit(user.Id, 25, caller);
+
+        result.IsSuccess.Should().BeTrue();
+        user.LeadLimit.Should().Be(25);
+    }
+
+    [Fact]
+    public async Task SetLeadLimit_OutOfRange_ReturnsLeadLimitOutOfRange()
+    {
+        var caller = _fixture.SeedAdministrator();
+        var user = _fixture.SeedUser("ivan@example.com", null, UserRole.Manager);
+
+        var result = await SetLeadLimit(user.Id, 0, caller);
+
+        result.Error.Should().Be(DomainErrors.User.LeadLimitOutOfRange);
+        user.LeadLimit.Should().Be(User.DefaultLeadLimit);
+    }
+
+    [Fact]
+    public void SetLeadLimitValidator_OutOfRange_ReturnsLeadLimitOutOfRange()
+    {
+        var result = new SetLeadLimitCommandValidator().Validate(new SetLeadLimitCommand(Guid.CreateVersion7(), User.MaxLeadLimit + 1));
+
+        result.Errors.Should().ContainSingle().Which.ErrorCode.Should().Be(DomainErrors.User.LeadLimitOutOfRange.Code);
+    }
 
     [Fact]
     public async Task ChangeBranch_ActiveBranch_MovesTheUser()

@@ -15,6 +15,12 @@ namespace AutoElite.Domain.Entities;
 /// </remarks>
 public sealed class User : AuditableEntity
 {
+    /// <summary>The number of leads a manager may have in progress at a time until an administrator sets another.</summary>
+    public const int DefaultLeadLimit = 10;
+
+    /// <summary>The largest number of leads in progress that a manager may be allowed.</summary>
+    public const int MaxLeadLimit = 1000;
+
     /// <summary>Gets the user's full name.</summary>
     public FullName FullName { get; private set; } = null!;
 
@@ -44,6 +50,12 @@ public sealed class User : AuditableEntity
 
     /// <summary>Gets the language notifications and emails are written in.</summary>
     public Language PreferredLanguage { get; private set; }
+
+    /// <summary>
+    /// Gets how many leads the user, as a manager, may have in progress at a time; an administrator sets it for each
+    /// manager and may still give a manager more. Taking on more is up to the caller to check.
+    /// </summary>
+    public int LeadLimit { get; private set; } = DefaultLeadLimit;
 
     private User(Guid id, FullName fullName, Email email, PhoneNumber? phone, Guid? branchId, Language preferredLanguage) : base(id)
     {
@@ -188,6 +200,22 @@ public sealed class User : AuditableEntity
             return Result.Failure(languageResult.Error);
 
         PreferredLanguage = language;
+
+        return Result.Success();
+    }
+
+    /// <summary>Sets how many leads the user, as a manager, may have in progress at a time.</summary>
+    /// <param name="limit">The number, from 1 to <see cref="MaxLeadLimit"/>.</param>
+    /// <returns>A failure if the user is inactive or the number is out of range.</returns>
+    public Result SetLeadLimit(int limit)
+    {
+        if (!IsActive)
+            return Result.Failure(DomainErrors.User.CannotModifyInactive);
+
+        if (limit is < 1 or > MaxLeadLimit)
+            return Result.Failure(DomainErrors.User.LeadLimitOutOfRange);
+
+        LeadLimit = limit;
 
         return Result.Success();
     }

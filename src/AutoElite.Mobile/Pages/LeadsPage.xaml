@@ -40,7 +40,7 @@
                 </VerticalStackLayout>
 
                 <VerticalStackLayout Spacing="10" IsVisible="{Binding HasMyLeads}">
-                    <Label Style="{StaticResource Overline}" Text="{l:Text Leads.Mine}" />
+                    <Label Style="{StaticResource Overline}" Text="{Binding MyLeadsTitle}" />
                     <VerticalStackLayout
                         Spacing="10"
                         BindableLayout.ItemsSource="{Binding MyLeads}"

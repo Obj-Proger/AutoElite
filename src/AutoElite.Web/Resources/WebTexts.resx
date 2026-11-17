@@ -286,6 +286,15 @@
   <data name="UserCard.Details" xml:space="preserve">
     <value>Name and phone</value>
   </data>
+  <data name="UserCard.LeadLimit" xml:space="preserve">
+    <value>Leads in progress</value>
+  </data>
+  <data name="UserCard.LeadLimitText" xml:space="preserve">
+    <value>Now in progress: {0}. A manager cannot take on more leads than this number; an administrator may give them more.</value>
+  </data>
+  <data name="UserCard.LeadWorkload" xml:space="preserve">
+    <value>{0} of {1}</value>
+  </data>
   <data name="UserCard.NotAccepted" xml:space="preserve">
     <value>The user has not set a password yet.</value>
   </data>

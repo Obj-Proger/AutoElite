@@ -25,6 +25,23 @@ internal sealed class LeadFixture
 
     public LeadAccess CreateLeadAccess(FakeCurrentUser caller) => new(Leads, caller);
 
+    public LeadCapacity CreateLeadCapacity(FakeCurrentUser caller) => new(Users, new FakeLeadQueries(Leads.Items), caller);
+
+    /// <summary>Lets the manager work on no more leads at a time than the limit.</summary>
+    public void SetLeadLimit(FakeCurrentUser manager, int limit) =>
+        Users.Items.Single(user => user.Id == manager.UserId).SetLeadLimit(limit).IsSuccess.Should().BeTrue();
+
+    /// <summary>Seeds a lead that the manager is working on.</summary>
+    public Lead SeedLeadInProgress(FakeCurrentUser manager, Guid? branchId = null)
+    {
+        var lead = SeedLead(branchId);
+        lead.AssignManager(manager.UserId!.Value, null, TestData.Now).IsSuccess.Should().BeTrue();
+        lead.StartWork(null, TestData.Now).IsSuccess.Should().BeTrue();
+        lead.ClearDomainEvents();
+
+        return lead;
+    }
+
     public Branch SeedBranch(string name = "Central")
     {
         var branch = TestData.NewBranch(name);

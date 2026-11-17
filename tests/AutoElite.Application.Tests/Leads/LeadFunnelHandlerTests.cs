@@ -10,13 +10,19 @@ namespace AutoElite.Application.Tests.Leads;
 public class LeadFunnelHandlerTests
 {
     private readonly LeadFixture _fixture = new();
-    private readonly FakeCurrentUser _manager = TestData.Manager(null);
+    private readonly FakeCurrentUser _manager;
+
+    public LeadFunnelHandlerTests()
+    {
+        _manager = _fixture.SeedManager(null);
+    }
 
     private Task<Result> StartWork(Guid leadId, FakeCurrentUser? caller = null)
     {
         var user = caller ?? _manager;
 
-        return new StartLeadWorkCommandHandler(_fixture.CreateLeadAccess(user), user, TestData.Clock())
+        return new StartLeadWorkCommandHandler(
+                _fixture.CreateLeadAccess(user), _fixture.CreateLeadManagers(), _fixture.CreateLeadCapacity(user), user, TestData.Clock())
             .Handle(new StartLeadWorkCommand(leadId), TestContext.Current.CancellationToken);
     }
 
@@ -24,9 +30,13 @@ public class LeadFunnelHandlerTests
         new MarkLeadLostCommandHandler(_fixture.CreateLeadAccess(_manager), _manager, TestData.Clock())
             .Handle(new MarkLeadLostCommand(leadId, reason), TestContext.Current.CancellationToken);
 
-    private Task<Result> Reopen(Guid leadId) =>
-        new ReopenLeadCommandHandler(_fixture.CreateLeadAccess(_manager), _manager, TestData.Clock())
+    private Task<Result> Reopen(Guid leadId, FakeCurrentUser? caller = null)
+    {
+        var user = caller ?? _manager;
+
+        return new ReopenLeadCommandHandler(_fixture.CreateLeadAccess(user), _fixture.CreateLeadCapacity(user), user, TestData.Clock())
             .Handle(new ReopenLeadCommand(leadId), TestContext.Current.CancellationToken);
+    }
 
     private Task<Result<Guid>> AddNote(Guid leadId, string? text) =>
         new AddLeadNoteCommandHandler(_fixture.CreateLeadAccess(_manager), _manager, TestData.Clock())
@@ -45,6 +55,67 @@ public class LeadFunnelHandlerTests
         change.FromStatus.Should().Be(LeadStatus.New);
         change.ChangedByUserId.Should().Be(_manager.UserId);
         change.ChangedAtUtc.Should().Be(TestData.Now);
+    }
+
+    [Fact]
+    public async Task StartWork_ManagerTakesOnALeadWithoutManager_BecomesItsManager()
+    {
+        var lead = _fixture.SeedLead();
+
+        await StartWork(lead.Id);
+
+        lead.ManagerId.Should().Be(_manager.UserId);
+    }
+
+    [Fact]
+    public async Task StartWork_AdministratorStartsALeadWithoutManager_LeavesItWithoutManager()
+    {
+        var lead = _fixture.SeedLead();
+
+        var result = await StartWork(lead.Id, TestData.Administrator());
+
+        result.IsSuccess.Should().BeTrue();
+        lead.ManagerId.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task StartWork_ManagerAtTheLimit_ReturnsManagerAtLimit()
+    {
+        _fixture.SetLeadLimit(_manager, 1);
+        _fixture.SeedLeadInProgress(_manager);
+        var lead = _fixture.SeedLead();
+
+        var result = await StartWork(lead.Id);
+
+        result.Error.Should().Be(ApplicationErrors.Lead.ManagerAtLimit);
+        lead.Status.Should().Be(LeadStatus.New);
+        lead.ManagerId.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task StartWork_ManagerBelowTheLimit_Starts()
+    {
+        _fixture.SetLeadLimit(_manager, 2);
+        _fixture.SeedLeadInProgress(_manager);
+        var lead = _fixture.SeedLead();
+
+        var result = await StartWork(lead.Id);
+
+        result.IsSuccess.Should().BeTrue();
+    }
+
+    [Fact]
+    public async Task StartWork_AdministratorStartsTheLeadOfAManagerAtTheLimit_GoesBeyondIt()
+    {
+        _fixture.SetLeadLimit(_manager, 1);
+        _fixture.SeedLeadInProgress(_manager);
+        var lead = _fixture.SeedLead();
+        lead.AssignManager(_manager.UserId!.Value, null, TestData.Now).IsSuccess.Should().BeTrue();
+
+        var result = await StartWork(lead.Id, TestData.Administrator());
+
+        result.IsSuccess.Should().BeTrue();
+        lead.Status.Should().Be(LeadStatus.InProgress);
     }
 
     [Fact]
@@ -103,6 +174,33 @@ public class LeadFunnelHandlerTests
         result.IsSuccess.Should().BeTrue();
         lead.Status.Should().Be(LeadStatus.InProgress);
         lead.LostReason.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task Reopen_LeadOfAManagerAtTheLimit_ReturnsManagerAtLimit()
+    {
+        _fixture.SetLeadLimit(_manager, 1);
+        var lead = _fixture.SeedLeadInProgress(_manager);
+        await MarkLost(lead.Id, "No answer");
+        _fixture.SeedLeadInProgress(_manager);
+
+        var result = await Reopen(lead.Id);
+
+        result.Error.Should().Be(ApplicationErrors.Lead.ManagerAtLimit);
+        lead.Status.Should().Be(LeadStatus.Lost);
+    }
+
+    [Fact]
+    public async Task Reopen_AdministratorReopensTheLeadOfAManagerAtTheLimit_GoesBeyondIt()
+    {
+        _fixture.SetLeadLimit(_manager, 1);
+        var lead = _fixture.SeedLeadInProgress(_manager);
+        await MarkLost(lead.Id, "No answer");
+        _fixture.SeedLeadInProgress(_manager);
+
+        var result = await Reopen(lead.Id, TestData.Administrator());
+
+        result.IsSuccess.Should().BeTrue();
     }
 
     [Fact]

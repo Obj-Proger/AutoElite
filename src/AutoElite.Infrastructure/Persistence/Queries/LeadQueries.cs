@@ -52,6 +52,11 @@ internal sealed class LeadQueries(AutoEliteDbContext dbContext) : ILeadQueries
     }
 
     /// <inheritdoc />
+    public Task<int> CountInProgressAsync(Guid managerId, CancellationToken cancellationToken = default) =>
+        dbContext.Set<Lead>().AsNoTracking()
+            .CountAsync(lead => lead.ManagerId == managerId && lead.Status == LeadStatus.InProgress, cancellationToken);
+
+    /// <inheritdoc />
     public async Task<LeadDetails?> GetDetailsAsync(Guid leadId, CancellationToken cancellationToken = default)
     {
         var row = await Rows(dbContext.Set<Lead>().AsNoTracking().Where(lead => lead.Id == leadId))

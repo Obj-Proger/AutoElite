@@ -8,8 +8,8 @@
 
 @*
     The card of a user for administrators and managers: their name and phone, which both correct; their roles and branch,
-    which an administrator changes; and their access: the invitation sent again, and deactivating or reactivating them.
-    The API decides whom a manager may change.
+    which an administrator changes, with the number of leads a manager may work on at a time; and their access: the
+    invitation sent again, and deactivating or reactivating them. The API decides whom a manager may change.
 *@
 <PageTitle>@(_user is null ? L["UserCard.Title"] : FullName) · AutoElite</PageTitle>
 
@@ -113,6 +113,31 @@
                 {
                     <p>@(_user.BranchName ?? L["Invite.NoBranch"])</p>
                 }
+
+                @if (HasRole(WebRoles.Manager))
+                {
+                    <h2 class="title">@L["UserCard.LeadLimit"]</h2>
+                    @if (_isAdministrator)
+                    {
+                        <div class="inline">
+                            <input class="field grow" type="number" min="1" max="@LeadLimitMax" step="1"
+                                   aria-label="@L["UserCard.LeadLimit"]" @bind="_leadLimit" />
+                            <button class="button secondary" type="button" disabled="@_isBusy" @onclick="SaveLeadLimitAsync">
+                                @L["UserCard.Save"]
+                            </button>
+                        </div>
+                        <p class="caption">
+                            @string.Format(CultureInfo.CurrentCulture, L["UserCard.LeadLimitText"], _user.LeadsInProgress ?? 0)
+                        </p>
+                    }
+                    else
+                    {
+                        <p>
+                            @string.Format(
+                                CultureInfo.CurrentCulture, L["UserCard.LeadWorkload"], _user.LeadsInProgress ?? 0, _user.LeadLimit ?? 0)
+                        </p>
+                    }
+                }
             </div>
 
             <div class="card">
@@ -159,6 +184,9 @@
 </section>
 
 @code {
+    // The highest limit the API accepts.
+    private const int LeadLimitMax = 1000;
+
     private static readonly string[] _roles =
         [WebRoles.Administrator, WebRoles.Manager, WebRoles.DrivingInstructor, WebRoles.TheoryInstructor, WebRoles.Student];
 
@@ -166,6 +194,7 @@
     private UserDetails? _user;
     private List<BranchItem> _branches = [];
     private string _branchId = string.Empty;
+    private int _leadLimit;
     private bool _isAdministrator;
     private bool _isBusy;
     private bool _isConfirmingDeactivation;
@@ -213,6 +242,7 @@
         _details.MiddleName = _user?.MiddleName ?? string.Empty;
         _details.Phone = _user?.Phone ?? string.Empty;
         _branchId = _user?.BranchId?.ToString() ?? string.Empty;
+        _leadLimit = _user?.LeadLimit ?? 0;
     }
 
     // Runs a change, reads the user again and tells how it went.
@@ -262,6 +292,11 @@
                 UserId = UserId,
                 BranchId = Guid.TryParse(_branchId, out var branchId) ? branchId : null
             }),
+            L["UserCard.Saved"]);
+
+    private Task SaveLeadLimitAsync() =>
+        ChangeAsync(
+            () => CreateApi().Api.V1.Users[UserId].LeadLimit.PutAsync(new SetLeadLimitCommand { UserId = UserId, LeadLimit = _leadLimit }),
             L["UserCard.Saved"]);
 
     private Task ResendInvitationAsync() =>

@@ -407,7 +407,7 @@
     <value>Добрый вечер,</value>
   </data>
   <data name="Home.Leads" xml:space="preserve">
-    <value>Новых: {0} · в работе у вас: {1}</value>
+    <value>Новых: {0} · в работе у вас: {1} из {2}</value>
   </data>
   <data name="Home.Morning" xml:space="preserve">
     <value>Доброе утро,</value>
@@ -528,6 +528,9 @@
   </data>
   <data name="Leads.Mine" xml:space="preserve">
     <value>В работе у вас</value>
+  </data>
+  <data name="Leads.MineOf" xml:space="preserve">
+    <value>В работе у вас: {0} из {1}</value>
   </data>
   <data name="Leads.New" xml:space="preserve">
     <value>Новые</value>

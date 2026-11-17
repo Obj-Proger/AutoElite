@@ -225,6 +225,10 @@ public static class ApplicationErrors
         public static readonly Error ManagerOfAnotherBranch = Error.Conflict(
             "Lead.ManagerOfAnotherBranch", "The manager works for another branch than the lead.");
 
+        /// <summary>The manager already works on as many leads as their limit allows; an administrator may go beyond it.</summary>
+        public static readonly Error ManagerAtLimit = Error.Conflict(
+            "Lead.ManagerAtLimit", "The manager already works on as many leads as their limit allows.");
+
         /// <summary>The status filter of the lead list is not a lead status.</summary>
         public static readonly Error StatusNotDefined = Error.Validation("Lead.StatusNotDefined", "Lead status is not valid.");
     }

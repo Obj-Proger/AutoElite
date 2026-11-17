@@ -1123,6 +1123,10 @@ public static class DomainErrors
 
         /// <summary>The language is not a defined <see cref="Enums.Language"/> value.</summary>
         public static readonly Error LanguageNotDefined = new("User.LanguageNotDefined", "Language is not supported.", ErrorType.Validation);
+
+        /// <summary>The number of leads a manager may have in progress is out of range.</summary>
+        public static readonly Error LeadLimitOutOfRange = new(
+            "User.LeadLimitOutOfRange", "The number of leads in progress must be from 1 to 1000.", ErrorType.Validation);
     }
 
     /// <summary>Errors related to the <see cref="Entities.UserRoleAssignment"/> entity.</summary>

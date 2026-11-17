@@ -18,4 +18,10 @@ public interface ILeadQueries
     /// <param name="cancellationToken">A token that signals cancellation of the operation.</param>
     /// <returns>The card, or <see langword="null"/> if the lead does not exist.</returns>
     Task<LeadDetails?> GetDetailsAsync(Guid leadId, CancellationToken cancellationToken = default);
+
+    /// <summary>Counts the leads in progress that a manager is responsible for, in every branch.</summary>
+    /// <param name="managerId">The identifier of the manager.</param>
+    /// <param name="cancellationToken">A token that signals cancellation of the operation.</param>
+    /// <returns>The number of the leads.</returns>
+    Task<int> CountInProgressAsync(Guid managerId, CancellationToken cancellationToken = default);
 }

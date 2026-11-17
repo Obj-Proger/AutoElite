@@ -16,7 +16,7 @@ public class GetUserQueryHandlerTests
     {
         var details = new UserDetails(
             Guid.CreateVersion7(), "Ivanov", "Ivan", null, "ivan@example.com", null, null, branchId, null,
-            Language.Russian, true, false, TestData.Now, [UserRole.Student]);
+            Language.Russian, true, false, TestData.Now, [UserRole.Student], User.DefaultLeadLimit, 0);
         _queries.Seed(details);
 
         return details;

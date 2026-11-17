@@ -14,7 +14,7 @@ graduation, in one self-hosted application.
 | Area | Scope |
 |---|---|
 | Users and branches | Accounts with one or more roles, profiles, deactivation, branches of one school |
-| CRM | Leads from the public form, statuses, notes, conversion into a contract |
+| CRM | Leads from the public form, statuses, notes, a limit of leads in progress per manager, conversion into a contract |
 | Courses, contracts, groups | Course catalog by licence category, contracts, payments due, study groups |
 | Theory | Lesson schedule, attendance, learning materials |
 | Practice | Vehicles, training grounds, routes, driving slots and bookings, skill grades |
@@ -211,9 +211,11 @@ narrowed to one of them if they choose, books a student found by a part of the n
 number on a free slot for their contract that fits the vehicle, which tells the student, and cancels a booking; in the
 tab of students they find a student and open their card with each contract, what was paid and what is owed, the progress
 and the payments, record a payment, received at once or waiting for its money, and confirm a waiting one. From the home
-page a manager opens the leads, the new ones and those they work on, takes a new lead on, which makes them its manager,
-calls or writes to the person, writes notes, marks a lead lost with the reason and opens it again; the contract of a
-lead is drawn up on the website. In the tab of studies, a theory instructor finds the questions the school wrote for the
+page a manager opens the leads, the new ones and those they work on with how many of them their limit allows, takes a
+new lead on, which makes them its manager within that limit, calls or writes to the person, writes notes, marks a lead
+lost with the reason and opens it again; the contract of a lead is drawn up on the website. An administrator sets the
+limit of each manager, ten leads in progress at first, on the card of the user on the website, and may give a manager
+leads beyond it. In the tab of studies, a theory instructor finds the questions the school wrote for the
 practice tests, writes a new one and corrects one: its text and illustration, the topic of a course, the licence
 categories, two to six options with the correct one marked and an explanation; a question is taken out of new tests
 rather than deleted. Every user reads their notifications, whose number on the home page changes at once through the
@@ -330,12 +332,12 @@ With the demo data, sign in as each kind of user to see what they do:
 
 - **Administrator** (`admin@autoelite.example`, on the website): the users of the school, finding them, inviting a new
   one and opening the invitation from the mail folder to set their password, correcting a user, granting a role, moving
-  a user between branches, deactivating and reactivating a user. The API reference at `/scalar` and the background jobs
-  at `/jobs` show what the website does not yet.
+  a user between branches, setting how many leads a manager may work on at a time, deactivating and reactivating a user.
+  The API reference at `/scalar` and the background jobs at `/jobs` show what the website does not yet.
 - **Manager** (`manager@autoelite.example`, on the website): the users of their branch only; they invite students. In
   the application: the schedule of every instructor, narrowed to one, booking a student on a free slot; the tab of
   students with the card of a student, recording a payment and confirming the waiting one of `student2`; the leads from
-  the home page, taking a new one on, a note, marking one lost.
+  the home page with the number in progress of the limit, taking a new one on, a note, marking one lost.
 - **Student** (`student1@autoelite.example`, in the mobile application, at `http://10.0.2.2:5080` from the Android
   emulator or `http://localhost:5080` on Windows): the lessons of the day on the home page and the week on the schedule,
   with the theory exam behind and the one ahead; booking and cancelling a slot and rating a lesson; the practice tests

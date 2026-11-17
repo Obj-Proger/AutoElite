@@ -286,6 +286,15 @@
   <data name="UserCard.Details" xml:space="preserve">
     <value>Имя и телефон</value>
   </data>
+  <data name="UserCard.LeadLimit" xml:space="preserve">
+    <value>Заявки в работе</value>
+  </data>
+  <data name="UserCard.LeadLimitText" xml:space="preserve">
+    <value>Сейчас в работе: {0}. Больше этого числа менеджер взять не может; администратор может превысить.</value>
+  </data>
+  <data name="UserCard.LeadWorkload" xml:space="preserve">
+    <value>{0} из {1}</value>
+  </data>
   <data name="UserCard.NotAccepted" xml:space="preserve">
     <value>Пользователь ещё не создал пароль.</value>
   </data>

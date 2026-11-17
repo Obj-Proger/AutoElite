@@ -2,7 +2,6 @@ using System.Globalization;
 using AutoElite.Client.Api.Models;
 using AutoElite.Mobile.Localization;
 using AutoElite.Mobile.Schedule;
-using AutoElite.Mobile.Session;
 using Microsoft.Kiota.Abstractions;
 
 namespace AutoElite.Mobile.Pages;
@@ -10,8 +9,9 @@ namespace AutoElite.Mobile.Pages;
 /// <summary>
 /// A lead for a manager: who the person is, how to reach them, what they wrote, where the lead is in the funnel and its
 /// notes, read from the API or, without a network, from the device. The manager calls or writes to the person, takes a
-/// new lead on, which makes them its manager when it has none, writes a note, marks an open lead lost with the reason
-/// and opens a lost one again; these need the network. The contract of a lead is drawn up on the website.
+/// new lead on, which makes them its manager when it has none and which their limit of leads in progress may not allow,
+/// writes a note, marks an open lead lost with the reason and opens a lost one again; these need the network. The
+/// contract of a lead is drawn up on the website.
 /// </summary>
 public sealed class LeadViewModel : ViewModel, IQueryAttributable
 {
@@ -19,19 +19,15 @@ public sealed class LeadViewModel : ViewModel, IQueryAttributable
     public const string LeadParameter = "lead";
 
     private readonly LeadBook _leads;
-    private readonly UserSession _session;
     private Guid _leadId;
     private string? _phone;
     private string? _email;
-    private Guid? _managerId;
 
     /// <summary>Initializes a new instance of the <see cref="LeadViewModel"/> class.</summary>
     /// <param name="leads">The leads of the school.</param>
-    /// <param name="session">The user of the application, who becomes the manager of a lead they take on.</param>
-    public LeadViewModel(LeadBook leads, UserSession session)
+    public LeadViewModel(LeadBook leads)
     {
         _leads = leads;
-        _session = session;
         CallCommand = new Command(async () => await CallAsync(), () => HasPhone);
         EmailCommand = new Command(async () => await EmailAsync(), () => HasEmail);
         TakeCommand = new Command(async () => await RunAsync(TakeAsync), () => !IsBusy);
@@ -245,7 +241,6 @@ public sealed class LeadViewModel : ViewModel, IQueryAttributable
         IsNew = lead.Status == LeadStatus.New;
         IsOpen = lead.Status is LeadStatus.New or LeadStatus.InProgress;
         IsLost = lead.Status == LeadStatus.Lost;
-        _managerId = lead.ManagerId;
     }
 
     // Sends an action, then reads the lead again; a failure is shown on the page.
@@ -270,13 +265,9 @@ public sealed class LeadViewModel : ViewModel, IQueryAttributable
         }
     }
 
-    // A manager who takes on a lead without a manager becomes its manager; an administrator only starts the work.
+    // The API makes a manager who takes on a lead without a manager its manager, within their limit of leads in progress.
     private async Task<bool> TakeAsync()
     {
-        var profile = (await _session.GetProfileAsync(CancellationToken.None)).Value;
-        if (_managerId is null && profile is { Id: { } userId } && profile.Roles?.Contains(UserRole.Manager) == true)
-            await _leads.AssignAsync(_leadId, userId, CancellationToken.None);
-
         await _leads.StartAsync(_leadId, CancellationToken.None);
 
         return true;

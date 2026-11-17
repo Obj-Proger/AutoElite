@@ -21,7 +21,12 @@ public class LeadChangeHandlerTests
             .Handle(new ChangeLeadBranchCommand(leadId, branchId), TestContext.Current.CancellationToken);
 
     private Task<Result> AssignManager(Guid leadId, Guid managerId, FakeCurrentUser caller) =>
-        new AssignLeadManagerCommandHandler(_fixture.CreateLeadAccess(caller), _fixture.CreateLeadManagers(), caller, TestData.Clock())
+        new AssignLeadManagerCommandHandler(
+                _fixture.CreateLeadAccess(caller),
+                _fixture.CreateLeadManagers(),
+                _fixture.CreateLeadCapacity(caller),
+                caller,
+                TestData.Clock())
             .Handle(new AssignLeadManagerCommand(leadId, managerId), TestContext.Current.CancellationToken);
 
     [Fact]
@@ -108,6 +113,49 @@ public class LeadChangeHandlerTests
         lead.ManagerId.Should().Be(manager.UserId);
         lead.DomainEvents.Should().ContainSingle().Which.Should().BeOfType<LeadAssignedDomainEvent>()
             .Which.AssignedByUserId.Should().Be(administrator.UserId);
+    }
+
+    [Fact]
+    public async Task AssignManager_LeadInProgressToAManagerAtTheLimit_ReturnsManagerAtLimit()
+    {
+        var manager = _fixture.SeedManager(null);
+        var other = _fixture.SeedManager(null, "other@example.com");
+        _fixture.SetLeadLimit(manager, 1);
+        _fixture.SeedLeadInProgress(manager);
+        var lead = _fixture.SeedLeadInProgress(other);
+
+        var result = await AssignManager(lead.Id, manager.UserId!.Value, other);
+
+        result.Error.Should().Be(ApplicationErrors.Lead.ManagerAtLimit);
+        lead.ManagerId.Should().Be(other.UserId);
+    }
+
+    [Fact]
+    public async Task AssignManager_NewLeadToAManagerAtTheLimit_Assigns()
+    {
+        var manager = _fixture.SeedManager(null);
+        _fixture.SetLeadLimit(manager, 1);
+        _fixture.SeedLeadInProgress(manager);
+        var lead = _fixture.SeedLead();
+
+        var result = await AssignManager(lead.Id, manager.UserId!.Value, manager);
+
+        result.IsSuccess.Should().BeTrue();
+    }
+
+    [Fact]
+    public async Task AssignManager_AdministratorGivesALeadInProgressToAManagerAtTheLimit_GoesBeyondIt()
+    {
+        var manager = _fixture.SeedManager(null);
+        var other = _fixture.SeedManager(null, "other@example.com");
+        _fixture.SetLeadLimit(manager, 1);
+        _fixture.SeedLeadInProgress(manager);
+        var lead = _fixture.SeedLeadInProgress(other);
+
+        var result = await AssignManager(lead.Id, manager.UserId!.Value, TestData.Administrator());
+
+        result.IsSuccess.Should().BeTrue();
+        lead.ManagerId.Should().Be(manager.UserId);
     }
 
     [Fact]

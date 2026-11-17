@@ -207,5 +207,38 @@ public sealed class LeadPersistenceTests(DatabaseFixture database) : IClassFixtu
         (await IdsAsync(Filter(_marker), DataScope.ForBranch(branch.Id))).Should().BeEquivalentTo(new[] { ofBranch.Id, withoutBranch.Id });
     }
 
+    [Fact]
+    public async Task CountInProgress_CountsOnlyTheLeadsInProgressOfTheManager()
+    {
+        var manager = NewUser("Лимитова");
+        var other = NewUser("Другова");
+        var inProgress = NewLead("Жанна");
+        var lost = NewLead("Зоя");
+        var assigned = NewLead("Инна");
+        var ofOther = NewLead("Кира");
+        await SaveAsync(null, manager, other, inProgress, lost, assigned, ofOther);
+        await ChangeAsync(inProgress.Id, tracked =>
+        {
+            tracked.AssignManager(manager.Id, null, Now).IsSuccess.Should().BeTrue();
+            tracked.StartWork(null, Now).IsSuccess.Should().BeTrue();
+        });
+        await ChangeAsync(lost.Id, tracked =>
+        {
+            tracked.AssignManager(manager.Id, null, Now).IsSuccess.Should().BeTrue();
+            tracked.MarkLost("Дорого", null, Now).IsSuccess.Should().BeTrue();
+        });
+        await ChangeAsync(assigned.Id, tracked => tracked.AssignManager(manager.Id, null, Now).IsSuccess.Should().BeTrue());
+        await ChangeAsync(ofOther.Id, tracked =>
+        {
+            tracked.AssignManager(other.Id, null, Now).IsSuccess.Should().BeTrue();
+            tracked.StartWork(null, Now).IsSuccess.Should().BeTrue();
+        });
+        await using var context = database.CreateContext();
+
+        var count = await new LeadQueries(context).CountInProgressAsync(manager.Id, CancellationToken);
+
+        count.Should().Be(1);
+    }
+
     private static LeadListFilter Filter(string search) => new(search, null, null, null, null);
 }

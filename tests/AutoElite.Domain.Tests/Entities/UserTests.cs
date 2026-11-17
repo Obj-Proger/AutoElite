@@ -422,4 +422,45 @@ public class UserTests
 
         result.Error.Should().Be(DomainErrors.User.CannotModifyInactive);
     }
+
+    [Fact]
+    public void Create_GivesTheDefaultLeadLimit()
+    {
+        CreateUser().LeadLimit.Should().Be(User.DefaultLeadLimit);
+    }
+
+    [Theory]
+    [InlineData(1)]
+    [InlineData(User.MaxLeadLimit)]
+    public void SetLeadLimit_InRange_SetsIt(int limit)
+    {
+        var user = CreateUser();
+
+        var result = user.SetLeadLimit(limit);
+
+        result.IsSuccess.Should().BeTrue();
+        user.LeadLimit.Should().Be(limit);
+    }
+
+    [Theory]
+    [InlineData(0)]
+    [InlineData(-1)]
+    [InlineData(User.MaxLeadLimit + 1)]
+    public void SetLeadLimit_OutOfRange_ReturnsLeadLimitOutOfRangeError(int limit)
+    {
+        var user = CreateUser();
+
+        var result = user.SetLeadLimit(limit);
+
+        result.Error.Should().Be(DomainErrors.User.LeadLimitOutOfRange);
+        user.LeadLimit.Should().Be(User.DefaultLeadLimit);
+    }
+
+    [Fact]
+    public void SetLeadLimit_InactiveUser_ReturnsCannotModifyInactiveError()
+    {
+        var result = CreateInactiveUser().SetLeadLimit(5);
+
+        result.Error.Should().Be(DomainErrors.User.CannotModifyInactive);
+    }
 }

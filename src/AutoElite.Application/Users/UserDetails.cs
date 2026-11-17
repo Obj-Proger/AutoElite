@@ -15,6 +15,8 @@ namespace AutoElite.Application.Users;
 /// <param name="HasAcceptedInvitation">Whether the user has set a password.</param>
 /// <param name="CreatedAtUtc">When the user was invited.</param>
 /// <param name="Roles">The roles the user holds.</param>
+/// <param name="LeadLimit">How many leads the user may take on at a time as a manager.</param>
+/// <param name="LeadsInProgress">The leads in progress that the user is responsible for.</param>
 public sealed record UserDetails(
     Guid Id,
     string LastName,
@@ -29,4 +31,6 @@ public sealed record UserDetails(
     bool IsActive,
     bool HasAcceptedInvitation,
     DateTime CreatedAtUtc,
-    IReadOnlyList<UserRole> Roles);
+    IReadOnlyList<UserRole> Roles,
+    int LeadLimit,
+    int LeadsInProgress);

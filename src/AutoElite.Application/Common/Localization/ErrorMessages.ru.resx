@@ -661,6 +661,9 @@
   <data name="Lead.ManagerAlreadyAssigned" xml:space="preserve">
     <value>Этот менеджер уже назначен на лид.</value>
   </data>
+  <data name="Lead.ManagerAtLimit" xml:space="preserve">
+    <value>У менеджера уже столько заявок в работе, сколько позволяет его лимит; превысить его может администратор.</value>
+  </data>
   <data name="Lead.ManagerIdEmpty" xml:space="preserve">
     <value>Идентификатор менеджера не может быть пустым.</value>
   </data>
@@ -1335,6 +1338,9 @@
   </data>
   <data name="User.LanguageNotDefined" xml:space="preserve">
     <value>Язык не поддерживается.</value>
+  </data>
+  <data name="User.LeadLimitOutOfRange" xml:space="preserve">
+    <value>Лимит заявок в работе должен быть от 1 до 1000.</value>
   </data>
   <data name="User.NotFound" xml:space="preserve">
     <value>Пользователь не найден.</value>

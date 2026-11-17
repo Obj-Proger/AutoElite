@@ -9,7 +9,8 @@ namespace AutoElite.Mobile.Schedule;
 /// The leads of the school as a manager works with them in the application: the new ones of their branch scope and
 /// those they are working on, a lead with its notes, read from the API or, without a network, from the device; and the
 /// actions of the funnel short of a contract, which is drawn up on the website: taking a lead on, writing a note, marking
-/// it lost and opening it again. The actions need the network.
+/// it lost and opening it again; and how many leads the user works on of the number their limit allows. The actions need
+/// the network.
 /// </summary>
 /// <param name="cache">What the user last read.</param>
 /// <param name="createApi">Creates the client of the API.</param>
@@ -31,6 +32,16 @@ public sealed class LeadBook(OfflineCache cache, Func<AutoEliteApiClient> create
     public Task<Cached<IReadOnlyList<LeadListItem>>> ReadInProgressAsync(Guid managerId, CancellationToken cancellationToken) =>
         ReadAsync("leads/mine", LeadStatus.InProgress, managerId, cancellationToken);
 
+    /// <summary>Reads how many leads the user works on and how many their limit allows.</summary>
+    /// <param name="cancellationToken">A token that signals cancellation of the operation.</param>
+    /// <returns>The leads in progress and the limit.</returns>
+    public Task<Cached<LeadWorkload>> ReadWorkloadAsync(CancellationToken cancellationToken) =>
+        cache.GetAsync(
+            "leads/workload",
+            token => createApi().Api.V1.Me.LeadWorkload.GetAsync(cancellationToken: token),
+            LeadWorkload.CreateFromDiscriminatorValue,
+            cancellationToken);
+
     /// <summary>Reads a lead with its notes.</summary>
     /// <param name="leadId">The lead.</param>
     /// <param name="cancellationToken">A token that signals cancellation of the operation.</param>
@@ -51,7 +62,10 @@ public sealed class LeadBook(OfflineCache cache, Func<AutoEliteApiClient> create
         createApi().Api.V1.Leads[leadId].Manager.PutAsync(
             new AssignLeadManagerCommand { LeadId = leadId, ManagerId = managerId }, cancellationToken: cancellationToken);
 
-    /// <summary>Starts the work on a new lead.</summary>
+    /// <summary>
+    /// Starts the work on a new lead; a manager who takes on a lead without a manager becomes its manager. A manager cannot
+    /// take on more leads than their limit.
+    /// </summary>
     /// <param name="leadId">The lead.</param>
     /// <param name="cancellationToken">A token that signals cancellation of the operation.</param>
     /// <returns>A task that completes when the lead is in progress.</returns>

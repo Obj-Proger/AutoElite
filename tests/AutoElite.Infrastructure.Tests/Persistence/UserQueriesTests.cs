@@ -75,6 +75,27 @@ public sealed class UserQueriesTests(DatabaseFixture database) : IClassFixture<D
         details.IsActive.Should().BeTrue();
         details.HasAcceptedInvitation.Should().BeTrue();
         details.Roles.Should().BeEquivalentTo(new[] { UserRole.Manager, UserRole.Student });
+        details.LeadLimit.Should().Be(User.DefaultLeadLimit);
+        details.LeadsInProgress.Should().Be(0);
+    }
+
+    [Fact]
+    public async Task GetDetails_ReadsTheLeadLimitAndTheLeadsInProgress()
+    {
+        var user = NewUser("Лидова");
+        user.SetLeadLimit(3).IsSuccess.Should().BeTrue();
+        var lead = Lead.Create($"Лид {_marker}", PhoneNumber.Create("+79991112233").Value, null, LeadSource.Website, null, null, null, null,
+                FixedClock.Default.UtcNow)
+            .Value;
+        lead.AssignManager(user.Id, null, FixedClock.Default.UtcNow).IsSuccess.Should().BeTrue();
+        lead.StartWork(null, FixedClock.Default.UtcNow).IsSuccess.Should().BeTrue();
+        await SaveAsync(user, lead);
+        await using var context = database.CreateContext();
+
+        var details = await new UserQueries(context).GetDetailsAsync(user.Id, CancellationToken);
+
+        details!.LeadLimit.Should().Be(3);
+        details.LeadsInProgress.Should().Be(1);
     }
 
     [Fact]

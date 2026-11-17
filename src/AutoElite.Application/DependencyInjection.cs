@@ -56,6 +56,7 @@ public static class DependencyInjection
         services.AddScoped<CoursePrice>();
         services.AddScoped<LeadAccess>();
         services.AddScoped<LeadManagers>();
+        services.AddScoped<LeadCapacity>();
         services.AddScoped<ContractStudents>();
         services.AddScoped<ContractFactory>();
         services.AddScoped<ContractAccess>();

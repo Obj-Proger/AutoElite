@@ -2357,6 +2357,10 @@ namespace AutoElite.Infrastructure.Persistence.Migrations
                         .HasColumnType("boolean")
                         .HasColumnName("is_active");
 
+                    b.Property<int>("LeadLimit")
+                        .HasColumnType("integer")
+                        .HasColumnName("lead_limit");
+
                     b.Property<DateTime?>("ModifiedAtUtc")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("modified_at_utc");

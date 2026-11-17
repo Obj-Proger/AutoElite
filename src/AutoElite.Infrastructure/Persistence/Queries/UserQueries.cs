@@ -25,13 +25,16 @@ internal sealed class UserQueries(AutoEliteDbContext dbContext) : IUserQueries
     public async Task<UserDetails?> GetDetailsAsync(Guid userId, CancellationToken cancellationToken = default)
     {
         var row = await Rows(Users().Where(user => user.Id == userId)).FirstOrDefaultAsync(cancellationToken);
+        if (row is null)
+            return null;
 
-        return row is null
-            ? null
-            : new UserDetails(
-                row.Id, row.LastName, row.FirstName, row.MiddleName, row.Email.Value, row.Phone?.Value, row.PhotoDocumentId,
-                row.BranchId, row.BranchName, row.PreferredLanguage, row.IsActive, row.HasAcceptedInvitation,
-                row.CreatedAtUtc, row.Roles);
+        var leadsInProgress = await dbContext.Set<Lead>().AsNoTracking()
+            .CountAsync(lead => lead.ManagerId == userId && lead.Status == LeadStatus.InProgress, cancellationToken);
+
+        return new UserDetails(
+            row.Id, row.LastName, row.FirstName, row.MiddleName, row.Email.Value, row.Phone?.Value, row.PhotoDocumentId,
+            row.BranchId, row.BranchName, row.PreferredLanguage, row.IsActive, row.HasAcceptedInvitation,
+            row.CreatedAtUtc, row.Roles, row.LeadLimit, leadsInProgress);
     }
 
     /// <inheritdoc />
@@ -102,6 +105,7 @@ internal sealed class UserQueries(AutoEliteDbContext dbContext) : IUserQueries
             BranchName = branch == null ? null : branch.Name,
             PreferredLanguage = user.PreferredLanguage,
             IsActive = user.IsActive,
+            LeadLimit = user.LeadLimit,
             CreatedAtUtc = user.CreatedAtUtc,
             HasAcceptedInvitation = dbContext.Set<UserAccount>()
                 .Any(account => account.Id == user.Id && account.PasswordHash != null),
@@ -135,6 +139,8 @@ internal sealed class UserQueries(AutoEliteDbContext dbContext) : IUserQueries
         public Language PreferredLanguage { get; init; }
 
         public bool IsActive { get; init; }
+
+        public int LeadLimit { get; init; }
 
         public DateTime CreatedAtUtc { get; init; }
 
