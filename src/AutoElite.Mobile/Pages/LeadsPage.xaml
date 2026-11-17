@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="AutoElite.Mobile.Pages.LeadsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:l="clr-namespace:AutoElite.Mobile.Localization"
+    xmlns:pages="clr-namespace:AutoElite.Mobile.Pages"
+    x:DataType="pages:LeadsViewModel"
+    Title="{l:Text Leads.Title}">
+
+    <!-- The leads of a manager: the new ones first, then those they are working on; each opens the lead. -->
+    <ContentPage.Resources>
+        <DataTemplate x:Key="Lead" x:DataType="pages:LeadEntry">
+            <Border Style="{StaticResource Card}" SemanticProperties.Description="{Binding Name}">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding OpenCommand}" />
+                </Border.GestureRecognizers>
+                <VerticalStackLayout Spacing="2">
+                    <Label Style="{StaticResource BodyLarge}" Text="{Binding Name}" />
+                    <Label Style="{StaticResource Secondary}" Text="{Binding Contacts}" />
+                    <Label Style="{StaticResource Caption}" Text="{Binding Details}" />
+                </VerticalStackLayout>
+            </Border>
+        </DataTemplate>
+    </ContentPage.Resources>
+
+    <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}" RefreshColor="{StaticResource Accent}">
+        <ScrollView>
+            <VerticalStackLayout Padding="{StaticResource PageMargin}" Spacing="14">
+                <Border Style="{StaticResource Card}" IsVisible="{Binding HasNotice}">
+                    <Label Style="{StaticResource Secondary}" Text="{Binding Notice}" />
+                </Border>
+
+                <VerticalStackLayout Spacing="10" IsVisible="{Binding HasNewLeads}">
+                    <Label Style="{StaticResource Overline}" Text="{l:Text Leads.New}" />
+                    <VerticalStackLayout
+                        Spacing="10"
+                        BindableLayout.ItemsSource="{Binding NewLeads}"
+                        BindableLayout.ItemTemplate="{StaticResource Lead}" />
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Spacing="10" IsVisible="{Binding HasMyLeads}">
+                    <Label Style="{StaticResource Overline}" Text="{l:Text Leads.Mine}" />
+                    <VerticalStackLayout
+                        Spacing="10"
+                        BindableLayout.ItemsSource="{Binding MyLeads}"
+                        BindableLayout.ItemTemplate="{StaticResource Lead}" />
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+        </ScrollView>
+    </RefreshView>
+
+</ContentPage>

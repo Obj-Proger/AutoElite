@@ -206,32 +206,34 @@ manager or an administrator sees the slots, theory lessons and exams of every in
 they choose, books a student found by a part of the name, the email address or the phone number on a free slot for their
 contract that fits the vehicle, which tells the student, and cancels a booking; in the tab of students they find a
 student and open their card with each contract, what was paid and what is owed, the progress and the payments, record a
-payment, received at once or waiting for its money, and confirm a waiting one. In the tab of studies, a theory
-instructor finds the questions the school wrote for the practice tests, writes a new one and corrects one: its text and
-illustration, the topic of a course, the licence categories, two to six options with the correct one marked and an
-explanation; a question is taken out of new tests rather than deleted. Every user reads their notifications, whose
-number on the home page changes at once through the SignalR hub, and their chats, where new messages appear at once and
-a message written without a network is sent later. A personal chat starts from the people the user studies or teaches
-with (`GET /api/v1/chats/contacts`): a student's instructors, an instructor's students. A message carries up to ten
-files, which need a network and open in another application from the cache of the device, emptied when the user signs
-out; the user deletes their own messages, turns the notifications of a chat off and leaves a group chat. In the profile
-the user corrects their name, phone and the language of their notifications and emails, sets or removes their photo,
-changes their password, which signs out their other devices, and asks for a new email address, which changes once they
-follow the link sent to it. An instructor opens the progress of a student they teach from a lesson or a personal chat
-(`GET /api/v1/students/{id}/progress`, without the money of the contracts): the practice hours, the driving lessons, the
-attendance of the group, the tests and the exams, and for a driving instructor the lessons with them, with the hours,
-the grade and the note; they write to or call the student from there. The schedule shows the school exams too: a
-student's own with their result, the practice exams of a driving instructor's branch and the exams of a theory
-instructor's groups. An exam opens with the current members of its group (`members` of `GET /api/v1/exams/{id}`) and
-their results; once a practice exam has begun, a driving instructor records each result, and a recorded result is
-corrected with a reason, a practice one by a driving instructor and a theory one by the instructor responsible for the
-group. A member of the staff sees on the home page how many of their tasks are open and overdue; the tasks open by their
-deadline, and the assignee starts a task, marks it done, after which a recurring one comes back, and opens it again. In
-the tab of studies, a student opens the documents of their contracts and adds their own, such as a scan of their
-passport, with a description, and deletes those they added; an opened file is kept in the cache of the device until they
-sign out. The texts of the application are in English, with a Russian translation, in `Resources/Strings`; the device's
-language chooses between them unless the user chooses one in the profile, where they also change the school and sign
-out.
+payment, received at once or waiting for its money, and confirm a waiting one. From the home page a manager opens the
+leads, the new ones and those they work on, takes a new lead on, which makes them its manager, calls or writes to the
+person, writes notes, marks a lead lost with the reason and opens it again; the contract of a lead is drawn up on the
+website. In the tab of studies, a theory instructor finds the questions the school wrote for the practice tests, writes
+a new one and corrects one: its text and illustration, the topic of a course, the licence categories, two to six options
+with the correct one marked and an explanation; a question is taken out of new tests rather than deleted. Every user
+reads their notifications, whose number on the home page changes at once through the SignalR hub, and their chats, where
+new messages appear at once and a message written without a network is sent later. A personal chat starts from the
+people the user studies or teaches with (`GET /api/v1/chats/contacts`): a student's instructors, an instructor's
+students. A message carries up to ten files, which need a network and open in another application from the cache of the
+device, emptied when the user signs out; the user deletes their own messages, turns the notifications of a chat off and
+leaves a group chat. In the profile the user corrects their name, phone and the language of their notifications and
+emails, sets or removes their photo, changes their password, which signs out their other devices, and asks for a new
+email address, which changes once they follow the link sent to it. An instructor opens the progress of a student they
+teach from a lesson or a personal chat (`GET /api/v1/students/{id}/progress`, without the money of the contracts): the
+practice hours, the driving lessons, the attendance of the group, the tests and the exams, and for a driving instructor
+the lessons with them, with the hours, the grade and the note; they write to or call the student from there. The
+schedule shows the school exams too: a student's own with their result, the practice exams of a driving instructor's
+branch and the exams of a theory instructor's groups. An exam opens with the current members of its group (`members` of
+`GET /api/v1/exams/{id}`) and their results; once a practice exam has begun, a driving instructor records each result,
+and a recorded result is corrected with a reason, a practice one by a driving instructor and a theory one by the
+instructor responsible for the group. A member of the staff sees on the home page how many of their tasks are open and
+overdue; the tasks open by their deadline, and the assignee starts a task, marks it done, after which a recurring one
+comes back, and opens it again. In the tab of studies, a student opens the documents of their contracts and adds their
+own, such as a scan of their passport, with a description, and deletes those they added; an opened file is kept in the
+cache of the device until they sign out. The texts of the application are in English, with a Russian translation, in
+`Resources/Strings`; the device's language chooses between them unless the user chooses one in the profile, where they
+also change the school and sign out.
 
 The application works without a network too (`src/AutoElite.Client.Offline`). A SQLite database in its private storage
 keeps what the user last read, shown as possibly out of date while the API cannot be reached, and the actions the user

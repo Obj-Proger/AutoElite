@@ -26,6 +26,8 @@ public sealed partial class HomeViewModel : ViewModel
     private readonly TimeProvider _timeProvider;
     private readonly LessonEntries _entries;
     private readonly StaffTasks _tasks;
+    private readonly LeadBook _leads;
+    private Guid? _userId;
 
     /// <summary>Initializes a new instance of the <see cref="HomeViewModel"/> class.</summary>
     /// <param name="session">The user of the application.</param>
@@ -38,6 +40,7 @@ public sealed partial class HomeViewModel : ViewModel
     /// <param name="timeProvider">The clock.</param>
     /// <param name="entries">Makes the cards of the lessons, with what the user can do with them.</param>
     /// <param name="tasks">The tasks the school gives a member of its staff.</param>
+    /// <param name="leads">The leads of the school, for a manager.</param>
     public HomeViewModel(
         UserSession session,
         StudentSchedule schedule,
@@ -48,7 +51,8 @@ public sealed partial class HomeViewModel : ViewModel
         OfflineSynchronizer synchronizer,
         TimeProvider timeProvider,
         LessonEntries entries,
-        StaffTasks tasks)
+        StaffTasks tasks,
+        LeadBook leads)
     {
         _session = session;
         _schedule = schedule;
@@ -62,7 +66,9 @@ public sealed partial class HomeViewModel : ViewModel
         _entries = entries;
         _entries.Changed = LoadAsync;
         _tasks = tasks;
+        _leads = leads;
         OpenTasksCommand = new Command(async () => await Routes.OpenAsync(Routes.Tasks));
+        OpenLeadsCommand = new Command(async () => await Routes.OpenAsync(Routes.Leads));
         RefreshCommand = new Command(async () => await RefreshAsync());
         DismissRefusalsCommand = new Command(async () => await DismissRefusalsAsync());
         BookCommand = new Command(async () => await Routes.OpenAsync(Routes.Booking));
@@ -185,6 +191,23 @@ public sealed partial class HomeViewModel : ViewModel
     /// <summary>Gets the command that opens the tasks.</summary>
     public Command OpenTasksCommand { get; }
 
+    /// <summary>Gets a value indicating whether the user is a manager or an administrator, who works on the leads.</summary>
+    public bool IsManager
+    {
+        get;
+        private set => SetProperty(ref field, value);
+    }
+
+    /// <summary>Gets how many leads are new and how many the user is working on.</summary>
+    public string LeadsSummary
+    {
+        get;
+        private set => SetProperty(ref field, value);
+    } = string.Empty;
+
+    /// <summary>Gets the command that opens the leads.</summary>
+    public Command OpenLeadsCommand { get; }
+
     /// <summary>Gets the command that sends the waiting actions and reads everything again.</summary>
     public Command RefreshCommand { get; }
 
@@ -225,6 +248,8 @@ public sealed partial class HomeViewModel : ViewModel
             IsTheoryInstructor = profile.Value.Roles?.Contains(UserRole.TheoryInstructor) == true;
             IsStaff = profile.Value.Roles?.Any(role => role is UserRole.Administrator or UserRole.Manager
                 or UserRole.DrivingInstructor or UserRole.TheoryInstructor) == true;
+            IsManager = profile.Value.Roles?.Any(role => role is UserRole.Administrator or UserRole.Manager) == true;
+            _userId = profile.Value.Id;
             if (profile.IsFromCache)
                 offlineSince = profile.SavedAt;
         }
@@ -265,6 +290,9 @@ public sealed partial class HomeViewModel : ViewModel
         if (IsStaff)
             await CountTasksAsync();
 
+        if (IsManager)
+            await CountLeadsAsync();
+
         await CountUnreadAsync();
         await ConnectAsync();
     }
@@ -287,6 +315,21 @@ public sealed partial class HomeViewModel : ViewModel
         catch (Exception exception) when (exception is ApiException or HttpRequestException)
         {
             // The numbers are shown once the tasks can be read.
+        }
+    }
+
+    // Shows how many leads are new and how many the user is working on; without a network the last numbers stay.
+    private async Task CountLeadsAsync()
+    {
+        try
+        {
+            var fresh = (await _leads.ReadNewAsync(CancellationToken.None)).Value.Count;
+            var mine = _userId is { } userId ? (await _leads.ReadInProgressAsync(userId, CancellationToken.None)).Value.Count : 0;
+            LeadsSummary = fresh + mine == 0 ? AppTexts.Get("Home.NoLeads") : AppTexts.Format("Home.Leads", fresh, mine);
+        }
+        catch (Exception exception) when (exception is ApiException or HttpRequestException)
+        {
+            // The numbers are shown once the leads can be read.
         }
     }
 

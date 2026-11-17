@@ -406,8 +406,14 @@
   <data name="Home.Evening" xml:space="preserve">
     <value>Добрый вечер,</value>
   </data>
+  <data name="Home.Leads" xml:space="preserve">
+    <value>Новых: {0} · в работе у вас: {1}</value>
+  </data>
   <data name="Home.Morning" xml:space="preserve">
     <value>Доброе утро,</value>
+  </data>
+  <data name="Home.NoLeads" xml:space="preserve">
+    <value>Новых заявок нет</value>
   </data>
   <data name="Home.NoTasks" xml:space="preserve">
     <value>Открытых задач нет</value>
@@ -441,6 +447,96 @@
   </data>
   <data name="Home.TasksOverdue" xml:space="preserve">
     <value>Открыто: {0}, просрочено: {1}</value>
+  </data>
+  <data name="Lead.AddNote" xml:space="preserve">
+    <value>Добавить заметку</value>
+  </data>
+  <data name="Lead.Advertising" xml:space="preserve">
+    <value>реклама</value>
+  </data>
+  <data name="Lead.Category" xml:space="preserve">
+    <value>категория {0}</value>
+  </data>
+  <data name="Lead.ContractHint" xml:space="preserve">
+    <value>Договор по заявке оформляется на сайте.</value>
+  </data>
+  <data name="Lead.Converted" xml:space="preserve">
+    <value>договор заключён</value>
+  </data>
+  <data name="Lead.Email" xml:space="preserve">
+    <value>Написать письмо</value>
+  </data>
+  <data name="Lead.EmailCopied" xml:space="preserve">
+    <value>На этом устройстве нет почтового приложения; адрес {0} скопирован.</value>
+  </data>
+  <data name="Lead.InProgress" xml:space="preserve">
+    <value>в работе</value>
+  </data>
+  <data name="Lead.Lost" xml:space="preserve">
+    <value>отказ</value>
+  </data>
+  <data name="Lead.LostReason" xml:space="preserve">
+    <value>Почему заявка закрыта?</value>
+  </data>
+  <data name="Lead.LostTitle" xml:space="preserve">
+    <value>Отказ по заявке</value>
+  </data>
+  <data name="Lead.Manager" xml:space="preserve">
+    <value>менеджер {0}</value>
+  </data>
+  <data name="Lead.MarkLost" xml:space="preserve">
+    <value>Отказ</value>
+  </data>
+  <data name="Lead.New" xml:space="preserve">
+    <value>новая</value>
+  </data>
+  <data name="Lead.NoManager" xml:space="preserve">
+    <value>менеджер не назначен</value>
+  </data>
+  <data name="Lead.NotePlaceholder" xml:space="preserve">
+    <value>О чём договорились</value>
+  </data>
+  <data name="Lead.Notes" xml:space="preserve">
+    <value>Заметки</value>
+  </data>
+  <data name="Lead.PhoneCall" xml:space="preserve">
+    <value>звонок</value>
+  </data>
+  <data name="Lead.Referral" xml:space="preserve">
+    <value>рекомендация</value>
+  </data>
+  <data name="Lead.Reopen" xml:space="preserve">
+    <value>Вернуть в работу</value>
+  </data>
+  <data name="Lead.SocialMedia" xml:space="preserve">
+    <value>соцсети</value>
+  </data>
+  <data name="Lead.Take" xml:space="preserve">
+    <value>Взять в работу</value>
+  </data>
+  <data name="Lead.Title" xml:space="preserve">
+    <value>Заявка</value>
+  </data>
+  <data name="Lead.WalkIn" xml:space="preserve">
+    <value>визит</value>
+  </data>
+  <data name="Lead.Website" xml:space="preserve">
+    <value>сайт</value>
+  </data>
+  <data name="Leads.Empty" xml:space="preserve">
+    <value>Новых заявок и заявок в работе нет.</value>
+  </data>
+  <data name="Leads.Mine" xml:space="preserve">
+    <value>В работе у вас</value>
+  </data>
+  <data name="Leads.New" xml:space="preserve">
+    <value>Новые</value>
+  </data>
+  <data name="Leads.Offline" xml:space="preserve">
+    <value>Заявки на {0}; они могли устареть.</value>
+  </data>
+  <data name="Leads.Title" xml:space="preserve">
+    <value>Заявки</value>
   </data>
   <data name="Lesson.Absent" xml:space="preserve">
     <value>Пропущено</value>

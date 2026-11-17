@@ -94,6 +94,12 @@ internal static class Routes
     /// <summary>A payment a manager records, opened over the card of the student with a <see cref="PaymentRequest"/>.</summary>
     public const string Payment = "payment";
 
+    /// <summary>The leads of a manager, opened over the home page.</summary>
+    public const string Leads = "leads";
+
+    /// <summary>A lead for a manager, opened over the leads with a <see cref="LeadRequest"/>.</summary>
+    public const string Lead = "lead";
+
     // How often and how long a navigation waits for one that the shell is still finishing.
     private const int NavigationAttempts = 20;
     private static readonly TimeSpan _navigationRetryDelay = TimeSpan.FromMilliseconds(50);

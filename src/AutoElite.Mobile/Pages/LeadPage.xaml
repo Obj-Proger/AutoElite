@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="AutoElite.Mobile.Pages.LeadPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:l="clr-namespace:AutoElite.Mobile.Localization"
+    xmlns:pages="clr-namespace:AutoElite.Mobile.Pages"
+    x:DataType="pages:LeadViewModel"
+    Title="{l:Text Lead.Title}">
+
+    <!--
+        The lead: the person with how to reach them, where the lead came from and what they wrote, where it is in the
+        funnel with what the manager can do, then the notes with a field for a new one.
+    -->
+    <ScrollView>
+        <VerticalStackLayout Padding="{StaticResource PageMargin}" Spacing="14">
+            <Border Style="{StaticResource HighlightCard}">
+                <VerticalStackLayout Spacing="8">
+                    <Label Style="{StaticResource Headline}" Text="{Binding Name}" />
+                    <Label Style="{StaticResource Secondary}" Text="{Binding Contacts}" />
+                    <Label Style="{StaticResource Caption}" Text="{Binding Details}" />
+                    <HorizontalStackLayout Spacing="8">
+                        <Button Text="{l:Text Student.Call}" Command="{Binding CallCommand}" IsVisible="{Binding HasPhone}" />
+                        <Button
+                            Style="{StaticResource SecondaryButton}"
+                            Text="{l:Text Lead.Email}"
+                            Command="{Binding EmailCommand}"
+                            IsVisible="{Binding HasEmail}" />
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Border>
+
+            <Border Style="{StaticResource Card}" IsVisible="{Binding HasNotice}">
+                <Label Style="{StaticResource Secondary}" Text="{Binding Notice}" />
+            </Border>
+
+            <Border Style="{StaticResource Card}" IsVisible="{Binding HasComment}">
+                <Label Style="{StaticResource BodyLarge}" Text="{Binding Comment}" />
+            </Border>
+
+            <Border Style="{StaticResource Card}">
+                <VerticalStackLayout Spacing="10">
+                    <Label Style="{StaticResource BodyLarge}" Text="{Binding State}" />
+                    <Button Text="{l:Text Lead.Take}" Command="{Binding TakeCommand}" IsVisible="{Binding IsNew}" />
+                    <Button
+                        Style="{StaticResource SecondaryButton}"
+                        Text="{l:Text Lead.MarkLost}"
+                        Command="{Binding LoseCommand}"
+                        IsVisible="{Binding IsOpen}" />
+                    <Button Text="{l:Text Lead.Reopen}" Command="{Binding ReopenCommand}" IsVisible="{Binding IsLost}" />
+                    <Label Style="{StaticResource Caption}" Text="{l:Text Lead.ContractHint}" IsVisible="{Binding IsOpen}" />
+                </VerticalStackLayout>
+            </Border>
+
+            <VerticalStackLayout Spacing="10">
+                <Label Style="{StaticResource Overline}" Text="{l:Text Lead.Notes}" />
+                <Border Style="{StaticResource Field}">
+                    <Editor Text="{Binding NoteText}" Placeholder="{l:Text Lead.NotePlaceholder}" AutoSize="TextChanges" MaxLength="2000" />
+                </Border>
+                <Button
+                    Style="{StaticResource SecondaryButton}"
+                    Text="{l:Text Lead.AddNote}"
+                    Command="{Binding AddNoteCommand}"
+                    HorizontalOptions="Start" />
+                <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
+                <VerticalStackLayout Spacing="8" BindableLayout.ItemsSource="{Binding Notes}" IsVisible="{Binding HasNotes}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="x:String">
+                            <Border Style="{StaticResource Card}">
+                                <Label Style="{StaticResource Secondary}" Text="{Binding .}" />
+                            </Border>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

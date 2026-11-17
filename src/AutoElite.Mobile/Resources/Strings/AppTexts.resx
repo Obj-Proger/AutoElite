@@ -406,8 +406,14 @@
   <data name="Home.Evening" xml:space="preserve">
     <value>Good evening,</value>
   </data>
+  <data name="Home.Leads" xml:space="preserve">
+    <value>New: {0} · yours in progress: {1}</value>
+  </data>
   <data name="Home.Morning" xml:space="preserve">
     <value>Good morning,</value>
+  </data>
+  <data name="Home.NoLeads" xml:space="preserve">
+    <value>No new leads</value>
   </data>
   <data name="Home.NoTasks" xml:space="preserve">
     <value>No open tasks</value>
@@ -441,6 +447,96 @@
   </data>
   <data name="Home.TasksOverdue" xml:space="preserve">
     <value>Open: {0}, overdue: {1}</value>
+  </data>
+  <data name="Lead.AddNote" xml:space="preserve">
+    <value>Add the note</value>
+  </data>
+  <data name="Lead.Advertising" xml:space="preserve">
+    <value>advertising</value>
+  </data>
+  <data name="Lead.Category" xml:space="preserve">
+    <value>category {0}</value>
+  </data>
+  <data name="Lead.ContractHint" xml:space="preserve">
+    <value>The contract of a lead is drawn up on the website.</value>
+  </data>
+  <data name="Lead.Converted" xml:space="preserve">
+    <value>contract signed</value>
+  </data>
+  <data name="Lead.Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="Lead.EmailCopied" xml:space="preserve">
+    <value>There is no mail application on this device; the address {0} is copied.</value>
+  </data>
+  <data name="Lead.InProgress" xml:space="preserve">
+    <value>in progress</value>
+  </data>
+  <data name="Lead.Lost" xml:space="preserve">
+    <value>lost</value>
+  </data>
+  <data name="Lead.LostReason" xml:space="preserve">
+    <value>Why is the lead lost?</value>
+  </data>
+  <data name="Lead.LostTitle" xml:space="preserve">
+    <value>Lost lead</value>
+  </data>
+  <data name="Lead.Manager" xml:space="preserve">
+    <value>manager {0}</value>
+  </data>
+  <data name="Lead.MarkLost" xml:space="preserve">
+    <value>Mark lost</value>
+  </data>
+  <data name="Lead.New" xml:space="preserve">
+    <value>new</value>
+  </data>
+  <data name="Lead.NoManager" xml:space="preserve">
+    <value>no manager yet</value>
+  </data>
+  <data name="Lead.NotePlaceholder" xml:space="preserve">
+    <value>What was said</value>
+  </data>
+  <data name="Lead.Notes" xml:space="preserve">
+    <value>Notes</value>
+  </data>
+  <data name="Lead.PhoneCall" xml:space="preserve">
+    <value>phone call</value>
+  </data>
+  <data name="Lead.Referral" xml:space="preserve">
+    <value>referral</value>
+  </data>
+  <data name="Lead.Reopen" xml:space="preserve">
+    <value>Reopen</value>
+  </data>
+  <data name="Lead.SocialMedia" xml:space="preserve">
+    <value>social media</value>
+  </data>
+  <data name="Lead.Take" xml:space="preserve">
+    <value>Take on</value>
+  </data>
+  <data name="Lead.Title" xml:space="preserve">
+    <value>Lead</value>
+  </data>
+  <data name="Lead.WalkIn" xml:space="preserve">
+    <value>visit</value>
+  </data>
+  <data name="Lead.Website" xml:space="preserve">
+    <value>website</value>
+  </data>
+  <data name="Leads.Empty" xml:space="preserve">
+    <value>There are no new leads and none in progress.</value>
+  </data>
+  <data name="Leads.Mine" xml:space="preserve">
+    <value>Yours in progress</value>
+  </data>
+  <data name="Leads.New" xml:space="preserve">
+    <value>New</value>
+  </data>
+  <data name="Leads.Offline" xml:space="preserve">
+    <value>Leads as of {0}; they may be out of date.</value>
+  </data>
+  <data name="Leads.Title" xml:space="preserve">
+    <value>Leads</value>
   </data>
   <data name="Lesson.Absent" xml:space="preserve">
     <value>Missed</value>

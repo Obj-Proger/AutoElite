@@ -44,6 +44,16 @@
                     </VerticalStackLayout>
                 </Border>
 
+                <Border Style="{StaticResource Card}" IsVisible="{Binding IsManager}">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding OpenLeadsCommand}" />
+                    </Border.GestureRecognizers>
+                    <VerticalStackLayout Spacing="4">
+                        <Label Style="{StaticResource Title}" Text="{l:Text Leads.Title}" />
+                        <Label Style="{StaticResource Secondary}" Text="{Binding LeadsSummary}" />
+                    </VerticalStackLayout>
+                </Border>
+
                 <Border Style="{StaticResource Card}" IsVisible="{Binding IsStaff}">
                     <Border.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding OpenTasksCommand}" />
