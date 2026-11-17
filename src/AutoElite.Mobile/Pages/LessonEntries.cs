@@ -12,11 +12,12 @@ namespace AutoElite.Mobile.Pages;
 /// Makes the cards of the lessons, with what the user can do with them, for the home page and the schedule: the lessons
 /// of a student, whose driving booking can be cancelled before the lesson and rated after it, and the free slots they
 /// can book; the practice slots of a driving instructor, who cancels a booking before the lesson and completes it or
-/// records that the student did not come once it has started, and withdraws a slot that has not started; and the theory
+/// records that the student did not come once it has started, and withdraws a slot that has not started; the theory
 /// lessons of a theory instructor, who moves or cancels a lesson before it starts and marks the attendance once it has
-/// started. Every change but withdrawing, moving and cancelling, which need the network, goes through the offline
-/// queue; a lesson with a change that waits to be sent shows it and offers nothing more until it is sent. After a
-/// change, <see cref="Changed"/> reads the page again.
+/// started; and the slots and theory lessons of every instructor for a manager, who books a student on a free slot and
+/// cancels a booking before the lesson. Every change but booking for a student, withdrawing, moving and cancelling, which
+/// need the network, goes through the offline queue; a lesson with a change that waits to be sent shows it and offers
+/// nothing more until it is sent. After a change, <see cref="Changed"/> reads the page again.
 /// </summary>
 /// <param name="synchronizer">Sends the actions, at once or once the API can be reached.</param>
 /// <param name="offers">Withdraws the slots of a driving instructor.</param>
@@ -291,6 +292,109 @@ public sealed class LessonEntries(
             Actions = actions,
             Start = start,
             End = end
+        };
+    }
+
+    /// <summary>
+    /// Makes the card of a practice slot for a manager or an administrator, who sees the slots of every instructor: a
+    /// free slot that has not started books a student, a booking cancels before the lesson, and a booked slot opens the
+    /// card of its student.
+    /// </summary>
+    /// <param name="item">The slot with its booking.</param>
+    /// <param name="waiting">The slots and lessons with a change that waits to be sent.</param>
+    /// <returns>The card, or <see langword="null"/> for a withdrawn slot or one without its times.</returns>
+    public ScheduleEntry? ManagedDrivingSlot(DrivingScheduleItem item, ISet<Guid> waiting)
+    {
+        ArgumentNullException.ThrowIfNull(waiting);
+        if (item is not { Slot: { Id: { } slotId, StartUtc: { } start, EndUtc: { } end, Status: { } slotStatus } slot }
+            || slotStatus == DrivingSlotStatus.Withdrawn)
+        {
+            return null;
+        }
+
+        var now = timeProvider.GetUtcNow();
+        var booking = item.Booking;
+        var isBooked = booking is { Status: not DrivingBookingStatus.Cancelled };
+        var isWaiting = waiting.Contains(slotId);
+        var time = LessonTexts.TimeOf(start, end);
+        var actions = new List<EntryAction>();
+        if (!isBooked && slotStatus == DrivingSlotStatus.Available && start > now && !isWaiting)
+        {
+            var request = new BookStudentRequest(
+                slotId, LessonTexts.DetailsOf(time, slot.InstructorName, slot.VehicleName), slot.Category, slot.Transmission);
+            actions.Add(new EntryAction(
+                AppTexts.Get("Lesson.BookStudent"),
+                new Command(async () => await Routes.OpenAsync(
+                    Routes.BookStudent, new Dictionary<string, object> { [BookStudentViewModel.SlotParameter] = request }))));
+        }
+
+        if (booking is { Status: DrivingBookingStatus.Active } && start > now && !isWaiting)
+            actions.Add(new EntryAction(AppTexts.Get("Lesson.Cancel"), new Command(async () => await CancelBookingAsync(slotId))));
+
+        if (isBooked && booking!.StudentId is { } studentId)
+        {
+            var request = new StudentRequest(studentId, booking.StudentName ?? string.Empty);
+            actions.Add(new EntryAction(
+                AppTexts.Get("Lesson.Student"),
+                new Command(async () => await Routes.OpenAsync(
+                    Routes.ManagedStudent, new Dictionary<string, object> { [ManagedStudentViewModel.StudentParameter] = request }))));
+        }
+
+        string? status = null;
+        if (isWaiting)
+            status = AppTexts.Get("Lesson.Waiting");
+        else if (booking is { Status: DrivingBookingStatus.Completed, ActualHours: var hours })
+            status = AppTexts.Format("Lesson.CompletedHours", hours?.ToString("0.##", CultureInfo.CurrentCulture));
+        else if (booking is { Status: DrivingBookingStatus.NoShow })
+            status = AppTexts.Get("Lesson.StudentNoShow");
+
+        return new ScheduleEntry
+        {
+            Kind = AppTexts.Get("Lesson.Driving"),
+            Category = booking?.Status switch
+            {
+                DrivingBookingStatus.NoShow => ScheduleCategory.Inactive,
+                _ when isBooked => ScheduleCategory.Driving,
+                _ => ScheduleCategory.Free
+            },
+            Title = isBooked ? booking!.StudentName ?? string.Empty : AppTexts.Get("Lesson.Free"),
+            Time = time,
+            Details = LessonTexts.DetailsOf(slot.InstructorName, slot.VehicleName, slot.VehiclePlate, slot.TrainingGroundName),
+            Status = status,
+            Actions = actions,
+            Start = start,
+            End = end,
+            Instructor = slot.InstructorId is { } instructorId ? (instructorId, slot.InstructorName ?? string.Empty) : null
+        };
+    }
+
+    /// <summary>
+    /// Makes the card of a theory lesson for a manager or an administrator, who sees the lessons of every group; what
+    /// is done with a lesson is its instructor's.
+    /// </summary>
+    /// <param name="lesson">The lesson.</param>
+    /// <returns>The card, or <see langword="null"/> for a lesson without its times.</returns>
+    public static ScheduleEntry? ManagedTheoryLesson(TheoryLessonItem lesson)
+    {
+        if (lesson is not { StartUtc: { } start, EndUtc: { } end, Status: { } status })
+            return null;
+
+        return new ScheduleEntry
+        {
+            Kind = AppTexts.Get("Lesson.Theory"),
+            Category = status == TheoryLessonStatus.Cancelled ? ScheduleCategory.Inactive : ScheduleCategory.Theory,
+            Title = lesson.TopicTitle ?? string.Empty,
+            Time = LessonTexts.TimeOf(start, end),
+            Details = LessonTexts.DetailsOf(lesson.GroupName, lesson.InstructorName),
+            Status = status switch
+            {
+                TheoryLessonStatus.Cancelled => AppTexts.Get("Lesson.Cancelled"),
+                TheoryLessonStatus.Completed => AppTexts.Get("Lesson.Completed"),
+                _ => null
+            },
+            Start = start,
+            End = end,
+            Instructor = lesson.InstructorId is { } instructorId ? (instructorId, lesson.InstructorName ?? string.Empty) : null
         };
     }
 

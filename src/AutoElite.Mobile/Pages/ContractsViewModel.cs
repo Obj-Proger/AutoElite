@@ -88,7 +88,11 @@ public sealed class ContractsViewModel : ViewModel
         }
     }
 
-    private static string MoneyOf(double? amount, string? currency) =>
+    /// <summary>An amount with its currency, such as "45 000,00 RUB".</summary>
+    /// <param name="amount">The amount.</param>
+    /// <param name="currency">The ISO 4217 code of the currency.</param>
+    /// <returns>The amount in the language of the user.</returns>
+    internal static string MoneyOf(double? amount, string? currency) =>
         string.Create(CultureInfo.CurrentCulture, $"{amount ?? 0:N2} {currency}");
 
     private static ContractEntry Entry(ContractDetails contract, IEnumerable<PaymentItem> payments)
@@ -128,7 +132,10 @@ public sealed class ContractsViewModel : ViewModel
         };
     }
 
-    private static string Payment(PaymentItem payment)
+    /// <summary>A payment as a line: its day, amount and purpose, and its state unless it is confirmed.</summary>
+    /// <param name="payment">The payment.</param>
+    /// <returns>The line.</returns>
+    internal static string Payment(PaymentItem payment)
     {
         var state = payment.Status switch
         {

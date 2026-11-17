@@ -251,25 +251,10 @@ public sealed class StudentViewModel : ViewModel, IQueryAttributable
         ContractEntries = [.. (progress.Contracts ?? []).Select(ContractOf)];
     }
 
-    // Calls with the dialer of the device; Windows has none of its own, so the tel link goes to an application that makes
-    // calls, such as Phone Link, and without one the number is copied for the user to call from their phone.
     private async Task CallAsync()
     {
-        if (Phone is not { } phone)
-            return;
-
-        if (PhoneDialer.Default.IsSupported)
-        {
-            PhoneDialer.Default.Open(phone);
-
-            return;
-        }
-
-        if (await Launcher.Default.TryOpenAsync(new Uri("tel:" + phone)))
-            return;
-
-        await Clipboard.Default.SetTextAsync(phone);
-        Notice = AppTexts.Format("Student.PhoneCopied", phone);
+        if (Phone is { } phone && !await PhoneCalls.CallAsync(phone))
+            Notice = AppTexts.Format("Student.PhoneCopied", phone);
     }
 
     private async Task WriteAsync()
@@ -278,7 +263,8 @@ public sealed class StudentViewModel : ViewModel, IQueryAttributable
         {
             var chatId = await _chats.OpenDirectAsync(_studentId, CancellationToken.None);
             await Routes.OpenAsync(
-                Routes.Chat, new Dictionary<string, object> { [ChatViewModel.ChatParameter] = new ChatRequest(chatId, Name, IsPersonal: true) });
+                Routes.Chat,
+                new Dictionary<string, object> { [ChatViewModel.ChatParameter] = new ChatRequest(chatId, Name, IsPersonal: true) });
         }
         catch (Exception exception) when (exception is ApiException or HttpRequestException or TaskCanceledException
             or InvalidOperationException)

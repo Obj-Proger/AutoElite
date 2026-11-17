@@ -30,6 +30,7 @@ public sealed class ScheduleViewModel : ViewModel
     private readonly ExamBook _exams;
     private readonly TimeProvider _timeProvider;
     private DateOnly? _loadedWeek;
+    private IReadOnlyList<ScheduleEntry> _weekEntries = [];
 
     /// <summary>Initializes a new instance of the <see cref="ScheduleViewModel"/> class.</summary>
     /// <param name="session">The user of the application, whose roles choose what the schedule shows.</param>
@@ -183,7 +184,7 @@ public sealed class ScheduleViewModel : ViewModel
         private set => SetProperty(ref field, value);
     }
 
-    /// <summary>Gets the lessons of the week.</summary>
+    /// <summary>Gets the lessons of the week, of the instructor chosen by a manager if they chose one.</summary>
     public IReadOnlyList<ScheduleEntry> Entries
     {
         get;
@@ -288,6 +289,34 @@ public sealed class ScheduleViewModel : ViewModel
 
     /// <summary>Gets a value indicating whether the user plans lessons or slots on the schedule.</summary>
     public bool CanPlan => IsDrivingInstructor || IsTheoryInstructor;
+
+    /// <summary>
+    /// Gets a value indicating whether the user is a manager or an administrator, who sees the lessons of every
+    /// instructor, books students on free slots and may narrow the schedule to one instructor.
+    /// </summary>
+    public bool IsManager
+    {
+        get;
+        private set => SetProperty(ref field, value);
+    }
+
+    /// <summary>Gets the choice of all instructors and the instructors of the week, for a manager.</summary>
+    public IReadOnlyList<InstructorChoice> Instructors
+    {
+        get;
+        private set => SetProperty(ref field, value);
+    } = [InstructorChoice.All];
+
+    /// <summary>Gets or sets the instructor whose lessons a manager sees, or all of them.</summary>
+    public InstructorChoice SelectedInstructor
+    {
+        get;
+        set
+        {
+            if (SetProperty(ref field, value ?? InstructorChoice.All))
+                Entries = Filter(_weekEntries);
+        }
+    } = InstructorChoice.All;
 
     /// <summary>Gets a value indicating whether the slots of the week are being repeated.</summary>
     public bool IsRepeating
@@ -402,6 +431,16 @@ public sealed class ScheduleViewModel : ViewModel
             if (roles.Contains(UserRole.Student))
                 offlineSince = Earliest(offlineSince, await ReadStudentWeekAsync(week, entries, waiting));
 
+            if (IsManagerOnly(roles))
+            {
+                var slots = await _instructorSchedule.ReadDrivingWeekAsync(week, CancellationToken.None);
+                entries.AddRange(slots.Value.Select(slot => _entries.ManagedDrivingSlot(slot, waiting)).OfType<ScheduleEntry>());
+                var lessons = await _instructorSchedule.ReadTheoryWeekAsync(week, CancellationToken.None);
+                entries.AddRange(lessons.Value.Select(LessonEntries.ManagedTheoryLesson).OfType<ScheduleEntry>());
+                offlineSince = Earliest(offlineSince, slots.IsFromCache ? slots.SavedAt : null);
+                offlineSince = Earliest(offlineSince, lessons.IsFromCache ? lessons.SavedAt : null);
+            }
+
             if (roles.Contains(UserRole.DrivingInstructor))
             {
                 var slots = await _instructorSchedule.ReadDrivingWeekAsync(week, CancellationToken.None);
@@ -434,7 +473,10 @@ public sealed class ScheduleViewModel : ViewModel
         _loadedWeek = week;
         IsDrivingInstructor = roles.Contains(UserRole.DrivingInstructor);
         IsTheoryInstructor = roles.Contains(UserRole.TheoryInstructor);
-        Entries = [.. entries.OrderBy(entry => entry.Start)];
+        IsManager = IsManagerOnly(roles);
+        _weekEntries = [.. entries.OrderBy(entry => entry.Start)];
+        ShowInstructors();
+        Entries = Filter(_weekEntries);
         Notice = isIncomplete
             ? AppTexts.Get("Schedule.Unavailable")
             : offlineSince is { } savedAt
@@ -442,8 +484,39 @@ public sealed class ScheduleViewModel : ViewModel
                 : null;
     }
 
+    // A manager or an administrator who gives no lessons sees the lessons of every instructor; one who also teaches sees
+    // their own lessons as an instructor.
+    private static bool IsManagerOnly(HashSet<UserRole> roles) =>
+        (roles.Contains(UserRole.Manager) || roles.Contains(UserRole.Administrator))
+        && !roles.Contains(UserRole.DrivingInstructor)
+        && !roles.Contains(UserRole.TheoryInstructor);
+
+    // The instructors of the week for a manager to choose from, keeping the one chosen while they have lessons.
+    private void ShowInstructors()
+    {
+        List<InstructorChoice> instructors =
+        [
+            InstructorChoice.All,
+            .. _weekEntries
+                .Select(entry => entry.Instructor)
+                .OfType<(Guid Id, string Name)>()
+                .DistinctBy(instructor => instructor.Id)
+                .OrderBy(instructor => instructor.Name, StringComparer.CurrentCulture)
+                .Select(instructor => new InstructorChoice(instructor.Id, instructor.Name))
+        ];
+        Instructors = instructors;
+        if (!instructors.Contains(SelectedInstructor))
+            SelectedInstructor = InstructorChoice.All;
+    }
+
+    // The lessons of the instructor chosen; an exam has none, so it shows only with all of them.
+    private IReadOnlyList<ScheduleEntry> Filter(IReadOnlyList<ScheduleEntry> entries) =>
+        SelectedInstructor.Id is { } instructorId
+            ? [.. entries.Where(entry => entry.Instructor?.Id == instructorId)]
+            : entries;
+
     // Adds the exams of the week: a student's own, the practice exams of a driving instructor's branch and the exams of
-    // a theory instructor's groups; gives when they were read, if they come from the device.
+    // a theory instructor's groups or, for a manager, of the school; gives when they were read, if they come from the device.
     private async Task<DateTimeOffset?> ReadExamsAsync(DateOnly week, HashSet<UserRole> roles, List<ScheduleEntry> entries)
     {
         DateTimeOffset? offlineSince = null;
@@ -459,11 +532,12 @@ public sealed class ScheduleViewModel : ViewModel
         }
 
         var isTheory = roles.Contains(UserRole.TheoryInstructor);
-        if (isTheory || roles.Contains(UserRole.DrivingInstructor))
+        var isManager = IsManagerOnly(roles);
+        if (isTheory || isManager || roles.Contains(UserRole.DrivingInstructor))
         {
             var exams = await _exams.ReadWeekAsync(week, CancellationToken.None);
             entries.AddRange(exams.Value
-                .Where(exam => isTheory || exam.Kind == ExamKind.Practice)
+                .Where(exam => isTheory || isManager || exam.Kind == ExamKind.Practice)
                 .Select(LessonEntries.Exam)
                 .OfType<ScheduleEntry>());
             offlineSince = Earliest(offlineSince, exams.IsFromCache ? exams.SavedAt : null);

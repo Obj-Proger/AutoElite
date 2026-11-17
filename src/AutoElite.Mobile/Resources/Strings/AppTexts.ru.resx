@@ -61,6 +61,24 @@
   <data name="Attendance.Unavailable" xml:space="preserve">
     <value>Не удалось загрузить занятие: нет связи с автошколой.</value>
   </data>
+  <data name="BookStudent.Book" xml:space="preserve">
+    <value>Записать</value>
+  </data>
+  <data name="BookStudent.ChooseContract" xml:space="preserve">
+    <value>По какому договору?</value>
+  </data>
+  <data name="BookStudent.Confirm" xml:space="preserve">
+    <value>Записать {0}: {1}?</value>
+  </data>
+  <data name="BookStudent.ConfirmTitle" xml:space="preserve">
+    <value>Запись на занятие</value>
+  </data>
+  <data name="BookStudent.NoContract" xml:space="preserve">
+    <value>У ученика {0} нет действующего договора на категорию и коробку передач этой машины.</value>
+  </data>
+  <data name="BookStudent.Title" xml:space="preserve">
+    <value>Запись ученика</value>
+  </data>
   <data name="Booking.Book" xml:space="preserve">
     <value>Записаться</value>
   </data>
@@ -433,6 +451,9 @@
   <data name="Lesson.Book" xml:space="preserve">
     <value>Записаться</value>
   </data>
+  <data name="Lesson.BookStudent" xml:space="preserve">
+    <value>Записать ученика</value>
+  </data>
   <data name="Lesson.Cancel" xml:space="preserve">
     <value>Отменить запись</value>
   </data>
@@ -648,6 +669,54 @@
   </data>
   <data name="Password.Rules" xml:space="preserve">
     <value>От 8 до 128 символов, хотя бы одна буква и одна цифра.</value>
+  </data>
+  <data name="Payment.Add" xml:space="preserve">
+    <value>Внести платёж</value>
+  </data>
+  <data name="Payment.Amount" xml:space="preserve">
+    <value>Сумма</value>
+  </data>
+  <data name="Payment.BankCard" xml:space="preserve">
+    <value>Банковская карта</value>
+  </data>
+  <data name="Payment.BankTransfer" xml:space="preserve">
+    <value>Банковский перевод</value>
+  </data>
+  <data name="Payment.Cash" xml:space="preserve">
+    <value>Наличные</value>
+  </data>
+  <data name="Payment.Confirm" xml:space="preserve">
+    <value>Подтвердить</value>
+  </data>
+  <data name="Payment.ConfirmText" xml:space="preserve">
+    <value>Деньги {0} получены?</value>
+  </data>
+  <data name="Payment.ConfirmTitle" xml:space="preserve">
+    <value>Подтверждение платежа</value>
+  </data>
+  <data name="Payment.DefaultPurpose" xml:space="preserve">
+    <value>Оплата обучения</value>
+  </data>
+  <data name="Payment.Method" xml:space="preserve">
+    <value>Способ оплаты</value>
+  </data>
+  <data name="Payment.Purpose" xml:space="preserve">
+    <value>Назначение</value>
+  </data>
+  <data name="Payment.Received" xml:space="preserve">
+    <value>Деньги получены</value>
+  </data>
+  <data name="Payment.ReceivedHint" xml:space="preserve">
+    <value>Иначе платёж ждёт подтверждения и пока не уменьшает долг.</value>
+  </data>
+  <data name="Payment.Save" xml:space="preserve">
+    <value>Сохранить</value>
+  </data>
+  <data name="Payment.Title" xml:space="preserve">
+    <value>Платёж</value>
+  </data>
+  <data name="Payment.WrongAmount" xml:space="preserve">
+    <value>Введите сумму больше нуля.</value>
   </data>
   <data name="Payments.Cancelled" xml:space="preserve">
     <value>отменён</value>
@@ -937,6 +1006,9 @@
   <data name="Role.TheoryInstructor" xml:space="preserve">
     <value>Преподаватель теории</value>
   </data>
+  <data name="Schedule.AllInstructors" xml:space="preserve">
+    <value>Все инструкторы</value>
+  </data>
   <data name="Schedule.Close" xml:space="preserve">
     <value>Закрыть</value>
   </data>
@@ -948,6 +1020,9 @@
   </data>
   <data name="Schedule.Free" xml:space="preserve">
     <value>Свободно {0}–{1}</value>
+  </data>
+  <data name="Schedule.Instructor" xml:space="preserve">
+    <value>Инструктор</value>
   </data>
   <data name="Schedule.Next" xml:space="preserve">
     <value>Вперёд</value>
@@ -1195,6 +1270,12 @@
   <data name="Student.Write" xml:space="preserve">
     <value>Написать</value>
   </data>
+  <data name="Students.NotFound" xml:space="preserve">
+    <value>Учеников не найдено.</value>
+  </data>
+  <data name="Students.Search" xml:space="preserve">
+    <value>Имя, почта или телефон</value>
+  </data>
   <data name="Study.ContractsHint" xml:space="preserve">
     <value>Прогресс обучения, откатанные часы и платежи.</value>
   </data>
@@ -1224,6 +1305,9 @@
   </data>
   <data name="Tab.Schedule" xml:space="preserve">
     <value>Расписание</value>
+  </data>
+  <data name="Tab.Students" xml:space="preserve">
+    <value>Ученики</value>
   </data>
   <data name="Tab.Study" xml:space="preserve">
     <value>Учёба</value>

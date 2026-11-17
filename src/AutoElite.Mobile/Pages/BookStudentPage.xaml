@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="AutoElite.Mobile.Pages.BookStudentPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:l="clr-namespace:AutoElite.Mobile.Localization"
+    xmlns:controls="clr-namespace:AutoElite.Mobile.Controls"
+    xmlns:pages="clr-namespace:AutoElite.Mobile.Pages"
+    x:DataType="pages:BookStudentViewModel"
+    Title="{l:Text BookStudent.Title}">
+
+    <!-- The lesson to book, then the search of the student; tapping a student books them after a confirmation. -->
+    <ScrollView>
+        <VerticalStackLayout Padding="{StaticResource PageMargin}" Spacing="14">
+            <Border Style="{StaticResource HighlightCard}">
+                <VerticalStackLayout Spacing="4">
+                    <Label Style="{StaticResource Overline}" Text="{l:Text Lesson.FreeSlot}" />
+                    <Label Style="{StaticResource BodyLarge}" Text="{Binding Summary}" />
+                </VerticalStackLayout>
+            </Border>
+            <Label Style="{StaticResource ErrorText}" Text="{Binding Message}" IsVisible="{Binding HasMessage}" />
+            <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
+            <controls:StudentSearchView BindingContext="{Binding Search}" />
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

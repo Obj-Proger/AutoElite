@@ -13,9 +13,10 @@
 
     <!--
         The schedule: the period with the arrows and today, the switch between a day and the week, the strip of the days
-        of the week for a day, the planning of an instructor, then the lessons, which a swipe moves to the next or
-        previous day or week: a day as a list, a week as a list by days or, on a wide page, as a grid of hours. An
-        instructor taps free time to offer a slot or schedule a lesson; the name of a day of the week shows that day.
+        of the week for a day, the planning of an instructor or the choice of an instructor for a manager, then the
+        lessons, which a swipe moves to the next or previous day or week: a day as a list, a week as a list by days or,
+        on a wide page, as a grid of hours. An instructor taps free time to offer a slot or schedule a lesson; the name
+        of a day of the week shows that day.
     -->
     <Grid Padding="16,16,16,0" RowDefinitions="Auto,Auto,Auto,Auto,Auto,*" RowSpacing="10">
         <Grid ColumnDefinitions="*,Auto,Auto,Auto" ColumnSpacing="6">
@@ -122,6 +123,13 @@
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
+
+        <Border Grid.Row="3" Style="{StaticResource Field}" IsVisible="{Binding IsManager}">
+            <Picker
+                Title="{l:Text Schedule.Instructor}"
+                ItemsSource="{Binding Instructors}"
+                SelectedItem="{Binding SelectedInstructor}" />
+        </Border>
 
         <VerticalStackLayout Grid.Row="3" Spacing="6" IsVisible="{Binding CanPlan}">
             <Grid ColumnDefinitions="*,*" ColumnSpacing="8" IsVisible="{Binding IsDrivingInstructor}">

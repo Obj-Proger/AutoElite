@@ -43,6 +43,9 @@ public partial class AppShell : Shell
         Routing.RegisterRoute(Routes.NewChat, typeof(NewChatPage));
         Routing.RegisterRoute(Routes.Contracts, typeof(ContractsPage));
         Routing.RegisterRoute(Routes.Security, typeof(SecurityPage));
+        Routing.RegisterRoute(Routes.BookStudent, typeof(BookStudentPage));
+        Routing.RegisterRoute(Routes.ManagedStudent, typeof(ManagedStudentPage));
+        Routing.RegisterRoute(Routes.Payment, typeof(PaymentPage));
         sessions.SessionEnded += (_, _) => Dispatcher.Dispatch(async () => await Routes.GoToAsync(Routes.SignIn));
     }
 
@@ -73,6 +76,7 @@ public partial class AppShell : Shell
         {
             var roles = (await _session.GetProfileAsync(CancellationToken.None)).Value.Roles ?? [];
             StudyTab.IsVisible = roles.Contains(UserRole.Student) || roles.Contains(UserRole.TheoryInstructor);
+            StudentsTab.IsVisible = roles.Contains(UserRole.Manager) || roles.Contains(UserRole.Administrator);
         }
         catch (Exception exception) when (exception is ApiException or HttpRequestException)
         {

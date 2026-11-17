@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="AutoElite.Mobile.Pages.StudentsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:l="clr-namespace:AutoElite.Mobile.Localization"
+    xmlns:controls="clr-namespace:AutoElite.Mobile.Controls"
+    xmlns:pages="clr-namespace:AutoElite.Mobile.Pages"
+    x:DataType="pages:StudentsViewModel"
+    Title="{l:Text Tab.Students}"
+    ControlTemplate="{StaticResource TabPage}"
+    Shell.NavBarIsVisible="{StaticResource NotOnWindows}">
+
+    <!-- The students of the school for a manager: the search, then the students found, each opening their card. -->
+    <ScrollView>
+        <VerticalStackLayout Padding="{StaticResource PageMargin}" Spacing="14">
+            <controls:StudentSearchView BindingContext="{Binding Search}" />
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

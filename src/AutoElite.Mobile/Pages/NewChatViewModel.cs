@@ -114,7 +114,8 @@ public sealed class NewChatViewModel(Chats chats) : ViewModel
         {
             var chatId = await chats.OpenDirectAsync(userId, CancellationToken.None);
             await Routes.ReplaceAsync(
-                Routes.Chat, new Dictionary<string, object> { [ChatViewModel.ChatParameter] = new ChatRequest(chatId, name, IsPersonal: true) });
+                Routes.Chat,
+                new Dictionary<string, object> { [ChatViewModel.ChatParameter] = new ChatRequest(chatId, name, IsPersonal: true) });
         }
         catch (Exception exception) when (exception is ApiException or HttpRequestException or TaskCanceledException
             or InvalidOperationException)

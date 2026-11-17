@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="AutoElite.Mobile.Pages.PaymentPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:l="clr-namespace:AutoElite.Mobile.Localization"
+    xmlns:pages="clr-namespace:AutoElite.Mobile.Pages"
+    x:DataType="pages:PaymentViewModel"
+    Title="{l:Text Payment.Title}">
+
+    <!-- The contract, then the amount with its currency, the way of paying, the purpose and whether the money is received. -->
+    <ScrollView>
+        <VerticalStackLayout Padding="{StaticResource PageMargin}" Spacing="14">
+            <Label Style="{StaticResource Overline}" Text="{Binding Contract}" />
+
+            <Border Style="{StaticResource Card}">
+                <VerticalStackLayout Spacing="8">
+                    <Label Style="{StaticResource Caption}" Text="{l:Text Payment.Amount}" />
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                        <Border Style="{StaticResource Field}">
+                            <Entry Text="{Binding Amount}" Keyboard="Numeric" ReturnType="Done" />
+                        </Border>
+                        <Label Grid.Column="1" Style="{StaticResource BodyLarge}" Text="{Binding Currency}" VerticalOptions="Center" />
+                    </Grid>
+                    <Label Style="{StaticResource Caption}" Text="{l:Text Payment.Method}" />
+                    <Border Style="{StaticResource Field}">
+                        <Picker Title="{l:Text Payment.Method}" ItemsSource="{Binding Methods}" SelectedIndex="{Binding MethodIndex}" />
+                    </Border>
+                    <Label Style="{StaticResource Caption}" Text="{l:Text Payment.Purpose}" />
+                    <Border Style="{StaticResource Field}">
+                        <Entry Text="{Binding Purpose}" MaxLength="200" />
+                    </Border>
+                </VerticalStackLayout>
+            </Border>
+
+            <Border Style="{StaticResource Card}">
+                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                    <VerticalStackLayout Spacing="2" VerticalOptions="Center">
+                        <Label Style="{StaticResource BodyLarge}" Text="{l:Text Payment.Received}" />
+                        <Label Style="{StaticResource Caption}" Text="{l:Text Payment.ReceivedHint}" />
+                    </VerticalStackLayout>
+                    <Switch Grid.Column="1" IsToggled="{Binding IsReceived}" OnColor="{StaticResource Accent}" VerticalOptions="Center" />
+                </Grid>
+            </Border>
+
+            <Label Style="{StaticResource ErrorText}" Text="{Binding Message}" IsVisible="{Binding HasMessage}" />
+            <Button Text="{l:Text Payment.Save}" Command="{Binding SaveCommand}" />
+            <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

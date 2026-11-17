@@ -83,6 +83,17 @@ internal static class Routes
     /// <summary>The change of the password and of the email address, opened over the tab of the profile.</summary>
     public const string Security = "security";
 
+    /// <summary>Booking a student on a free slot by a manager, opened over the schedule with a <see cref="BookStudentRequest"/>.</summary>
+    public const string BookStudent = "book-student";
+
+    /// <summary>
+    /// The card of a student for a manager, opened over the students or the schedule with a <see cref="StudentRequest"/>.
+    /// </summary>
+    public const string ManagedStudent = "managed-student";
+
+    /// <summary>A payment a manager records, opened over the card of the student with a <see cref="PaymentRequest"/>.</summary>
+    public const string Payment = "payment";
+
     // How often and how long a navigation waits for one that the shell is still finishing.
     private const int NavigationAttempts = 20;
     private static readonly TimeSpan _navigationRetryDelay = TimeSpan.FromMilliseconds(50);

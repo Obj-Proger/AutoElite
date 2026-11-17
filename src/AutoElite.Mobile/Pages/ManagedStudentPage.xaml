@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="AutoElite.Mobile.Pages.ManagedStudentPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:l="clr-namespace:AutoElite.Mobile.Localization"
+    xmlns:pages="clr-namespace:AutoElite.Mobile.Pages"
+    x:DataType="pages:ManagedStudentViewModel"
+    Title="{l:Text Student.Title}">
+
+    <!--
+        The student for a manager: how to reach them, then each contract with its money first, its progress and its
+        payments, a payment that waits for its money with a button to confirm it and an active contract with one to
+        record a payment.
+    -->
+    <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}" RefreshColor="{StaticResource Accent}">
+        <ScrollView>
+            <VerticalStackLayout Padding="{StaticResource PageMargin}" Spacing="14">
+                <Border Style="{StaticResource HighlightCard}">
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="14" RowDefinitions="Auto,Auto" RowSpacing="10">
+                        <Border
+                            WidthRequest="56"
+                            HeightRequest="56"
+                            StrokeThickness="0"
+                            BackgroundColor="{StaticResource Accent}"
+                            VerticalOptions="Start">
+                            <Border.StrokeShape>
+                                <Ellipse />
+                            </Border.StrokeShape>
+                            <Label
+                                Text="{Binding Initials}"
+                                FontFamily="TextSemiBold"
+                                FontSize="20"
+                                TextColor="{StaticResource OnAccent}"
+                                HorizontalOptions="Center"
+                                VerticalOptions="Center" />
+                        </Border>
+                        <VerticalStackLayout Grid.Column="1" Spacing="4" VerticalOptions="Center">
+                            <Label Style="{StaticResource Headline}" Text="{Binding Name}" />
+                            <Label Style="{StaticResource Secondary}" Text="{Binding Contacts}" />
+                        </VerticalStackLayout>
+                        <HorizontalStackLayout Grid.Row="1" Grid.ColumnSpan="2" Spacing="8">
+                            <Button Text="{l:Text Student.Write}" Command="{Binding WriteCommand}" />
+                            <Button
+                                Style="{StaticResource SecondaryButton}"
+                                Text="{l:Text Student.Call}"
+                                Command="{Binding CallCommand}"
+                                IsVisible="{Binding HasPhone}" />
+                        </HorizontalStackLayout>
+                    </Grid>
+                </Border>
+
+                <Border Style="{StaticResource Card}" IsVisible="{Binding HasNotice}">
+                    <Label Style="{StaticResource Secondary}" Text="{Binding Notice}" />
+                </Border>
+
+                <VerticalStackLayout Spacing="14" BindableLayout.ItemsSource="{Binding ContractEntries}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="pages:ManagedContractEntry">
+                            <Border Style="{StaticResource Card}">
+                                <VerticalStackLayout Spacing="8">
+                                    <Label Style="{StaticResource Overline}" Text="{Binding Number}" />
+                                    <Label Style="{StaticResource Title}" Text="{Binding Course}" />
+                                    <Label Style="{StaticResource BodyLarge}" Text="{Binding Money}">
+                                        <Label.Triggers>
+                                            <DataTrigger TargetType="Label" Binding="{Binding HasDebt}" Value="True">
+                                                <Setter Property="TextColor" Value="{StaticResource Warning}" />
+                                            </DataTrigger>
+                                        </Label.Triggers>
+                                    </Label>
+                                    <Button
+                                        Text="{l:Text Payment.Add}"
+                                        Command="{Binding AddPaymentCommand}"
+                                        IsVisible="{Binding CanAddPayment}"
+                                        HorizontalOptions="Start" />
+                                    <Label Style="{StaticResource Secondary}" Text="{Binding Practice}" />
+                                    <ProgressBar Progress="{Binding PracticeProgress}" />
+                                    <Label Style="{StaticResource Secondary}" Text="{Binding Theory}" />
+                                    <VerticalStackLayout Spacing="6" IsVisible="{Binding HasPayments}">
+                                        <Label Style="{StaticResource Caption}" Text="{l:Text Payments.Title}" />
+                                        <VerticalStackLayout Spacing="6" BindableLayout.ItemsSource="{Binding Payments}">
+                                            <BindableLayout.ItemTemplate>
+                                                <DataTemplate x:DataType="pages:PaymentEntry">
+                                                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                                                        <Label
+                                                            Style="{StaticResource Secondary}"
+                                                            Text="{Binding Text}"
+                                                            VerticalOptions="Center" />
+                                                        <Button
+                                                            Grid.Column="1"
+                                                            Style="{StaticResource SecondaryButton}"
+                                                            Text="{l:Text Payment.Confirm}"
+                                                            Command="{Binding ConfirmCommand}"
+                                                            IsVisible="{Binding CanConfirm}" />
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </BindableLayout.ItemTemplate>
+                                        </VerticalStackLayout>
+                                    </VerticalStackLayout>
+                                </VerticalStackLayout>
+                            </Border>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+        </ScrollView>
+    </RefreshView>
+
+</ContentPage>

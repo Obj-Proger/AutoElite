@@ -32,4 +32,10 @@ public sealed class ScheduleEntry
 
     /// <summary>Gets the end of the lesson, which gives its height in the schedule.</summary>
     internal DateTimeOffset End { get; init; }
+
+    /// <summary>
+    /// Gets the instructor who gives the lesson and their name, by which a manager narrows the schedule to one of them;
+    /// <see langword="null"/> for an exam.
+    /// </summary>
+    internal (Guid Id, string Name)? Instructor { get; init; }
 }
