@@ -18,7 +18,7 @@ public enum SignInOutcome
     /// <summary>The API of the school could not be reached.</summary>
     Unreachable,
 
-    /// <summary>The user is neither a student nor an instructor, so the application is not for them.</summary>
+    /// <summary>The user holds no role in the school that the application is for.</summary>
     NotForThisApp,
 
     /// <summary>The API failed otherwise.</summary>

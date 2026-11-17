@@ -34,8 +34,8 @@ public sealed class UserSession(
     public Task<bool> IsSignedInAsync(CancellationToken cancellationToken) => sessions.IsSignedInAsync(cancellationToken);
 
     /// <summary>
-    /// Signs in a student or an instructor and makes the offline data on the device theirs; the staff of the school,
-    /// who work on its website, are signed out again.
+    /// Signs in a student, an instructor, a manager or an administrator and makes the offline data on the device theirs;
+    /// a user who holds none of these roles in the school is signed out again.
     /// </summary>
     /// <param name="email">The email address.</param>
     /// <param name="password">The password.</param>
@@ -71,7 +71,8 @@ public sealed class UserSession(
         }
 
         if (profile is not { Id: { } userId, Roles: { } roles }
-            || !roles.Exists(role => role is UserRole.Student or UserRole.DrivingInstructor or UserRole.TheoryInstructor))
+            || !roles.Exists(role => role is UserRole.Student or UserRole.DrivingInstructor or UserRole.TheoryInstructor
+                or UserRole.Manager or UserRole.Administrator))
         {
             await sessions.SignOutAsync(cancellationToken);
 

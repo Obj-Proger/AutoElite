@@ -1268,7 +1268,7 @@
     <value>Введите почту и пароль.</value>
   </data>
   <data name="SignIn.NotForThisApp" xml:space="preserve">
-    <value>Приложение предназначено для учеников и инструкторов. Сотрудники автошколы работают на её сайте.</value>
+    <value>У вашей учётной записи пока нет роли в автошколе. Обратитесь к её администратору.</value>
   </data>
   <data name="SignIn.Password" xml:space="preserve">
     <value>Пароль</value>

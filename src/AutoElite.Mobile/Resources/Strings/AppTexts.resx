@@ -1268,7 +1268,7 @@
     <value>Enter your email and password.</value>
   </data>
   <data name="SignIn.NotForThisApp" xml:space="preserve">
-    <value>The app is for students and instructors. The staff of the school work on its website.</value>
+    <value>Your account has no role in the school yet. Ask its administrator.</value>
   </data>
   <data name="SignIn.Password" xml:space="preserve">
     <value>Password</value>
