@@ -44,13 +44,14 @@ internal sealed class UserQueries(AutoEliteDbContext dbContext) : IUserQueries
 
         if (QueryExtensions.ContainsPattern(filter.Search) is { } pattern)
         {
-            // The email column holds the address as text; the casts let SQL search it although the property is a
-            // value object.
+            // The email and phone columns hold their values as text; the casts let SQL search them although the
+            // properties are value objects.
             users = users.Where(user =>
                 EF.Functions.ILike(user.FullName.LastName, pattern, QueryExtensions.LikeEscape)
                 || EF.Functions.ILike(user.FullName.FirstName, pattern, QueryExtensions.LikeEscape)
                 || EF.Functions.ILike(user.FullName.MiddleName!, pattern, QueryExtensions.LikeEscape)
-                || EF.Functions.ILike((string)(object)user.Email, pattern, QueryExtensions.LikeEscape));
+                || EF.Functions.ILike((string)(object)user.Email, pattern, QueryExtensions.LikeEscape)
+                || EF.Functions.ILike((string)(object)user.Phone!, pattern, QueryExtensions.LikeEscape));
         }
 
         if (filter.Role is { } role)

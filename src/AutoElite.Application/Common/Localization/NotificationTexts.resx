@@ -25,6 +25,12 @@
   <data name="DrivingLessonBooked.Title" xml:space="preserve">
     <value>New driving booking</value>
   </data>
+  <data name="DrivingLessonBookedForStudent.Body" xml:space="preserve">
+    <value>You are booked for a driving lesson on {0:MMMM d 'at' h:mm tt} with {1}.</value>
+  </data>
+  <data name="DrivingLessonBookedForStudent.Title" xml:space="preserve">
+    <value>Driving lesson booked for you</value>
+  </data>
   <data name="DrivingLessonReminder.Body" xml:space="preserve">
     <value>Your driving lesson is on {0:MMMM d 'at' h:mm tt}.</value>
   </data>

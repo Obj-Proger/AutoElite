@@ -6,6 +6,7 @@ using AutoElite.Application.DrivingSlots.WithdrawDrivingSlot;
 using AutoElite.Application.Settings;
 using AutoElite.Domain.Entities;
 using AutoElite.Domain.Enums;
+using AutoElite.Domain.Events;
 
 namespace AutoElite.Application.Tests.DrivingSlots;
 
@@ -194,6 +195,45 @@ public class DrivingSlotCommandHandlerTests
         var other = _fixture.SeedContract("other@example.com", Transmission.Manual);
 
         var result = await Book(slot, contractId: other.Id);
+
+        result.Error.Should().Be(ApplicationErrors.NotFound<Contract>());
+        slot.Status.Should().Be(DrivingSlotStatus.Available);
+    }
+
+    [Fact]
+    public async Task Book_ManagerForAStudentOfTheirBranch_BooksTheSlotAsTheManager()
+    {
+        var branchId = Guid.CreateVersion7();
+        var contract = _fixture.SeedContract("branch@example.com", Transmission.Manual, branchId);
+        var manager = new FakeCurrentUser
+        {
+            UserId = Guid.CreateVersion7(),
+            BranchId = branchId,
+            Roles = new HashSet<UserRole> { UserRole.Manager }
+        };
+        var slot = _fixture.SeedSlot();
+
+        var result = await Book(slot, manager, contract.Id);
+
+        result.IsSuccess.Should().BeTrue();
+        slot.CurrentBooking!.ContractId.Should().Be(contract.Id);
+        slot.DomainEvents.OfType<DrivingLessonBookedDomainEvent>().Should().ContainSingle()
+            .Which.BookedByUserId.Should().Be(manager.UserId);
+    }
+
+    [Fact]
+    public async Task Book_ManagerForAStudentOfAnotherBranch_ReturnsContractNotFound()
+    {
+        var contract = _fixture.SeedContract("other-branch@example.com", Transmission.Manual, Guid.CreateVersion7());
+        var manager = new FakeCurrentUser
+        {
+            UserId = Guid.CreateVersion7(),
+            BranchId = Guid.CreateVersion7(),
+            Roles = new HashSet<UserRole> { UserRole.Manager }
+        };
+        var slot = _fixture.SeedSlot();
+
+        var result = await Book(slot, manager, contract.Id);
 
         result.Error.Should().Be(ApplicationErrors.NotFound<Contract>());
         slot.Status.Should().Be(DrivingSlotStatus.Available);

@@ -125,6 +125,25 @@ public sealed class UserQueriesTests(DatabaseFixture database) : IClassFixture<D
     }
 
     [Fact]
+    public async Task GetList_SearchFindsThePhone()
+    {
+        var digits = string.Concat(Guid.NewGuid().ToString("N").Where(char.IsAsciiDigit).Concat("0000000000"))[..10];
+        var byPhone = User.Create(
+                FullName.Create("Телефонов", "Имя", null).Value,
+                Email.Create($"{Guid.NewGuid():N}@example.com").Value,
+                PhoneNumber.Create("+7" + digits).Value,
+                null,
+                FixedClock.Default.UtcNow,
+                Language.Russian)
+            .Value;
+        await SaveAsync(byPhone);
+
+        var found = await ListAsync(new UserListFilter(digits, null, null, null));
+
+        found.Items.Should().ContainSingle().Which.Id.Should().Be(byPhone.Id);
+    }
+
+    [Fact]
     public async Task GetList_FiltersByRoleBranchAndActivity()
     {
         var branch = NewBranch();

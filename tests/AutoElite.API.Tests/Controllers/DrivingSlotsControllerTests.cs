@@ -97,6 +97,29 @@ public sealed class DrivingSlotsControllerTests(ApiFactory api)
     }
 
     [Fact]
+    public async Task Manager_BooksASlotForAStudent()
+    {
+        using var admin = await api.SignedInClientAsync(UserRole.Administrator);
+        using var manager = await api.SignedInClientAsync(UserRole.Manager);
+        using var instructor = await api.SignedInClientAsync(UserRole.DrivingInstructor);
+        var (student, studentUser) = await api.SignInAsync(UserRole.Student);
+        using var studentClient = student;
+        var vehicleId = await CreateVehicleAsync(admin);
+        var contractId = await DrawUpContractAsync(admin, studentUser.UserId);
+        var start = DateTime.UtcNow.Date.AddDays(4).AddHours(10);
+        var slotId = await instructor.CreateAsync(
+            "/api/v1/driving-slots", new { VehicleId = vehicleId, StartUtc = start, EndUtc = start.AddHours(2) });
+
+        using var booked = await manager.SendJsonAsync(
+            HttpMethod.Post, $"/api/v1/driving-slots/{slotId}/book", new { ContractId = contractId });
+        var lessons = await student.GetJsonAsync($"/api/v1/me/driving-lessons?{Period(start.Date, start.Date.AddDays(1))}");
+
+        booked.StatusCode.Should().Be(HttpStatusCode.NoContent);
+        lessons.EnumerateArray().Should().ContainSingle()
+            .Which.GetProperty("slot").GetProperty("id").GetGuid().Should().Be(slotId);
+    }
+
+    [Fact]
     public async Task Student_CannotReadTheSchedule()
     {
         using var student = await api.SignedInClientAsync(UserRole.Student);

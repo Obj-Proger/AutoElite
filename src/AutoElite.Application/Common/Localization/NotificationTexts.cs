@@ -29,6 +29,11 @@ internal static class NotificationTexts
     /// </summary>
     public const string DrivingLessonBooked = "DrivingLessonBooked";
 
+    /// <summary>
+    /// A manager booked a driving lesson for the student: <c>{0}</c> is the local start, <c>{1}</c> the instructor.
+    /// </summary>
+    public const string DrivingLessonBookedForStudent = "DrivingLessonBookedForStudent";
+
     /// <summary>A driving booking was cancelled: <c>{0}</c> is the local start, <c>{1}</c> the reason.</summary>
     public const string DrivingBookingCancelled = "DrivingBookingCancelled";
 

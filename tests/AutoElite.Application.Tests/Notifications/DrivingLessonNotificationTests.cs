@@ -52,6 +52,29 @@ public class DrivingLessonNotificationTests
     }
 
     [Fact]
+    public async Task BookedByStaff_TellsTheStudentTheTimeAndTheInstructor()
+    {
+        var booked = Raised<DrivingLessonBookedDomainEvent>() with { BookedByUserId = Guid.CreateVersion7() };
+
+        await new NotifyStudentWhenBookedByStaffHandler(CreateReader(), _fixture.Users, _fixture.CreateNotifier())
+            .Handle(booked, TestContext.Current.CancellationToken);
+
+        var notification = _fixture.Notifications.Items.Should().ContainSingle().Which;
+        notification.RecipientId.Should().Be(_student.Id);
+        notification.Title.Should().Be("Вас записали на вождение");
+        notification.Body.Should().Be("Вас записали на занятие по вождению 3 марта в 13:00, инструктор Ivanov Oleg.");
+    }
+
+    [Fact]
+    public async Task BookedByTheStudent_DoesNotTellTheStudent()
+    {
+        await new NotifyStudentWhenBookedByStaffHandler(CreateReader(), _fixture.Users, _fixture.CreateNotifier())
+            .Handle(Raised<DrivingLessonBookedDomainEvent>(), TestContext.Current.CancellationToken);
+
+        _fixture.Notifications.Items.Should().BeEmpty();
+    }
+
+    [Fact]
     public async Task Booked_CancelledBeforeTheEventIsHandled_NotifiesNobody()
     {
         var booked = Raised<DrivingLessonBookedDomainEvent>();

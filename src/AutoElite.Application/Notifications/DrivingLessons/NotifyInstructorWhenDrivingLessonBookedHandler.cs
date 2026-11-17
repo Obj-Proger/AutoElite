@@ -4,7 +4,7 @@ using AutoElite.Application.Users;
 
 namespace AutoElite.Application.Notifications.DrivingLessons;
 
-/// <summary>Tells the instructor that a student booked their driving lesson; only students book (FR-6.4).</summary>
+/// <summary>Tells the instructor that their driving lesson was booked, by the student or by a manager for them (FR-6.4).</summary>
 internal sealed class NotifyInstructorWhenDrivingLessonBookedHandler(
     DrivingLessonReader lessonReader,
     IUserRepository userRepository,

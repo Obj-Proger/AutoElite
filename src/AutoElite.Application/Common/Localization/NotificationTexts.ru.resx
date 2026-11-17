@@ -25,6 +25,12 @@
   <data name="DrivingLessonBooked.Title" xml:space="preserve">
     <value>Новая запись на вождение</value>
   </data>
+  <data name="DrivingLessonBookedForStudent.Body" xml:space="preserve">
+    <value>Вас записали на занятие по вождению {0:d MMMM 'в' HH:mm}, инструктор {1}.</value>
+  </data>
+  <data name="DrivingLessonBookedForStudent.Title" xml:space="preserve">
+    <value>Вас записали на вождение</value>
+  </data>
   <data name="DrivingLessonReminder.Body" xml:space="preserve">
     <value>Занятие по вождению {0:d MMMM 'в' HH:mm}.</value>
   </data>

@@ -6,7 +6,7 @@ namespace AutoElite.Application.Users.GetUsers;
 /// Reads a page of the user list for staff (UC-01). Managers see the users of their branch and the users not tied
 /// to any branch.
 /// </summary>
-/// <param name="Search">Text to find in the name or email address.</param>
+/// <param name="Search">Text to find in the name, the email address or the phone number.</param>
 /// <param name="Role">Only users who hold this role.</param>
 /// <param name="BranchId">Only users of this branch.</param>
 /// <param name="IsActive">Only active or only deactivated users.</param>
