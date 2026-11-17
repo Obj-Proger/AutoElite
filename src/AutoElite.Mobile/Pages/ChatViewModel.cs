@@ -65,12 +65,29 @@ public sealed class ChatViewModel : ViewModel, IQueryAttributable
         ActionsCommand = new Command(async () => await ShowActionsAsync());
     }
 
-    /// <summary>Gets the title of the chat.</summary>
+    /// <summary>Gets the title of the chat: the full name of the other person of a personal chat.</summary>
     public string Title
     {
         get;
         private set => SetProperty(ref field, value);
     } = string.Empty;
+
+    /// <summary>
+    /// Gets the title of the page, which the bar of the page keeps short: the surname and initials of the other person of
+    /// a personal chat, such as "Кузнецов А. П.", or the title of a group chat.
+    /// </summary>
+    public string PageTitle
+    {
+        get;
+        private set => SetProperty(ref field, value);
+    } = string.Empty;
+
+    /// <summary>Gets a value indicating whether the full name of the person stands over the messages, as the bar shortens it.</summary>
+    public bool ShowsFullName
+    {
+        get;
+        private set => SetProperty(ref field, value);
+    }
 
     /// <summary>Gets the messages, the earliest first.</summary>
     public IReadOnlyList<MessageEntry> Messages
@@ -150,11 +167,23 @@ public sealed class ChatViewModel : ViewModel, IQueryAttributable
 
         _chatId = request.ChatId;
         Title = request.Title;
+        PageTitle = request.IsPersonal ? ShortNameOf(request.Title) : request.Title;
+        ShowsFullName = PageTitle != request.Title;
         Messages = [];
         Text = string.Empty;
         _files.Clear();
         _pending.Clear();
         ShowPending();
+    }
+
+    // The surname and initials of a full name, such as "Кузнецов А. П." of "Кузнецов Алексей Петрович".
+    private static string ShortNameOf(string fullName)
+    {
+        var words = fullName.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+
+        return words.Length < 2
+            ? fullName
+            : string.Join(' ', words.Skip(1).Select(word => string.Concat(word[..1], ".")).Prepend(words[0]));
     }
 
     /// <summary>Starts reading the chat again whenever a message of it arrives, while the page is shown.</summary>

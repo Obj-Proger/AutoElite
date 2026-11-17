@@ -11,6 +11,11 @@
                 focus; the frame and the background of the native text box and combo box would draw a second one inside.
             -->
             <Thickness x:Key="TextControlBorderThemeThickness">0</Thickness>
+            <!--
+                The border of a field has its own padding; the padding of the text box itself would move the text of an
+                editor and its placeholder further in and down than the text of an entry.
+            -->
+            <Thickness x:Key="TextControlThemePadding">0,6,0,6</Thickness>
             <Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
             <SolidColorBrush x:Key="TextControlBackground" Color="Transparent" />
             <SolidColorBrush x:Key="TextControlBackgroundPointerOver" Color="Transparent" />

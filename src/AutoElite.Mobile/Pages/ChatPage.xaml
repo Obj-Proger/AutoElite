@@ -6,7 +6,7 @@
     xmlns:l="clr-namespace:AutoElite.Mobile.Localization"
     xmlns:pages="clr-namespace:AutoElite.Mobile.Pages"
     x:DataType="pages:ChatViewModel"
-    Title="{Binding Title}">
+    Title="{Binding PageTitle}">
 
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="{l:Text Chat.Actions}" Command="{Binding ActionsCommand}" />
@@ -15,6 +15,7 @@
     <Grid RowDefinitions="*,Auto,Auto">
         <ScrollView x:Name="Scroller">
             <VerticalStackLayout x:Name="MessageList" Padding="{StaticResource PageMargin}" Spacing="10">
+                <Label Style="{StaticResource Secondary}" Text="{Binding Title}" IsVisible="{Binding ShowsFullName}" />
                 <Border Style="{StaticResource Card}" IsVisible="{Binding HasNotice}">
                     <Label Style="{StaticResource Secondary}" Text="{Binding Notice}" />
                 </Border>

@@ -168,6 +168,7 @@
         <Setter Property="FontSize" Value="15" />
         <Setter Property="BackgroundColor" Value="Transparent" />
         <Setter Property="MinimumHeightRequest" Value="{StaticResource TouchTarget}" />
+        <Setter Property="VerticalTextAlignment" Value="Center" />
         <Setter Property="controls:FieldFocus.IsEnabled" Value="True" />
     </Style>
 

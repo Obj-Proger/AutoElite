@@ -96,6 +96,7 @@ public sealed class ChatsViewModel : ViewModel
             return null;
 
         var title = chat.Title ?? string.Empty;
+        var request = new ChatRequest(chatId, title, chat.Kind == ChatKind.Direct);
 
         return new ChatEntry
         {
@@ -111,7 +112,7 @@ public sealed class ChatsViewModel : ViewModel
             Unread = chat.UnreadCount is { } unread and > 0 ? unread.ToString(CultureInfo.CurrentCulture) : null,
             OpenCommand = new Command(async () => await Routes.OpenAsync(
                 Routes.Chat,
-                new Dictionary<string, object> { [ChatViewModel.ChatParameter] = new ChatRequest(chatId, title) }))
+                new Dictionary<string, object> { [ChatViewModel.ChatParameter] = request }))
         };
     }
 

@@ -1150,6 +1150,9 @@
   <data name="Student.ExamFailed" xml:space="preserve">
     <value>не сдан</value>
   </data>
+  <data name="Student.ExamNoResult" xml:space="preserve">
+    <value>без результата</value>
+  </data>
   <data name="Student.ExamPassed" xml:space="preserve">
     <value>сдан</value>
   </data>
@@ -1160,7 +1163,7 @@
     <value>оценка {0}</value>
   </data>
   <data name="Student.Group" xml:space="preserve">
-    <value>Группа {0}: посещено {1} из {2} занятий</value>
+    <value>{0}: посещено {1} из {2} занятий</value>
   </data>
   <data name="Student.LessonComing" xml:space="preserve">
     <value>Предстоит</value>
@@ -1170,6 +1173,9 @@
   </data>
   <data name="Student.Offline" xml:space="preserve">
     <value>Нет связи. Данные на {0}.</value>
+  </data>
+  <data name="Student.PhoneCopied" xml:space="preserve">
+    <value>Звонки с этого устройства недоступны; номер {0} скопирован.</value>
   </data>
   <data name="Student.PracticeExam" xml:space="preserve">
     <value>Экзамен по вождению</value>

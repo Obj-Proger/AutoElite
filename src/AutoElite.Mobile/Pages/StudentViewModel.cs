@@ -33,7 +33,7 @@ public sealed class StudentViewModel : ViewModel, IQueryAttributable
         _session = session;
         _chats = chats;
         WriteCommand = new Command(async () => await WriteAsync());
-        CallCommand = new Command(Call, () => HasPhone);
+        CallCommand = new Command(async () => await CallAsync(), () => HasPhone);
     }
 
     /// <summary>Gets the full name of the student.</summary>
@@ -156,6 +156,18 @@ public sealed class StudentViewModel : ViewModel, IQueryAttributable
     private static string GearboxOf(Transmission? transmission) =>
         transmission == Transmission.Automatic ? AppTexts.Get("OfferSlot.Automatic") : AppTexts.Get("OfferSlot.Manual");
 
+    // The category of a contract, unless the name of its course names it already, such as "Category B".
+    private static string? CategoryOf(StudentProgressContract contract)
+    {
+        if (contract.Category is not { } category)
+            return null;
+
+        var name = CategoryNames.Of(category);
+        var words = (contract.CourseName ?? string.Empty).Split(' ', StringSplitOptions.RemoveEmptyEntries);
+
+        return words.Contains(name, StringComparer.CurrentCultureIgnoreCase) ? null : name;
+    }
+
     private static StudentContractEntry ContractOf(StudentProgressContract contract)
     {
         var culture = CultureInfo.CurrentCulture;
@@ -172,10 +184,7 @@ public sealed class StudentViewModel : ViewModel, IQueryAttributable
 
         return new StudentContractEntry
         {
-            Course = LessonTexts.DetailsOf(
-                contract.CourseName,
-                contract.Category is { } category ? CategoryNames.Of(category) : null,
-                GearboxOf(contract.Transmission)),
+            Course = LessonTexts.DetailsOf(contract.CourseName, CategoryOf(contract), GearboxOf(contract.Transmission)),
             State = LessonTexts.DetailsOf(
                 state,
                 contract.StartDate is { } start && contract.EndDate is { } end
@@ -190,7 +199,7 @@ public sealed class StudentViewModel : ViewModel, IQueryAttributable
                 ? AppTexts.Format("Student.Group", group.GroupName, group.LessonsAttended ?? 0, group.LessonsHeld ?? 0)
                 : null,
             Tests = AppTexts.Format("Student.Tests", tests?.Attempts ?? 0, tests?.Passed ?? 0),
-            Exams = [.. (contract.Exams ?? []).Select(ExamOf)]
+            Exams = [.. (contract.Exams ?? []).OrderBy(item => item.Exam?.ScheduledAtUtc).Select(ExamOf)]
         };
     }
 
@@ -202,6 +211,7 @@ public sealed class StudentViewModel : ViewModel, IQueryAttributable
         var outcome = item.Result switch
         {
             null when item.Exam?.Status == ExamStatus.Cancelled => AppTexts.Get("Student.ExamCancelled"),
+            null when item.Exam?.ScheduledAtUtc < DateTimeOffset.UtcNow => AppTexts.Get("Student.ExamNoResult"),
             null => AppTexts.Get("Student.ExamComing"),
             { Passed: true } => AppTexts.Get("Student.ExamPassed"),
             _ => AppTexts.Get("Student.ExamFailed")
@@ -241,10 +251,25 @@ public sealed class StudentViewModel : ViewModel, IQueryAttributable
         ContractEntries = [.. (progress.Contracts ?? []).Select(ContractOf)];
     }
 
-    private void Call()
+    // Calls with the dialer of the device; Windows has none of its own, so the tel link goes to an application that makes
+    // calls, such as Phone Link, and without one the number is copied for the user to call from their phone.
+    private async Task CallAsync()
     {
-        if (Phone is { } phone && PhoneDialer.Default.IsSupported)
+        if (Phone is not { } phone)
+            return;
+
+        if (PhoneDialer.Default.IsSupported)
+        {
             PhoneDialer.Default.Open(phone);
+
+            return;
+        }
+
+        if (await Launcher.Default.TryOpenAsync(new Uri("tel:" + phone)))
+            return;
+
+        await Clipboard.Default.SetTextAsync(phone);
+        Notice = AppTexts.Format("Student.PhoneCopied", phone);
     }
 
     private async Task WriteAsync()
@@ -253,7 +278,7 @@ public sealed class StudentViewModel : ViewModel, IQueryAttributable
         {
             var chatId = await _chats.OpenDirectAsync(_studentId, CancellationToken.None);
             await Routes.OpenAsync(
-                Routes.Chat, new Dictionary<string, object> { [ChatViewModel.ChatParameter] = new ChatRequest(chatId, Name) });
+                Routes.Chat, new Dictionary<string, object> { [ChatViewModel.ChatParameter] = new ChatRequest(chatId, Name, IsPersonal: true) });
         }
         catch (Exception exception) when (exception is ApiException or HttpRequestException or TaskCanceledException
             or InvalidOperationException)
