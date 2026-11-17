@@ -68,11 +68,14 @@ if (-not $connectionString) {
     throw 'The user secrets have no ConnectionStrings:AutoElite: run scripts/Initialize-DevEnvironment.ps1 -ExistingDatabase.'
 }
 
+# The builder reads the keys and the quoted values of the connection string. PowerShell shows its keys as properties,
+# so that assigning the ConnectionString property would add a key of that name; the setter method parses it.
 $parts = New-Object System.Data.Common.DbConnectionStringBuilder
-$parts.ConnectionString = $connectionString
+$parts.set_ConnectionString($connectionString)
 function Get-Part([string[]] $names) {
     foreach ($name in $names) {
-        if ($parts.ContainsKey($name)) { return [string] $parts[$name] }
+        $value = $null
+        if ($parts.TryGetValue($name, [ref] $value) -and $value) { return [string] $value }
     }
 
     return $null
