@@ -4,14 +4,15 @@ namespace AutoElite.Mobile.Pages;
 internal static class PhoneCalls
 {
     /// <summary>
-    /// Calls with the dialer of the device; Windows has none of its own, so the tel link goes to an application that
-    /// makes calls, such as Phone Link, and without one the number is copied for the user to call from their phone.
+    /// Calls with the dialer of the phone. Windows has no dialer of its own: its phone dialer reports itself supported
+    /// but shows nothing on a computer, so there the tel link goes to an application that makes calls, such as Phone
+    /// Link, and without one the number is copied for the user to call from their phone.
     /// </summary>
     /// <param name="phone">The number.</param>
     /// <returns><see langword="true"/> if the call was passed on; <see langword="false"/> if the number was copied.</returns>
     public static async Task<bool> CallAsync(string phone)
     {
-        if (PhoneDialer.Default.IsSupported)
+        if (DeviceInfo.Current.Platform != DevicePlatform.WinUI && PhoneDialer.Default.IsSupported)
         {
             PhoneDialer.Default.Open(phone);
 
