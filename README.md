@@ -81,6 +81,7 @@ needs the .NET 10 SDK, Docker Desktop and PowerShell:
 ```powershell
 .\scripts\Initialize-DevEnvironment.ps1   # once: the database, the keys and the settings; asks for the demo password
 .\scripts\Start-DevEnvironment.ps1        # each time: the database, then the API and the website in two windows
+.\scripts\Reset-DevDatabase.ps1           # to start the demo again: an empty database, filled on the next start
 ```
 
 The first script writes a random password of the database to `.env`, which git ignores, starts PostgreSQL 18 from
@@ -98,9 +99,12 @@ Windows PowerShell runs no script of a file until it is allowed once for the use
 CurrentUser RemoteSigned` lets local scripts run and still stops unsigned ones downloaded from the internet.
 
 With a PostgreSQL server that already runs, such as one on another machine or behind a Docker context of a remote host,
-pass `-ExistingDatabase` to both scripts: the first asks for the connection string without showing it, keeps it in the
+pass `-ExistingDatabase` to the scripts: the first asks for the connection string without showing it, keeps it in the
 user secrets and starts nothing in Docker. The API creates the database when it first starts, if the user of the
-connection string may create databases; otherwise create an empty one first.
+connection string may create databases; otherwise create an empty one first. `Reset-DevDatabase.ps1 -ExistingDatabase`
+drops the database of the connection string and creates it empty, owned by its user, with psql or, without it, psql in
+Docker; it asks to type the name of the database first, and the password goes to psql through the environment of the
+script only.
 
 ### Running the API
 
@@ -317,7 +321,8 @@ dotnet user-secrets --project src/AutoElite.API set "DemoData:Password" "<8 to 1
 The demo users sign in with that password at `admin`, `manager`, `theory` (theory instructor), `driving` (driving
 instructor) and `student1` to `student3`, each `@autoelite.example`, a domain reserved for examples, so no email reaches
 anybody. The data is created once: a database that has it is left as it is, and a failed step is logged; drop the
-database to start again, which also moves the past and the future of the demo to the new day.
+database to start again (`scripts/Reset-DevDatabase.ps1`), which also moves the past and the future of the demo to the
+new day.
 
 ### A tour of the demo
 
