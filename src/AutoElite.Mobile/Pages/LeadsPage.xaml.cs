@@ -1,6 +1,6 @@
 namespace AutoElite.Mobile.Pages;
 
-/// <summary>The leads of a manager, opened over the home page.</summary>
+/// <summary>The leads of a manager or an administrator, a tab.</summary>
 public partial class LeadsPage : ContentPage
 {
     private readonly LeadsViewModel _viewModel;

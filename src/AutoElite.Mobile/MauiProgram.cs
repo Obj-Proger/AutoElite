@@ -71,6 +71,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<StudentContracts>();
         builder.Services.AddSingleton<StudentDirectory>();
         builder.Services.AddSingleton<LeadBook>();
+        builder.Services.AddSingleton<AppChrome>();
         builder.Services.AddSingleton(provider => new RealtimeConnection(
             () => ApiAddress.Current, provider.GetRequiredService<AuthSessionManager>()));
         builder.Services.AddSingleton<AppShell>();

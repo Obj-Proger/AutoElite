@@ -697,9 +697,6 @@
   <data name="Notifications.Unavailable" xml:space="preserve">
     <value>Не удалось загрузить уведомления: нет связи с автошколой.</value>
   </data>
-  <data name="Notifications.Unread" xml:space="preserve">
-    <value>Уведомления · новых: {0}</value>
-  </data>
   <data name="OfferSlot.Automatic" xml:space="preserve">
     <value>АКПП</value>
   </data>
@@ -1409,7 +1406,7 @@
     <value>Чаты</value>
   </data>
   <data name="Tab.Home" xml:space="preserve">
-    <value>Главная</value>
+    <value>Сегодня</value>
   </data>
   <data name="Tab.Profile" xml:space="preserve">
     <value>Профиль</value>

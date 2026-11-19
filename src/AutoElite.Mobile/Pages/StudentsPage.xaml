@@ -9,7 +9,7 @@
     x:DataType="pages:StudentsViewModel"
     Title="{l:Text Tab.Students}"
     ControlTemplate="{StaticResource TabPage}"
-    Shell.NavBarIsVisible="{StaticResource NotOnWindows}">
+    Shell.NavBarIsVisible="False">
 
     <!-- The students of the school for a manager: the search, then the students found, each opening their card. -->
     <ScrollView>

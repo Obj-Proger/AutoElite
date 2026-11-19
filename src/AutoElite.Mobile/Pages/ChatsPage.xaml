@@ -8,7 +8,7 @@
     x:DataType="pages:ChatsViewModel"
     Title="{l:Text Chats.Title}"
     ControlTemplate="{StaticResource TabPage}"
-    Shell.NavBarIsVisible="{StaticResource NotOnWindows}">
+    Shell.NavBarIsVisible="False">
 
     <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}" RefreshColor="{DynamicResource Accent}">
         <ScrollView>

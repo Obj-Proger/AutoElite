@@ -6,7 +6,9 @@
     xmlns:l="clr-namespace:AutoElite.Mobile.Localization"
     xmlns:pages="clr-namespace:AutoElite.Mobile.Pages"
     x:DataType="pages:LeadsViewModel"
-    Title="{l:Text Leads.Title}">
+    Title="{l:Text Leads.Title}"
+    Shell.NavBarIsVisible="False"
+    ControlTemplate="{StaticResource TabPage}">
 
     <!-- The leads of a manager: the new ones first, then those they are working on; each opens the lead. -->
     <ContentPage.Resources>

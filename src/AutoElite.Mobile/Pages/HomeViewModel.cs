@@ -12,14 +12,13 @@ namespace AutoElite.Mobile.Pages;
 /// <summary>
 /// The home page of the signed-in user: the greeting; the lessons of a student or of an instructor, with what they can
 /// do with them (HomeViewModel.Lessons.cs); whether the data is from the device; the actions that wait to be sent and
-/// those the school did not accept; and the notifications. The other sections are tabs of the shell.
+/// those the school did not accept. The bell above the tabs counts the notifications; the other sections are tabs.
 /// </summary>
 public sealed partial class HomeViewModel : ViewModel
 {
     private readonly UserSession _session;
     private readonly StudentSchedule _schedule;
     private readonly InstructorSchedule _instructorSchedule;
-    private readonly Notifications _notifications;
     private readonly RealtimeConnection _realtime;
     private readonly OfflineQueue _queue;
     private readonly OfflineSynchronizer _synchronizer;
@@ -32,8 +31,7 @@ public sealed partial class HomeViewModel : ViewModel
     /// <param name="session">The user of the application.</param>
     /// <param name="schedule">The lessons of the student.</param>
     /// <param name="instructorSchedule">The lessons of the instructor.</param>
-    /// <param name="notifications">The notifications of the user.</param>
-    /// <param name="realtime">The connection through which new notifications arrive at once.</param>
+    /// <param name="realtime">The connection to the hub of the API, started when the page appears.</param>
     /// <param name="queue">The actions that wait to be sent.</param>
     /// <param name="synchronizer">Sends the actions.</param>
     /// <param name="timeProvider">The clock.</param>
@@ -44,7 +42,6 @@ public sealed partial class HomeViewModel : ViewModel
         UserSession session,
         StudentSchedule schedule,
         InstructorSchedule instructorSchedule,
-        Notifications notifications,
         RealtimeConnection realtime,
         OfflineQueue queue,
         OfflineSynchronizer synchronizer,
@@ -56,9 +53,7 @@ public sealed partial class HomeViewModel : ViewModel
         _session = session;
         _schedule = schedule;
         _instructorSchedule = instructorSchedule;
-        _notifications = notifications;
         _realtime = realtime;
-        realtime.NotificationReceived += (_, _) => MainThread.BeginInvokeOnMainThread(async () => await CountUnreadAsync());
         _queue = queue;
         _synchronizer = synchronizer;
         _timeProvider = timeProvider;
@@ -67,11 +62,10 @@ public sealed partial class HomeViewModel : ViewModel
         _tasks = tasks;
         _leads = leads;
         OpenTasksCommand = new Command(async () => await Routes.OpenAsync(Routes.Tasks));
-        OpenLeadsCommand = new Command(async () => await Routes.OpenAsync(Routes.Leads));
+        OpenLeadsCommand = new Command(async () => await Routes.GoToAsync(Routes.Leads));
         RefreshCommand = new Command(async () => await RefreshAsync());
         DismissRefusalsCommand = new Command(async () => await DismissRefusalsAsync());
         BookCommand = new Command(async () => await Routes.OpenAsync(Routes.Booking));
-        NotificationsCommand = new Command(async () => await Routes.OpenAsync(Routes.Notifications));
     }
 
     /// <summary>Gets the greeting for the time of day.</summary>
@@ -213,16 +207,6 @@ public sealed partial class HomeViewModel : ViewModel
     /// <summary>Gets the command that opens the booking of a driving lesson.</summary>
     public Command BookCommand { get; }
 
-    /// <summary>Gets the command that opens the notifications.</summary>
-    public Command NotificationsCommand { get; }
-
-    /// <summary>Gets the text of the button of the notifications, with the number of unread ones.</summary>
-    public string NotificationsText
-    {
-        get;
-        private set => SetProperty(ref field, value);
-    } = AppTexts.Get("Notifications.Title");
-
     /// <summary>Gets the command that removes the actions the school did not accept, once the user has seen them.</summary>
     public Command DismissRefusalsCommand { get; }
 
@@ -291,7 +275,6 @@ public sealed partial class HomeViewModel : ViewModel
         if (IsManager)
             await CountLeadsAsync();
 
-        await CountUnreadAsync();
         await ConnectAsync();
     }
 
@@ -335,24 +318,8 @@ public sealed partial class HomeViewModel : ViewModel
         }
     }
 
-    // Shows the number of unread notifications; without a network the button keeps the last number.
-    private async Task CountUnreadAsync()
-    {
-        try
-        {
-            var unread = await _notifications.CountUnreadAsync(CancellationToken.None);
-            NotificationsText = unread > 0
-                ? AppTexts.Format("Notifications.Unread", unread)
-                : AppTexts.Get("Notifications.Title");
-        }
-        catch (Exception exception) when (exception is ApiException or HttpRequestException)
-        {
-            // The number is shown again once the API can be reached.
-        }
-    }
-
-    // Connects to the hub, so that new notifications update the number at once; without a network it is tried again
-    // the next time the page appears, and a lost connection reconnects by itself.
+    // Connects to the hub, so that new notifications and messages update the counts above the tabs at once; without a
+    // network it is tried again the next time the page appears, and a lost connection reconnects by itself.
     private async Task ConnectAsync()
     {
         try

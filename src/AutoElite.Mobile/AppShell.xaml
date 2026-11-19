@@ -9,8 +9,9 @@
 
     <!--
         The start page comes first and moves on to the address of the school, signing in or the tabs of the signed-in
-        user, which replace each other; the other pages open over a tab. The tab of studies is a student's and a theory
-        instructor's, the tab of students a manager's and an administrator's.
+        user, which replace each other; the other pages open over a tab, the profile from the avatar above every tab. The
+        tab of studies is a student's and a theory instructor's, the tabs of students and of leads a manager's and an
+        administrator's.
     -->
     <ShellContent ContentTemplate="{DataTemplate pages:StartPage}" Route="start" />
     <ShellContent ContentTemplate="{DataTemplate pages:SchoolPage}" Route="school" />
@@ -29,11 +30,11 @@
         <Tab x:Name="StudentsTab" Title="{l:Text Tab.Students}" Icon="tab_students.png" Route="students" IsVisible="False">
             <ShellContent ContentTemplate="{DataTemplate pages:StudentsPage}" />
         </Tab>
+        <Tab x:Name="LeadsTab" Title="{l:Text Leads.Title}" Route="leads" IsVisible="False">
+            <ShellContent ContentTemplate="{DataTemplate pages:LeadsPage}" />
+        </Tab>
         <Tab Title="{l:Text Tab.Chats}" Icon="tab_chats.png" Route="chats">
             <ShellContent ContentTemplate="{DataTemplate pages:ChatsPage}" />
-        </Tab>
-        <Tab Title="{l:Text Tab.Profile}" Icon="tab_profile.png" Route="profile">
-            <ShellContent ContentTemplate="{DataTemplate pages:ProfilePage}" />
         </Tab>
     </TabBar>
 

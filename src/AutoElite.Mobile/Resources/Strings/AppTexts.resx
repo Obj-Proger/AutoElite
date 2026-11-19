@@ -697,9 +697,6 @@
   <data name="Notifications.Unavailable" xml:space="preserve">
     <value>The notifications could not be read: no connection to the school.</value>
   </data>
-  <data name="Notifications.Unread" xml:space="preserve">
-    <value>Notifications · {0} new</value>
-  </data>
   <data name="OfferSlot.Automatic" xml:space="preserve">
     <value>automatic</value>
   </data>
@@ -1409,7 +1406,7 @@
     <value>Chats</value>
   </data>
   <data name="Tab.Home" xml:space="preserve">
-    <value>Home</value>
+    <value>Today</value>
   </data>
   <data name="Tab.Profile" xml:space="preserve">
     <value>Profile</value>

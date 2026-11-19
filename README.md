@@ -188,38 +188,40 @@ and Windows. Building it, and so the whole solution, needs the MAUI workload: `d
 keeps the session in the secure storage of the device. On the first start it asks for the address of the school's API,
 which must use HTTPS; a debug build also takes HTTP and offers the API of the development machine:
 `http://localhost:5080` on Windows, `http://10.0.2.2:5080` from the Android emulator. Students, instructors, managers
-and administrators sign in; the rest of the work of the staff is on the website. The tabs, at the bottom on Android and
-in a strip of equal parts at the top on Windows, so that all of them stay in view at any width, lead to the home page,
-the schedule, the studies of a student (their practice tests and contracts), the students of a manager, the chats and
-the profile. The schedule shows a day, chosen in the strip of its week, as a list of cards with the free time of an
-instructor between them, or the whole week as a list by days or, on a wide window, as a grid of hours; it is moved by
-arrows or a swipe and shows the lessons of each role of the user, a student also the free slots they can book, and
-tapping a lesson shows what the user can do with it, such as booking, cancelling, completing or marking the attendance.
-A student sees their driving and theory lessons on the home page, books a free practice slot of one of their contracts
-and cancels a booking, with or without a network, and takes practice tests and theory exams with the timer and a review
-of their mistakes, which need a network; rates a completed lesson; and follows the progress of their training with its
-payments; pulling the page down sends the waiting actions and reads the lessons again. A driving instructor offers a
-practice slot by tapping free time on the schedule, with its length, vehicle and training ground, repeats the slots of a
-week on up to four next weeks, leaving out those that would overlap, withdraws a slot with a reason, which needs a
-network, sees their slots of the next two weeks, cancels a booking before the lesson and, once it has started, completes
-it with the hours, the grades of the student's skills and a note, or records that the student did not come, also without
-a network. A theory instructor schedules a lesson of one of their groups on a topic of its course by tapping free time
-on the schedule, moves or cancels a lesson before it starts, with the students notified, which needs a network, sees
-their theory lessons and marks the attendance of a lesson that has started for the whole group at once, in a classroom
-without a network too. A manager or an administrator sees the slots, theory lessons and exams of every instructor,
-narrowed to one of them if they choose, books a student found by a part of the name, the email address or the phone
-number on a free slot for their contract that fits the vehicle, which tells the student, and cancels a booking; in the
-tab of students they find a student and open their card with each contract, what was paid and what is owed, the progress
-and the payments, record a payment, received at once or waiting for its money, and confirm a waiting one. From the home
-page a manager opens the leads, the new ones and those they work on with how many of them their limit allows, takes a
-new lead on, which makes them its manager within that limit, calls or writes to the person, writes notes, marks a lead
-lost with the reason and opens it again; the contract of a lead is drawn up on the website. An administrator sets the
-limit of each manager, ten leads in progress at first, on the card of the user on the website, and may give a manager
-leads beyond it. In the tab of studies, a theory instructor finds the questions the school wrote for the
-practice tests, writes a new one and corrects one: its text and illustration, the topic of a course, the licence
+and administrators sign in; the rest of the work of the staff is on the website. Above every tab are its title, the
+bell with the count of unread notifications, up to 99+, and the avatar, which opens the profile. The tabs follow the
+width of the window on every platform: a bar at the bottom of a phone, a rail of icons at the left of a narrow window
+and a menu with captions at the left of one from 1000 wide. They lead to today, the schedule, the studies of a student
+(their practice tests and contracts), the students and the leads of a manager, with the count of new leads, and the
+chats, with the count of unread messages. The schedule shows a day, chosen in the strip of its week, as a list of cards
+with the free time of an instructor between them, or the whole week as a list by days or, on a wide window, as a grid of
+hours; it is moved by arrows or a swipe and shows the lessons of each role of the user, a student also the free slots
+they can book, and tapping a lesson shows what the user can do with it, such as booking, cancelling, completing or
+marking the attendance. A student sees their driving and theory lessons on the home page, books a free practice slot of
+one of their contracts and cancels a booking, with or without a network, and takes practice tests and theory exams with
+the timer and a review of their mistakes, which need a network; rates a completed lesson; and follows the progress of
+their training with its payments; pulling the page down sends the waiting actions and reads the lessons again. A driving
+instructor offers a practice slot by tapping free time on the schedule, with its length, vehicle and training ground,
+repeats the slots of a week on up to four next weeks, leaving out those that would overlap, withdraws a slot with a
+reason, which needs a network, sees their slots of the next two weeks, cancels a booking before the lesson and, once it
+has started, completes it with the hours, the grades of the student's skills and a note, or records that the student did
+not come, also without a network. A theory instructor schedules a lesson of one of their groups on a topic of its course
+by tapping free time on the schedule, moves or cancels a lesson before it starts, with the students notified, which
+needs a network, sees their theory lessons and marks the attendance of a lesson that has started for the whole group at
+once, in a classroom without a network too. A manager or an administrator sees the slots, theory lessons and exams of
+every instructor, narrowed to one of them if they choose, books a student found by a part of the name, the email address
+or the phone number on a free slot for their contract that fits the vehicle, which tells the student, and cancels a
+booking; in the tab of students they find a student and open their card with each contract, what was paid and what is
+owed, the progress and the payments, record a payment, received at once or waiting for its money, and confirm a waiting
+one. In the tab of leads a manager sees the leads, the new ones and those they work on with how many of them their limit
+allows, takes a new lead on, which makes them its manager within that limit, calls or writes to the person, writes
+notes, marks a lead lost with the reason and opens it again; the contract of a lead is drawn up on the website. An
+administrator sets the limit of each manager, ten leads in progress at first, on the card of the user on the website,
+and may give a manager leads beyond it. In the tab of studies, a theory instructor finds the questions the school wrote
+for the practice tests, writes a new one and corrects one: its text and illustration, the topic of a course, the licence
 categories, two to six options with the correct one marked and an explanation; a question is taken out of new tests
-rather than deleted. Every user reads their notifications, whose number on the home page changes at once through the
-SignalR hub, and their chats, where new messages appear at once and a message written without a network is sent later. A
+rather than deleted. Every user reads their notifications, whose number on the bell changes at once through the SignalR
+hub, and their chats, where new messages appear at once and a message written without a network is sent later. A
 personal chat starts from the people the user studies or teaches with (`GET /api/v1/chats/contacts`): a student's
 instructors, an instructor's students. A message carries up to ten files, which need a network and open in another
 application from the cache of the device, emptied when the user signs out; the user deletes their own messages, turns
@@ -239,8 +241,8 @@ a recurring one comes back, and opens it again. In the tab of studies, a student
 and adds their own, such as a scan of their passport, with a description, and deletes those they added; an opened file
 is kept in the cache of the device until they sign out. The texts of the application are in English, with a Russian
 translation, in `Resources/Strings`; the device's language chooses between them unless the user chooses one in the
-profile, where they also change the school and sign out. The colors follow the light or dark theme of the device, or
-the theme the user chooses in the profile, which shows at once.
+profile, where they also change the school and sign out. The colors follow the light or dark theme of the device, or the
+theme the user chooses in the profile, which shows at once.
 
 The application works without a network too (`src/AutoElite.Client.Offline`). A SQLite database in its private storage
 keeps what the user last read, shown as possibly out of date while the API cannot be reached, and the actions the user
@@ -337,8 +339,8 @@ With the demo data, sign in as each kind of user to see what they do:
   The API reference at `/scalar` and the background jobs at `/jobs` show what the website does not yet.
 - **Manager** (`manager@autoelite.example`, on the website): the users of their branch only; they invite students. In
   the application: the schedule of every instructor, narrowed to one, booking a student on a free slot; the tab of
-  students with the card of a student, recording a payment and confirming the waiting one of `student2`; the leads from
-  the home page with the number in progress of the limit, taking a new one on, a note, marking one lost.
+  students with the card of a student, recording a payment and confirming the waiting one of `student2`; the tab of
+  leads with the number in progress of the limit, taking a new one on, a note, marking one lost.
 - **Student** (`student1@autoelite.example`, in the mobile application, at `http://10.0.2.2:5080` from the Android
   emulator or `http://localhost:5080` on Windows): the lessons of the day on the home page and the week on the schedule,
   with the theory exam behind and the one ahead; booking and cancelling a slot and rating a lesson; the practice tests

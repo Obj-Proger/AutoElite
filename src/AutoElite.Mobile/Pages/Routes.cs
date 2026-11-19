@@ -68,7 +68,7 @@ internal static class Routes
     /// <summary>A practice test attempt, opened over the tests page with the attempt as a parameter.</summary>
     public const string TestSession = "test-session";
 
-    /// <summary>The notifications of the user, opened over the home page.</summary>
+    /// <summary>The notifications of the user, opened from the bell above the tabs.</summary>
     public const string Notifications = "notifications";
 
     /// <summary>A chat, opened over the tab of chats with a <see cref="ChatRequest"/>.</summary>
@@ -80,7 +80,7 @@ internal static class Routes
     /// <summary>The contracts of a student with the progress and the payments, opened over the tab of studies.</summary>
     public const string Contracts = "contracts";
 
-    /// <summary>The change of the password and of the email address, opened over the tab of the profile.</summary>
+    /// <summary>The change of the password and of the email address, opened over the profile.</summary>
     public const string Security = "security";
 
     /// <summary>Booking a student on a free slot by a manager, opened over the schedule with a <see cref="BookStudentRequest"/>.</summary>
@@ -94,8 +94,11 @@ internal static class Routes
     /// <summary>A payment a manager records, opened over the card of the student with a <see cref="PaymentRequest"/>.</summary>
     public const string Payment = "payment";
 
-    /// <summary>The leads of a manager, opened over the home page.</summary>
-    public const string Leads = "leads";
+    /// <summary>The leads of a manager or an administrator, a tab.</summary>
+    public const string Leads = Main + "/leads";
+
+    /// <summary>The profile and the settings of the user, opened from the avatar above the tabs.</summary>
+    public const string Profile = "profile";
 
     /// <summary>A lead for a manager, opened over the leads with a <see cref="LeadRequest"/>.</summary>
     public const string Lead = "lead";
