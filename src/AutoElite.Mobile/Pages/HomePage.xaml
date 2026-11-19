@@ -10,7 +10,7 @@
     ControlTemplate="{StaticResource TabPage}">
 
     <!-- Pulling the page down sends the waiting actions and reads everything again. -->
-    <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}" RefreshColor="{StaticResource Accent}">
+    <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}" RefreshColor="{DynamicResource Accent}">
         <ScrollView>
             <VerticalStackLayout Padding="{StaticResource PageMargin}" Spacing="18">
                 <VerticalStackLayout Spacing="2">

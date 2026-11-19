@@ -13,7 +13,7 @@
         payments, a payment that waits for its money with a button to confirm it and an active contract with one to
         record a payment.
     -->
-    <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}" RefreshColor="{StaticResource Accent}">
+    <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}" RefreshColor="{DynamicResource Accent}">
         <ScrollView>
             <VerticalStackLayout Padding="{StaticResource PageMargin}" Spacing="14">
                 <Border Style="{StaticResource HighlightCard}">
@@ -22,7 +22,7 @@
                             WidthRequest="56"
                             HeightRequest="56"
                             StrokeThickness="0"
-                            BackgroundColor="{StaticResource Accent}"
+                            BackgroundColor="{DynamicResource Accent}"
                             VerticalOptions="Start">
                             <Border.StrokeShape>
                                 <Ellipse />
@@ -31,7 +31,7 @@
                                 Text="{Binding Initials}"
                                 FontFamily="TextSemiBold"
                                 FontSize="20"
-                                TextColor="{StaticResource OnAccent}"
+                                TextColor="{DynamicResource OnAccent}"
                                 HorizontalOptions="Center"
                                 VerticalOptions="Center" />
                         </Border>
@@ -64,7 +64,7 @@
                                     <Label Style="{StaticResource BodyLarge}" Text="{Binding Money}">
                                         <Label.Triggers>
                                             <DataTrigger TargetType="Label" Binding="{Binding HasDebt}" Value="True">
-                                                <Setter Property="TextColor" Value="{StaticResource Warning}" />
+                                                <Setter Property="TextColor" Value="{DynamicResource Warning}" />
                                             </DataTrigger>
                                         </Label.Triggers>
                                     </Label>

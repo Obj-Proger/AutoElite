@@ -9,7 +9,7 @@
     Title="{l:Text Booking.Title}">
 
     <!-- Pulling the page down reads the free slots again. -->
-    <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}" RefreshColor="{StaticResource Accent}">
+    <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}" RefreshColor="{DynamicResource Accent}">
         <ScrollView>
             <VerticalStackLayout Padding="{StaticResource PageMargin}" Spacing="14">
                 <VerticalStackLayout Spacing="8" IsVisible="{Binding HasChoice}">

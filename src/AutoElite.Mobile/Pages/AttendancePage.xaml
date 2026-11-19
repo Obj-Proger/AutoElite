@@ -31,7 +31,7 @@
                                 <Switch
                                     Grid.Column="1"
                                     IsToggled="{Binding IsPresent}"
-                                    OnColor="{StaticResource Accent}"
+                                    OnColor="{DynamicResource Accent}"
                                     VerticalOptions="Center" />
                             </Grid>
                         </Border>

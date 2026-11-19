@@ -46,11 +46,8 @@ public static class FieldFocus
 
     private static void OnFocusChanged(object? sender, FocusEventArgs e)
     {
-        if (sender is VisualElement { Parent: Border field }
-            && Application.Current?.Resources.TryGetValue(e.IsFocused ? "Accent" : "Border", out var color) == true
-            && color is Color stroke)
-        {
-            field.Stroke = stroke;
-        }
+        // A dynamic resource, so that the border follows a change of the theme.
+        if (sender is VisualElement { Parent: Border field })
+            field.SetDynamicResource(Border.StrokeProperty, e.IsFocused ? "Accent" : "Border");
     }
 }

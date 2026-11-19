@@ -18,7 +18,7 @@
                         WidthRequest="72"
                         HeightRequest="72"
                         StrokeThickness="0"
-                        BackgroundColor="{StaticResource Accent}"
+                        BackgroundColor="{DynamicResource Accent}"
                         VerticalOptions="Start">
                         <Border.StrokeShape>
                             <Ellipse />
@@ -28,7 +28,7 @@
                                 Text="{Binding Initials}"
                                 FontFamily="TextSemiBold"
                                 FontSize="26"
-                                TextColor="{StaticResource OnAccent}"
+                                TextColor="{DynamicResource OnAccent}"
                                 HorizontalOptions="Center"
                                 VerticalOptions="Center" />
                             <Image
@@ -112,6 +112,15 @@
                         <Picker ItemsSource="{Binding Languages}" SelectedIndex="{Binding LanguageIndex}" />
                     </Border>
                     <Label Style="{StaticResource Caption}" Text="{Binding LanguageNote}" IsVisible="{Binding HasLanguageNote}" />
+                </VerticalStackLayout>
+            </Border>
+
+            <Border Style="{StaticResource Card}">
+                <VerticalStackLayout Spacing="8">
+                    <Label Style="{StaticResource Overline}" Text="{l:Text Settings.Theme}" />
+                    <Border Style="{StaticResource Field}">
+                        <Picker ItemsSource="{Binding Themes}" SelectedIndex="{Binding ThemeIndex}" />
+                    </Border>
                 </VerticalStackLayout>
             </Border>
 

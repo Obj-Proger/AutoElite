@@ -48,6 +48,12 @@
     --color-accent: #C9A96E;
     --color-accent-hover: #E2C891;
     --color-on-accent: #0E0F11;
+    --color-accent-text: #C9A96E;
+    --color-primary: #C9A96E;
+    --color-primary-pressed: #E2C891;
+    --color-on-primary: #0E0F11;
+    --color-highlight: #23252A;
+    --color-highlight-border: #2A2C31;
     --color-success: #86C29A;
     --color-warning: #E0B661;
     --color-danger: #E5867A;

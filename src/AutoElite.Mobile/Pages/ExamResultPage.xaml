@@ -24,8 +24,8 @@
                             Command="{Binding PassedCommand}">
                             <Button.Triggers>
                                 <DataTrigger TargetType="Button" Binding="{Binding IsPassed}" Value="True">
-                                    <Setter Property="BackgroundColor" Value="{StaticResource Success}" />
-                                    <Setter Property="TextColor" Value="{StaticResource OnAccent}" />
+                                    <Setter Property="BackgroundColor" Value="{DynamicResource Success}" />
+                                    <Setter Property="TextColor" Value="{DynamicResource OnAccent}" />
                                 </DataTrigger>
                             </Button.Triggers>
                         </Button>
@@ -36,8 +36,8 @@
                             Command="{Binding FailedCommand}">
                             <Button.Triggers>
                                 <DataTrigger TargetType="Button" Binding="{Binding IsFailed}" Value="True">
-                                    <Setter Property="BackgroundColor" Value="{StaticResource Danger}" />
-                                    <Setter Property="TextColor" Value="{StaticResource OnAccent}" />
+                                    <Setter Property="BackgroundColor" Value="{DynamicResource Danger}" />
+                                    <Setter Property="TextColor" Value="{DynamicResource OnAccent}" />
                                 </DataTrigger>
                             </Button.Triggers>
                         </Button>

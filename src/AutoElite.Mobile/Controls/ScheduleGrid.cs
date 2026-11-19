@@ -1,6 +1,7 @@
 using System.Globalization;
 using System.Windows.Input;
 using AutoElite.Mobile.Pages;
+using AutoElite.Mobile.Theming;
 using Microsoft.Maui.Controls.Shapes;
 using Microsoft.Maui.Layouts;
 
@@ -48,6 +49,13 @@ public sealed class ScheduleGrid : ContentView
     private const double HoursWidth = 44;
     private const double MinimumBlockHeight = 36;
     private const double ColumnSpacing = 4;
+
+    /// <summary>Initializes a new instance of the <see cref="ScheduleGrid"/> class.</summary>
+    public ScheduleGrid()
+    {
+        Loaded += (_, _) => AppPalette.Changed += OnPaletteChanged;
+        Unloaded += (_, _) => AppPalette.Changed -= OnPaletteChanged;
+    }
 
     /// <summary>Gets or sets the lessons; those outside the days shown are left out.</summary>
     public IReadOnlyList<ScheduleEntry>? Entries
@@ -97,8 +105,7 @@ public sealed class ScheduleGrid : ContentView
     private static void OnLayoutChanged(BindableObject bindable, object oldValue, object newValue) =>
         ((ScheduleGrid)bindable).Rebuild();
 
-    private static Color ColorOf(string key) =>
-        Application.Current?.Resources.TryGetValue(key, out var value) == true && value is Color color ? color : Colors.Gray;
+    private static Color ColorOf(string key) => AppPalette.ColorOf(key);
 
     private static DateOnly DayOf(DateTimeOffset moment) => DateOnly.FromDateTime(moment.DateTime);
 
@@ -142,6 +149,9 @@ public sealed class ScheduleGrid : ContentView
 
         return result;
     }
+
+    // The colours are taken when the views are made, so a new theme makes them again.
+    private void OnPaletteChanged(object? sender, EventArgs args) => Dispatcher.Dispatch(Rebuild);
 
     private void Rebuild()
     {
@@ -238,7 +248,7 @@ public sealed class ScheduleGrid : ContentView
         for (var index = 0; index < days; index++)
         {
             var day = FirstDay.AddDays(index);
-            var color = DayOf(now) == day ? ColorOf("Accent") : ColorOf("Text");
+            var color = DayOf(now) == day ? ColorOf("AccentText") : ColorOf("Text");
             var cell = new VerticalStackLayout { Spacing = 0, BackgroundColor = Colors.Transparent };
             cell.Add(new Label
             {
@@ -302,7 +312,7 @@ public sealed class ScheduleGrid : ContentView
         {
             ScheduleCategory.Driving => (ColorOf("Accent"), ColorOf("Accent"), ColorOf("OnAccent")),
             ScheduleCategory.Theory => (ColorOf("SurfaceRaised"), ColorOf("TextSecondary"), ColorOf("Text")),
-            ScheduleCategory.Free => (Colors.Transparent, ColorOf("Accent"), ColorOf("Accent")),
+            ScheduleCategory.Free => (Colors.Transparent, ColorOf("Accent"), ColorOf("AccentText")),
             ScheduleCategory.Exam => (ColorOf("Surface"), ColorOf("Warning"), ColorOf("Warning")),
             _ => (ColorOf("Surface"), ColorOf("Border"), ColorOf("TextMuted"))
         };

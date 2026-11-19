@@ -1,4 +1,5 @@
 using AutoElite.Mobile.Offline;
+using AutoElite.Mobile.Theming;
 
 namespace AutoElite.Mobile;
 
@@ -18,14 +19,18 @@ public partial class App : Application
     {
         InitializeComponent();
 
-        // Noir Modern is dark: the system controls follow it whatever the theme of the device.
-        UserAppTheme = AppTheme.Dark;
+        // The dark or the light colors of Noir Modern, as the user chose or as the device is.
+        AppPalette.Start(this);
         _shell = shell;
         _synchronization = synchronization;
     }
 
     /// <inheritdoc />
-    protected override void OnStart() => _synchronization.Start();
+    protected override void OnStart()
+    {
+        AppPalette.ApplyToSystemBars();
+        _synchronization.Start();
+    }
 
     /// <inheritdoc />
     protected override void OnResume() => _synchronization.Synchronize();

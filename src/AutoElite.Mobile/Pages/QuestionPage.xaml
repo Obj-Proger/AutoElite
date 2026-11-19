@@ -29,7 +29,7 @@
                     <Border
                         StrokeThickness="0"
                         StrokeShape="RoundRectangle 12"
-                        BackgroundColor="{StaticResource SurfaceRaised}"
+                        BackgroundColor="{DynamicResource SurfaceRaised}"
                         IsVisible="{Binding HasImage}">
                         <Image
                             Source="{Binding Image}"
@@ -68,7 +68,7 @@
                                     Margin="0,0,6,6"
                                     Padding="12,6"
                                     StrokeThickness="1"
-                                    Stroke="{StaticResource Border}"
+                                    Stroke="{DynamicResource Border}"
                                     StrokeShape="RoundRectangle 14"
                                     BackgroundColor="Transparent">
                                     <Border.GestureRecognizers>
@@ -76,14 +76,14 @@
                                     </Border.GestureRecognizers>
                                     <Border.Triggers>
                                         <DataTrigger TargetType="Border" Binding="{Binding IsSelected}" Value="True">
-                                            <Setter Property="BackgroundColor" Value="{StaticResource Accent}" />
-                                            <Setter Property="Stroke" Value="{StaticResource Accent}" />
+                                            <Setter Property="BackgroundColor" Value="{DynamicResource Accent}" />
+                                            <Setter Property="Stroke" Value="{DynamicResource Accent}" />
                                         </DataTrigger>
                                     </Border.Triggers>
                                     <Label Text="{Binding Name}" FontFamily="TextSemiBold">
                                         <Label.Triggers>
                                             <DataTrigger TargetType="Label" Binding="{Binding IsSelected}" Value="True">
-                                                <Setter Property="TextColor" Value="{StaticResource OnAccent}" />
+                                                <Setter Property="TextColor" Value="{DynamicResource OnAccent}" />
                                             </DataTrigger>
                                         </Label.Triggers>
                                     </Label>
@@ -112,8 +112,8 @@
                                         <Button.Triggers>
                                             <DataTrigger TargetType="Button" Binding="{Binding IsCorrect}" Value="True">
                                                 <Setter Property="Text" Value="✓" />
-                                                <Setter Property="BackgroundColor" Value="{StaticResource Accent}" />
-                                                <Setter Property="TextColor" Value="{StaticResource OnAccent}" />
+                                                <Setter Property="BackgroundColor" Value="{DynamicResource Accent}" />
+                                                <Setter Property="TextColor" Value="{DynamicResource OnAccent}" />
                                             </DataTrigger>
                                         </Button.Triggers>
                                     </Button>

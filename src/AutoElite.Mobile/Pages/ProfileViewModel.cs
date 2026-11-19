@@ -2,6 +2,7 @@ using System.Globalization;
 using AutoElite.Client.Api.Models;
 using AutoElite.Mobile.Localization;
 using AutoElite.Mobile.Session;
+using AutoElite.Mobile.Theming;
 using Microsoft.Kiota.Abstractions;
 
 namespace AutoElite.Mobile.Pages;
@@ -43,6 +44,8 @@ public sealed class ProfileViewModel : ViewModel
             AppTexts.Get("Settings.Russian")
         ];
         LanguageIndex = Math.Max(0, AppLanguage.Cultures.ToList().IndexOf(AppLanguage.Chosen));
+        Themes = [AppTexts.Get("Settings.ThemeDevice"), AppTexts.Get("Settings.ThemeDark"), AppTexts.Get("Settings.ThemeLight")];
+        ThemeIndex = (int)AppPalette.Chosen;
         ChangeSchoolCommand = new Command(async () => await LeaveAsync(changeSchool: true), () => !IsBusy);
         SignOutCommand = new Command(async () => await LeaveAsync(changeSchool: false), () => !IsBusy);
         SourceCodeCommand = new Command(async () => await Launcher.Default.OpenAsync(new Uri(SourceCode)));
@@ -171,6 +174,20 @@ public sealed class ProfileViewModel : ViewModel
 
             AppLanguage.Choose(AppLanguage.Cultures[value]);
             LanguageNote = AppLanguage.Chosen == AppLanguage.Started ? null : AppTexts.Get("Settings.Restart");
+        }
+    }
+
+    /// <summary>Gets the themes to choose from: the one of the device, the dark one and the light one.</summary>
+    public IReadOnlyList<string> Themes { get; }
+
+    /// <summary>Gets or sets the chosen theme, by its position among <see cref="Themes"/>; it shows at once.</summary>
+    public int ThemeIndex
+    {
+        get;
+        set
+        {
+            if (SetProperty(ref field, value) && Enum.IsDefined((ThemeChoice)value) && (ThemeChoice)value != AppPalette.Chosen)
+                AppPalette.Choose((ThemeChoice)value);
         }
     }
 

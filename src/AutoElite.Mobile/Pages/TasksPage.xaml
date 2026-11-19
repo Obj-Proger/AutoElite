@@ -14,8 +14,8 @@
                 <Button Style="{StaticResource SecondaryButton}" Text="{l:Text Tasks.Open}" Command="{Binding ShowOpenCommand}">
                     <Button.Triggers>
                         <DataTrigger TargetType="Button" Binding="{Binding ShowsOpen}" Value="True">
-                            <Setter Property="BackgroundColor" Value="{StaticResource Accent}" />
-                            <Setter Property="TextColor" Value="{StaticResource OnAccent}" />
+                            <Setter Property="BackgroundColor" Value="{DynamicResource Accent}" />
+                            <Setter Property="TextColor" Value="{DynamicResource OnAccent}" />
                         </DataTrigger>
                     </Button.Triggers>
                 </Button>
@@ -26,8 +26,8 @@
                     Command="{Binding ShowDoneCommand}">
                     <Button.Triggers>
                         <DataTrigger TargetType="Button" Binding="{Binding ShowsDone}" Value="True">
-                            <Setter Property="BackgroundColor" Value="{StaticResource Accent}" />
-                            <Setter Property="TextColor" Value="{StaticResource OnAccent}" />
+                            <Setter Property="BackgroundColor" Value="{DynamicResource Accent}" />
+                            <Setter Property="TextColor" Value="{DynamicResource OnAccent}" />
                         </DataTrigger>
                     </Button.Triggers>
                 </Button>
@@ -47,7 +47,7 @@
                                 <Label Style="{StaticResource Caption}" Text="{Binding Status}">
                                     <Label.Triggers>
                                         <DataTrigger TargetType="Label" Binding="{Binding IsOverdue}" Value="True">
-                                            <Setter Property="TextColor" Value="{StaticResource Danger}" />
+                                            <Setter Property="TextColor" Value="{DynamicResource Danger}" />
                                         </DataTrigger>
                                     </Label.Triggers>
                                 </Label>

@@ -1252,6 +1252,18 @@
   <data name="Settings.SourceCode" xml:space="preserve">
     <value>Исходный код</value>
   </data>
+  <data name="Settings.Theme" xml:space="preserve">
+    <value>Тема</value>
+  </data>
+  <data name="Settings.ThemeDark" xml:space="preserve">
+    <value>Тёмная</value>
+  </data>
+  <data name="Settings.ThemeDevice" xml:space="preserve">
+    <value>Как на устройстве</value>
+  </data>
+  <data name="Settings.ThemeLight" xml:space="preserve">
+    <value>Светлая</value>
+  </data>
   <data name="Settings.Version" xml:space="preserve">
     <value>AutoElite {0}</value>
   </data>

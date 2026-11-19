@@ -49,8 +49,8 @@
             <Button Style="{StaticResource SecondaryButton}" Text="{l:Text Schedule.Day}" Command="{Binding ShowDayCommand}">
                 <Button.Triggers>
                     <DataTrigger TargetType="Button" Binding="{Binding IsDayView}" Value="True">
-                        <Setter Property="BackgroundColor" Value="{StaticResource Accent}" />
-                        <Setter Property="TextColor" Value="{StaticResource OnAccent}" />
+                        <Setter Property="BackgroundColor" Value="{DynamicResource Accent}" />
+                        <Setter Property="TextColor" Value="{DynamicResource OnAccent}" />
                     </DataTrigger>
                 </Button.Triggers>
             </Button>
@@ -61,8 +61,8 @@
                 Command="{Binding ShowWeekCommand}">
                 <Button.Triggers>
                     <DataTrigger TargetType="Button" Binding="{Binding IsWeekView}" Value="True">
-                        <Setter Property="BackgroundColor" Value="{StaticResource Accent}" />
-                        <Setter Property="TextColor" Value="{StaticResource OnAccent}" />
+                        <Setter Property="BackgroundColor" Value="{DynamicResource Accent}" />
+                        <Setter Property="TextColor" Value="{DynamicResource OnAccent}" />
                     </DataTrigger>
                 </Button.Triggers>
             </Button>
@@ -91,31 +91,31 @@
                         </Border.GestureRecognizers>
                         <Border.Triggers>
                             <DataTrigger TargetType="Border" Binding="{Binding IsToday}" Value="True">
-                                <Setter Property="Stroke" Value="{StaticResource Accent}" />
+                                <Setter Property="Stroke" Value="{DynamicResource Accent}" />
                             </DataTrigger>
                             <DataTrigger TargetType="Border" Binding="{Binding IsSelected}" Value="True">
-                                <Setter Property="BackgroundColor" Value="{StaticResource Accent}" />
+                                <Setter Property="BackgroundColor" Value="{DynamicResource Accent}" />
                             </DataTrigger>
                         </Border.Triggers>
                         <VerticalStackLayout Spacing="2" HorizontalOptions="Center">
                             <Label Style="{StaticResource Caption}" Text="{Binding Name}" HorizontalOptions="Center">
                                 <Label.Triggers>
                                     <DataTrigger TargetType="Label" Binding="{Binding IsSelected}" Value="True">
-                                        <Setter Property="TextColor" Value="{StaticResource OnAccent}" />
+                                        <Setter Property="TextColor" Value="{DynamicResource OnAccent}" />
                                     </DataTrigger>
                                 </Label.Triggers>
                             </Label>
                             <Label Style="{StaticResource Title}" Text="{Binding Number}" HorizontalOptions="Center">
                                 <Label.Triggers>
                                     <DataTrigger TargetType="Label" Binding="{Binding IsSelected}" Value="True">
-                                        <Setter Property="TextColor" Value="{StaticResource OnAccent}" />
+                                        <Setter Property="TextColor" Value="{DynamicResource OnAccent}" />
                                     </DataTrigger>
                                 </Label.Triggers>
                             </Label>
                             <Ellipse
                                 WidthRequest="5"
                                 HeightRequest="5"
-                                Fill="{StaticResource Accent}"
+                                Fill="{DynamicResource Accent}"
                                 HorizontalOptions="Center"
                                 IsVisible="{Binding HasLessons}" />
                         </VerticalStackLayout>

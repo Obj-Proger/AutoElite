@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using AutoElite.Mobile.Pages;
+using AutoElite.Mobile.Theming;
 using Microsoft.Maui.Controls.Shapes;
 using ShapePath = Microsoft.Maui.Controls.Shapes.Path;
 
@@ -41,8 +42,7 @@ public sealed class AppTabs : ContentView
     // The tabs of the signed-in user: the items of the tab bar of the shell.
     private TabBar? Bar => _shell?.Items.OfType<TabBar>().FirstOrDefault();
 
-    private static Color Resource(string key) =>
-        Application.Current?.Resources.TryGetValue(key, out var value) == true && value is Color color ? color : Colors.Gray;
+    private static Color Resource(string key) => AppPalette.ColorOf(key);
 
     private void Attach()
     {
@@ -52,6 +52,7 @@ public sealed class AppTabs : ContentView
             return;
 
         _shell.Navigated += OnNavigated;
+        AppPalette.Changed += OnPaletteChanged;
         foreach (var tab in Bar?.Items ?? [])
         {
             tab.PropertyChanged += OnTabChanged;
@@ -66,6 +67,8 @@ public sealed class AppTabs : ContentView
         if (_shell is not null)
             _shell.Navigated -= OnNavigated;
 
+        AppPalette.Changed -= OnPaletteChanged;
+
         foreach (var tab in _watched)
             tab.PropertyChanged -= OnTabChanged;
 
@@ -74,6 +77,9 @@ public sealed class AppTabs : ContentView
     }
 
     private void OnNavigated(object? sender, ShellNavigatedEventArgs args) => Draw();
+
+    // The colours are taken when the parts are made, so a new theme makes them again.
+    private void OnPaletteChanged(object? sender, EventArgs args) => Dispatcher.Dispatch(Draw);
 
     // A tab shown or hidden for the roles of the user, or its caption in another language.
     private void OnTabChanged(object? sender, PropertyChangedEventArgs args)
@@ -101,7 +107,7 @@ public sealed class AppTabs : ContentView
     // One tab: its icon over its caption and, under the current one, a short bar.
     private static VerticalStackLayout Part(TabBar bar, ShellSection tab, bool isCurrent)
     {
-        var color = Resource(isCurrent ? "Accent" : "TextMuted");
+        var color = Resource(isCurrent ? "AccentText" : "TextMuted");
         var part = new VerticalStackLayout
         {
             Spacing = 4,

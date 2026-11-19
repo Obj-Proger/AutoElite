@@ -10,7 +10,7 @@
     ControlTemplate="{StaticResource TabPage}"
     Shell.NavBarIsVisible="{StaticResource NotOnWindows}">
 
-    <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}" RefreshColor="{StaticResource Accent}">
+    <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}" RefreshColor="{DynamicResource Accent}">
         <ScrollView>
             <VerticalStackLayout Padding="{StaticResource PageMargin}" Spacing="10">
                 <Button Style="{StaticResource SecondaryButton}" Text="{l:Text Chats.New}" Command="{Binding NewChatCommand}" />
@@ -37,12 +37,12 @@
                                     <Border
                                         Grid.Row="1"
                                         Grid.Column="1"
-                                        BackgroundColor="{StaticResource Accent}"
+                                        BackgroundColor="{DynamicResource Accent}"
                                         StrokeThickness="0"
                                         Padding="8,2"
                                         StrokeShape="RoundRectangle 10"
                                         IsVisible="{Binding HasUnread}">
-                                        <Label Text="{Binding Unread}" TextColor="{StaticResource OnAccent}" FontSize="12" />
+                                        <Label Text="{Binding Unread}" TextColor="{DynamicResource OnAccent}" FontSize="12" />
                                     </Border>
                                 </Grid>
                             </Border>

@@ -2,6 +2,7 @@ using System.Globalization;
 using System.Windows.Input;
 using AutoElite.Mobile.Localization;
 using AutoElite.Mobile.Pages;
+using AutoElite.Mobile.Theming;
 using Microsoft.Maui.Controls.Shapes;
 
 namespace AutoElite.Mobile.Controls;
@@ -48,6 +49,13 @@ public sealed class ScheduleAgenda : ContentView
     private const int FirstWorkingHour = 8;
     private const int LastWorkingHour = 21;
     private static readonly TimeSpan _shortestFreeTime = TimeSpan.FromMinutes(30);
+
+    /// <summary>Initializes a new instance of the <see cref="ScheduleAgenda"/> class.</summary>
+    public ScheduleAgenda()
+    {
+        Loaded += (_, _) => AppPalette.Changed += OnPaletteChanged;
+        Unloaded += (_, _) => AppPalette.Changed -= OnPaletteChanged;
+    }
 
     /// <summary>Gets or sets the lessons; those outside the days shown are left out.</summary>
     public IReadOnlyList<ScheduleEntry>? Entries
@@ -101,8 +109,7 @@ public sealed class ScheduleAgenda : ContentView
     private static void OnLayoutChanged(BindableObject bindable, object oldValue, object newValue) =>
         ((ScheduleAgenda)bindable).Rebuild();
 
-    private static Color ColorOf(string key) =>
-        Application.Current?.Resources.TryGetValue(key, out var value) == true && value is Color color ? color : Colors.Gray;
+    private static Color ColorOf(string key) => AppPalette.ColorOf(key);
 
     private static DateOnly DayOf(DateTimeOffset moment) => DateOnly.FromDateTime(moment.DateTime);
 
@@ -125,7 +132,7 @@ public sealed class ScheduleAgenda : ContentView
     {
         ScheduleCategory.Driving => (ColorOf("Accent"), ColorOf("Text")),
         ScheduleCategory.Theory => (ColorOf("TextSecondary"), ColorOf("Text")),
-        ScheduleCategory.Free => (ColorOf("Accent"), ColorOf("Accent")),
+        ScheduleCategory.Free => (ColorOf("Accent"), ColorOf("AccentText")),
         ScheduleCategory.Exam => (ColorOf("Warning"), ColorOf("Warning")),
         _ => (ColorOf("Border"), ColorOf("TextMuted"))
     };
@@ -188,6 +195,9 @@ public sealed class ScheduleAgenda : ContentView
 
         return free;
     }
+
+    // The colours are taken when the views are made, so a new theme makes them again.
+    private void OnPaletteChanged(object? sender, EventArgs args) => Dispatcher.Dispatch(Rebuild);
 
     private void Rebuild()
     {
@@ -279,7 +289,7 @@ public sealed class ScheduleAgenda : ContentView
         var text = AppTexts.Format("Schedule.Free", TimeOf(start), TimeOf(end));
         var row = GridOf(8, GridLength.Star, GridLength.Auto);
         row.Add(Text(text, 14, ColorOf("TextSecondary")), 0, 0);
-        row.Add(Text("+", 18, ColorOf("Accent"), "TextSemiBold"), 1, 0);
+        row.Add(Text("+", 18, ColorOf("AccentText"), "TextSemiBold"), 1, 0);
         var border = new Border
         {
             BackgroundColor = Colors.Transparent,
@@ -302,9 +312,9 @@ public sealed class ScheduleAgenda : ContentView
         var name = day.ToString("dddd, d MMMM", culture);
         var header = new HorizontalStackLayout { Spacing = 8 };
         var title = string.Concat(name[..1].ToUpper(culture), name[1..]);
-        header.Add(Text(title, 17, isToday ? ColorOf("Accent") : ColorOf("Text"), "TextSemiBold"));
+        header.Add(Text(title, 17, isToday ? ColorOf("AccentText") : ColorOf("Text"), "TextSemiBold"));
         if (isToday)
-            header.Add(Text(AppTexts.Get("Schedule.Today"), 13, ColorOf("Accent"), "TextMedium"));
+            header.Add(Text(AppTexts.Get("Schedule.Today"), 13, ColorOf("AccentText"), "TextMedium"));
 
         var section = new VerticalStackLayout { Spacing = 6 };
         section.Add(Tappable(header, DayCommand, day, title));

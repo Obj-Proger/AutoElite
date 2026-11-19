@@ -239,7 +239,8 @@ a recurring one comes back, and opens it again. In the tab of studies, a student
 and adds their own, such as a scan of their passport, with a description, and deletes those they added; an opened file
 is kept in the cache of the device until they sign out. The texts of the application are in English, with a Russian
 translation, in `Resources/Strings`; the device's language chooses between them unless the user chooses one in the
-profile, where they also change the school and sign out.
+profile, where they also change the school and sign out. The colors follow the light or dark theme of the device, or
+the theme the user chooses in the profile, which shows at once.
 
 The application works without a network too (`src/AutoElite.Client.Offline`). A SQLite database in its private storage
 keeps what the user last read, shown as possibly out of date while the API cannot be reached, and the actions the user

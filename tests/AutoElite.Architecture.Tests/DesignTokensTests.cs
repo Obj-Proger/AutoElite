@@ -6,37 +6,50 @@ namespace AutoElite.Architecture.Tests;
 
 /// <summary>
 /// The clients copy the colors of the design system from design/tokens.json, and the website its fonts from
-/// design/fonts; the copies must match.
+/// design/fonts; the copies must match. The light theme has a color for every color of the dark one.
 /// </summary>
 public partial class DesignTokensTests
 {
     private static readonly XNamespace _xaml = "http://schemas.microsoft.com/winfx/2009/xaml";
 
-    // The colors of the tokens, by their names in PascalCase, as the clients name them.
-    private static Dictionary<string, string> TokenColors()
+    // The colors of a group of the tokens, the dark theme by default, by their names in PascalCase, as the clients name them.
+    private static Dictionary<string, string> TokenColors(string group = "color")
     {
         using var tokens = JsonDocument.Parse(File.ReadAllText(Repository.PathOf("design", "tokens.json")));
 
-        return tokens.RootElement.GetProperty("color").EnumerateObject()
+        return tokens.RootElement.GetProperty(group).EnumerateObject()
             .Where(token => !token.Name.StartsWith('$'))
             .ToDictionary(
                 token => char.ToUpperInvariant(token.Name[0]) + token.Name[1..],
                 token => token.Value.GetProperty("$value").GetString()!.ToUpperInvariant());
     }
 
+    // The colors of a resource dictionary of the mobile application, by their keys.
+    private static Dictionary<string, string> MobileColors(string file)
+    {
+        var path = Repository.PathOf("src", "AutoElite.Mobile", "Resources", "Styles", file);
+
+        return XDocument.Load(path).Root!.Elements()
+            .Where(element => element.Name.LocalName == "Color")
+            .ToDictionary(element => element.Attribute(_xaml + "Key")!.Value, element => element.Value.Trim().ToUpperInvariant());
+    }
+
     [Fact]
     public void MobileColors_AreTheColorsOfTheTokens()
     {
-        var path = Repository.PathOf("src", "AutoElite.Mobile", "Resources", "Styles", "Colors.xaml");
-        var colors = XDocument.Load(path).Root!.Elements()
-            .Where(element => element.Name.LocalName == "Color")
-            .ToDictionary(element => element.Attribute(_xaml + "Key")!.Value, element => element.Value.Trim().ToUpperInvariant());
-
         var tokens = TokenColors();
 
         tokens.Should().NotBeEmpty();
-        colors.Should().BeEquivalentTo(tokens);
+        MobileColors("Colors.xaml").Should().BeEquivalentTo(tokens);
     }
+
+    [Fact]
+    public void MobileLightColors_AreTheLightColorsOfTheTokens() =>
+        MobileColors("ColorsLight.xaml").Should().BeEquivalentTo(TokenColors("colorLight"));
+
+    [Fact]
+    public void LightTheme_HasAColorForEveryColorOfTheDarkOne() =>
+        TokenColors("colorLight").Keys.Should().BeEquivalentTo(TokenColors().Keys);
 
     [Fact]
     public void WebColors_AreTheColorsOfTheTokens()

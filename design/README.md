@@ -3,14 +3,17 @@
 The design system of the AutoElite mobile application and website: one look on every screen.
 
 Graphite and champagne gold, with a geometric display face for headings and figures and a neutral grotesque for
-everything else: premium without being old-fashioned. The interface is dark.
+everything else: premium without being old-fashioned. The interface is dark; a light theme of warm ivory and stone with
+soft gold keeps the same look by day. The application follows the theme of the device unless the user chooses one in
+the profile.
 
 ## Tokens
 
 [`tokens.json`](tokens.json) holds every color, font, size, spacing and radius, in the format of the
 [W3C Design Tokens Community Group](https://www.designtokens.org/). It is the source of truth: the clients copy its
-values (the mobile application in `src/AutoElite.Mobile/Resources/Styles/Colors.xaml`), and the architecture tests check
-that the copies match, so a change starts here.
+values (the mobile application in `src/AutoElite.Mobile/Resources/Styles/Colors.xaml` and `ColorsLight.xaml`), and the
+architecture tests check that the copies match, so a change starts here. The group `color` is the dark theme and
+`colorLight` the light one, with the same names.
 
 | Color | Value | Use |
 |---|---|---|
@@ -24,9 +27,17 @@ that the copies match, so a change starts here.
 | accent | `#C9A96E` | Primary actions, highlights, the active tab |
 | accentHover | `#E2C891` | The accent pressed or under the pointer |
 | onAccent | `#0E0F11` | Text and icons on the accent |
+| accentText | `#C9A96E` | Gold text and icons on a surface: labels in capitals, links, the current day |
+| primary / primaryPressed | `#C9A96E` / `#E2C891` | The main button of a screen, and pressed |
+| onPrimary | `#0E0F11` | Text on the main button |
+| highlight / highlightBorder | `#23252A` / `#2A2C31` | The highlighted card: what matters most on a screen now |
 | success / warning / danger | `#86C29A` / `#E0B661` / `#E5867A` | States |
 
-Every text color has a contrast of at least 4.5:1 on the background and on every surface (WCAG AA).
+The light theme puts warm ivory behind white cards, stone (`#ECE7DE`) under the highlighted card and soft gold
+(`#E2D1AA`) on the main button; the gold of text turns dark (`#7A5C24`) and the states deeper, so that every text still
+reads at 4.5:1. The gold of fills, badges and the active tab stays `#C9A96E` in both themes.
+
+Every text color has a contrast of at least 4.5:1 on the background and on every surface of its theme (WCAG AA).
 
 ## Type
 

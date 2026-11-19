@@ -35,7 +35,7 @@
                                     WidthRequest="40"
                                     HeightRequest="40"
                                     StrokeThickness="0"
-                                    BackgroundColor="{StaticResource SurfaceRaised}"
+                                    BackgroundColor="{DynamicResource SurfaceRaised}"
                                     VerticalOptions="Center">
                                     <Border.StrokeShape>
                                         <Ellipse />
@@ -43,7 +43,7 @@
                                     <Label
                                         Text="{Binding Initials}"
                                         FontFamily="TextSemiBold"
-                                        TextColor="{StaticResource Accent}"
+                                        TextColor="{DynamicResource AccentText}"
                                         HorizontalOptions="Center"
                                         VerticalOptions="Center" />
                                 </Border>

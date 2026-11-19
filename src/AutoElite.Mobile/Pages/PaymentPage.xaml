@@ -39,7 +39,7 @@
                         <Label Style="{StaticResource BodyLarge}" Text="{l:Text Payment.Received}" />
                         <Label Style="{StaticResource Caption}" Text="{l:Text Payment.ReceivedHint}" />
                     </VerticalStackLayout>
-                    <Switch Grid.Column="1" IsToggled="{Binding IsReceived}" OnColor="{StaticResource Accent}" VerticalOptions="Center" />
+                    <Switch Grid.Column="1" IsToggled="{Binding IsReceived}" OnColor="{DynamicResource Accent}" VerticalOptions="Center" />
                 </Grid>
             </Border>
 

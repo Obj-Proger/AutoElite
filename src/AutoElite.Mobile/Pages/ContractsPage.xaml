@@ -8,7 +8,7 @@
     x:DataType="pages:ContractsViewModel"
     Title="{l:Text Contracts.Title}">
 
-    <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}" RefreshColor="{StaticResource Accent}">
+    <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}" RefreshColor="{DynamicResource Accent}">
         <ScrollView>
             <VerticalStackLayout Padding="{StaticResource PageMargin}" Spacing="14">
                 <Border Style="{StaticResource Card}" IsVisible="{Binding HasNotice}">
