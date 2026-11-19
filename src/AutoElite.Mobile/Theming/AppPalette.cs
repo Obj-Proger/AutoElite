@@ -84,6 +84,27 @@ internal static class AppPalette
 #endif
     }
 
+    /// <summary>
+    /// Paints a view that takes colors in code, such as tints, while it is on screen: when it appears and when the colors
+    /// change.
+    /// </summary>
+    /// <param name="view">The view.</param>
+    /// <param name="paint">Gives the view the colors of the current theme.</param>
+    public static void Follow(VisualElement view, Action paint)
+    {
+        ArgumentNullException.ThrowIfNull(view);
+        ArgumentNullException.ThrowIfNull(paint);
+
+        void OnChanged(object? sender, EventArgs args) => view.Dispatcher.Dispatch(paint);
+
+        view.Loaded += (_, _) =>
+        {
+            Changed += OnChanged;
+            paint();
+        };
+        view.Unloaded += (_, _) => Changed -= OnChanged;
+    }
+
     /// <summary>Gets a color of the current theme by its resource key, such as Accent.</summary>
     /// <param name="key">The resource key.</param>
     /// <returns>The color.</returns>

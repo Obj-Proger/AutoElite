@@ -407,4 +407,6 @@ nuget.org only.
 [GPL-3.0](LICENSE)
 
 The PDF reports use the PT Sans font by ParaType, embedded in the infrastructure assembly under the
-[SIL Open Font License 1.1](src/AutoElite.Infrastructure/Reports/Fonts/OFL.txt).
+[SIL Open Font License 1.1](src/AutoElite.Infrastructure/Reports/Fonts/OFL.txt). The application and the website use
+Inter and Unbounded under the same license ([`design/fonts`](design/fonts)), and the icons of the application are drawn
+after Lucide, under the [ISC License](design/icons/Lucide-LICENSE.txt).

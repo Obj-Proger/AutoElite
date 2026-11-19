@@ -49,6 +49,30 @@ Both are under the SIL Open Font License 1.1 ([Inter](fonts/Inter-OFL.txt), [Unb
 The files in [`fonts`](fonts) are static instances of the variable fonts of Google Fonts at those weights (Inter at
 an optical size of 14), so that every platform shows the weight it is asked for.
 
+## Icons
+
+Outlines on a grid of 24 with round ends, 1.8 thick, drawn after [Lucide](https://lucide.dev) (ISC License,
+[`icons/Lucide-LICENSE.txt`](icons/Lucide-LICENSE.txt)): the mobile application has them by name in
+`Controls/AppIcons.cs` and draws them with `AppIcon`. An icon takes the color of the text it goes with, or of the tone
+of its tile.
+
+## Components
+
+The screens are built from a few parts of `src/AutoElite.Mobile/Controls`, so that the same thing looks the same
+everywhere:
+
+- **ListRow**: one thing of a list as a card, with an icon in a tile of its tone, a title over a line of details, a
+  short value at the end and an arrow when it opens something.
+- **StatusPill**: a short status in the color of its tone instead of a line of text.
+- **CountBadge**: a count of new things in gold, up to 99, then 99+.
+- **Avatar**: a photo or initials in a circle, gold for the user themselves.
+- **StatTile**: a figure with what it counts and, as part of a whole, a bar.
+- **EmptyState**: an icon, why a list is empty and what to do about it.
+- **NoticeBanner**: the notice at the top of a page, such as that it shows what was saved on the device.
+
+A tone says what a thing tells: neutral, accent (soon, now, waiting), success, warning or danger. Its color tints the
+background of a tile, a pill or a notice and colors its icon and text.
+
 ## Shapes
 
 Spacing in steps of 4 (4, 8, 12, 16, 24, 32), 22 at the sides of a phone screen. Radii of 14 for buttons and fields,

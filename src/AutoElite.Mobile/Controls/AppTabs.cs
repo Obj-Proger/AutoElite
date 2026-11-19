@@ -1,8 +1,6 @@
 using System.ComponentModel;
 using AutoElite.Mobile.Pages;
 using AutoElite.Mobile.Theming;
-using Microsoft.Maui.Controls.Shapes;
-using ShapePath = Microsoft.Maui.Controls.Shapes.Path;
 
 namespace AutoElite.Mobile.Controls;
 
@@ -17,15 +15,13 @@ public sealed class AppTabs : ContentView
     // The icons of the tabs by their routes, the same drawings as the images of the shell (Resources/Images).
     private static readonly Dictionary<string, string> _icons = new(StringComparer.Ordinal)
     {
-        ["home"] = "M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z",
-        ["schedule"] = "M5 5h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z M3 10h18 M8 3v4 M16 3v4",
-        ["study"] = "M2 5h6a4 4 0 0 1 4 4v11a3 3 0 0 0-3-3H2z M22 5h-6a4 4 0 0 0-4 4v11a3 3 0 0 1 3-3h7z",
-        ["students"] = "M5 8a4 4 0 1 0 8 0a4 4 0 1 0-8 0z M1 21a8 8 0 0 1 16 0 M16 4.1a4 4 0 0 1 0 7.8 M19 14.5a8 8 0 0 1 4 6.5",
-        ["chats"] = "M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z",
-        ["profile"] = "M8 8a4 4 0 1 0 8 0a4 4 0 1 0-8 0z M4 21a8 8 0 0 1 16 0"
+        ["home"] = "home",
+        ["schedule"] = "calendar",
+        ["study"] = "book-open",
+        ["students"] = "users",
+        ["chats"] = "message-circle",
+        ["profile"] = "user"
     };
-
-    private static readonly PathGeometryConverter _geometries = new();
 
     private readonly Grid _strip = new() { Padding = new Thickness(8, 8, 8, 0) };
     private readonly List<ShellSection> _watched = [];
@@ -116,19 +112,7 @@ public sealed class AppTabs : ContentView
             HorizontalOptions = LayoutOptions.Fill
         };
         if (tab.Route is { } route && _icons.TryGetValue(route, out var icon))
-        {
-            part.Add(new ShapePath
-            {
-                Data = (Geometry?)_geometries.ConvertFromInvariantString(icon),
-                Stroke = color,
-                StrokeThickness = 1.8,
-                StrokeLineCap = PenLineCap.Round,
-                StrokeLineJoin = PenLineJoin.Round,
-                WidthRequest = 24,
-                HeightRequest = 24,
-                HorizontalOptions = LayoutOptions.Center
-            });
-        }
+            part.Add(new AppIcon { Name = icon, Color = color });
 
         part.Add(new Label
         {
