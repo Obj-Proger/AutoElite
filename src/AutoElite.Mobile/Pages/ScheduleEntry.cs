@@ -27,6 +27,9 @@ public sealed class ScheduleEntry
     /// <summary>Gets what the user can do with the lesson, such as cancel its booking or complete it.</summary>
     public IReadOnlyList<EntryAction> Actions { get; init; } = [];
 
+    /// <summary>Gets the address of the ground of a driving lesson, for the way to it, if it has one.</summary>
+    internal string? Address { get; init; }
+
     /// <summary>Gets the start of the lesson, by which the schedule is ordered and placed.</summary>
     internal DateTimeOffset Start { get; init; }
 

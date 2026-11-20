@@ -87,7 +87,8 @@ public sealed class LessonEntries(
 
         List<EntryAction> actions = [];
         if (exam.Kind == ExamKind.Theory && exam.Status != ExamStatus.Cancelled)
-            actions.Add(new EntryAction(AppTexts.Get("Exam.OpenTests"), new Command(async () => await Routes.OpenAsync(Routes.Tests))));
+            actions.Add(new EntryAction(
+                AppTexts.Get("Exam.OpenTests"), new Command(async () => await Routes.OpenAsync(Routes.Tests)), IsMain: true));
 
         return new ScheduleEntry
         {
@@ -158,7 +159,7 @@ public sealed class LessonEntries(
             actions.Add(new EntryAction(AppTexts.Get("Lesson.Cancel"), new Command(async () => await CancelBookingAsync(slotId))));
 
         if (status == DrivingBookingStatus.Completed && rating is null && !isWaiting)
-            actions.Add(new EntryAction(AppTexts.Get("Lesson.Rate"), new Command(async () => await RateAsync(slotId))));
+            actions.Add(new EntryAction(AppTexts.Get("Lesson.Rate"), new Command(async () => await RateAsync(slotId)), IsMain: true));
 
         return new ScheduleEntry
         {
@@ -167,6 +168,7 @@ public sealed class LessonEntries(
             Title = slot.VehicleName ?? string.Empty,
             Time = LessonTexts.TimeOf(start, end),
             Details = LessonTexts.DetailsOf(slot.InstructorName, slot.VehiclePlate, slot.TrainingGroundName),
+            Address = slot.TrainingGroundAddress,
             Status = status switch
             {
                 _ when isWaiting => AppTexts.Get("Lesson.Waiting"),
@@ -199,7 +201,8 @@ public sealed class LessonEntries(
         var isWaiting = waiting.Contains(slotId);
         var actions = new List<EntryAction>();
         if (!isWaiting && contracts.Count > 0)
-            actions.Add(new EntryAction(AppTexts.Get("Lesson.Book"), new Command(async () => await BookAsync(slotId, contracts))));
+            actions.Add(new EntryAction(
+                AppTexts.Get("Lesson.Book"), new Command(async () => await BookAsync(slotId, contracts)), IsMain: true));
 
         return new ScheduleEntry
         {
@@ -239,7 +242,8 @@ public sealed class LessonEntries(
             {
                 actions.Add(new EntryAction(
                     AppTexts.Get("Lesson.Complete"),
-                    new Command(async () => await CompleteAsync(slotId, start, end, student))));
+                    new Command(async () => await CompleteAsync(slotId, start, end, student)),
+                    IsMain: true));
                 actions.Add(new EntryAction(
                     AppTexts.Get("Lesson.MarkNoShow"), new Command(async () => await MarkNoShowAsync(slotId))));
             }
@@ -288,6 +292,7 @@ public sealed class LessonEntries(
             Title = isBooked ? student : AppTexts.Get("Lesson.Free"),
             Time = LessonTexts.TimeOf(start, end),
             Details = LessonTexts.DetailsOf(slot.VehicleName, slot.VehiclePlate, slot.TrainingGroundName),
+            Address = slot.TrainingGroundAddress,
             Status = status,
             Actions = actions,
             Start = start,
@@ -415,7 +420,8 @@ public sealed class LessonEntries(
         {
             var route = string.Create(
                 CultureInfo.InvariantCulture, $"{Routes.Attendance}?{AttendanceViewModel.LessonParameter}={lessonId:D}");
-            actions.Add(new EntryAction(AppTexts.Get("Lesson.MarkAttendance"), new Command(async () => await Routes.OpenAsync(route))));
+            actions.Add(new EntryAction(
+                AppTexts.Get("Lesson.MarkAttendance"), new Command(async () => await Routes.OpenAsync(route)), IsMain: true));
         }
 
         if (status == TheoryLessonStatus.Scheduled && start > now && !isWaiting)

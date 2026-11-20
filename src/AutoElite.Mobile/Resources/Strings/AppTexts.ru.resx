@@ -391,9 +391,6 @@
   <data name="Files.Megabytes" xml:space="preserve">
     <value>{0} МБ</value>
   </data>
-  <data name="Home.Afternoon" xml:space="preserve">
-    <value>Добрый день,</value>
-  </data>
   <data name="Home.Book" xml:space="preserve">
     <value>Записаться на вождение</value>
   </data>
@@ -402,18 +399,6 @@
   </data>
   <data name="Home.Empty" xml:space="preserve">
     <value>В ближайшие два месяца занятий нет.</value>
-  </data>
-  <data name="Home.Evening" xml:space="preserve">
-    <value>Добрый вечер,</value>
-  </data>
-  <data name="Home.Leads" xml:space="preserve">
-    <value>Новых: {0} · в работе у вас: {1} из {2}</value>
-  </data>
-  <data name="Home.Morning" xml:space="preserve">
-    <value>Доброе утро,</value>
-  </data>
-  <data name="Home.NoLeads" xml:space="preserve">
-    <value>Новых заявок нет</value>
   </data>
   <data name="Home.NoTasks" xml:space="preserve">
     <value>Открытых задач нет</value>
@@ -429,9 +414,6 @@
   </data>
   <data name="Home.RefusedItem" xml:space="preserve">
     <value>{0}: {1}</value>
-  </data>
-  <data name="Home.Schedule" xml:space="preserve">
-    <value>Расписание</value>
   </data>
   <data name="Home.SignOut" xml:space="preserve">
     <value>Выйти</value>
@@ -1554,5 +1536,77 @@
   </data>
   <data name="Tests.Unavailable" xml:space="preserve">
     <value>Для тестов нужна связь с автошколой. Попробуйте, когда появится сеть.</value>
+  </data>
+  <data name="Today.AddressCopied" xml:space="preserve">
+    <value>На устройстве нет карт. Адрес скопирован: {0}</value>
+  </data>
+  <data name="Today.Ahead" xml:space="preserve">
+    <value>Впереди</value>
+  </data>
+  <data name="Today.All" xml:space="preserve">
+    <value>Всё расписание</value>
+  </data>
+  <data name="Today.Attended" xml:space="preserve">
+    <value>посещено</value>
+  </data>
+  <data name="Today.Attention" xml:space="preserve">
+    <value>Требует внимания</value>
+  </data>
+  <data name="Today.Contract" xml:space="preserve">
+    <value>Договор {0}</value>
+  </data>
+  <data name="Today.Debt" xml:space="preserve">
+    <value>К оплате {0}</value>
+  </data>
+  <data name="Today.Free" xml:space="preserve">
+    <value>Свободные слоты</value>
+  </data>
+  <data name="Today.HoursMinutes" xml:space="preserve">
+    <value>{0} ч {1} мин</value>
+  </data>
+  <data name="Today.In" xml:space="preserve">
+    <value>через {0}</value>
+  </data>
+  <data name="Today.Lessons" xml:space="preserve">
+    <value>Сегодня</value>
+  </data>
+  <data name="Today.Minutes" xml:space="preserve">
+    <value>{0} мин</value>
+  </data>
+  <data name="Today.More" xml:space="preserve">
+    <value>Ещё</value>
+  </data>
+  <data name="Today.MyLeads" xml:space="preserve">
+    <value>у вас в работе</value>
+  </data>
+  <data name="Today.NewLeads" xml:space="preserve">
+    <value>новые, ждут</value>
+  </data>
+  <data name="Today.Next" xml:space="preserve">
+    <value>Следующее занятие</value>
+  </data>
+  <data name="Today.Of" xml:space="preserve">
+    <value>из {0}</value>
+  </data>
+  <data name="Today.OfHeld" xml:space="preserve">
+    <value>из {0} проведено</value>
+  </data>
+  <data name="Today.OfHours" xml:space="preserve">
+    <value>из {0} ч</value>
+  </data>
+  <data name="Today.Ongoing" xml:space="preserve">
+    <value>идёт · ещё {0}</value>
+  </data>
+  <data name="Today.Open" xml:space="preserve">
+    <value>Открыть</value>
+  </data>
+  <data name="Today.Route" xml:space="preserve">
+    <value>Как добраться</value>
+  </data>
+  <data name="Today.Theory" xml:space="preserve">
+    <value>Теория</value>
+  </data>
+  <data name="Today.ThisWeek" xml:space="preserve">
+    <value>на неделе</value>
   </data>
 </root>

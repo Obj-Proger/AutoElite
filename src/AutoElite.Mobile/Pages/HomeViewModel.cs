@@ -2,6 +2,7 @@ using System.Globalization;
 using AutoElite.Client.Api.Models;
 using AutoElite.Client.Offline;
 using AutoElite.Client.Realtime;
+using AutoElite.Mobile.Controls;
 using AutoElite.Mobile.Localization;
 using AutoElite.Mobile.Schedule;
 using AutoElite.Mobile.Session;
@@ -10,9 +11,11 @@ using Microsoft.Kiota.Abstractions;
 namespace AutoElite.Mobile.Pages;
 
 /// <summary>
-/// The home page of the signed-in user: the greeting; the lessons of a student or of an instructor, with what they can
-/// do with them (HomeViewModel.Lessons.cs); whether the data is from the device; the actions that wait to be sent and
-/// those the school did not accept. The bell above the tabs counts the notifications; the other sections are tabs.
+/// Today, the first tab of the signed-in user: the lesson going on or the next one in a highlighted card, with what the
+/// user can do with it; the figures of their role (the hours driven and the debt of a student, the lessons of the day
+/// and the free slots of an instructor, the leads of a manager); the tasks of the staff; the next lessons as rows
+/// (HomeViewModel.Lessons.cs); and whether the data is from the device, with the actions that wait to be sent and those
+/// the school did not accept. The bell above the tabs counts the notifications; the other sections are tabs.
 /// </summary>
 public sealed partial class HomeViewModel : ViewModel
 {
@@ -26,6 +29,7 @@ public sealed partial class HomeViewModel : ViewModel
     private readonly LessonEntries _entries;
     private readonly StaffTasks _tasks;
     private readonly LeadBook _leads;
+    private readonly StudentContracts _contracts;
 
     /// <summary>Initializes a new instance of the <see cref="HomeViewModel"/> class.</summary>
     /// <param name="session">The user of the application.</param>
@@ -38,6 +42,7 @@ public sealed partial class HomeViewModel : ViewModel
     /// <param name="entries">Makes the cards of the lessons, with what the user can do with them.</param>
     /// <param name="tasks">The tasks the school gives a member of its staff.</param>
     /// <param name="leads">The leads of the school, for a manager.</param>
+    /// <param name="contracts">The contracts of a student, for their hours and debt.</param>
     public HomeViewModel(
         UserSession session,
         StudentSchedule schedule,
@@ -48,7 +53,8 @@ public sealed partial class HomeViewModel : ViewModel
         TimeProvider timeProvider,
         LessonEntries entries,
         StaffTasks tasks,
-        LeadBook leads)
+        LeadBook leads,
+        StudentContracts contracts)
     {
         _session = session;
         _schedule = schedule;
@@ -61,26 +67,15 @@ public sealed partial class HomeViewModel : ViewModel
         _entries.Changed = LoadAsync;
         _tasks = tasks;
         _leads = leads;
+        _contracts = contracts;
         OpenTasksCommand = new Command(async () => await Routes.OpenAsync(Routes.Tasks));
         OpenLeadsCommand = new Command(async () => await Routes.GoToAsync(Routes.Leads));
         RefreshCommand = new Command(async () => await RefreshAsync());
         DismissRefusalsCommand = new Command(async () => await DismissRefusalsAsync());
         BookCommand = new Command(async () => await Routes.OpenAsync(Routes.Booking));
+        OpenScheduleCommand = new Command(async () => await Routes.GoToAsync(Routes.Schedule));
+        OpenContractsCommand = new Command(async () => await Routes.OpenAsync(Routes.Contracts));
     }
-
-    /// <summary>Gets the greeting for the time of day.</summary>
-    public string Greeting
-    {
-        get;
-        private set => SetProperty(ref field, value);
-    } = string.Empty;
-
-    /// <summary>Gets the first name of the user.</summary>
-    public string Name
-    {
-        get;
-        private set => SetProperty(ref field, value);
-    } = string.Empty;
 
     /// <summary>Gets whether the data is from the device and how many actions wait to be sent, or <see langword="null"/>.</summary>
     public string? Status
@@ -146,6 +141,130 @@ public sealed partial class HomeViewModel : ViewModel
     /// <summary>Gets a value indicating whether the user has no lessons ahead.</summary>
     public bool HasNoLessons => ShowsLessons && Lessons.Count == 0;
 
+    /// <summary>Gets the lesson going on or the next one, or <see langword="null"/> when there is none.</summary>
+    public NextLessonCard? Next
+    {
+        get;
+        private set
+        {
+            if (SetProperty(ref field, value))
+                OnPropertyChanged(nameof(HasNext));
+        }
+    }
+
+    /// <summary>Gets a value indicating whether there is a lesson going on or ahead.</summary>
+    public bool HasNext => Next is not null;
+
+    /// <summary>Gets the lessons after the next one, a few of them; the schedule has the rest.</summary>
+    public IReadOnlyList<LessonRow> Rows
+    {
+        get;
+        private set
+        {
+            if (SetProperty(ref field, value))
+                OnPropertyChanged(nameof(HasRows));
+        }
+    } = [];
+
+    /// <summary>Gets a value indicating whether there are lessons after the next one.</summary>
+    public bool HasRows => Rows.Count > 0;
+
+    /// <summary>Gets the command of an empty schedule: booking a driving lesson for a student, nothing for others.</summary>
+    public Command? EmptyCommand => IsStudent ? BookCommand : null;
+
+    /// <summary>Gets a value indicating whether the user is an instructor, who sees the lessons of the day.</summary>
+    public bool IsInstructor => IsDrivingInstructor || IsTheoryInstructor;
+
+    /// <summary>Gets how many lessons of the day are held.</summary>
+    public string LessonsHeld
+    {
+        get;
+        private set => SetProperty(ref field, value);
+    } = "0";
+
+    /// <summary>Gets how many lessons the day has, after the number held.</summary>
+    public string LessonsOfDay
+    {
+        get;
+        private set => SetProperty(ref field, value);
+    } = string.Empty;
+
+    /// <summary>Gets the part of the lessons of the day that is held, from 0 to 1.</summary>
+    public double DayProgress
+    {
+        get;
+        private set => SetProperty(ref field, value);
+    }
+
+    /// <summary>Gets how many free slots of a driving instructor wait for a booking in the next seven days.</summary>
+    public string FreeSlots
+    {
+        get;
+        private set => SetProperty(ref field, value);
+    } = "0";
+
+    /// <summary>Gets the hours a student has driven on their active contract.</summary>
+    public string DrivingHours
+    {
+        get;
+        private set => SetProperty(ref field, value);
+    } = "0";
+
+    /// <summary>Gets the hours of driving of the course, after the hours driven.</summary>
+    public string CourseHours
+    {
+        get;
+        private set => SetProperty(ref field, value);
+    } = string.Empty;
+
+    /// <summary>Gets the part of the driving of the course a student has done, from 0 to 1.</summary>
+    public double DrivingProgress
+    {
+        get;
+        private set => SetProperty(ref field, value);
+    }
+
+    /// <summary>Gets how many theory lessons a student has attended.</summary>
+    public string TheoryAttended
+    {
+        get;
+        private set => SetProperty(ref field, value);
+    } = "0";
+
+    /// <summary>Gets a value indicating whether a student has an active contract, whose progress the page shows.</summary>
+    public bool HasContract
+    {
+        get;
+        private set => SetProperty(ref field, value);
+    }
+
+    /// <summary>Gets what a student owes on their active contract, as the title of its row.</summary>
+    public string Debt
+    {
+        get;
+        private set => SetProperty(ref field, value);
+    } = string.Empty;
+
+    /// <summary>Gets the contract the debt is on.</summary>
+    public string DebtContract
+    {
+        get;
+        private set => SetProperty(ref field, value);
+    } = string.Empty;
+
+    /// <summary>Gets a value indicating whether a student owes money on their active contract.</summary>
+    public bool HasDebt
+    {
+        get;
+        private set => SetProperty(ref field, value);
+    }
+
+    /// <summary>Gets the command that opens the contracts and payments of a student.</summary>
+    public Command OpenContractsCommand { get; }
+
+    /// <summary>Gets the command that opens the schedule.</summary>
+    public Command OpenScheduleCommand { get; }
+
     /// <summary>Gets the actions the school did not accept, each with the reason.</summary>
     public IReadOnlyList<string> Refusals
     {
@@ -181,6 +300,20 @@ public sealed partial class HomeViewModel : ViewModel
         private set => SetProperty(ref field, value);
     } = string.Empty;
 
+    /// <summary>Gets how many tasks are open.</summary>
+    public string TasksCount
+    {
+        get;
+        private set => SetProperty(ref field, value);
+    } = string.Empty;
+
+    /// <summary>Gets the tone of the tasks: danger when some are overdue.</summary>
+    public StatusTone TasksTone
+    {
+        get;
+        private set => SetProperty(ref field, value);
+    }
+
     /// <summary>Gets the command that opens the tasks.</summary>
     public Command OpenTasksCommand { get; }
 
@@ -191,12 +324,33 @@ public sealed partial class HomeViewModel : ViewModel
         private set => SetProperty(ref field, value);
     }
 
-    /// <summary>Gets how many leads are new and how many the user is working on.</summary>
-    public string LeadsSummary
+    /// <summary>Gets how many leads are new.</summary>
+    public string NewLeads
+    {
+        get;
+        private set => SetProperty(ref field, value);
+    } = "0";
+
+    /// <summary>Gets how many leads the user is working on.</summary>
+    public string MyLeads
+    {
+        get;
+        private set => SetProperty(ref field, value);
+    } = "0";
+
+    /// <summary>Gets the limit of the leads the user may work on, after their number.</summary>
+    public string LeadLimit
     {
         get;
         private set => SetProperty(ref field, value);
     } = string.Empty;
+
+    /// <summary>Gets the part of their limit the leads of the user take, from 0 to 1.</summary>
+    public double LeadsProgress
+    {
+        get;
+        private set => SetProperty(ref field, value);
+    }
 
     /// <summary>Gets the command that opens the leads.</summary>
     public Command OpenLeadsCommand { get; }
@@ -214,18 +368,10 @@ public sealed partial class HomeViewModel : ViewModel
     /// <returns>A task that completes when the page shows them.</returns>
     public async Task LoadAsync()
     {
-        Greeting = _timeProvider.GetLocalNow().Hour switch
-        {
-            >= 5 and < 12 => AppTexts.Get("Home.Morning"),
-            >= 12 and < 18 => AppTexts.Get("Home.Afternoon"),
-            _ => AppTexts.Get("Home.Evening")
-        };
-
         DateTimeOffset? offlineSince = null;
         try
         {
             var profile = await _session.GetProfileAsync(CancellationToken.None);
-            Name = profile.Value.FirstName ?? string.Empty;
             IsStudent = profile.Value.Roles?.Contains(UserRole.Student) == true;
             IsDrivingInstructor = profile.Value.Roles?.Contains(UserRole.DrivingInstructor) == true;
             IsTheoryInstructor = profile.Value.Roles?.Contains(UserRole.TheoryInstructor) == true;
@@ -237,8 +383,7 @@ public sealed partial class HomeViewModel : ViewModel
         }
         catch (Exception exception) when (exception is ApiException or HttpRequestException)
         {
-            // Neither the API nor the device has the profile; the page greets the user without their name.
-            Name = string.Empty;
+            // Neither the API nor the device has the profile; the page shows what it can read without it.
         }
 
         var actions = await _queue.ListAsync(CancellationToken.None);
@@ -257,6 +402,7 @@ public sealed partial class HomeViewModel : ViewModel
             offlineSince = Earliest(offlineSince, await LoadTheoryInstructorLessonsAsync(lessons, waiting));
 
         Lessons = [.. lessons.OrderBy(entry => entry.Start)];
+        ShowLessons();
 
         Refusals = [.. actions.Where(action => action.IsRejected).Select(PendingActionTexts.DescribeRefusal)];
 
@@ -269,6 +415,9 @@ public sealed partial class HomeViewModel : ViewModel
             lines.Add(AppTexts.Format("Home.Pending", waitingCount));
 
         Status = lines.Count > 0 ? string.Join(Environment.NewLine, lines) : null;
+        if (IsStudent)
+            await ShowContractAsync();
+
         if (IsStaff)
             await CountTasksAsync();
 
@@ -289,6 +438,8 @@ public sealed partial class HomeViewModel : ViewModel
             var (open, _) = await _tasks.ReadOpenAsync(CancellationToken.None);
             var now = _timeProvider.GetUtcNow();
             var overdue = open.Count(task => task.DueAtUtc < now);
+            TasksCount = open.Count.ToString(CultureInfo.CurrentCulture);
+            TasksTone = overdue > 0 ? StatusTone.Danger : StatusTone.Neutral;
             TasksSummary = open.Count == 0
                 ? AppTexts.Get("Home.NoTasks")
                 : overdue > 0 ? AppTexts.Format("Home.TasksOverdue", open.Count, overdue) : AppTexts.Format("Home.Tasks", open.Count);
@@ -308,9 +459,11 @@ public sealed partial class HomeViewModel : ViewModel
             var fresh = (await _leads.ReadNewAsync(CancellationToken.None)).Value.Count;
             var workload = (await _leads.ReadWorkloadAsync(CancellationToken.None)).Value;
             var mine = workload.InProgress ?? 0;
-            LeadsSummary = fresh + mine == 0
-                ? AppTexts.Get("Home.NoLeads")
-                : AppTexts.Format("Home.Leads", fresh, mine, workload.Limit ?? 0);
+            var limit = workload.Limit ?? 0;
+            NewLeads = fresh.ToString(CultureInfo.CurrentCulture);
+            MyLeads = mine.ToString(CultureInfo.CurrentCulture);
+            LeadLimit = AppTexts.Format("Today.Of", limit);
+            LeadsProgress = limit > 0 ? Math.Clamp((double)mine / limit, 0, 1) : 0;
         }
         catch (Exception exception) when (exception is ApiException or HttpRequestException)
         {
@@ -336,6 +489,8 @@ public sealed partial class HomeViewModel : ViewModel
     {
         OnPropertyChanged(nameof(ShowsLessons));
         OnPropertyChanged(nameof(HasNoLessons));
+        OnPropertyChanged(nameof(IsInstructor));
+        OnPropertyChanged(nameof(EmptyCommand));
     }
 
     private async Task RefreshAsync()

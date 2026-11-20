@@ -391,9 +391,6 @@
   <data name="Files.Megabytes" xml:space="preserve">
     <value>{0} MB</value>
   </data>
-  <data name="Home.Afternoon" xml:space="preserve">
-    <value>Good afternoon,</value>
-  </data>
   <data name="Home.Book" xml:space="preserve">
     <value>Book a driving lesson</value>
   </data>
@@ -402,18 +399,6 @@
   </data>
   <data name="Home.Empty" xml:space="preserve">
     <value>No lessons in the next two months.</value>
-  </data>
-  <data name="Home.Evening" xml:space="preserve">
-    <value>Good evening,</value>
-  </data>
-  <data name="Home.Leads" xml:space="preserve">
-    <value>New: {0} · yours in progress: {1} of {2}</value>
-  </data>
-  <data name="Home.Morning" xml:space="preserve">
-    <value>Good morning,</value>
-  </data>
-  <data name="Home.NoLeads" xml:space="preserve">
-    <value>No new leads</value>
   </data>
   <data name="Home.NoTasks" xml:space="preserve">
     <value>No open tasks</value>
@@ -429,9 +414,6 @@
   </data>
   <data name="Home.RefusedItem" xml:space="preserve">
     <value>{0}: {1}</value>
-  </data>
-  <data name="Home.Schedule" xml:space="preserve">
-    <value>Schedule</value>
   </data>
   <data name="Home.SignOut" xml:space="preserve">
     <value>Sign out</value>
@@ -1554,5 +1536,77 @@
   </data>
   <data name="Tests.Unavailable" xml:space="preserve">
     <value>Tests need a connection to the school. Try again when the device is online.</value>
+  </data>
+  <data name="Today.AddressCopied" xml:space="preserve">
+    <value>There are no maps on this device. The address is copied: {0}</value>
+  </data>
+  <data name="Today.Ahead" xml:space="preserve">
+    <value>Ahead</value>
+  </data>
+  <data name="Today.All" xml:space="preserve">
+    <value>Whole schedule</value>
+  </data>
+  <data name="Today.Attended" xml:space="preserve">
+    <value>attended</value>
+  </data>
+  <data name="Today.Attention" xml:space="preserve">
+    <value>Needs attention</value>
+  </data>
+  <data name="Today.Contract" xml:space="preserve">
+    <value>Contract {0}</value>
+  </data>
+  <data name="Today.Debt" xml:space="preserve">
+    <value>To pay {0}</value>
+  </data>
+  <data name="Today.Free" xml:space="preserve">
+    <value>Free slots</value>
+  </data>
+  <data name="Today.HoursMinutes" xml:space="preserve">
+    <value>{0} h {1} min</value>
+  </data>
+  <data name="Today.In" xml:space="preserve">
+    <value>in {0}</value>
+  </data>
+  <data name="Today.Lessons" xml:space="preserve">
+    <value>Today</value>
+  </data>
+  <data name="Today.Minutes" xml:space="preserve">
+    <value>{0} min</value>
+  </data>
+  <data name="Today.More" xml:space="preserve">
+    <value>More</value>
+  </data>
+  <data name="Today.MyLeads" xml:space="preserve">
+    <value>yours in progress</value>
+  </data>
+  <data name="Today.NewLeads" xml:space="preserve">
+    <value>new, waiting</value>
+  </data>
+  <data name="Today.Next" xml:space="preserve">
+    <value>Next lesson</value>
+  </data>
+  <data name="Today.Of" xml:space="preserve">
+    <value>of {0}</value>
+  </data>
+  <data name="Today.OfHeld" xml:space="preserve">
+    <value>of {0} held</value>
+  </data>
+  <data name="Today.OfHours" xml:space="preserve">
+    <value>of {0} h</value>
+  </data>
+  <data name="Today.Ongoing" xml:space="preserve">
+    <value>on now · {0} left</value>
+  </data>
+  <data name="Today.Open" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="Today.Route" xml:space="preserve">
+    <value>Directions</value>
+  </data>
+  <data name="Today.Theory" xml:space="preserve">
+    <value>Theory</value>
+  </data>
+  <data name="Today.ThisWeek" xml:space="preserve">
+    <value>this week</value>
   </data>
 </root>

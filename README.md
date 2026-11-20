@@ -197,10 +197,11 @@ chats, with the count of unread messages. The schedule shows a day, chosen in th
 with the free time of an instructor between them, or the whole week as a list by days or, on a wide window, as a grid of
 hours; it is moved by arrows or a swipe and shows the lessons of each role of the user, a student also the free slots
 they can book, and tapping a lesson shows what the user can do with it, such as booking, cancelling, completing or
-marking the attendance. A student sees their driving and theory lessons on the home page, books a free practice slot of
-one of their contracts and cancels a booking, with or without a network, and takes practice tests and theory exams with
-the timer and a review of their mistakes, which need a network; rates a completed lesson; and follows the progress of
-their training with its payments; pulling the page down sends the waiting actions and reads the lessons again. A driving
+marking the attendance. A student sees on the tab of today their next lesson in a highlighted card, with the way to its
+ground, the hours they have driven and what they owe, and their following lessons, books a free practice slot of one of
+their contracts and cancels a booking, with or without a network, and takes practice tests and theory exams with the
+timer and a review of their mistakes, which need a network; rates a completed lesson; and follows the progress of their
+training with its payments; pulling the page down sends the waiting actions and reads the lessons again. A driving
 instructor offers a practice slot by tapping free time on the schedule, with its length, vehicle and training ground,
 repeats the slots of a week on up to four next weeks, leaving out those that would overlap, withdraws a slot with a
 reason, which needs a network, sees their slots of the next two weeks, cancels a booking before the lesson and, once it
@@ -235,7 +236,7 @@ student from there. The schedule shows the school exams too: a student's own wit
 driving instructor's branch and the exams of a theory instructor's groups. An exam opens with the current members of its
 group (`members` of `GET /api/v1/exams/{id}`) and their results; once a practice exam has begun, a driving instructor
 records each result, and a recorded result is corrected with a reason, a practice one by a driving instructor and a
-theory one by the instructor responsible for the group. A member of the staff sees on the home page how many of their
+theory one by the instructor responsible for the group. A member of the staff sees on the tab of today how many of their
 tasks are open and overdue; the tasks open by their deadline, and the assignee starts a task, marks it done, after which
 a recurring one comes back, and opens it again. In the tab of studies, a student opens the documents of their contracts
 and adds their own, such as a scan of their passport, with a description, and deletes those they added; an opened file
@@ -342,7 +343,7 @@ With the demo data, sign in as each kind of user to see what they do:
   students with the card of a student, recording a payment and confirming the waiting one of `student2`; the tab of
   leads with the number in progress of the limit, taking a new one on, a note, marking one lost.
 - **Student** (`student1@autoelite.example`, in the mobile application, at `http://10.0.2.2:5080` from the Android
-  emulator or `http://localhost:5080` on Windows): the lessons of the day on the home page and the week on the schedule,
+  emulator or `http://localhost:5080` on Windows): the next lesson on today and the week on the schedule,
   with the theory exam behind and the one ahead; booking and cancelling a slot and rating a lesson; the practice tests
   with the attempts behind and the exam result; the contract with its payments and progress and the documents, with the
   scanned contract and the medical certificate; the chat with the driving instructor, with the route of a lesson, and
@@ -352,7 +353,7 @@ With the demo data, sign in as each kind of user to see what they do:
 - **Driving instructor** (`driving@autoelite.example`, in the application): the schedule of slots with the bookings of
   the students; offering a slot by tapping free time, repeating the week, withdrawing a slot; a lesson completed with
   the grades of the skills or marked missed; the progress of a student from a booked lesson or the chat; the practice
-  exam of today, recording the results of the second and third students; the tasks on the home page, one overdue.
+  exam of today, recording the results of the second and third students; the tasks on today, one overdue.
 - **Theory instructor** (`theory@autoelite.example`, in the application): the lessons of the group, scheduling, moving
   and cancelling one, the attendance marked once a lesson has started; the exams of the group, correcting a theory
   result; the questions of the tests in the tab of studies; the chat with the second student; the tasks.
