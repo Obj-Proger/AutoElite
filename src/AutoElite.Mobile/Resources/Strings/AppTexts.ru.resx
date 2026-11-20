@@ -1538,7 +1538,7 @@
     <value>Для тестов нужна связь с автошколой. Попробуйте, когда появится сеть.</value>
   </data>
   <data name="Today.AddressCopied" xml:space="preserve">
-    <value>На устройстве нет карт. Адрес скопирован: {0}</value>
+    <value>Не удалось открыть карты. Адрес скопирован: {0}</value>
   </data>
   <data name="Today.Ahead" xml:space="preserve">
     <value>Впереди</value>
@@ -1566,6 +1566,9 @@
   </data>
   <data name="Today.In" xml:space="preserve">
     <value>через {0}</value>
+  </data>
+  <data name="Today.InDays" xml:space="preserve">
+    <value>через {0} дн.</value>
   </data>
   <data name="Today.Lessons" xml:space="preserve">
     <value>Сегодня</value>
@@ -1608,5 +1611,8 @@
   </data>
   <data name="Today.ThisWeek" xml:space="preserve">
     <value>на неделе</value>
+  </data>
+  <data name="Today.Tomorrow" xml:space="preserve">
+    <value>завтра</value>
   </data>
 </root>

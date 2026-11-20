@@ -1538,7 +1538,7 @@
     <value>Tests need a connection to the school. Try again when the device is online.</value>
   </data>
   <data name="Today.AddressCopied" xml:space="preserve">
-    <value>There are no maps on this device. The address is copied: {0}</value>
+    <value>The maps could not be opened. The address is copied: {0}</value>
   </data>
   <data name="Today.Ahead" xml:space="preserve">
     <value>Ahead</value>
@@ -1566,6 +1566,9 @@
   </data>
   <data name="Today.In" xml:space="preserve">
     <value>in {0}</value>
+  </data>
+  <data name="Today.InDays" xml:space="preserve">
+    <value>in {0} days</value>
   </data>
   <data name="Today.Lessons" xml:space="preserve">
     <value>Today</value>
@@ -1608,5 +1611,8 @@
   </data>
   <data name="Today.ThisWeek" xml:space="preserve">
     <value>this week</value>
+  </data>
+  <data name="Today.Tomorrow" xml:space="preserve">
+    <value>tomorrow</value>
   </data>
 </root>

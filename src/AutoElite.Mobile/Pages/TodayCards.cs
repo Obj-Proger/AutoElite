@@ -79,8 +79,8 @@ public sealed class LessonRow
 /// <summary>Makes the cards of the page of today out of the lessons of the user.</summary>
 internal static class TodayCards
 {
-    // A countdown in hours and minutes up to a day before the lesson, and its day before that.
-    private static readonly TimeSpan _day = TimeSpan.FromDays(1);
+    // The maps on the web that show the way to a ground, in a browser or, on a phone, in their application.
+    private const string MapsAddress = "https://yandex.ru/maps/?text=";
 
     /// <summary>Finds the lesson going on or else the next one; free slots and cancelled lessons do not count.</summary>
     /// <param name="lessons">The lessons of the user, the earliest first.</param>
@@ -103,16 +103,14 @@ internal static class TodayCards
         if (route is not null && route != main)
             others.Insert(0, route);
 
+        var days = (lesson.Start.ToLocalTime().Date - now.ToLocalTime().Date).Days;
+
         return new NextLessonCard
         {
-            Kind = lesson.Kind,
-            Countdown = isGoingOn
-                ? AppTexts.Format("Today.Ongoing", DurationOf(lesson.End - now))
-                : lesson.Start - now < _day
-                    ? AppTexts.Format("Today.In", DurationOf(lesson.Start - now))
-                    : DayOf(lesson.Start),
+            Kind = days == 0 ? lesson.Kind : LessonTexts.DetailsOf(DayOf(lesson.Start), lesson.Kind),
+            Countdown = isGoingOn ? AppTexts.Format("Today.Ongoing", DurationOf(lesson.End - now)) : CountdownOf(lesson, now, days),
             CountdownTone = isGoingOn ? StatusTone.Success : StatusTone.Accent,
-            Time = TimesOf(lesson, now),
+            Time = string.Create(CultureInfo.CurrentCulture, $"{lesson.Start.ToLocalTime():t} – {lesson.End.ToLocalTime():t}"),
             Title = lesson.Title,
             TitleIcon = IconOf(lesson.Category),
             Details = lesson.Details,
@@ -177,14 +175,13 @@ internal static class TodayCards
         _ => StatusTone.Neutral
     };
 
-    // The times of a lesson today, or its day before them later.
-    private static string TimesOf(ScheduleEntry lesson, DateTimeOffset now)
+    // How long until a lesson of today starts, or in how many days a later one is.
+    private static string CountdownOf(ScheduleEntry lesson, DateTimeOffset now, int days) => days switch
     {
-        var start = lesson.Start.ToLocalTime();
-        var times = string.Create(CultureInfo.CurrentCulture, $"{start:t} – {lesson.End.ToLocalTime():t}");
-
-        return start.Date == now.ToLocalTime().Date ? times : LessonTexts.DetailsOf(DayOf(lesson.Start), times);
-    }
+        0 => AppTexts.Format("Today.In", DurationOf(lesson.Start - now)),
+        1 => AppTexts.Get("Today.Tomorrow"),
+        _ => AppTexts.Format("Today.InDays", days)
+    };
 
     private static string DayOf(DateTimeOffset moment) =>
         moment.ToLocalTime().ToString("ddd, d MMMM", CultureInfo.CurrentCulture);
@@ -195,19 +192,17 @@ internal static class TodayCards
             ? new EntryAction(AppTexts.Get("Today.Route"), new Command(async () => await OpenMapAsync(address)))
             : null;
 
+    // The address on the maps of the web, which need no application on the device; when nothing can open them, the
+    // address is copied, so that it can be pasted elsewhere.
     private static async Task OpenMapAsync(string address)
     {
-        try
-        {
-            await Map.Default.OpenAsync(new Placemark { Thoroughfare = address }, new MapLaunchOptions { Name = address });
-        }
-        catch (Exception exception) when (exception is FeatureNotSupportedException or InvalidOperationException)
-        {
-            // No maps on the device: the address can be pasted into another application.
-            await Clipboard.Default.SetTextAsync(address);
-            await Shell.Current.DisplayAlertAsync(
-                AppTexts.Get("Today.Route"), AppTexts.Format("Today.AddressCopied", address), AppTexts.Get("Home.Dismiss"));
-        }
+        var maps = new Uri(MapsAddress + Uri.EscapeDataString(address));
+        if (await Launcher.Default.TryOpenAsync(maps))
+            return;
+
+        await Clipboard.Default.SetTextAsync(address);
+        await Shell.Current.DisplayAlertAsync(
+            AppTexts.Get("Today.Route"), AppTexts.Format("Today.AddressCopied", address), AppTexts.Get("Home.Dismiss"));
     }
 
     // Offers what the user can do with a lesson and does what they choose.
