@@ -79,8 +79,8 @@ public sealed class LessonRow
 /// <summary>Makes the cards of the page of today out of the lessons of the user.</summary>
 internal static class TodayCards
 {
-    // The maps on the web that show the way to a ground, in a browser or, on a phone, in their application.
-    private const string MapsAddress = "https://yandex.ru/maps/?text=";
+    // The maps on the web, for a device without a maps application.
+    private const string WebMaps = "https://www.google.com/maps/search/?api=1&query=";
 
     /// <summary>Finds the lesson going on or else the next one; free slots and cancelled lessons do not count.</summary>
     /// <param name="lessons">The lessons of the user, the earliest first.</param>
@@ -192,17 +192,32 @@ internal static class TodayCards
             ? new EntryAction(AppTexts.Get("Today.Route"), new Command(async () => await OpenMapAsync(address)))
             : null;
 
-    // The address on the maps of the web, which need no application on the device; when nothing can open them, the
-    // address is copied, so that it can be pasted elsewhere.
+    // The address in the first maps that open: an application of the device, else the maps of the web; when nothing
+    // opens, the address is copied, so that it can be pasted elsewhere.
     private static async Task OpenMapAsync(string address)
     {
-        var maps = new Uri(MapsAddress + Uri.EscapeDataString(address));
-        if (await Launcher.Default.TryOpenAsync(maps))
-            return;
+        foreach (var maps in MapsOf(Uri.EscapeDataString(address)))
+        {
+            if (await Launcher.Default.TryOpenAsync(maps))
+                return;
+        }
 
         await Clipboard.Default.SetTextAsync(address);
         await Shell.Current.DisplayAlertAsync(
             AppTexts.Get("Today.Route"), AppTexts.Format("Today.AddressCopied", address), AppTexts.Get("Home.Dismiss"));
+    }
+
+    // Where to show an address, best first. On Android a place (geo:) goes to the maps application the user prefers:
+    // the only one installed, or the one they choose, and may keep, among several. On Windows its Maps open it when
+    // they are installed. Google Maps on the web need no application.
+    private static IEnumerable<Uri> MapsOf(string address)
+    {
+        if (DeviceInfo.Current.Platform == DevicePlatform.Android)
+            yield return new Uri("geo:0,0?q=" + address);
+        else if (DeviceInfo.Current.Platform == DevicePlatform.WinUI)
+            yield return new Uri("bingmaps:?where=" + address);
+
+        yield return new Uri(WebMaps + address);
     }
 
     // Offers what the user can do with a lesson and does what they choose.
