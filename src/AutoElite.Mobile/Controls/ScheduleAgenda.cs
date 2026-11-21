@@ -8,12 +8,12 @@ using Microsoft.Maui.Controls.Shapes;
 namespace AutoElite.Mobile.Controls;
 
 /// <summary>
-/// The schedule as a list, which reads well at any width: a day as cards in the order of time, each with its start and
-/// end, a stripe of the colour of its kind, what it is, who and where, and its state; a line marks the present moment
-/// on today and, when <see cref="ShowsFreeTime"/> is set, rows between the cards offer the free time of the day. Several
-/// days, such as a week, are sections under the names of their days, with a short row for each lesson. Tapping a
-/// lesson runs <see cref="EntryCommand"/> with it, tapping free time runs <see cref="EmptyCommand"/> with its start, and
-/// tapping the name of a day runs <see cref="DayCommand"/> with the day.
+/// The schedule as a list, which reads well at any width: each lesson as a card with the icon of its kind in a tile of
+/// its color, what it is over who and where or its state, and its start over how long it lasts; a free slot is a dashed
+/// card. A line marks the present moment on today and, when <see cref="ShowsFreeTime"/> is set, dashed rows between the
+/// cards of a day offer its free time. Several days, such as a week, are sections under the names of the days that have
+/// lessons. Tapping a lesson runs <see cref="EntryCommand"/> with it, tapping free time runs <see cref="EmptyCommand"/>
+/// with its start, and tapping the name of a day runs <see cref="DayCommand"/> with the day.
 /// </summary>
 public sealed class ScheduleAgenda : ContentView
 {
@@ -127,14 +127,14 @@ public sealed class ScheduleAgenda : ContentView
             : string.Create(CultureInfo.CurrentCulture, $"{entry.Kind} · {entry.Title}");
     }
 
-    // The colour of the stripe and of the text of a lesson by its kind; a cancelled lesson and a missed one are muted.
-    private static (Color Stripe, Color Text) ColorsOf(ScheduleCategory category) => category switch
+    // The tone of the tile of a lesson by its kind: the gold for driving and free slots, a warning for an exam, danger
+    // for a cancelled or missed lesson.
+    private static StatusTone ToneOf(ScheduleCategory category) => category switch
     {
-        ScheduleCategory.Driving => (ColorOf("Accent"), ColorOf("Text")),
-        ScheduleCategory.Theory => (ColorOf("TextSecondary"), ColorOf("Text")),
-        ScheduleCategory.Free => (ColorOf("Accent"), ColorOf("AccentText")),
-        ScheduleCategory.Exam => (ColorOf("Warning"), ColorOf("Warning")),
-        _ => (ColorOf("Border"), ColorOf("TextMuted"))
+        ScheduleCategory.Driving or ScheduleCategory.Free => StatusTone.Accent,
+        ScheduleCategory.Exam => StatusTone.Warning,
+        ScheduleCategory.Inactive => StatusTone.Danger,
+        _ => StatusTone.Neutral
     };
 
     private static Label Text(string text, double size, Color color, string font = "TextRegular", int maxLines = 1) => new()
@@ -196,6 +196,64 @@ public sealed class ScheduleAgenda : ContentView
         return free;
     }
 
+    // The tile of an icon: tinted by its tone or, for free time, dashed.
+    private static Border TileOf(string icon, StatusTone tone, bool isFree)
+    {
+        var tile = new Border
+        {
+            WidthRequest = 44,
+            HeightRequest = 44,
+            StrokeShape = new RoundRectangle { CornerRadius = 12 },
+            StrokeThickness = isFree ? 1 : 0,
+            Stroke = ColorOf("TextMuted"),
+            BackgroundColor = isFree ? Colors.Transparent : ToneColors.BackgroundOf(tone),
+            VerticalOptions = LayoutOptions.Center,
+            Content = new AppIcon { Name = icon, Size = 22, Color = ColorOf(ToneColors.ForegroundOf(tone)) }
+        };
+        if (isFree)
+            tile.StrokeDashArray = [4, 3];
+
+        return tile;
+    }
+
+    // A card of a row of the list: filled, or dashed and clear for free time.
+    private static Border CardOf(View content, bool isFree)
+    {
+        var card = new Border
+        {
+            BackgroundColor = isFree ? Colors.Transparent : ColorOf("Surface"),
+            Stroke = ColorOf("Border"),
+            StrokeThickness = isFree ? 1 : 0,
+            StrokeShape = new RoundRectangle { CornerRadius = 18 },
+            Padding = new Thickness(16, 14),
+            Content = content
+        };
+        if (isFree)
+            card.StrokeDashArray = [4, 3];
+
+        return card;
+    }
+
+    // The name of a day over its lessons, such as WEDNESDAY, 19 NOVEMBER, with a pill on today.
+    private static HorizontalStackLayout HeaderOf(DateOnly day, bool isToday)
+    {
+        var header = new HorizontalStackLayout { Spacing = 10, Margin = new Thickness(0, 10, 0, 0) };
+        header.Add(new Label
+        {
+            Text = day.ToString("dddd, d MMMM", CultureInfo.CurrentCulture),
+            FontFamily = "TextSemiBold",
+            FontSize = 12,
+            CharacterSpacing = 1.5,
+            TextTransform = TextTransform.Uppercase,
+            TextColor = isToday ? ColorOf("AccentText") : ColorOf("TextMuted"),
+            VerticalOptions = LayoutOptions.Center
+        });
+        if (isToday)
+            header.Add(new StatusPill { Text = AppTexts.Get("Schedule.Today"), Tone = StatusTone.Accent });
+
+        return header;
+    }
+
     // The colours are taken when the views are made, so a new theme makes them again.
     private void OnPaletteChanged(object? sender, EventArgs args) => Dispatcher.Dispatch(Rebuild);
 
@@ -210,15 +268,27 @@ public sealed class ScheduleAgenda : ContentView
                 .OrderBy(lesson => lesson.Start)
         ];
         var now = DateTimeOffset.Now;
-        var list = new VerticalStackLayout { Spacing = days == 1 ? 10 : 18 };
-        for (var index = 0; index < days; index++)
+        var list = new VerticalStackLayout { Spacing = 10 };
+        if (days == 1)
         {
-            var day = FirstDay.AddDays(index);
-            var dayLessons = lessons.Where(lesson => DayOf(lesson.Start) == day).ToList();
-            if (days == 1)
-                AddDay(list, day, dayLessons, now);
-            else
-                list.Add(SectionOf(day, dayLessons, now));
+            AddDay(list, FirstDay, lessons, now);
+        }
+        else if (lessons.Count == 0)
+        {
+            list.Add(Text(AppTexts.Get("Schedule.Empty"), 15, ColorOf("TextSecondary")));
+        }
+        else
+        {
+            for (var index = 0; index < days; index++)
+            {
+                var day = FirstDay.AddDays(index);
+                var dayLessons = lessons.Where(lesson => DayOf(lesson.Start) == day).ToList();
+                if (dayLessons.Count == 0)
+                    continue;
+
+                list.Add(Tappable(HeaderOf(day, DayOf(now) == day), DayCommand, day, day.ToString("D", CultureInfo.CurrentCulture)));
+                AddRows(list, dayLessons, DayOf(now) == day ? now : null);
+            }
         }
 
         Content = list;
@@ -227,131 +297,80 @@ public sealed class ScheduleAgenda : ContentView
     // A day as cards, with the line of now on today and its free time between them when it is offered.
     private void AddDay(VerticalStackLayout list, DateOnly day, List<Placed> lessons, DateTimeOffset now)
     {
-        var rows = new List<(DateTimeOffset At, View Row)>();
-        rows.AddRange(lessons.Select(lesson => (lesson.Start, (View)CardOf(lesson))));
-        if (ShowsFreeTime && EmptyCommand is not null && day >= DayOf(now))
-            rows.AddRange(FreeTimeOf(day, lessons, now).Select(free => (free.Start, (View)FreeRowOf(free.Start, free.End))));
-
-        if (DayOf(now) == day)
-            rows.Add((now, NowLine(now)));
-
         if (lessons.Count == 0)
-            rows.Insert(0, (DateTimeOffset.MinValue, (View)Text(AppTexts.Get("Schedule.Empty"), 15, ColorOf("TextSecondary"))));
+            list.Add(Text(AppTexts.Get("Schedule.Empty"), 15, ColorOf("TextSecondary")));
+
+        List<(DateTimeOffset Start, DateTimeOffset End)> free = ShowsFreeTime && EmptyCommand is not null && day >= DayOf(now)
+            ? FreeTimeOf(day, lessons, now)
+            : [];
+        AddRows(list, lessons, DayOf(now) == day ? now : null, free);
+    }
+
+    // The lessons of a day in the order of time, with its free time and, on today, the line of now.
+    private void AddRows(
+        VerticalStackLayout list,
+        List<Placed> lessons,
+        DateTimeOffset? now,
+        List<(DateTimeOffset Start, DateTimeOffset End)>? free = null)
+    {
+        var rows = new List<(DateTimeOffset At, View Row)>();
+        rows.AddRange(lessons.Select(lesson => (lesson.Start, (View)RowOf(lesson))));
+        rows.AddRange((free ?? []).Select(time => (time.Start, (View)FreeRowOf(time.Start, time.End))));
+        if (now is { } moment && lessons.Count > 0)
+            rows.Add((moment, NowLine(moment)));
 
         foreach (var (_, row) in rows.OrderBy(row => row.At))
             list.Add(row);
     }
 
-    // A lesson as a card: its start over its end, the stripe of its kind, what it is, who and where, and its state.
-    private Border CardOf(Placed lesson)
+    // A lesson as a card: the icon of its kind, what it is over who and where or its state, its start over its length.
+    private Border RowOf(Placed lesson)
     {
         var entry = lesson.Entry;
-        var (stripe, text) = ColorsOf(entry.Category);
-        var content = GridOf(12, new GridLength(52), new GridLength(4), GridLength.Star);
+        var isFree = entry.Category == ScheduleCategory.Free;
+        var isInactive = entry.Category == ScheduleCategory.Inactive;
+        var content = GridOf(14, GridLength.Auto, GridLength.Star, GridLength.Auto);
+        content.Add(TileOf(TodayCards.IconOf(entry.Category), ToneOf(entry.Category), isFree), 0, 0);
 
-        var times = new VerticalStackLayout { Spacing = 2 };
-        times.Add(Text(TimeOf(lesson.Start), 16, ColorOf("Text"), "TextSemiBold"));
-        times.Add(Text(TimeOf(lesson.End), 13, ColorOf("TextMuted")));
-        content.Add(times, 0, 0);
-        content.Add(new BoxView { Color = stripe, CornerRadius = 2, VerticalOptions = LayoutOptions.Fill }, 1, 0);
-
-        var lines = new VerticalStackLayout { Spacing = 3 };
-        lines.Add(Text(TitleOf(entry), 16, text, "TextSemiBold", 2));
+        var lines = new VerticalStackLayout { Spacing = 3, VerticalOptions = LayoutOptions.Center };
+        lines.Add(Text(TitleOf(entry), 15, isInactive ? ColorOf("TextMuted") : ColorOf("Text"), "TextSemiBold", 2));
         if (!string.IsNullOrWhiteSpace(entry.Details))
-            lines.Add(Text(entry.Details, 14, ColorOf("TextSecondary"), maxLines: 2));
+            lines.Add(Text(entry.Details, 13, ColorOf("TextMuted"), maxLines: 2));
 
         if (entry.Status is { } status)
+            lines.Add(new StatusPill { Text = status, Tone = isInactive ? StatusTone.Danger : StatusTone.Neutral });
+
+        content.Add(lines, 1, 0);
+
+        var times = new VerticalStackLayout { Spacing = 2, VerticalOptions = LayoutOptions.Center };
+        times.Add(new Label
         {
-            var statusColor = entry.Category == ScheduleCategory.Inactive ? ColorOf("TextMuted") : stripe;
-            lines.Add(Text(status, 13, statusColor, "TextMedium", 2));
-        }
+            Text = TimeOf(lesson.Start),
+            FontFamily = "DisplaySemiBold",
+            FontSize = 15,
+            TextColor = isInactive ? ColorOf("TextMuted") : ColorOf("Text"),
+            HorizontalOptions = LayoutOptions.End
+        });
+        var length = Text(TodayCards.DurationOf(lesson.End - lesson.Start), 12, ColorOf("TextMuted"));
+        length.HorizontalOptions = LayoutOptions.End;
+        times.Add(length);
+        content.Add(times, 2, 0);
 
-        content.Add(lines, 2, 0);
-
-        var card = new Border
-        {
-            BackgroundColor = entry.Category == ScheduleCategory.Free ? Colors.Transparent : ColorOf("Surface"),
-            Stroke = entry.Category == ScheduleCategory.Free ? ColorOf("Accent") : ColorOf("Border"),
-            StrokeThickness = 1,
-            StrokeShape = new RoundRectangle { CornerRadius = 14 },
-            Padding = new Thickness(14, 12),
-            Content = content
-        };
-        if (entry.Category == ScheduleCategory.Free)
-            card.StrokeDashArray = [4, 3];
-
-        return Tappable(card, EntryCommand, entry, LessonTexts.DetailsOf(entry.Kind, entry.Time, entry.Title, entry.Status));
+        return Tappable(
+            CardOf(content, isFree), EntryCommand, entry, LessonTexts.DetailsOf(entry.Kind, entry.Time, entry.Title, entry.Status));
     }
 
     // Free time between lessons, which plans at its start when tapped.
     private Border FreeRowOf(DateTimeOffset start, DateTimeOffset end)
     {
         var text = AppTexts.Format("Schedule.Free", TimeOf(start), TimeOf(end));
-        var row = GridOf(8, GridLength.Star, GridLength.Auto);
-        row.Add(Text(text, 14, ColorOf("TextSecondary")), 0, 0);
-        row.Add(Text("+", 18, ColorOf("AccentText"), "TextSemiBold"), 1, 0);
-        var border = new Border
-        {
-            BackgroundColor = Colors.Transparent,
-            Stroke = ColorOf("Border"),
-            StrokeThickness = 1,
-            StrokeDashArray = [4, 3],
-            StrokeShape = new RoundRectangle { CornerRadius = 14 },
-            Padding = new Thickness(14, 10),
-            Content = row
-        };
+        var content = GridOf(14, GridLength.Auto, GridLength.Star);
+        content.Add(TileOf("plus", StatusTone.Accent, isFree: true), 0, 0);
+        var label = Text(text, 15, ColorOf("TextSecondary"), "TextMedium");
+        label.VerticalOptions = LayoutOptions.Center;
+        content.Add(label, 1, 0);
 
-        return Tappable(border, EmptyCommand, start, text);
-    }
-
-    // A day of several as a section: its name, which shows the day when tapped, then a short row for each lesson.
-    private VerticalStackLayout SectionOf(DateOnly day, List<Placed> lessons, DateTimeOffset now)
-    {
-        var culture = CultureInfo.CurrentCulture;
-        var isToday = DayOf(now) == day;
-        var name = day.ToString("dddd, d MMMM", culture);
-        var header = new HorizontalStackLayout { Spacing = 8 };
-        var title = string.Concat(name[..1].ToUpper(culture), name[1..]);
-        header.Add(Text(title, 17, isToday ? ColorOf("AccentText") : ColorOf("Text"), "TextSemiBold"));
-        if (isToday)
-            header.Add(Text(AppTexts.Get("Schedule.Today"), 13, ColorOf("AccentText"), "TextMedium"));
-
-        var section = new VerticalStackLayout { Spacing = 6 };
-        section.Add(Tappable(header, DayCommand, day, title));
-        var rows = new List<(DateTimeOffset At, View Row)>();
-        rows.AddRange(lessons.Select(lesson => (lesson.Start, (View)RowOf(lesson))));
-        if (isToday && lessons.Count > 0)
-            rows.Add((now, NowLine(now)));
-
-        if (lessons.Count == 0)
-            rows.Add((DateTimeOffset.MinValue, (View)Text(AppTexts.Get("Schedule.Empty"), 14, ColorOf("TextMuted"))));
-
-        foreach (var (_, row) in rows.OrderBy(row => row.At))
-            section.Add(row);
-
-        return section;
-    }
-
-    // A lesson of a week as a row: its times, the stripe of its kind, what it is and its state or details.
-    private Grid RowOf(Placed lesson)
-    {
-        var entry = lesson.Entry;
-        var (stripe, text) = ColorsOf(entry.Category);
-        var row = GridOf(10, new GridLength(96), new GridLength(3), GridLength.Star);
-        row.Padding = new Thickness(0, 4);
-        row.BackgroundColor = Colors.Transparent;
-        var times = string.Create(CultureInfo.CurrentCulture, $"{TimeOf(lesson.Start)}–{TimeOf(lesson.End)}");
-        row.Add(Text(times, 14, ColorOf("TextSecondary")), 0, 0);
-        row.Add(new BoxView { Color = stripe, CornerRadius = 1.5, VerticalOptions = LayoutOptions.Fill }, 1, 0);
-
-        var lines = new VerticalStackLayout { Spacing = 1 };
-        lines.Add(Text(TitleOf(entry), 15, text, "TextMedium"));
-        if ((entry.Status ?? entry.Details) is { Length: > 0 } detail)
-            lines.Add(Text(detail, 13, ColorOf("TextMuted")));
-
-        row.Add(lines, 2, 0);
-
-        return Tappable(row, EntryCommand, entry, LessonTexts.DetailsOf(entry.Kind, entry.Time, entry.Title, entry.Status));
+        return Tappable(CardOf(content, isFree: true), EmptyCommand, start, text);
     }
 
     private static T Tappable<T>(T view, ICommand? command, object parameter, string description)

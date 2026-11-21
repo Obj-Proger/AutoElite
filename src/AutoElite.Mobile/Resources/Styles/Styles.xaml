@@ -3,7 +3,8 @@
 <!--
     The styles of Noir Modern (design/README.md). Controls look right without a style; text, buttons and cards take a
     named style for their role: Display, Headline, Title, BodyLarge, Secondary, Caption, ErrorText and Overline for labels,
-    SecondaryButton, Field for the border around an entry, Card and HighlightCard. Colors are dynamic resources, so that
+    SecondaryButton, Segment in a SegmentBar for a choice of views, Field for the border around an entry, Card and
+    HighlightCard. Colors are dynamic resources, so that
     the light theme can take the place of the dark one while the application runs (AppPalette).
 -->
 <ResourceDictionary
@@ -142,6 +143,26 @@
         <Setter Property="CornerRadius" Value="14" />
         <Setter Property="MinimumHeightRequest" Value="{StaticResource TouchTarget}" />
         <Setter Property="Padding" Value="20,0" />
+    </Style>
+
+    <!-- A choice between views, such as a day and the week: the buttons of a bar; the chosen one is raised. -->
+    <Style x:Key="SegmentBar" TargetType="Border">
+        <Setter Property="BackgroundColor" Value="{DynamicResource Surface}" />
+        <Setter Property="StrokeThickness" Value="0" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 14" />
+        <Setter Property="Padding" Value="4" />
+    </Style>
+
+    <Style x:Key="Segment" TargetType="Button">
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="TextColor" Value="{DynamicResource TextSecondary}" />
+        <Setter Property="FontFamily" Value="TextSemiBold" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="CornerRadius" Value="10" />
+        <Setter Property="BorderWidth" Value="0" />
+        <Setter Property="HeightRequest" Value="40" />
+        <Setter Property="MinimumHeightRequest" Value="40" />
+        <Setter Property="Padding" Value="0" />
     </Style>
 
     <!-- Input -->

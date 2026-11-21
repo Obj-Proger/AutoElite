@@ -193,11 +193,13 @@ bell with the count of unread notifications, up to 99+, and the avatar, which op
 width of the window on every platform: a bar at the bottom of a phone, a rail of icons at the left of a narrow window
 and a menu with captions at the left of one from 1000 wide. They lead to today, the schedule, the studies of a student
 (their practice tests and contracts), the students and the leads of a manager, with the count of new leads, and the
-chats, with the count of unread messages. The schedule shows a day, chosen in the strip of its week, as a list of cards
-with the free time of an instructor between them, or the whole week as a list by days or, on a wide window, as a grid of
-hours; it is moved by arrows or a swipe and shows the lessons of each role of the user, a student also the free slots
-they can book, and tapping a lesson shows what the user can do with it, such as booking, cancelling, completing or
-marking the attendance. A student sees on the tab of today their next lesson in a highlighted card, with the way to its
+chats, with the count of unread messages. The schedule switches between a day, chosen in the strip of its week, and the
+week. A lesson is a card with the icon of its kind, what it is, who and where or its state, and its start and length; a
+free slot is a dashed card, and so is the free time of an instructor between the cards of a day. The week is a list
+under the names of its days with lessons or, on a wide window, a grid of hours; arrows or a swipe move the schedule and
+a link brings it back to today. It shows the lessons of each role of the user, a student also the free slots they can
+book, and tapping a lesson shows what the user can do with it, such as booking, cancelling, completing or marking the
+attendance. A student sees on the tab of today their next lesson in a highlighted card, with the way to its
 ground, the hours they have driven and what they owe, and their following lessons, books a free practice slot of one of
 their contracts and cancels a booking, with or without a network, and takes practice tests and theory exams with the
 timer and a review of their mistakes, which need a network; rates a completed lesson; and follows the progress of their

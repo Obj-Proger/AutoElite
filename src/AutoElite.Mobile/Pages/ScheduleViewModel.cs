@@ -93,6 +93,7 @@ public sealed class ScheduleViewModel : ViewModel
 
             OnPropertyChanged(nameof(GridFirstDay));
             OnPropertyChanged(nameof(Period));
+            OnPropertyChanged(nameof(IsAwayFromToday));
             Days = DaysOf(Entries);
             OnPropertyChanged(nameof(IsEmpty));
             OnPropertyChanged(nameof(IsGridEmpty));
@@ -112,6 +113,7 @@ public sealed class ScheduleViewModel : ViewModel
             OnPropertyChanged(nameof(GridFirstDay));
             OnPropertyChanged(nameof(GridDayCount));
             OnPropertyChanged(nameof(Period));
+            OnPropertyChanged(nameof(IsAwayFromToday));
             OnPropertyChanged(nameof(IsEmpty));
             OnPropertyChanged(nameof(ShowsGrid));
             OnPropertyChanged(nameof(ShowsList));
@@ -176,6 +178,11 @@ public sealed class ScheduleViewModel : ViewModel
                 : string.Create(culture, $"{first.ToString("d MMM", culture)} – {last.ToString("d MMM", culture)}");
         }
     }
+
+    /// <summary>Gets a value indicating whether the day or the week shown is not that of today, which offers the way back.</summary>
+    public bool IsAwayFromToday => IsWeekView
+        ? ScheduleWeek.FirstDayOf(SelectedDay) != ScheduleWeek.FirstDayOf(Today)
+        : SelectedDay != Today;
 
     /// <summary>Gets the days of the week of the selected day, for the strip above the grid.</summary>
     public IReadOnlyList<DayChip> Days
