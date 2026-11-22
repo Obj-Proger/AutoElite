@@ -122,8 +122,8 @@ public sealed class ScheduleViewModel : ViewModel
     }
 
     /// <summary>
-    /// Gets or sets a value indicating whether the page is wide enough for the week as a grid of hours, with seven
-    /// readable columns; the page sets it from its width.
+    /// Gets or sets a value indicating whether the page is wide enough for a grid of hours, with seven readable columns
+    /// for a week; the page sets it from its width.
     /// </summary>
     public bool IsWide
     {
@@ -139,10 +139,13 @@ public sealed class ScheduleViewModel : ViewModel
         }
     }
 
-    /// <summary>Gets a value indicating whether the week is shown as a grid of hours.</summary>
-    public bool ShowsGrid => IsWeekView && IsWide;
+    /// <summary>
+    /// Gets a value indicating whether the day or the week is shown as a grid of hours across the page, as calendars
+    /// do on a wide window, so that switching between them keeps the width.
+    /// </summary>
+    public bool ShowsGrid => IsWide;
 
-    /// <summary>Gets a value indicating whether the period is shown as a list: always a day, and a week on a narrow screen.</summary>
+    /// <summary>Gets a value indicating whether the day or the week is shown as a list of cards, on a narrow screen.</summary>
     public bool ShowsList => !ShowsGrid;
 
     /// <summary>Gets a value indicating whether the grid of the week is shown and has no lessons; the list says so itself.</summary>

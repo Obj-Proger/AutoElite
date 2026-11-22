@@ -47,7 +47,7 @@ public sealed class ListRow : Border
     private readonly Border _tile;
     private readonly Label _title = new() { FontFamily = "TextSemiBold", FontSize = 15, LineBreakMode = LineBreakMode.TailTruncation };
     private readonly Label _subtitle = new() { FontSize = 13, LineBreakMode = LineBreakMode.TailTruncation, MaxLines = 2 };
-    private readonly Label _trailing = new() { FontFamily = "DisplaySemiBold", FontSize = 15, VerticalOptions = LayoutOptions.Center };
+    private readonly Label _trailing = new() { FontFamily = "DisplaySemiBold", FontSize = 14, VerticalOptions = LayoutOptions.Center };
     private readonly AppIcon _chevron = new() { Name = "chevron-right", Size = 18 };
     private readonly TapGestureRecognizer _tap = new();
 
@@ -164,7 +164,8 @@ public sealed class ListRow : Border
         _subtitle.IsVisible = !string.IsNullOrWhiteSpace(Subtitle);
         _trailing.Text = Trailing;
         _trailing.IsVisible = !string.IsNullOrWhiteSpace(Trailing);
-        _chevron.IsVisible = ShowsChevron;
+        // A row without the arrow keeps its place, so that the trailing texts of the rows of a list line up.
+        _chevron.Opacity = ShowsChevron ? 1 : 0;
         _tap.Command = Command;
         _tap.CommandParameter = CommandParameter;
         SemanticProperties.SetDescription(

@@ -16,7 +16,7 @@
         documents; of a theory instructor, the questions of the school for the tests.
     -->
     <ScrollView>
-        <controls:AdaptiveGrid Padding="20,8,20,32" MaximumWidthRequest="1200" HorizontalOptions="Start">
+        <controls:AdaptiveGrid Padding="20,8,20,32" MinItemWidth="280" MaximumWidthRequest="1200" HorizontalOptions="Start">
             <controls:ListRow
                 Icon="clipboard-check"
                 Tone="Accent"

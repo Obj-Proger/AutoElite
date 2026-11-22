@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Windows.Input;
 using AutoElite.Mobile.Controls;
 using AutoElite.Mobile.Localization;
 
@@ -6,8 +7,8 @@ namespace AutoElite.Mobile.Pages;
 
 /// <summary>
 /// The lesson that matters most on the page of today: the one going on, or else the next one, in a highlighted card
-/// with how long until it starts or ends, one main button and the rest of what the user can do with it behind a
-/// button of its own.
+/// with how long until it starts or ends, one main button and a second one: the only other thing the user can do
+/// with it, or the rest of them behind More.
 /// </summary>
 public sealed class NextLessonCard
 {
@@ -44,8 +45,14 @@ public sealed class NextLessonCard
     /// <summary>Gets a value indicating whether the lesson has a main thing to do.</summary>
     public bool HasMain => Main is not null;
 
-    /// <summary>Gets the command that offers the other things to do with the lesson, if any.</summary>
-    public Command? MoreCommand { get; init; }
+    /// <summary>
+    /// Gets the caption of the second button: the other thing to do with the lesson when there is only one, such as
+    /// cancelling the booking, else More, which offers them all.
+    /// </summary>
+    public string MoreText { get; init; } = string.Empty;
+
+    /// <summary>Gets the command of the second button: the other thing to do, or offering the other things, if any.</summary>
+    public ICommand? MoreCommand { get; init; }
 
     /// <summary>Gets a value indicating whether there are other things to do with the lesson.</summary>
     public bool HasMore => MoreCommand is not null;
@@ -116,7 +123,13 @@ internal static class TodayCards
             Details = lesson.Details,
             Status = lesson.Status,
             Main = main,
-            MoreCommand = others.Count > 0 ? new Command(async () => await OfferAsync(lesson.Title, others)) : null
+            MoreText = others.Count == 1 ? others[0].Text : AppTexts.Get("Today.More"),
+            MoreCommand = others.Count switch
+            {
+                0 => null,
+                1 => others[0].Command,
+                _ => new Command(async () => await OfferAsync(lesson.Title, others))
+            }
         };
     }
 

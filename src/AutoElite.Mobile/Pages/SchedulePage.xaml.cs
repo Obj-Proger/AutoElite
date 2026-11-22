@@ -1,9 +1,9 @@
 namespace AutoElite.Mobile.Pages;
 
-/// <summary>The schedule of the user, a tab of the shell: a list, or a grid of hours for a week on a wide page.</summary>
+/// <summary>The schedule of the user, a tab of the shell: a list, or a grid of hours on a wide page.</summary>
 public partial class SchedulePage : ContentPage
 {
-    // The width from which the seven columns of a week as a grid of hours stay readable.
+    // The width from which a grid of hours, with the seven columns of a week, stays readable.
     private const double WideWidth = 900;
 
     private readonly ScheduleViewModel _viewModel;

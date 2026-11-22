@@ -18,9 +18,9 @@ public sealed class SupportingPane : Layout
         nameof(Spacing), typeof(double), typeof(SupportingPane), 24d, propertyChanged: OnLayoutChanged);
 
     // The share of the width the supporting content takes beside the main one, and its narrowest and widest.
-    private const double SideShare = 0.36;
+    private const double SideShare = 0.4;
     private const double SideMin = 320;
-    private const double SideMax = 440;
+    private const double SideMax = 480;
 
     /// <summary>Gets or sets the width from which the two stand side by side.</summary>
     public double Threshold
