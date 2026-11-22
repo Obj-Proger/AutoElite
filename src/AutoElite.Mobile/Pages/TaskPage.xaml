@@ -3,19 +3,23 @@
     x:Class="AutoElite.Mobile.Pages.TaskPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:AutoElite.Mobile.Controls"
     xmlns:l="clr-namespace:AutoElite.Mobile.Localization"
     xmlns:pages="clr-namespace:AutoElite.Mobile.Pages"
     x:DataType="pages:TaskViewModel"
     Title="{l:Text Task.Title}">
 
     <ScrollView>
-        <VerticalStackLayout Padding="{StaticResource PageMargin}" Spacing="14">
+        <VerticalStackLayout Padding="20,8,20,32" MaximumWidthRequest="760" Spacing="14">
             <Border Style="{StaticResource HighlightCard}">
-                <VerticalStackLayout Spacing="4">
-                    <Label Style="{StaticResource Headline}" Text="{Binding Title}" />
-                    <Label Style="{StaticResource Secondary}" Text="{Binding Due}" />
-                    <Label Style="{StaticResource Caption}" Text="{Binding Status}" />
-                </VerticalStackLayout>
+                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="14">
+                    <controls:IconTile Icon="check" Tone="Accent" />
+                    <VerticalStackLayout Grid.Column="1" Spacing="3" VerticalOptions="Center">
+                        <Label FontFamily="DisplaySemiBold" FontSize="18" Text="{Binding Title}" />
+                        <Label Style="{StaticResource Secondary}" Text="{Binding Due}" />
+                        <Label Style="{StaticResource Caption}" Text="{Binding Status}" />
+                    </VerticalStackLayout>
+                </Grid>
             </Border>
 
             <Border Style="{StaticResource Card}" IsVisible="{Binding HasDescription}">
@@ -23,7 +27,7 @@
             </Border>
             <Label Style="{StaticResource Caption}" Text="{Binding Origin}" />
 
-            <Label Style="{StaticResource ErrorText}" Text="{Binding Message}" IsVisible="{Binding HasMessage}" />
+            <controls:NoticeBanner Text="{Binding Message}" Tone="Danger" />
             <Button
                 Style="{StaticResource SecondaryButton}"
                 Text="{l:Text Task.Start}"

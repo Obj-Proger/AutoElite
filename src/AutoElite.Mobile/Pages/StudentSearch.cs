@@ -92,7 +92,6 @@ public sealed class StudentSearch(StudentDirectory directory) : ViewModel
         return new ContactEntry
         {
             Name = name,
-            Initials = PhoneCalls.InitialsOf(name),
             Roles = LessonTexts.DetailsOf(student.Phone, student.Email),
             OpenCommand = new Command(async () =>
             {

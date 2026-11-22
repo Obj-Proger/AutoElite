@@ -11,9 +11,6 @@ public sealed class ContactEntry
     /// <summary>Gets how the person works with the user, such as their driving instructor, or how to reach them.</summary>
     public required string Roles { get; init; }
 
-    /// <summary>Gets the initials, shown in place of a photo.</summary>
-    public required string Initials { get; init; }
-
     /// <summary>Gets the command that opens what the person is chosen for, such as the personal chat with them.</summary>
     public required ICommand OpenCommand { get; init; }
 }

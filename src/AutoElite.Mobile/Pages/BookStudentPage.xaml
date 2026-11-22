@@ -11,14 +11,14 @@
 
     <!-- The lesson to book, then the search of the student; tapping a student books them after a confirmation. -->
     <ScrollView>
-        <VerticalStackLayout Padding="{StaticResource PageMargin}" Spacing="14">
+        <VerticalStackLayout Padding="20,8,20,32" MaximumWidthRequest="760" Spacing="14">
             <Border Style="{StaticResource HighlightCard}">
-                <VerticalStackLayout Spacing="4">
-                    <Label Style="{StaticResource Overline}" Text="{l:Text Lesson.FreeSlot}" />
+                <VerticalStackLayout Spacing="6">
+                    <Label Style="{StaticResource Overline}" TextColor="{DynamicResource TextMuted}" Text="{l:Text Lesson.FreeSlot}" />
                     <Label Style="{StaticResource BodyLarge}" Text="{Binding Summary}" />
                 </VerticalStackLayout>
             </Border>
-            <Label Style="{StaticResource ErrorText}" Text="{Binding Message}" IsVisible="{Binding HasMessage}" />
+            <controls:NoticeBanner Text="{Binding Message}" Tone="Danger" />
             <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
             <controls:StudentSearchView BindingContext="{Binding Search}" />
         </VerticalStackLayout>

@@ -3,16 +3,17 @@
     x:Class="AutoElite.Mobile.Pages.OfferSlotPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:AutoElite.Mobile.Controls"
     xmlns:l="clr-namespace:AutoElite.Mobile.Localization"
     xmlns:pages="clr-namespace:AutoElite.Mobile.Pages"
     x:DataType="pages:OfferSlotViewModel"
     Title="{l:Text OfferSlot.Title}">
 
     <ScrollView>
-        <VerticalStackLayout Padding="{StaticResource PageMargin}" Spacing="14">
+        <VerticalStackLayout Padding="20,8,20,32" MaximumWidthRequest="560" Spacing="14">
             <Border Style="{StaticResource Card}">
                 <VerticalStackLayout Spacing="8">
-                    <Label Style="{StaticResource Overline}" Text="{l:Text OfferSlot.When}" />
+                    <Label Style="{StaticResource Overline}" TextColor="{DynamicResource TextMuted}" Text="{l:Text OfferSlot.When}" />
                     <Border Style="{StaticResource Field}">
                         <Picker Title="{l:Text OfferSlot.Day}" ItemsSource="{Binding Days}" SelectedIndex="{Binding DayIndex}" />
                     </Border>
@@ -35,7 +36,7 @@
 
             <Border Style="{StaticResource Card}">
                 <VerticalStackLayout Spacing="8">
-                    <Label Style="{StaticResource Overline}" Text="{l:Text OfferSlot.Where}" />
+                    <Label Style="{StaticResource Overline}" TextColor="{DynamicResource TextMuted}" Text="{l:Text OfferSlot.Where}" />
                     <Border Style="{StaticResource Field}">
                         <Picker
                             Title="{l:Text OfferSlot.Vehicle}"
@@ -52,7 +53,7 @@
                 </VerticalStackLayout>
             </Border>
 
-            <Label Style="{StaticResource ErrorText}" Text="{Binding Message}" IsVisible="{Binding HasMessage}" />
+            <controls:NoticeBanner Text="{Binding Message}" Tone="Danger" />
             <Button Text="{l:Text OfferSlot.Offer}" Command="{Binding OfferCommand}" />
             <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
         </VerticalStackLayout>

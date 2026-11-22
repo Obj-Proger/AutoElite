@@ -3,6 +3,7 @@
     x:Class="AutoElite.Mobile.Pages.PaymentPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:AutoElite.Mobile.Controls"
     xmlns:l="clr-namespace:AutoElite.Mobile.Localization"
     xmlns:pages="clr-namespace:AutoElite.Mobile.Pages"
     x:DataType="pages:PaymentViewModel"
@@ -10,8 +11,8 @@
 
     <!-- The contract, then the amount with its currency, the way of paying, the purpose and whether the money is received. -->
     <ScrollView>
-        <VerticalStackLayout Padding="{StaticResource PageMargin}" Spacing="14">
-            <Label Style="{StaticResource Overline}" Text="{Binding Contract}" />
+        <VerticalStackLayout Padding="20,8,20,32" MaximumWidthRequest="560" Spacing="14">
+            <Label Style="{StaticResource Overline}" TextColor="{DynamicResource TextMuted}" Text="{Binding Contract}" />
 
             <Border Style="{StaticResource Card}">
                 <VerticalStackLayout Spacing="8">
@@ -43,7 +44,7 @@
                 </Grid>
             </Border>
 
-            <Label Style="{StaticResource ErrorText}" Text="{Binding Message}" IsVisible="{Binding HasMessage}" />
+            <controls:NoticeBanner Text="{Binding Message}" Tone="Danger" />
             <Button Text="{l:Text Payment.Save}" Command="{Binding SaveCommand}" />
             <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
         </VerticalStackLayout>

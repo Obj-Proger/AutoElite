@@ -73,11 +73,6 @@ public sealed class NewChatViewModel(Chats chats) : ViewModel
         }
     }
 
-    // Initials of a full name, its first two words: the last and the first name.
-    private static string InitialsOf(string name) =>
-        string.Concat(name.Split(' ', StringSplitOptions.RemoveEmptyEntries).Take(2).Select(part => part[0]))
-            .ToUpper(CultureInfo.CurrentCulture);
-
     private ContactEntry Entry(ChatContactItem contact)
     {
         var name = contact.FullName ?? string.Empty;
@@ -86,7 +81,6 @@ public sealed class NewChatViewModel(Chats chats) : ViewModel
         return new ContactEntry
         {
             Name = name,
-            Initials = InitialsOf(name),
             Roles = string.Join(", ", (contact.Roles ?? []).OfType<UserRole>().Select(RoleTexts.Of)),
             OpenCommand = new Command(async () => await OpenAsync(userId, name))
         };
