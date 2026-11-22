@@ -60,6 +60,13 @@ public sealed class BookingViewModel : ViewModel
         private set => SetProperty(ref field, value);
     } = [];
 
+    /// <summary>Gets what the page says when it has nothing to show, or <see langword="null"/>.</summary>
+    public string? EmptyText
+    {
+        get;
+        private set => SetProperty(ref field, value);
+    }
+
     /// <summary>Gets why there are no slots to show, or that the slots are from the device, or <see langword="null"/>.</summary>
     public string? Notice
     {
@@ -114,7 +121,7 @@ public sealed class BookingViewModel : ViewModel
             ?? contracts.FirstOrDefault(contract => contract.Id is not null);
         if (chosen is null)
         {
-            Show([], null, AppTexts.Get("Booking.NoContract"));
+            Show([], null, null, AppTexts.Get("Booking.NoContract"));
 
             return;
         }
@@ -144,15 +151,16 @@ public sealed class BookingViewModel : ViewModel
         var entries = slots.Value.Select(slot => Entry(contractId, slot)).OfType<SlotEntry>().ToList();
         var notice = slots.IsFromCache
             ? AppTexts.Format("Booking.Offline", slots.SavedAt.ToLocalTime().ToString("g", CultureInfo.CurrentCulture))
-            : entries.Count == 0 ? AppTexts.Get("Booking.Empty") : null;
-        Show(entries, name, notice);
+            : null;
+        Show(entries, name, notice, entries.Count == 0 ? AppTexts.Get("Booking.Empty") : null);
     }
 
-    private void Show(IReadOnlyList<SlotEntry> slots, string? contract, string? notice)
+    private void Show(IReadOnlyList<SlotEntry> slots, string? contract, string? notice, string? empty = null)
     {
         Slots = slots;
         Contract = contract;
         Notice = notice;
+        EmptyText = empty;
     }
 
     private SlotEntry? Entry(Guid contractId, DrivingSlotItem slot)

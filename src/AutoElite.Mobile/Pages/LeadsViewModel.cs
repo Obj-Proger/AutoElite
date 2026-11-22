@@ -53,7 +53,14 @@ public sealed class LeadsViewModel(LeadBook leads, UserSession session) : ViewMo
         private set => SetProperty(ref field, value);
     } = AppTexts.Get("Leads.Mine");
 
-    /// <summary>Gets that there are no leads, that they are from the device, or why they could not be read.</summary>
+    /// <summary>Gets what the page says when it has nothing to show, or <see langword="null"/>.</summary>
+    public string? EmptyText
+    {
+        get;
+        private set => SetProperty(ref field, value);
+    }
+
+    /// <summary>Gets that the leads are from the device, or why they could not be read.</summary>
     public string? Notice
     {
         get;
@@ -92,7 +99,8 @@ public sealed class LeadsViewModel(LeadBook leads, UserSession session) : ViewMo
             DateTimeOffset? savedAt = fresh.IsFromCache ? fresh.SavedAt : mine is { IsFromCache: true } ? mine.SavedAt : null;
             Notice = savedAt is { } saved
                 ? AppTexts.Format("Leads.Offline", saved.ToLocalTime().ToString("g", CultureInfo.CurrentCulture))
-                : NewLeads.Count + MyLeads.Count == 0 ? AppTexts.Get("Leads.Empty") : null;
+                : null;
+            EmptyText = NewLeads.Count + MyLeads.Count == 0 ? AppTexts.Get("Leads.Empty") : null;
         }
         catch (Exception exception) when (exception is ApiException or HttpRequestException)
         {

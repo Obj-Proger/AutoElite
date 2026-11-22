@@ -21,7 +21,7 @@
             <Label Style="{StaticResource Secondary}" Text="{l:Text Documents.MineHint}" />
             <Button Text="{l:Text Documents.Add}" Command="{Binding AddCommand}" />
             <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
-            <Label Style="{StaticResource Caption}" Text="{l:Text Documents.NoneOfMine}" IsVisible="{Binding HasNoneOfMine}" />
+            <controls:EmptyState Icon="file-text" Text="{l:Text Documents.NoneOfMine}" IsVisible="{Binding HasNoneOfMine}" />
             <controls:AdaptiveGrid BindableLayout.ItemsSource="{Binding Mine}">
                 <BindableLayout.ItemTemplate>
                     <DataTemplate x:DataType="pages:DocumentEntry">

@@ -35,7 +35,14 @@ public sealed class TasksViewModel(StaffTasks tasks, TimeProvider timeProvider) 
         private set => SetProperty(ref field, value);
     } = [];
 
-    /// <summary>Gets that there are no tasks, that they are from the device, or why they could not be read.</summary>
+    /// <summary>Gets what the page says when it has nothing to show, or <see langword="null"/>.</summary>
+    public string? EmptyText
+    {
+        get;
+        private set => SetProperty(ref field, value);
+    }
+
+    /// <summary>Gets that the tasks are from the device, or why they could not be read.</summary>
     public string? Notice
     {
         get;
@@ -78,7 +85,8 @@ public sealed class TasksViewModel(StaffTasks tasks, TimeProvider timeProvider) 
             Items = [.. items.Where(task => task.Id is not null).Select(task => Entry(task, now))];
             Notice = offlineSince is { } savedAt
                 ? AppTexts.Format("Tasks.Offline", savedAt.ToLocalTime().ToString("g", CultureInfo.CurrentCulture))
-                : Items.Count == 0 ? (ShowsDone ? AppTexts.Get("Tasks.NoneDone") : AppTexts.Get("Tasks.NoneOpen")) : null;
+                : null;
+            EmptyText = Items.Count == 0 ? (ShowsDone ? AppTexts.Get("Tasks.NoneDone") : AppTexts.Get("Tasks.NoneOpen")) : null;
         }
         catch (Exception exception) when (exception is ApiException or HttpRequestException)
         {

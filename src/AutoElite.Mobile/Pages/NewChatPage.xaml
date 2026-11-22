@@ -21,6 +21,7 @@
             </Border>
             <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
             <controls:NoticeBanner Text="{Binding Notice}" />
+            <controls:EmptyState Icon="users" Text="{Binding EmptyText}" HidesWithoutText="True" />
 
             <VerticalStackLayout Spacing="10" BindableLayout.ItemsSource="{Binding Items}">
                 <BindableLayout.ItemTemplate>

@@ -179,7 +179,7 @@
     <value>Choose a chat to read it here.</value>
   </data>
   <data name="Chats.Empty" xml:space="preserve">
-    <value>No chats yet. Start one with the + button; your instructors and groups write here too.</value>
+    <value>No chats yet. Your instructors and groups write here too.</value>
   </data>
   <data name="Chats.Muted" xml:space="preserve">
     <value>muted</value>

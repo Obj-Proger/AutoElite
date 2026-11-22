@@ -17,6 +17,7 @@
         <ScrollView>
             <controls:PageColumn Padding="20,8,20,32" Spacing="12" MaximumWidthRequest="1200">
                 <controls:NoticeBanner Text="{Binding Notice}" />
+                <controls:EmptyState Icon="clipboard-check" Text="{Binding EmptyText}" HidesWithoutText="True" />
 
                 <Label Style="{StaticResource Title}" Text="{l:Text Exams.Title}" IsVisible="{Binding HasExams}" />
                 <controls:AdaptiveGrid MinItemWidth="320" BindableLayout.ItemsSource="{Binding Exams}">

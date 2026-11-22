@@ -82,7 +82,14 @@ public sealed class ChatsViewModel : ViewModel
 
     /// <summary>Gets a value indicating whether the pane asks to choose a chat, as none is open.</summary>
     public bool ChoosesChat => IsWide && !HasConversation;
-    /// <summary>Gets that there are no chats, or that they are from the device, or <see langword="null"/>.</summary>
+    /// <summary>Gets what the page says when it has nothing to show, or <see langword="null"/>.</summary>
+    public string? EmptyText
+    {
+        get;
+        private set => SetProperty(ref field, value);
+    }
+
+    /// <summary>Gets that the chats are from the device or could not be read, or <see langword="null"/>.</summary>
     public string? Notice
     {
         get;
@@ -137,13 +144,15 @@ public sealed class ChatsViewModel : ViewModel
             Show();
             Notice = chats.IsFromCache
                 ? AppTexts.Format("Chats.Offline", chats.SavedAt.ToLocalTime().ToString("g", CultureInfo.CurrentCulture))
-                : _read.Count == 0 ? AppTexts.Get("Chats.Empty") : null;
+                : null;
+            EmptyText = _read.Count == 0 ? AppTexts.Get("Chats.Empty") : null;
         }
         catch (Exception exception) when (exception is ApiException or HttpRequestException)
         {
             _read = [];
             Show();
             Notice = AppTexts.Get("Chats.Unavailable");
+            EmptyText = null;
         }
     }
 

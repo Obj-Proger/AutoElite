@@ -275,7 +275,7 @@ public sealed class ScheduleAgenda : ContentView
         }
         else if (lessons.Count == 0)
         {
-            list.Add(Text(AppTexts.Get("Schedule.Empty"), 15, ColorOf("TextSecondary")));
+            list.Add(new EmptyState { Icon = "calendar", Text = AppTexts.Get("Schedule.Empty") });
         }
         else
         {
@@ -298,7 +298,7 @@ public sealed class ScheduleAgenda : ContentView
     private void AddDay(VerticalStackLayout list, DateOnly day, List<Placed> lessons, DateTimeOffset now)
     {
         if (lessons.Count == 0)
-            list.Add(Text(AppTexts.Get("Schedule.Empty"), 15, ColorOf("TextSecondary")));
+            list.Add(new EmptyState { Icon = "calendar", Text = AppTexts.Get("Schedule.Empty") });
 
         List<(DateTimeOffset Start, DateTimeOffset End)> free = ShowsFreeTime && EmptyCommand is not null && day >= DayOf(now)
             ? FreeTimeOf(day, lessons, now)

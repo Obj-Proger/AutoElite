@@ -65,6 +65,13 @@ public sealed class ManagedStudentViewModel : ViewModel, IQueryAttributable
         private set => SetProperty(ref field, value);
     } = [];
 
+    /// <summary>Gets what the page says when it has nothing to show, or <see langword="null"/>.</summary>
+    public string? EmptyText
+    {
+        get;
+        private set => SetProperty(ref field, value);
+    }
+
     /// <summary>Gets that the card is from the device, or why it could not be read or an action failed.</summary>
     public string? Notice
     {
@@ -139,7 +146,8 @@ public sealed class ManagedStudentViewModel : ViewModel, IQueryAttributable
             ContractEntries = entries;
             Notice = savedAt is { } saved
                 ? AppTexts.Format("Contracts.Offline", saved.ToLocalTime().ToString("g", CultureInfo.CurrentCulture))
-                : entries.Count == 0 ? AppTexts.Get("Contracts.Empty") : null;
+                : null;
+            EmptyText = entries.Count == 0 ? AppTexts.Get("Contracts.Empty") : null;
         }
         catch (Exception exception) when (exception is ApiException or HttpRequestException)
         {

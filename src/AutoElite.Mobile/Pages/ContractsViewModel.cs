@@ -30,7 +30,14 @@ public sealed class ContractsViewModel : ViewModel
         private set => SetProperty(ref field, value);
     } = [];
 
-    /// <summary>Gets that there are no contracts, or that they are from the device, or <see langword="null"/>.</summary>
+    /// <summary>Gets what the page says when it has nothing to show, or <see langword="null"/>.</summary>
+    public string? EmptyText
+    {
+        get;
+        private set => SetProperty(ref field, value);
+    }
+
+    /// <summary>Gets that the contracts are from the device or could not be read, or <see langword="null"/>.</summary>
     public string? Notice
     {
         get;
@@ -79,7 +86,8 @@ public sealed class ContractsViewModel : ViewModel
             Items = entries;
             Notice = offlineSince is { } savedAt
                 ? AppTexts.Format("Contracts.Offline", savedAt.ToLocalTime().ToString("g", CultureInfo.CurrentCulture))
-                : entries.Count == 0 ? AppTexts.Get("Contracts.Empty") : null;
+                : null;
+            EmptyText = entries.Count == 0 ? AppTexts.Get("Contracts.Empty") : null;
         }
         catch (Exception exception) when (exception is ApiException or HttpRequestException)
         {

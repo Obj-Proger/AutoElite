@@ -179,7 +179,7 @@
     <value>Выберите чат, чтобы открыть переписку.</value>
   </data>
   <data name="Chats.Empty" xml:space="preserve">
-    <value>Чатов пока нет. Начните разговор кнопкой «+»; здесь пишут и ваши инструкторы и группы.</value>
+    <value>Чатов пока нет. Здесь вам пишут и ваши инструкторы и группы.</value>
   </data>
   <data name="Chats.Muted" xml:space="preserve">
     <value>без звука</value>

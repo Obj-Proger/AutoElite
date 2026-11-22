@@ -33,6 +33,7 @@
                 <Label Style="{StaticResource Overline}" TextColor="{DynamicResource TextMuted}" Text="{Binding Contract}" Margin="4,0" />
 
                 <controls:NoticeBanner Text="{Binding Notice}" />
+                <controls:EmptyState Icon="calendar" Text="{Binding EmptyText}" HidesWithoutText="True" />
 
                 <controls:AdaptiveGrid MinItemWidth="300" BindableLayout.ItemsSource="{Binding Slots}">
                     <BindableLayout.ItemTemplate>

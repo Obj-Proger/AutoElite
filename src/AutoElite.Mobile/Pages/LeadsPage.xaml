@@ -39,6 +39,7 @@
         <ScrollView>
             <controls:PageColumn Padding="20,8,20,32" Spacing="16" MaximumWidthRequest="1200">
                 <controls:NoticeBanner Text="{Binding Notice}" />
+                <controls:EmptyState Icon="inbox" Text="{Binding EmptyText}" HidesWithoutText="True" />
 
                 <VerticalStackLayout Spacing="8" IsVisible="{Binding HasNewLeads}">
                     <Label

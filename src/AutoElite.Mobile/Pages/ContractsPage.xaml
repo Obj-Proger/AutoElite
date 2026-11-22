@@ -18,6 +18,7 @@
         <ScrollView>
             <controls:PageColumn Padding="20,8,20,32" Spacing="14" MaximumWidthRequest="1200">
                 <controls:NoticeBanner Text="{Binding Notice}" />
+                <controls:EmptyState Icon="wallet" Text="{Binding EmptyText}" HidesWithoutText="True" />
 
                 <controls:AdaptiveGrid MaxColumns="1" Spacing="14" BindableLayout.ItemsSource="{Binding Items}">
                     <BindableLayout.ItemTemplate>

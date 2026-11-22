@@ -33,6 +33,13 @@ public sealed class NewChatViewModel(Chats chats) : ViewModel
         }
     } = string.Empty;
 
+    /// <summary>Gets what the page says when it has nothing to show, or <see langword="null"/>.</summary>
+    public string? EmptyText
+    {
+        get;
+        private set => SetProperty(ref field, value);
+    }
+
     /// <summary>Gets that there is nobody yet, or that the list is from the device, or why opening failed.</summary>
     public string? Notice
     {
@@ -65,7 +72,8 @@ public sealed class NewChatViewModel(Chats chats) : ViewModel
             Filter();
             Notice = contacts.IsFromCache
                 ? AppTexts.Format("Chats.Offline", contacts.SavedAt.ToLocalTime().ToString("g", CultureInfo.CurrentCulture))
-                : _all.Count == 0 ? AppTexts.Get("NewChat.Empty") : null;
+                : null;
+            EmptyText = _all.Count == 0 ? AppTexts.Get("NewChat.Empty") : null;
         }
         catch (Exception exception) when (exception is ApiException or HttpRequestException)
         {

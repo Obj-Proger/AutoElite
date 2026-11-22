@@ -36,6 +36,7 @@
                 </Grid>
             </Border>
             <controls:NoticeBanner Text="{Binding Notice}" />
+            <controls:EmptyState Icon="check" Text="{Binding EmptyText}" HidesWithoutText="True" />
 
             <controls:AdaptiveGrid BindableLayout.ItemsSource="{Binding Items}">
                 <BindableLayout.ItemTemplate>

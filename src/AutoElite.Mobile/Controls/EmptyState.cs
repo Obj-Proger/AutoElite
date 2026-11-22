@@ -25,15 +25,26 @@ public sealed class EmptyState : VerticalStackLayout
     public static readonly BindableProperty CommandProperty = BindableProperty.Create(
         nameof(Command), typeof(ICommand), typeof(EmptyState), propertyChanged: OnChanged);
 
-    private readonly AppIcon _icon = new() { Size = 26 };
-    private readonly Label _text = new() { FontSize = 15, HorizontalTextAlignment = TextAlignment.Center };
+    /// <summary>Identifies the <see cref="HidesWithoutText"/> property.</summary>
+    public static readonly BindableProperty HidesWithoutTextProperty = BindableProperty.Create(
+        nameof(HidesWithoutText), typeof(bool), typeof(EmptyState), false, propertyChanged: OnChanged);
+
+    private readonly AppIcon _icon = new() { Size = 34 };
+    private readonly Label _text = new()
+    {
+        FontFamily = "TextSemiBold",
+        FontSize = 18,
+        HorizontalTextAlignment = TextAlignment.Center,
+        MaximumWidthRequest = 420,
+        HorizontalOptions = LayoutOptions.Center
+    };
     private readonly Button _action = new() { HorizontalOptions = LayoutOptions.Center };
 
     /// <summary>Initializes a new instance of the <see cref="EmptyState"/> class.</summary>
     public EmptyState()
     {
-        Spacing = 12;
-        Padding = new Thickness(24, 32);
+        Spacing = 16;
+        Padding = new Thickness(24, 56);
         HorizontalOptions = LayoutOptions.Fill;
         _icon.SetDynamicResource(AppIcon.ColorProperty, "TextMuted");
         _text.SetDynamicResource(Label.TextColorProperty, "TextSecondary");
@@ -41,8 +52,8 @@ public sealed class EmptyState : VerticalStackLayout
 
         var circle = new Border
         {
-            WidthRequest = 56,
-            HeightRequest = 56,
+            WidthRequest = 80,
+            HeightRequest = 80,
             StrokeThickness = 0,
             StrokeShape = new Ellipse(),
             HorizontalOptions = LayoutOptions.Center,
@@ -84,6 +95,16 @@ public sealed class EmptyState : VerticalStackLayout
         set => SetValue(CommandProperty, value);
     }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether the state hides while it has no text, so that a page shows it by giving it
+    /// the text of what it lacks.
+    /// </summary>
+    public bool HidesWithoutText
+    {
+        get => (bool)GetValue(HidesWithoutTextProperty);
+        set => SetValue(HidesWithoutTextProperty, value);
+    }
+
     private static void OnChanged(BindableObject bindable, object oldValue, object newValue) => ((EmptyState)bindable).Update();
 
     private void Update()
@@ -93,5 +114,7 @@ public sealed class EmptyState : VerticalStackLayout
         _action.Text = ActionText;
         _action.Command = Command;
         _action.IsVisible = Command is not null && !string.IsNullOrWhiteSpace(ActionText);
+        if (HidesWithoutText)
+            IsVisible = !string.IsNullOrWhiteSpace(Text);
     }
 }

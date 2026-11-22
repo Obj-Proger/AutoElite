@@ -64,6 +64,13 @@ public sealed class TestsViewModel : ViewModel
     /// <summary>Gets a value indicating whether the student has taken tests.</summary>
     public bool HasAttempts => Attempts.Count > 0;
 
+    /// <summary>Gets what the page says when it has nothing to show, or <see langword="null"/>.</summary>
+    public string? EmptyText
+    {
+        get;
+        private set => SetProperty(ref field, value);
+    }
+
     /// <summary>Gets why there is nothing to show, or <see langword="null"/>.</summary>
     public string? Notice
     {
@@ -99,7 +106,7 @@ public sealed class TestsViewModel : ViewModel
             if (contract is not { Id: { } contractId, Category: { } category })
             {
                 Exams = [];
-                Show([], [], AppTexts.Get("Tests.NoContract"));
+                Show([], [], null, AppTexts.Get("Tests.NoContract"));
 
                 return;
             }
@@ -112,6 +119,7 @@ public sealed class TestsViewModel : ViewModel
             Show(
                 [.. templates.Select(template => TemplateEntry(contractId, template)).OfType<TestEntry>()],
                 [.. attempts.Where(attempt => attempt.ExamId is null).Select(AttemptEntry).OfType<TestEntry>()],
+                null,
                 templates.Count == 0 ? AppTexts.Get("Tests.NoTemplates") : null);
         }
         catch (Exception exception) when (exception is ApiException or HttpRequestException)
@@ -216,11 +224,12 @@ public sealed class TestsViewModel : ViewModel
         };
     }
 
-    private void Show(IReadOnlyList<TestEntry> templates, IReadOnlyList<TestEntry> attempts, string? notice)
+    private void Show(IReadOnlyList<TestEntry> templates, IReadOnlyList<TestEntry> attempts, string? notice, string? empty = null)
     {
         Templates = templates;
         Attempts = attempts;
         Notice = notice;
+        EmptyText = empty;
     }
 
     private async Task StartAsync(Guid contractId, Guid templateId)
