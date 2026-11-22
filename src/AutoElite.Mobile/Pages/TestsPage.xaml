@@ -15,11 +15,11 @@
     -->
     <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}" RefreshColor="{DynamicResource Accent}">
         <ScrollView>
-            <VerticalStackLayout Padding="20,8,20,32" Spacing="12" MaximumWidthRequest="760">
+            <controls:PageColumn Padding="20,8,20,32" Spacing="12" MaximumWidthRequest="1200">
                 <controls:NoticeBanner Text="{Binding Notice}" />
 
                 <Label Style="{StaticResource Title}" Text="{l:Text Exams.Title}" IsVisible="{Binding HasExams}" />
-                <VerticalStackLayout Spacing="10" BindableLayout.ItemsSource="{Binding Exams}">
+                <controls:AdaptiveGrid MinItemWidth="320" BindableLayout.ItemsSource="{Binding Exams}">
                     <BindableLayout.ItemTemplate>
                         <DataTemplate x:DataType="pages:TestEntry">
                             <Border Style="{StaticResource Card}">
@@ -36,10 +36,10 @@
                             </Border>
                         </DataTemplate>
                     </BindableLayout.ItemTemplate>
-                </VerticalStackLayout>
+                </controls:AdaptiveGrid>
 
                 <Label Style="{StaticResource Title}" Text="{l:Text Tests.Practice}" Margin="0,6,0,0" />
-                <VerticalStackLayout Spacing="10" BindableLayout.ItemsSource="{Binding Templates}">
+                <controls:AdaptiveGrid MinItemWidth="320" BindableLayout.ItemsSource="{Binding Templates}">
                     <BindableLayout.ItemTemplate>
                         <DataTemplate x:DataType="pages:TestEntry">
                             <Border Style="{StaticResource HighlightCard}">
@@ -56,10 +56,10 @@
                             </Border>
                         </DataTemplate>
                     </BindableLayout.ItemTemplate>
-                </VerticalStackLayout>
+                </controls:AdaptiveGrid>
 
                 <Label Style="{StaticResource Title}" Text="{l:Text Tests.Attempts}" IsVisible="{Binding HasAttempts}" Margin="0,6,0,0" />
-                <VerticalStackLayout Spacing="8" BindableLayout.ItemsSource="{Binding Attempts}">
+                <controls:AdaptiveGrid MinItemWidth="360" BindableLayout.ItemsSource="{Binding Attempts}">
                     <BindableLayout.ItemTemplate>
                         <DataTemplate x:DataType="pages:TestEntry">
                             <controls:ListRow
@@ -71,8 +71,8 @@
                                 Command="{Binding Command}" />
                         </DataTemplate>
                     </BindableLayout.ItemTemplate>
-                </VerticalStackLayout>
-            </VerticalStackLayout>
+                </controls:AdaptiveGrid>
+            </controls:PageColumn>
         </ScrollView>
     </RefreshView>
 

@@ -10,7 +10,7 @@
     Title="{l:Text OfferSlot.Title}">
 
     <ScrollView>
-        <VerticalStackLayout Padding="20,8,20,32" MaximumWidthRequest="560" Spacing="14">
+        <controls:PageColumn Padding="20,8,20,32" MaximumWidthRequest="560" Spacing="14">
             <Border Style="{StaticResource Card}">
                 <VerticalStackLayout Spacing="8">
                     <Label Style="{StaticResource Overline}" TextColor="{DynamicResource TextMuted}" Text="{l:Text OfferSlot.When}" />
@@ -56,7 +56,7 @@
             <controls:NoticeBanner Text="{Binding Message}" Tone="Danger" />
             <Button Text="{l:Text OfferSlot.Offer}" Command="{Binding OfferCommand}" />
             <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
-        </VerticalStackLayout>
+        </controls:PageColumn>
     </ScrollView>
 
 </ContentPage>

@@ -16,7 +16,7 @@
     -->
     <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}" RefreshColor="{DynamicResource Accent}">
         <ScrollView>
-            <VerticalStackLayout Padding="20,12,20,32" Spacing="16" MaximumWidthRequest="760">
+            <controls:PageColumn Padding="20,12,20,32" Spacing="16" MaximumWidthRequest="1200">
                 <controls:PersonHeader
                     Name="{Binding Name}"
                     Details="{Binding Contacts}"
@@ -26,7 +26,11 @@
 
                 <controls:NoticeBanner Text="{Binding Notice}" Tone="Warning" />
 
-                <VerticalStackLayout Spacing="12" BindableLayout.ItemsSource="{Binding ContractEntries}">
+                <controls:AdaptiveGrid
+                    MinItemWidth="420"
+                    MaxColumns="2"
+                    Spacing="12"
+                    BindableLayout.ItemsSource="{Binding ContractEntries}">
                     <BindableLayout.ItemTemplate>
                         <DataTemplate x:DataType="pages:ManagedContractEntry">
                             <Border Style="{StaticResource HighlightCard}">
@@ -103,8 +107,8 @@
                             </Border>
                         </DataTemplate>
                     </BindableLayout.ItemTemplate>
-                </VerticalStackLayout>
-            </VerticalStackLayout>
+                </controls:AdaptiveGrid>
+            </controls:PageColumn>
         </ScrollView>
     </RefreshView>
 

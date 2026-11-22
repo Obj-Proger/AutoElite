@@ -15,10 +15,10 @@
     -->
     <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}" RefreshColor="{DynamicResource Accent}">
         <ScrollView>
-            <VerticalStackLayout Padding="20,8,20,32" Spacing="14" MaximumWidthRequest="760">
+            <controls:PageColumn Padding="20,8,20,32" Spacing="14" MaximumWidthRequest="1200">
                 <controls:NoticeBanner Text="{Binding Notice}" />
 
-                <VerticalStackLayout Spacing="14" BindableLayout.ItemsSource="{Binding Items}">
+                <controls:AdaptiveGrid MinItemWidth="420" MaxColumns="2" Spacing="14" BindableLayout.ItemsSource="{Binding Items}">
                     <BindableLayout.ItemTemplate>
                         <DataTemplate x:DataType="pages:ContractEntry">
                             <Border Style="{StaticResource HighlightCard}">
@@ -76,8 +76,8 @@
                             </Border>
                         </DataTemplate>
                     </BindableLayout.ItemTemplate>
-                </VerticalStackLayout>
-            </VerticalStackLayout>
+                </controls:AdaptiveGrid>
+            </controls:PageColumn>
         </ScrollView>
     </RefreshView>
 

@@ -11,7 +11,7 @@
 
     <!-- The lesson to book, then the search of the student; tapping a student books them after a confirmation. -->
     <ScrollView>
-        <VerticalStackLayout Padding="20,8,20,32" MaximumWidthRequest="760" Spacing="14">
+        <controls:PageColumn Padding="20,8,20,32" MaximumWidthRequest="840" Spacing="14">
             <Border Style="{StaticResource HighlightCard}">
                 <VerticalStackLayout Spacing="6">
                     <Label Style="{StaticResource Overline}" TextColor="{DynamicResource TextMuted}" Text="{l:Text Lesson.FreeSlot}" />
@@ -21,7 +21,7 @@
             <controls:NoticeBanner Text="{Binding Message}" Tone="Danger" />
             <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
             <controls:StudentSearchView BindingContext="{Binding Search}" />
-        </VerticalStackLayout>
+        </controls:PageColumn>
     </ScrollView>
 
 </ContentPage>

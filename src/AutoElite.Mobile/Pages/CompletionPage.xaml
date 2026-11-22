@@ -14,7 +14,7 @@
         the student, each under its caption, then completing it.
     -->
     <ScrollView>
-        <VerticalStackLayout Padding="20,12,20,32" Spacing="16" MaximumWidthRequest="560">
+        <controls:PageColumn Padding="20,12,20,32" Spacing="16" MaximumWidthRequest="560">
             <Grid ColumnDefinitions="Auto,*" ColumnSpacing="14">
                 <controls:Avatar Name="{Binding Student}" Size="48" />
                 <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
@@ -60,7 +60,7 @@
             </VerticalStackLayout>
 
             <Button Text="{l:Text Lesson.Complete}" Command="{Binding SaveCommand}" />
-        </VerticalStackLayout>
+        </controls:PageColumn>
     </ScrollView>
 
 </ContentPage>

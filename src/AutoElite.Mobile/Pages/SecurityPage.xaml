@@ -11,7 +11,7 @@
 
     <!-- The password and the email address, opened from the profile: each field under its caption. -->
     <ScrollView>
-        <VerticalStackLayout Padding="20,12,20,32" Spacing="24" MaximumWidthRequest="560">
+        <controls:PageColumn Padding="20,12,20,32" Spacing="24" MaximumWidthRequest="560">
             <VerticalStackLayout Spacing="14">
                 <Label
                     Style="{StaticResource Overline}"
@@ -77,7 +77,7 @@
             </VerticalStackLayout>
 
             <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
-        </VerticalStackLayout>
+        </controls:PageColumn>
     </ScrollView>
 
 </ContentPage>

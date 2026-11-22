@@ -15,7 +15,7 @@
         what the application is; then signing out. The previews of the themes keep their own colors in either theme.
     -->
     <ScrollView>
-        <VerticalStackLayout Padding="20,12,20,32" Spacing="20" MaximumWidthRequest="560">
+        <controls:PageColumn Padding="20,12,20,32" Spacing="20" MaximumWidthRequest="1200">
             <Grid ColumnDefinitions="Auto,*" ColumnSpacing="16">
                 <Grid WidthRequest="72" HeightRequest="72" SemanticProperties.Description="{l:Text Profile.ChangePhoto}">
                     <Grid.GestureRecognizers>
@@ -44,192 +44,208 @@
 
             <controls:NoticeBanner Text="{Binding Message}" />
 
-            <VerticalStackLayout Spacing="8">
-                <Label
-                    Style="{StaticResource Overline}"
-                    TextColor="{DynamicResource TextMuted}"
-                    Text="{l:Text Profile.Account}"
-                    Margin="4,0" />
-                <Border Style="{StaticResource Card}" Padding="0">
-                    <VerticalStackLayout>
-                        <controls:MenuRow Icon="user" Title="{l:Text Profile.Details}" Command="{Binding PersonalCommand}" />
-                        <BoxView HeightRequest="1" Color="{DynamicResource Border}" Margin="50,0,0,0" />
-                        <controls:MenuRow Icon="shield" Title="{l:Text Security.Title}" Command="{Binding SecurityCommand}" />
-                        <BoxView HeightRequest="1" Color="{DynamicResource Border}" Margin="50,0,0,0" />
-                        <controls:MenuRow
-                            Icon="globe"
-                            Title="{l:Text Settings.Language}"
-                            Value="{Binding LanguageName}"
-                            Command="{Binding LanguageCommand}" />
-                    </VerticalStackLayout>
-                </Border>
-            </VerticalStackLayout>
+            <!-- The groups side by side on a wide window, one under the other on a phone. -->
+            <controls:AdaptiveGrid MinItemWidth="380" MaxColumns="2" Spacing="20">
+                <VerticalStackLayout Spacing="8">
+                    <Label
+                        Style="{StaticResource Overline}"
+                        TextColor="{DynamicResource TextMuted}"
+                        Text="{l:Text Profile.Account}"
+                        Margin="4,0" />
+                    <Border Style="{StaticResource Card}" Padding="0">
+                        <VerticalStackLayout>
+                            <controls:MenuRow Icon="user" Title="{l:Text Profile.Details}" Command="{Binding PersonalCommand}" />
+                            <BoxView HeightRequest="1" Color="{DynamicResource Border}" Margin="50,0,0,0" />
+                            <controls:MenuRow Icon="shield" Title="{l:Text Security.Title}" Command="{Binding SecurityCommand}" />
+                            <BoxView HeightRequest="1" Color="{DynamicResource Border}" Margin="50,0,0,0" />
+                            <controls:MenuRow
+                                Icon="globe"
+                                Title="{l:Text Settings.Language}"
+                                Value="{Binding LanguageName}"
+                                Command="{Binding LanguageCommand}" />
+                        </VerticalStackLayout>
+                    </Border>
+                </VerticalStackLayout>
 
-            <VerticalStackLayout Spacing="8">
-                <Label
-                    Style="{StaticResource Overline}"
-                    TextColor="{DynamicResource TextMuted}"
-                    Text="{l:Text Settings.Theme}"
-                    Margin="4,0" />
-                <Grid ColumnDefinitions="*,*,*" ColumnSpacing="8">
+                <VerticalStackLayout Spacing="8">
+                    <Label
+                        Style="{StaticResource Overline}"
+                        TextColor="{DynamicResource TextMuted}"
+                        Text="{l:Text Settings.Theme}"
+                        Margin="4,0" />
+                    <Grid ColumnDefinitions="*,*,*" ColumnSpacing="8">
+                    <Border
+                        Grid.Column="0"
+                        Padding="10"
+                        StrokeShape="RoundRectangle 16"
+                        StrokeThickness="1"
+                        Stroke="{DynamicResource Border}"
+                        BackgroundColor="{DynamicResource Surface}"
+                        SemanticProperties.Description="{l:Text Settings.ThemeDevice}">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding ThemeCommand}" CommandParameter="0" />
+                        </Border.GestureRecognizers>
+                        <Border.Triggers>
+                            <DataTrigger TargetType="Border" Binding="{Binding IsDeviceTheme}" Value="True">
+                                <Setter Property="Stroke" Value="{DynamicResource Accent}" />
+                                <Setter Property="StrokeThickness" Value="2" />
+                            </DataTrigger>
+                        </Border.Triggers>
+                        <VerticalStackLayout Spacing="8">
+                            <Grid HeightRequest="56" ColumnDefinitions="*,*">
+                                <BoxView Color="#F6F4EF" CornerRadius="10,0,10,0" />
+                                <BoxView Grid.Column="1" Color="#0E0F11" CornerRadius="0,10,0,10" />
+                            </Grid>
+                            <Label
+                                FontFamily="TextSemiBold"
+                                FontSize="13"
+                                Text="{l:Text Settings.ThemeDevice}"
+                                LineBreakMode="TailTruncation" />
+                        </VerticalStackLayout>
+                    </Border>
+                    <Border
+                        Grid.Column="1"
+                        Padding="10"
+                        StrokeShape="RoundRectangle 16"
+                        StrokeThickness="1"
+                        Stroke="{DynamicResource Border}"
+                        BackgroundColor="{DynamicResource Surface}"
+                        SemanticProperties.Description="{l:Text Settings.ThemeDark}">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding ThemeCommand}" CommandParameter="1" />
+                        </Border.GestureRecognizers>
+                        <Border.Triggers>
+                            <DataTrigger TargetType="Border" Binding="{Binding IsDarkTheme}" Value="True">
+                                <Setter Property="Stroke" Value="{DynamicResource Accent}" />
+                                <Setter Property="StrokeThickness" Value="2" />
+                            </DataTrigger>
+                        </Border.Triggers>
+                        <VerticalStackLayout Spacing="8">
+                            <Border
+                                HeightRequest="56"
+                                Padding="8"
+                                StrokeThickness="0"
+                                StrokeShape="RoundRectangle 10"
+                                BackgroundColor="#0E0F11">
+                                <BoxView
+                                    WidthRequest="24"
+                                    HeightRequest="6"
+                                    CornerRadius="3"
+                                    Color="#C9A96E"
+                                    HorizontalOptions="Start"
+                                    VerticalOptions="End" />
+                            </Border>
+                            <Label
+                                FontFamily="TextSemiBold"
+                                FontSize="13"
+                                Text="{l:Text Settings.ThemeDark}"
+                                LineBreakMode="TailTruncation" />
+                        </VerticalStackLayout>
+                    </Border>
+                    <Border
+                        Grid.Column="2"
+                        Padding="10"
+                        StrokeShape="RoundRectangle 16"
+                        StrokeThickness="1"
+                        Stroke="{DynamicResource Border}"
+                        BackgroundColor="{DynamicResource Surface}"
+                        SemanticProperties.Description="{l:Text Settings.ThemeLight}">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding ThemeCommand}" CommandParameter="2" />
+                        </Border.GestureRecognizers>
+                        <Border.Triggers>
+                            <DataTrigger TargetType="Border" Binding="{Binding IsLightTheme}" Value="True">
+                                <Setter Property="Stroke" Value="{DynamicResource Accent}" />
+                                <Setter Property="StrokeThickness" Value="2" />
+                            </DataTrigger>
+                        </Border.Triggers>
+                        <VerticalStackLayout Spacing="8">
+                            <Border
+                                HeightRequest="56"
+                                Padding="8"
+                                StrokeThickness="1"
+                                Stroke="#ECE8E0"
+                                StrokeShape="RoundRectangle 10"
+                                BackgroundColor="#F6F4EF">
+                                <BoxView
+                                    WidthRequest="24"
+                                    HeightRequest="6"
+                                    CornerRadius="3"
+                                    Color="#C9A96E"
+                                    HorizontalOptions="Start"
+                                    VerticalOptions="End" />
+                            </Border>
+                            <Label
+                                FontFamily="TextSemiBold"
+                                FontSize="13"
+                                Text="{l:Text Settings.ThemeLight}"
+                                LineBreakMode="TailTruncation" />
+                        </VerticalStackLayout>
+                    </Border>
+                    </Grid>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Spacing="8" IsVisible="{Binding IsStudent}">
+                    <Label
+                        Style="{StaticResource Overline}"
+                        TextColor="{DynamicResource TextMuted}"
+                        Text="{l:Text Profile.Study}"
+                        Margin="4,0" />
+                    <Border Style="{StaticResource Card}" Padding="0">
+                        <VerticalStackLayout>
+                            <controls:MenuRow Icon="wallet" Title="{l:Text Contracts.Title}" Command="{Binding ContractsCommand}" />
+                            <BoxView HeightRequest="1" Color="{DynamicResource Border}" Margin="50,0,0,0" />
+                            <controls:MenuRow Icon="file-text" Title="{l:Text Documents.Title}" Command="{Binding DocumentsCommand}" />
+                        </VerticalStackLayout>
+                    </Border>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Spacing="8">
+                    <Label
+                        Style="{StaticResource Overline}"
+                        TextColor="{DynamicResource TextMuted}"
+                        Text="{l:Text Profile.App}"
+                        Margin="4,0" />
+                    <Border Style="{StaticResource Card}" Padding="0">
+                        <VerticalStackLayout>
+                            <controls:MenuRow
+                                Icon="map-pin"
+                                Title="{l:Text Settings.School}"
+                                Value="{Binding School}"
+                                Command="{Binding SchoolCommand}" />
+                            <BoxView HeightRequest="1" Color="{DynamicResource Border}" Margin="50,0,0,0" />
+                            <controls:MenuRow
+                                Icon="info"
+                                Title="{l:Text Settings.About}"
+                                Value="{Binding VersionNumber}"
+                                Command="{Binding AboutCommand}" />
+                        </VerticalStackLayout>
+                    </Border>
+                </VerticalStackLayout>
+
                 <Border
-                    Grid.Column="0"
-                    Padding="10"
-                    StrokeShape="RoundRectangle 16"
+                    VerticalOptions="Start"
+                    Style="{StaticResource Card}"
+                    Padding="0"
+                    HeightRequest="52"
                     StrokeThickness="1"
                     Stroke="{DynamicResource Border}"
-                    BackgroundColor="{DynamicResource Surface}"
-                    SemanticProperties.Description="{l:Text Settings.ThemeDevice}">
+                    SemanticProperties.Description="{l:Text Home.SignOut}">
                     <Border.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding ThemeCommand}" CommandParameter="0" />
+                        <TapGestureRecognizer Command="{Binding SignOutCommand}" />
                     </Border.GestureRecognizers>
-                    <Border.Triggers>
-                        <DataTrigger TargetType="Border" Binding="{Binding IsDeviceTheme}" Value="True">
-                            <Setter Property="Stroke" Value="{DynamicResource Accent}" />
-                            <Setter Property="StrokeThickness" Value="2" />
-                        </DataTrigger>
-                    </Border.Triggers>
-                    <VerticalStackLayout Spacing="8">
-                        <Grid HeightRequest="56" ColumnDefinitions="*,*">
-                            <BoxView Color="#F6F4EF" CornerRadius="10,0,10,0" />
-                            <BoxView Grid.Column="1" Color="#0E0F11" CornerRadius="0,10,0,10" />
-                        </Grid>
+                    <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
+                        <controls:AppIcon Name="log-out" Size="20" Color="{DynamicResource Danger}" />
                         <Label
                             FontFamily="TextSemiBold"
-                            FontSize="13"
-                            Text="{l:Text Settings.ThemeDevice}"
-                            LineBreakMode="TailTruncation" />
-                    </VerticalStackLayout>
+                            FontSize="15"
+                            TextColor="{DynamicResource Danger}"
+                            Text="{l:Text Home.SignOut}"
+                            VerticalOptions="Center" />
+                    </HorizontalStackLayout>
                 </Border>
-                <Border
-                    Grid.Column="1"
-                    Padding="10"
-                    StrokeShape="RoundRectangle 16"
-                    StrokeThickness="1"
-                    Stroke="{DynamicResource Border}"
-                    BackgroundColor="{DynamicResource Surface}"
-                    SemanticProperties.Description="{l:Text Settings.ThemeDark}">
-                    <Border.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding ThemeCommand}" CommandParameter="1" />
-                    </Border.GestureRecognizers>
-                    <Border.Triggers>
-                        <DataTrigger TargetType="Border" Binding="{Binding IsDarkTheme}" Value="True">
-                            <Setter Property="Stroke" Value="{DynamicResource Accent}" />
-                            <Setter Property="StrokeThickness" Value="2" />
-                        </DataTrigger>
-                    </Border.Triggers>
-                    <VerticalStackLayout Spacing="8">
-                        <Border
-                            HeightRequest="56"
-                            Padding="8"
-                            StrokeThickness="0"
-                            StrokeShape="RoundRectangle 10"
-                            BackgroundColor="#0E0F11">
-                            <BoxView
-                                WidthRequest="24"
-                                HeightRequest="6"
-                                CornerRadius="3"
-                                Color="#C9A96E"
-                                HorizontalOptions="Start"
-                                VerticalOptions="End" />
-                        </Border>
-                        <Label FontFamily="TextSemiBold" FontSize="13" Text="{l:Text Settings.ThemeDark}" LineBreakMode="TailTruncation" />
-                    </VerticalStackLayout>
-                </Border>
-                <Border
-                    Grid.Column="2"
-                    Padding="10"
-                    StrokeShape="RoundRectangle 16"
-                    StrokeThickness="1"
-                    Stroke="{DynamicResource Border}"
-                    BackgroundColor="{DynamicResource Surface}"
-                    SemanticProperties.Description="{l:Text Settings.ThemeLight}">
-                    <Border.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding ThemeCommand}" CommandParameter="2" />
-                    </Border.GestureRecognizers>
-                    <Border.Triggers>
-                        <DataTrigger TargetType="Border" Binding="{Binding IsLightTheme}" Value="True">
-                            <Setter Property="Stroke" Value="{DynamicResource Accent}" />
-                            <Setter Property="StrokeThickness" Value="2" />
-                        </DataTrigger>
-                    </Border.Triggers>
-                    <VerticalStackLayout Spacing="8">
-                        <Border
-                            HeightRequest="56"
-                            Padding="8"
-                            StrokeThickness="1"
-                            Stroke="#ECE8E0"
-                            StrokeShape="RoundRectangle 10"
-                            BackgroundColor="#F6F4EF">
-                            <BoxView
-                                WidthRequest="24"
-                                HeightRequest="6"
-                                CornerRadius="3"
-                                Color="#C9A96E"
-                                HorizontalOptions="Start"
-                                VerticalOptions="End" />
-                        </Border>
-                        <Label FontFamily="TextSemiBold" FontSize="13" Text="{l:Text Settings.ThemeLight}" LineBreakMode="TailTruncation" />
-                    </VerticalStackLayout>
-                </Border>
-                </Grid>
-            </VerticalStackLayout>
-
-            <VerticalStackLayout Spacing="8" IsVisible="{Binding IsStudent}">
-                <Label
-                    Style="{StaticResource Overline}"
-                    TextColor="{DynamicResource TextMuted}"
-                    Text="{l:Text Profile.Study}"
-                    Margin="4,0" />
-                <Border Style="{StaticResource Card}" Padding="0">
-                    <VerticalStackLayout>
-                        <controls:MenuRow Icon="wallet" Title="{l:Text Contracts.Title}" Command="{Binding ContractsCommand}" />
-                        <BoxView HeightRequest="1" Color="{DynamicResource Border}" Margin="50,0,0,0" />
-                        <controls:MenuRow Icon="file-text" Title="{l:Text Documents.Title}" Command="{Binding DocumentsCommand}" />
-                    </VerticalStackLayout>
-                </Border>
-            </VerticalStackLayout>
-
-            <VerticalStackLayout Spacing="8">
-                <Label Style="{StaticResource Overline}" TextColor="{DynamicResource TextMuted}" Text="{l:Text Profile.App}" Margin="4,0" />
-                <Border Style="{StaticResource Card}" Padding="0">
-                    <VerticalStackLayout>
-                        <controls:MenuRow
-                            Icon="map-pin"
-                            Title="{l:Text Settings.School}"
-                            Value="{Binding School}"
-                            Command="{Binding SchoolCommand}" />
-                        <BoxView HeightRequest="1" Color="{DynamicResource Border}" Margin="50,0,0,0" />
-                        <controls:MenuRow
-                            Icon="info"
-                            Title="{l:Text Settings.About}"
-                            Value="{Binding VersionNumber}"
-                            Command="{Binding AboutCommand}" />
-                    </VerticalStackLayout>
-                </Border>
-            </VerticalStackLayout>
-
-            <Border
-                Style="{StaticResource Card}"
-                Padding="0"
-                HeightRequest="52"
-                StrokeThickness="1"
-                Stroke="{DynamicResource Border}"
-                SemanticProperties.Description="{l:Text Home.SignOut}">
-                <Border.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding SignOutCommand}" />
-                </Border.GestureRecognizers>
-                <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
-                    <controls:AppIcon Name="log-out" Size="20" Color="{DynamicResource Danger}" />
-                    <Label
-                        FontFamily="TextSemiBold"
-                        FontSize="15"
-                        TextColor="{DynamicResource Danger}"
-                        Text="{l:Text Home.SignOut}"
-                        VerticalOptions="Center" />
-                </HorizontalStackLayout>
-            </Border>
-        </VerticalStackLayout>
+            </controls:AdaptiveGrid>
+        </controls:PageColumn>
     </ScrollView>
 
 </ContentPage>

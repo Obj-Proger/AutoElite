@@ -11,7 +11,7 @@
 
     <!-- The contract, then the amount with its currency, the way of paying, the purpose and whether the money is received. -->
     <ScrollView>
-        <VerticalStackLayout Padding="20,8,20,32" MaximumWidthRequest="560" Spacing="14">
+        <controls:PageColumn Padding="20,8,20,32" MaximumWidthRequest="560" Spacing="14">
             <Label Style="{StaticResource Overline}" TextColor="{DynamicResource TextMuted}" Text="{Binding Contract}" />
 
             <Border Style="{StaticResource Card}">
@@ -47,7 +47,7 @@
             <controls:NoticeBanner Text="{Binding Message}" Tone="Danger" />
             <Button Text="{l:Text Payment.Save}" Command="{Binding SaveCommand}" />
             <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
-        </VerticalStackLayout>
+        </controls:PageColumn>
     </ScrollView>
 
 </ContentPage>

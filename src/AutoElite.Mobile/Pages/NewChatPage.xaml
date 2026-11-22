@@ -10,7 +10,7 @@
     Title="{l:Text NewChat.Title}">
 
     <ScrollView>
-        <VerticalStackLayout Padding="20,8,20,32" MaximumWidthRequest="760" Spacing="10">
+        <controls:PageColumn Padding="20,8,20,32" MaximumWidthRequest="840" Spacing="10">
             <Border Style="{StaticResource Field}">
                 <Entry
                     Text="{Binding Search}"
@@ -40,7 +40,7 @@
                     </DataTemplate>
                 </BindableLayout.ItemTemplate>
             </VerticalStackLayout>
-        </VerticalStackLayout>
+        </controls:PageColumn>
     </ScrollView>
 
 </ContentPage>

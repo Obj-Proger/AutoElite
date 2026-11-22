@@ -16,7 +16,7 @@
         documents; of a theory instructor, the questions of the school for the tests.
     -->
     <ScrollView>
-        <VerticalStackLayout Padding="20,8,20,32" Spacing="8" MaximumWidthRequest="760">
+        <controls:AdaptiveGrid Padding="20,8,20,32" MaximumWidthRequest="1200" HorizontalOptions="Start">
             <controls:ListRow
                 Icon="clipboard-check"
                 Tone="Accent"
@@ -48,7 +48,7 @@
                 ShowsChevron="True"
                 Command="{Binding OpenQuestionsCommand}"
                 IsVisible="{Binding IsTheoryInstructor}" />
-        </VerticalStackLayout>
+        </controls:AdaptiveGrid>
     </ScrollView>
 
 </ContentPage>

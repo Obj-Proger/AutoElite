@@ -268,7 +268,7 @@ public sealed class ScheduleAgenda : ContentView
                 .OrderBy(lesson => lesson.Start)
         ];
         var now = DateTimeOffset.Now;
-        var list = new VerticalStackLayout { Spacing = 10 };
+        var list = new PageColumn { Spacing = 10 };
         if (days == 1)
         {
             AddDay(list, FirstDay, lessons, now);

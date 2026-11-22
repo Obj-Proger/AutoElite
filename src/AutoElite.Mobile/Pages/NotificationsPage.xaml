@@ -20,7 +20,7 @@
     -->
     <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}" RefreshColor="{DynamicResource Accent}">
         <ScrollView>
-            <VerticalStackLayout Padding="16,8,16,24" Spacing="4" MaximumWidthRequest="760">
+            <controls:PageColumn Padding="16,8,16,24" Spacing="4" MaximumWidthRequest="840">
                 <Border Style="{StaticResource SegmentBar}" Margin="4,0,4,10">
                     <Grid ColumnDefinitions="*,*" ColumnSpacing="4">
                         <Button Style="{StaticResource Segment}" Text="{l:Text Notifications.All}" Command="{Binding ShowAllCommand}">
@@ -122,7 +122,7 @@
                 </VerticalStackLayout>
 
                 <controls:EmptyState Icon="bell" Text="{Binding EmptyText}" IsVisible="{Binding IsEmpty}" />
-            </VerticalStackLayout>
+            </controls:PageColumn>
         </ScrollView>
     </RefreshView>
 

@@ -15,7 +15,7 @@
     -->
     <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}" RefreshColor="{DynamicResource Accent}">
         <ScrollView>
-            <VerticalStackLayout Padding="20,8,20,32" Spacing="12" MaximumWidthRequest="760">
+            <controls:PageColumn Padding="20,8,20,32" Spacing="12" MaximumWidthRequest="1200">
                 <VerticalStackLayout Spacing="8" IsVisible="{Binding HasChoice}">
                     <Label Style="{StaticResource Secondary}" Text="{l:Text Booking.Choose}" />
                     <VerticalStackLayout Spacing="8" BindableLayout.ItemsSource="{Binding Contracts}">
@@ -34,7 +34,7 @@
 
                 <controls:NoticeBanner Text="{Binding Notice}" />
 
-                <VerticalStackLayout Spacing="10" BindableLayout.ItemsSource="{Binding Slots}">
+                <controls:AdaptiveGrid MinItemWidth="300" BindableLayout.ItemsSource="{Binding Slots}">
                     <BindableLayout.ItemTemplate>
                         <DataTemplate x:DataType="pages:SlotEntry">
                             <Border Style="{StaticResource Card}">
@@ -52,8 +52,8 @@
                             </Border>
                         </DataTemplate>
                     </BindableLayout.ItemTemplate>
-                </VerticalStackLayout>
-            </VerticalStackLayout>
+                </controls:AdaptiveGrid>
+            </controls:PageColumn>
         </ScrollView>
     </RefreshView>
 

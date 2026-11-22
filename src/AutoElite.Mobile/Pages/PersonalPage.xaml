@@ -11,7 +11,7 @@
 
     <!-- The personal details: each field under its caption, then saving and how it went. -->
     <ScrollView>
-        <VerticalStackLayout Padding="20,12,20,32" Spacing="16" MaximumWidthRequest="560">
+        <controls:PageColumn Padding="20,12,20,32" Spacing="16" MaximumWidthRequest="560">
             <VerticalStackLayout Spacing="6">
                 <Label Style="{StaticResource Caption}" Text="{l:Text Profile.LastName}" />
                 <Border Style="{StaticResource Field}">
@@ -53,7 +53,7 @@
             </controls:NoticeBanner>
             <Button Text="{l:Text Profile.Save}" Command="{Binding SaveCommand}" />
             <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
-        </VerticalStackLayout>
+        </controls:PageColumn>
     </ScrollView>
 
 </ContentPage>

@@ -13,9 +13,9 @@
 
     <!-- The students of the school for a manager: the search, then the students found, each opening their card. -->
     <ScrollView>
-        <VerticalStackLayout Padding="20,8,20,32" MaximumWidthRequest="760" Spacing="14">
+        <controls:PageColumn Padding="20,8,20,32" MaximumWidthRequest="840" Spacing="14">
             <controls:StudentSearchView BindingContext="{Binding Search}" />
-        </VerticalStackLayout>
+        </controls:PageColumn>
     </ScrollView>
 
 </ContentPage>

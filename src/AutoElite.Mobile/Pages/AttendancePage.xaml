@@ -14,7 +14,7 @@
         they came, then saving it.
     -->
     <ScrollView>
-        <VerticalStackLayout Padding="20,12,20,32" Spacing="14" MaximumWidthRequest="760">
+        <controls:PageColumn Padding="20,12,20,32" Spacing="14" MaximumWidthRequest="840">
             <Border Style="{StaticResource HighlightCard}">
                 <Grid ColumnDefinitions="Auto,*" ColumnSpacing="14">
                     <controls:IconTile Icon="book-open" Tone="Accent" />
@@ -50,7 +50,7 @@
             </Border>
 
             <Button Text="{l:Text Attendance.Save}" Command="{Binding SaveCommand}" />
-        </VerticalStackLayout>
+        </controls:PageColumn>
     </ScrollView>
 
 </ContentPage>

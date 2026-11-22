@@ -191,36 +191,39 @@ which must use HTTPS; a debug build also takes HTTP and offers the API of the de
 and administrators sign in; the rest of the work of the staff is on the website. Above every tab are its title, the bell
 with the count of unread notifications, up to 99+, and the avatar, which opens the profile. The tabs follow the width of
 the window on every platform: a bar at the bottom of a phone, a rail of icons at the left of a narrow window and a menu
-with captions at the left of one from 1000 wide. They lead to today, the schedule, the studies of a student (their
-practice tests and contracts), the students and the leads of a manager, with the count of new leads, and the chats, with
-the count of unread messages. The schedule switches between a day, chosen in the strip of its week, and the week. A
-lesson is a card with the icon of its kind, what it is, who and where or its state, and its start and length; a free
-slot is a dashed card, and so is the free time of an instructor between the cards of a day. The week is a list under the
-names of its days with lessons or, on a wide window, a grid of hours; arrows or a swipe move the schedule and a link
-brings it back to today. It shows the lessons of each role of the user, a student also the free slots they can book, and
-tapping a lesson shows what the user can do with it, such as booking, cancelling, completing or marking the attendance.
-A student sees on the tab of today their next lesson in a highlighted card, with the way to its ground, the hours they
-have driven and what they owe, and their following lessons, books a free practice slot of one of their contracts and
-cancels a booking, with or without a network, and takes practice tests and theory exams with the timer and a review of
-their mistakes, which need a network; rates a completed lesson; and follows the progress of their training with its
-payments; pulling the page down sends the waiting actions and reads the lessons again. A driving instructor offers a
-practice slot by tapping free time on the schedule, with its length, vehicle and training ground, repeats the slots of a
-week on up to four next weeks, leaving out those that would overlap, withdraws a slot with a reason, which needs a
-network, sees their slots of the next two weeks, cancels a booking before the lesson and, once it has started, completes
-it with the hours, the grades of the student's skills and a note, or records that the student did not come, also without
-a network. A theory instructor schedules a lesson of one of their groups on a topic of its course by tapping free time
-on the schedule, moves or cancels a lesson before it starts, with the students notified, which needs a network, sees
-their theory lessons and marks the attendance of a lesson that has started for the whole group at once, in a classroom
-without a network too. A manager or an administrator sees the slots, theory lessons and exams of every instructor,
-narrowed to one of them if they choose, books a student found by a part of the name, the email address or the phone
-number on a free slot for their contract that fits the vehicle, which tells the student, and cancels a booking; in the
-tab of students they find a student and open their card with each contract, what was paid and what is owed, the progress
-and the payments, record a payment, received at once or waiting for its money, and confirm a waiting one. In the tab of
-leads a manager sees the leads, the new ones and those they work on with how many of them their limit allows, takes a
-new lead on, which makes them its manager within that limit, calls or writes to the person, writes notes, marks a lead
-lost with the reason and opens it again; the contract of a lead is drawn up on the website. An administrator sets the
-limit of each manager, ten leads in progress at first, on the card of the user on the website, and may give a manager
-leads beyond it. In the tab of studies, a theory instructor finds the questions the school wrote for the practice tests,
+with captions at the left of one from 1000 wide. The content follows the canonical layouts of adaptive design: it starts
+under the title of the page, forms and lists of rows keep a readable width, cards of the same kind form as many columns
+as fit, and today, the card of a student and that of a lead put what supports the main content beside it on a wide
+window and under it on a phone. They lead to today, the schedule, the studies of a student (their practice tests and
+contracts), the students and the leads of a manager, with the count of new leads, and the chats, with the count of
+unread messages. The schedule switches between a day, chosen in the strip of its week, and the week. A lesson is a card
+with the icon of its kind, what it is, who and where or its state, and its start and length; a free slot is a dashed
+card, and so is the free time of an instructor between the cards of a day. The week is a list under the names of its
+days with lessons or, on a wide window, a grid of hours; arrows or a swipe move the schedule and a link brings it back
+to today. It shows the lessons of each role of the user, a student also the free slots they can book, and tapping a
+lesson shows what the user can do with it, such as booking, cancelling, completing or marking the attendance. A student
+sees on the tab of today their next lesson in a highlighted card, with the way to its ground, the hours they have driven
+and what they owe, and their following lessons, books a free practice slot of one of their contracts and cancels a
+booking, with or without a network, and takes practice tests and theory exams with the timer and a review of their
+mistakes, which need a network; rates a completed lesson; and follows the progress of their training with its payments;
+pulling the page down sends the waiting actions and reads the lessons again. A driving instructor offers a practice slot
+by tapping free time on the schedule, with its length, vehicle and training ground, repeats the slots of a week on up to
+four next weeks, leaving out those that would overlap, withdraws a slot with a reason, which needs a network, sees their
+slots of the next two weeks, cancels a booking before the lesson and, once it has started, completes it with the hours,
+the grades of the student's skills and a note, or records that the student did not come, also without a network. A
+theory instructor schedules a lesson of one of their groups on a topic of its course by tapping free time on the
+schedule, moves or cancels a lesson before it starts, with the students notified, which needs a network, sees their
+theory lessons and marks the attendance of a lesson that has started for the whole group at once, in a classroom without
+a network too. A manager or an administrator sees the slots, theory lessons and exams of every instructor, narrowed to
+one of them if they choose, books a student found by a part of the name, the email address or the phone number on a free
+slot for their contract that fits the vehicle, which tells the student, and cancels a booking; in the tab of students
+they find a student and open their card with each contract, what was paid and what is owed, the progress and the
+payments, record a payment, received at once or waiting for its money, and confirm a waiting one. In the tab of leads a
+manager sees the leads, the new ones and those they work on with how many of them their limit allows, takes a new lead
+on, which makes them its manager within that limit, calls or writes to the person, writes notes, marks a lead lost with
+the reason and opens it again; the contract of a lead is drawn up on the website. An administrator sets the limit of
+each manager, ten leads in progress at first, on the card of the user on the website, and may give a manager leads
+beyond it. In the tab of studies, a theory instructor finds the questions the school wrote for the practice tests,
 writes a new one and corrects one: its text and illustration, the topic of a course, the licence categories, two to six
 options with the correct one marked and an explanation; a question is taken out of new tests rather than deleted. Every
 user reads their notifications, all of them or the unread ones by days, each with the icon of what it is about and

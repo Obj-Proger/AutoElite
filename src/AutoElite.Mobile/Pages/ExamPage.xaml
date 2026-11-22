@@ -14,7 +14,7 @@
         and, for an examiner, recording a result.
     -->
     <ScrollView>
-        <VerticalStackLayout Padding="20,12,20,32" Spacing="14" MaximumWidthRequest="760">
+        <controls:PageColumn Padding="20,12,20,32" Spacing="14" MaximumWidthRequest="840">
             <Border Style="{StaticResource HighlightCard}">
                 <Grid ColumnDefinitions="Auto,*" ColumnSpacing="14">
                     <controls:IconTile Icon="clipboard-check" Tone="Warning" />
@@ -55,7 +55,7 @@
                     </DataTemplate>
                 </BindableLayout.ItemTemplate>
             </VerticalStackLayout>
-        </VerticalStackLayout>
+        </controls:PageColumn>
     </ScrollView>
 
 </ContentPage>

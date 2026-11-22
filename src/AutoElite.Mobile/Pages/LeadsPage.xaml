@@ -37,7 +37,7 @@
 
     <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}" RefreshColor="{DynamicResource Accent}">
         <ScrollView>
-            <VerticalStackLayout Padding="20,8,20,32" Spacing="16" MaximumWidthRequest="760">
+            <controls:PageColumn Padding="20,8,20,32" Spacing="16" MaximumWidthRequest="1200">
                 <controls:NoticeBanner Text="{Binding Notice}" />
 
                 <VerticalStackLayout Spacing="8" IsVisible="{Binding HasNewLeads}">
@@ -46,8 +46,7 @@
                         TextColor="{DynamicResource TextMuted}"
                         Text="{l:Text Leads.New}"
                         Margin="4,0" />
-                    <VerticalStackLayout
-                        Spacing="8"
+                    <controls:AdaptiveGrid
                         BindableLayout.ItemsSource="{Binding NewLeads}"
                         BindableLayout.ItemTemplate="{StaticResource Lead}" />
                 </VerticalStackLayout>
@@ -58,12 +57,11 @@
                         TextColor="{DynamicResource TextMuted}"
                         Text="{Binding MyLeadsTitle}"
                         Margin="4,0" />
-                    <VerticalStackLayout
-                        Spacing="8"
+                    <controls:AdaptiveGrid
                         BindableLayout.ItemsSource="{Binding MyLeads}"
                         BindableLayout.ItemTemplate="{StaticResource Lead}" />
                 </VerticalStackLayout>
-            </VerticalStackLayout>
+            </controls:PageColumn>
         </ScrollView>
     </RefreshView>
 

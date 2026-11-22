@@ -18,156 +18,159 @@
         list by days or, on a wide page, as a grid of hours. An instructor taps free time to offer a slot or schedule a
         lesson; the name of a day of the week shows that day.
     -->
-    <Grid Padding="20,4,20,0" RowDefinitions="Auto,Auto,Auto,Auto,Auto,*" RowSpacing="10">
-        <Border Style="{StaticResource SegmentBar}">
-            <Grid ColumnDefinitions="*,*" ColumnSpacing="4">
-                <Button Style="{StaticResource Segment}" Text="{l:Text Schedule.Day}" Command="{Binding ShowDayCommand}">
-                    <Button.Triggers>
-                        <DataTrigger TargetType="Button" Binding="{Binding IsDayView}" Value="True">
-                            <Setter Property="BackgroundColor" Value="{DynamicResource SurfaceRaised}" />
-                            <Setter Property="TextColor" Value="{DynamicResource Text}" />
-                        </DataTrigger>
-                    </Button.Triggers>
-                </Button>
-                <Button
-                    Grid.Column="1"
-                    Style="{StaticResource Segment}"
-                    Text="{l:Text Schedule.Week}"
-                    Command="{Binding ShowWeekCommand}">
-                    <Button.Triggers>
-                        <DataTrigger TargetType="Button" Binding="{Binding IsWeekView}" Value="True">
-                            <Setter Property="BackgroundColor" Value="{DynamicResource SurfaceRaised}" />
-                            <Setter Property="TextColor" Value="{DynamicResource Text}" />
-                        </DataTrigger>
-                    </Button.Triggers>
-                </Button>
-            </Grid>
-        </Border>
-
-        <Grid Grid.Row="1" ColumnDefinitions="*,Auto,Auto,Auto" ColumnSpacing="2">
-            <Label
-                FontFamily="TextSemiBold"
-                FontSize="15"
-                Text="{Binding Period}"
-                VerticalOptions="Center"
-                LineBreakMode="TailTruncation" />
-            <Label
-                Grid.Column="1"
-                Padding="10,12"
-                FontFamily="TextSemiBold"
-                FontSize="14"
-                TextColor="{DynamicResource AccentText}"
-                Text="{l:Text Schedule.Today}"
-                VerticalOptions="Center"
-                IsVisible="{Binding IsAwayFromToday}">
-                <Label.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding TodayCommand}" />
-                </Label.GestureRecognizers>
-            </Label>
-            <Grid Grid.Column="2" WidthRequest="44" HeightRequest="44" SemanticProperties.Description="{l:Text Schedule.Previous}">
-                <Grid.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding PreviousCommand}" />
-                </Grid.GestureRecognizers>
-                <controls:AppIcon Name="chevron-left" Size="20" />
-            </Grid>
-            <Grid Grid.Column="3" WidthRequest="44" HeightRequest="44" SemanticProperties.Description="{l:Text Schedule.Next}">
-                <Grid.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding NextCommand}" />
-                </Grid.GestureRecognizers>
-                <controls:AppIcon Name="chevron-right" Size="20" />
-            </Grid>
-        </Grid>
-
-        <CollectionView
-            Grid.Row="2"
-            ItemsSource="{Binding Days}"
-            SelectionMode="None"
-            HeightRequest="76"
-            IsVisible="{Binding IsDayView}">
-            <CollectionView.ItemsLayout>
-                <GridItemsLayout Orientation="Vertical" Span="7" />
-            </CollectionView.ItemsLayout>
-            <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="pages:DayChip">
-                    <Border
-                        Margin="1"
-                        Padding="0,8"
-                        BackgroundColor="Transparent"
-                        StrokeThickness="0"
-                        StrokeShape="RoundRectangle 14">
-                        <Border.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding SelectCommand}" />
-                        </Border.GestureRecognizers>
-                        <Border.Triggers>
-                            <DataTrigger TargetType="Border" Binding="{Binding IsSelected}" Value="True">
-                                <Setter Property="BackgroundColor" Value="{DynamicResource Primary}" />
+    <Grid Padding="20,4,20,0" RowDefinitions="Auto,*" RowSpacing="10">
+        <!-- The choice of the view, the period, the days and the planning, as wide as a readable column. -->
+        <controls:PageColumn Spacing="10" MaximumWidthRequest="840">
+            <Border Style="{StaticResource SegmentBar}">
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="4">
+                    <Button Style="{StaticResource Segment}" Text="{l:Text Schedule.Day}" Command="{Binding ShowDayCommand}">
+                        <Button.Triggers>
+                            <DataTrigger TargetType="Button" Binding="{Binding IsDayView}" Value="True">
+                                <Setter Property="BackgroundColor" Value="{DynamicResource SurfaceRaised}" />
+                                <Setter Property="TextColor" Value="{DynamicResource Text}" />
                             </DataTrigger>
-                        </Border.Triggers>
-                        <VerticalStackLayout Spacing="4" HorizontalOptions="Center">
-                            <Label Style="{StaticResource Caption}" Text="{Binding Name}" HorizontalOptions="Center">
-                                <Label.Triggers>
-                                    <DataTrigger TargetType="Label" Binding="{Binding IsSelected}" Value="True">
-                                        <Setter Property="TextColor" Value="{DynamicResource OnPrimary}" />
-                                    </DataTrigger>
-                                </Label.Triggers>
-                            </Label>
-                            <Label FontFamily="DisplaySemiBold" FontSize="16" Text="{Binding Number}" HorizontalOptions="Center">
-                                <Label.Triggers>
-                                    <DataTrigger TargetType="Label" Binding="{Binding IsToday}" Value="True">
-                                        <Setter Property="TextColor" Value="{DynamicResource AccentText}" />
-                                    </DataTrigger>
-                                    <DataTrigger TargetType="Label" Binding="{Binding IsSelected}" Value="True">
-                                        <Setter Property="TextColor" Value="{DynamicResource OnPrimary}" />
-                                    </DataTrigger>
-                                </Label.Triggers>
-                            </Label>
-                            <Ellipse
-                                WidthRequest="5"
-                                HeightRequest="5"
-                                Fill="{DynamicResource Accent}"
-                                HorizontalOptions="Center"
-                                Opacity="0">
-                                <Ellipse.Triggers>
-                                    <DataTrigger TargetType="Ellipse" Binding="{Binding HasLessons}" Value="True">
-                                        <Setter Property="Opacity" Value="1" />
-                                    </DataTrigger>
-                                    <DataTrigger TargetType="Ellipse" Binding="{Binding IsSelected}" Value="True">
-                                        <Setter Property="Fill" Value="{DynamicResource OnPrimary}" />
-                                    </DataTrigger>
-                                </Ellipse.Triggers>
-                            </Ellipse>
-                        </VerticalStackLayout>
-                    </Border>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
+                        </Button.Triggers>
+                    </Button>
+                    <Button
+                        Grid.Column="1"
+                        Style="{StaticResource Segment}"
+                        Text="{l:Text Schedule.Week}"
+                        Command="{Binding ShowWeekCommand}">
+                        <Button.Triggers>
+                            <DataTrigger TargetType="Button" Binding="{Binding IsWeekView}" Value="True">
+                                <Setter Property="BackgroundColor" Value="{DynamicResource SurfaceRaised}" />
+                                <Setter Property="TextColor" Value="{DynamicResource Text}" />
+                            </DataTrigger>
+                        </Button.Triggers>
+                    </Button>
+                </Grid>
+            </Border>
 
-        <Border Grid.Row="3" Style="{StaticResource Field}" IsVisible="{Binding IsManager}">
-            <Picker
-                Title="{l:Text Schedule.Instructor}"
-                ItemsSource="{Binding Instructors}"
-                SelectedItem="{Binding SelectedInstructor}" />
-        </Border>
-
-        <VerticalStackLayout Grid.Row="3" Spacing="6" IsVisible="{Binding CanPlan}">
-            <Grid ColumnDefinitions="*,*" ColumnSpacing="8" IsVisible="{Binding IsDrivingInstructor}">
-                <Button Text="{l:Text Schedule.Offer}" Command="{Binding OfferCommand}" />
-                <Button
+            <Grid ColumnDefinitions="*,Auto,Auto,Auto" ColumnSpacing="2">
+                <Label
+                    FontFamily="TextSemiBold"
+                    FontSize="15"
+                    Text="{Binding Period}"
+                    VerticalOptions="Center"
+                    LineBreakMode="TailTruncation" />
+                <Label
                     Grid.Column="1"
-                    Style="{StaticResource SecondaryButton}"
-                    Text="{l:Text Schedule.Repeat}"
-                    Command="{Binding RepeatWeekCommand}" />
+                    Padding="10,12"
+                    FontFamily="TextSemiBold"
+                    FontSize="14"
+                    TextColor="{DynamicResource AccentText}"
+                    Text="{l:Text Schedule.Today}"
+                    VerticalOptions="Center"
+                    IsVisible="{Binding IsAwayFromToday}">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding TodayCommand}" />
+                    </Label.GestureRecognizers>
+                </Label>
+                <Grid Grid.Column="2" WidthRequest="44" HeightRequest="44" SemanticProperties.Description="{l:Text Schedule.Previous}">
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding PreviousCommand}" />
+                    </Grid.GestureRecognizers>
+                    <controls:AppIcon Name="chevron-left" Size="20" />
+                </Grid>
+                <Grid Grid.Column="3" WidthRequest="44" HeightRequest="44" SemanticProperties.Description="{l:Text Schedule.Next}">
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding NextCommand}" />
+                    </Grid.GestureRecognizers>
+                    <controls:AppIcon Name="chevron-right" Size="20" />
+                </Grid>
             </Grid>
-            <Button
-                Text="{l:Text Schedule.PlanTheory}"
-                Command="{Binding PlanTheoryCommand}"
-                IsVisible="{Binding IsTheoryInstructor}" />
-            <Label Style="{StaticResource Caption}" Text="{l:Text Schedule.OfferHint}" />
-        </VerticalStackLayout>
 
-        <controls:NoticeBanner Grid.Row="4" Text="{Binding Notice}" Tone="Warning" />
+            <CollectionView
+               
+                ItemsSource="{Binding Days}"
+                SelectionMode="None"
+                HeightRequest="76"
+                IsVisible="{Binding IsDayView}">
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout Orientation="Vertical" Span="7" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="pages:DayChip">
+                        <Border
+                            Margin="1"
+                            Padding="0,8"
+                            BackgroundColor="Transparent"
+                            StrokeThickness="0"
+                            StrokeShape="RoundRectangle 14">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding SelectCommand}" />
+                            </Border.GestureRecognizers>
+                            <Border.Triggers>
+                                <DataTrigger TargetType="Border" Binding="{Binding IsSelected}" Value="True">
+                                    <Setter Property="BackgroundColor" Value="{DynamicResource Primary}" />
+                                </DataTrigger>
+                            </Border.Triggers>
+                            <VerticalStackLayout Spacing="4" HorizontalOptions="Center">
+                                <Label Style="{StaticResource Caption}" Text="{Binding Name}" HorizontalOptions="Center">
+                                    <Label.Triggers>
+                                        <DataTrigger TargetType="Label" Binding="{Binding IsSelected}" Value="True">
+                                            <Setter Property="TextColor" Value="{DynamicResource OnPrimary}" />
+                                        </DataTrigger>
+                                    </Label.Triggers>
+                                </Label>
+                                <Label FontFamily="DisplaySemiBold" FontSize="16" Text="{Binding Number}" HorizontalOptions="Center">
+                                    <Label.Triggers>
+                                        <DataTrigger TargetType="Label" Binding="{Binding IsToday}" Value="True">
+                                            <Setter Property="TextColor" Value="{DynamicResource AccentText}" />
+                                        </DataTrigger>
+                                        <DataTrigger TargetType="Label" Binding="{Binding IsSelected}" Value="True">
+                                            <Setter Property="TextColor" Value="{DynamicResource OnPrimary}" />
+                                        </DataTrigger>
+                                    </Label.Triggers>
+                                </Label>
+                                <Ellipse
+                                    WidthRequest="5"
+                                    HeightRequest="5"
+                                    Fill="{DynamicResource Accent}"
+                                    HorizontalOptions="Center"
+                                    Opacity="0">
+                                    <Ellipse.Triggers>
+                                        <DataTrigger TargetType="Ellipse" Binding="{Binding HasLessons}" Value="True">
+                                            <Setter Property="Opacity" Value="1" />
+                                        </DataTrigger>
+                                        <DataTrigger TargetType="Ellipse" Binding="{Binding IsSelected}" Value="True">
+                                            <Setter Property="Fill" Value="{DynamicResource OnPrimary}" />
+                                        </DataTrigger>
+                                    </Ellipse.Triggers>
+                                </Ellipse>
+                            </VerticalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
 
-        <Grid Grid.Row="5">
+            <Border Style="{StaticResource Field}" IsVisible="{Binding IsManager}">
+                <Picker
+                    Title="{l:Text Schedule.Instructor}"
+                    ItemsSource="{Binding Instructors}"
+                    SelectedItem="{Binding SelectedInstructor}" />
+            </Border>
+
+            <VerticalStackLayout Spacing="6" IsVisible="{Binding CanPlan}">
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="8" IsVisible="{Binding IsDrivingInstructor}">
+                    <Button Text="{l:Text Schedule.Offer}" Command="{Binding OfferCommand}" />
+                    <Button
+                        Grid.Column="1"
+                        Style="{StaticResource SecondaryButton}"
+                        Text="{l:Text Schedule.Repeat}"
+                        Command="{Binding RepeatWeekCommand}" />
+                </Grid>
+                <Button
+                    Text="{l:Text Schedule.PlanTheory}"
+                    Command="{Binding PlanTheoryCommand}"
+                    IsVisible="{Binding IsTheoryInstructor}" />
+                <Label Style="{StaticResource Caption}" Text="{l:Text Schedule.OfferHint}" />
+            </VerticalStackLayout>
+
+            <controls:NoticeBanner Text="{Binding Notice}" Tone="Warning" />
+        </controls:PageColumn>
+
+        <Grid Grid.Row="1">
             <Grid.GestureRecognizers>
                 <SwipeGestureRecognizer Direction="Left" Command="{Binding NextCommand}" />
                 <SwipeGestureRecognizer Direction="Right" Command="{Binding PreviousCommand}" />
@@ -176,6 +179,8 @@
                 <ScrollView>
                     <Grid Margin="0,8,0,24">
                         <controls:ScheduleAgenda
+                            MaximumWidthRequest="840"
+                            HorizontalOptions="Start"
                             IsVisible="{Binding ShowsList}"
                             Entries="{Binding Entries}"
                             FirstDay="{Binding GridFirstDay}"
