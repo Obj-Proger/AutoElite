@@ -175,8 +175,11 @@
   <data name="Chat.Unmuted" xml:space="preserve">
     <value>The notifications of this chat are on.</value>
   </data>
+  <data name="Chats.Choose" xml:space="preserve">
+    <value>Choose a chat to read it here.</value>
+  </data>
   <data name="Chats.Empty" xml:space="preserve">
-    <value>No chats yet. Start one with “New chat”; your instructors and groups write here too.</value>
+    <value>No chats yet. Start one with the + button; your instructors and groups write here too.</value>
   </data>
   <data name="Chats.Muted" xml:space="preserve">
     <value>muted</value>
@@ -187,11 +190,17 @@
   <data name="Chats.Offline" xml:space="preserve">
     <value>No connection. The messages are as of {0}.</value>
   </data>
+  <data name="Chats.Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
   <data name="Chats.Title" xml:space="preserve">
     <value>Messages</value>
   </data>
   <data name="Chats.Unavailable" xml:space="preserve">
     <value>The messages could not be read: no connection to the school.</value>
+  </data>
+  <data name="Chats.Yesterday" xml:space="preserve">
+    <value>Yesterday</value>
   </data>
   <data name="Common.Cancel" xml:space="preserve">
     <value>Cancel</value>

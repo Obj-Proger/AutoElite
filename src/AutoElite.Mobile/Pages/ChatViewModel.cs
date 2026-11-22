@@ -130,10 +130,14 @@ public sealed class ChatViewModel : ViewModel, IQueryAttributable
             if (!SetProperty(ref field, value))
                 return;
 
+            OnPropertyChanged(nameof(IsNotBusy));
             SendCommand.ChangeCanExecute();
             AttachCommand.ChangeCanExecute();
         }
     }
+
+    /// <summary>Gets a value indicating whether nothing is being attached or sent, which shows the button of sending.</summary>
+    public bool IsNotBusy => !IsBusy;
 
     /// <summary>Gets that the messages are from the device or could not be read, or how an action went.</summary>
     public string? Notice
@@ -158,18 +162,28 @@ public sealed class ChatViewModel : ViewModel, IQueryAttributable
     /// <summary>Gets the command that offers turning the notifications off or on and leaving a group chat.</summary>
     public Command ActionsCommand { get; }
 
+    /// <summary>Occurs when the user has left the group chat, which then closes.</summary>
+    public event EventHandler? Left;
+
     /// <inheritdoc />
     public void ApplyQueryAttributes(IDictionary<string, object> query)
     {
         ArgumentNullException.ThrowIfNull(query);
-        if (!query.TryGetValue(ChatParameter, out var value) || value is not ChatRequest request)
-            return;
+        if (query.TryGetValue(ChatParameter, out var value) && value is ChatRequest request)
+            Open(request);
+    }
 
+    /// <summary>Shows another chat, whose messages <see cref="LoadChatAsync"/> and <see cref="LoadAsync"/> read.</summary>
+    /// <param name="request">The chat.</param>
+    public void Open(ChatRequest request)
+    {
+        ArgumentNullException.ThrowIfNull(request);
         _chatId = request.ChatId;
         Title = request.Title;
         PageTitle = request.IsPersonal ? ShortNameOf(request.Title) : request.Title;
         ShowsFullName = PageTitle != request.Title;
         Messages = [];
+        Notice = null;
         Text = string.Empty;
         _files.Clear();
         _pending.Clear();
@@ -379,7 +393,7 @@ public sealed class ChatViewModel : ViewModel, IQueryAttributable
                          AppTexts.Get("Common.Cancel")))
             {
                 await _chats.LeaveAsync(_chatId, CancellationToken.None);
-                await Shell.Current.GoToAsync("..");
+                Left?.Invoke(this, EventArgs.Empty);
             }
         }
         catch (Exception exception) when (exception is ApiException or HttpRequestException or TaskCanceledException)

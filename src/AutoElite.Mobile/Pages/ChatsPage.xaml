@@ -3,6 +3,7 @@
     x:Class="AutoElite.Mobile.Pages.ChatsPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:AutoElite.Mobile.Controls"
     xmlns:l="clr-namespace:AutoElite.Mobile.Localization"
     xmlns:pages="clr-namespace:AutoElite.Mobile.Pages"
     x:DataType="pages:ChatsViewModel"
@@ -10,47 +11,135 @@
     ControlTemplate="{StaticResource TabPage}"
     Shell.NavBarIsVisible="False">
 
-    <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}" RefreshColor="{DynamicResource Accent}">
-        <ScrollView>
-            <VerticalStackLayout Padding="{StaticResource PageMargin}" Spacing="10">
-                <Button Style="{StaticResource SecondaryButton}" Text="{l:Text Chats.New}" Command="{Binding NewChatCommand}" />
-                <Border Style="{StaticResource Card}" IsVisible="{Binding HasNotice}">
-                    <Label Style="{StaticResource Secondary}" Text="{Binding Notice}" />
-                </Border>
+    <!--
+        The chats: a search, then each chat with the initials of the person or the icon of a group, its title, when its
+        latest message was sent, the message and how many are unread; the button at the bottom starts a new chat. On a
+        wide window the chat tapped opens in the pane next to the list, which asks to choose one until then.
+    -->
+    <Grid x:Name="Panes" ColumnDefinitions="*,0">
+        <Grid RowDefinitions="Auto,Auto,*">
+            <Border Style="{StaticResource Field}" Margin="20,4,20,8">
+                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
+                    <controls:AppIcon Name="search" Size="18" Color="{DynamicResource TextMuted}" />
+                    <Entry
+                        Grid.Column="1"
+                        Text="{Binding Query}"
+                        Placeholder="{l:Text Chats.Search}"
+                        ClearButtonVisibility="WhileEditing"
+                        ReturnType="Search" />
+                </Grid>
+            </Border>
 
-                <VerticalStackLayout Spacing="10" BindableLayout.ItemsSource="{Binding Items}">
-                    <BindableLayout.ItemTemplate>
-                        <DataTemplate x:DataType="pages:ChatEntry">
-                            <Border Style="{StaticResource Card}">
-                                <Border.GestureRecognizers>
-                                    <TapGestureRecognizer Command="{Binding OpenCommand}" />
-                                </Border.GestureRecognizers>
-                                <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto" ColumnSpacing="10" RowSpacing="4">
-                                    <Label Style="{StaticResource BodyLarge}" Text="{Binding Title}" />
-                                    <Label Grid.Column="1" Style="{StaticResource Caption}" Text="{Binding Time}" />
-                                    <Label
-                                        Grid.Row="1"
-                                        Style="{StaticResource Secondary}"
-                                        Text="{Binding LastMessage}"
-                                        LineBreakMode="TailTruncation"
-                                        MaxLines="1" />
-                                    <Border
-                                        Grid.Row="1"
-                                        Grid.Column="1"
-                                        BackgroundColor="{DynamicResource Accent}"
-                                        StrokeThickness="0"
-                                        Padding="8,2"
-                                        StrokeShape="RoundRectangle 10"
-                                        IsVisible="{Binding HasUnread}">
-                                        <Label Text="{Binding Unread}" TextColor="{DynamicResource OnAccent}" FontSize="12" />
-                                    </Border>
-                                </Grid>
-                            </Border>
-                        </DataTemplate>
-                    </BindableLayout.ItemTemplate>
-                </VerticalStackLayout>
-            </VerticalStackLayout>
-        </ScrollView>
-    </RefreshView>
+            <controls:NoticeBanner Grid.Row="1" Text="{Binding Notice}" Margin="20,0,20,8" />
+
+            <RefreshView
+                Grid.Row="2"
+                IsRefreshing="{Binding IsRefreshing}"
+                Command="{Binding RefreshCommand}"
+                RefreshColor="{DynamicResource Accent}">
+                <ScrollView>
+                    <VerticalStackLayout Padding="8,0,8,96" Spacing="2" BindableLayout.ItemsSource="{Binding Items}">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate x:DataType="pages:ChatEntry">
+                                <Border
+                                    Padding="12,10"
+                                    StrokeThickness="0"
+                                    StrokeShape="RoundRectangle 14"
+                                    BackgroundColor="Transparent"
+                                    SemanticProperties.Description="{Binding Title}">
+                                    <Border.Triggers>
+                                        <DataTrigger TargetType="Border" Binding="{Binding IsSelected}" Value="True">
+                                            <Setter Property="BackgroundColor" Value="{DynamicResource Surface}" />
+                                        </DataTrigger>
+                                    </Border.Triggers>
+                                    <Border.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding OpenCommand}" />
+                                    </Border.GestureRecognizers>
+                                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="14">
+                                        <controls:Avatar Name="{Binding Title}" Size="48" IsVisible="{Binding IsPersonal}" />
+                                        <Border
+                                            WidthRequest="48"
+                                            HeightRequest="48"
+                                            StrokeThickness="0"
+                                            StrokeShape="Ellipse"
+                                            BackgroundColor="{DynamicResource SurfaceRaised}"
+                                            IsVisible="{Binding IsGroup}">
+                                            <controls:AppIcon Name="users" Size="22" Color="{DynamicResource AccentText}" />
+                                        </Border>
+                                        <VerticalStackLayout Grid.Column="1" Spacing="4" VerticalOptions="Center">
+                                            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                                                <Label
+                                                    FontFamily="TextSemiBold"
+                                                    FontSize="15"
+                                                    Text="{Binding Title}"
+                                                    LineBreakMode="TailTruncation" />
+                                                <Label
+                                                    Grid.Column="1"
+                                                    FontSize="12"
+                                                    TextColor="{DynamicResource TextMuted}"
+                                                    Text="{Binding Time}"
+                                                    VerticalOptions="Center">
+                                                    <Label.Triggers>
+                                                        <DataTrigger TargetType="Label" Binding="{Binding HasUnread}" Value="True">
+                                                            <Setter Property="TextColor" Value="{DynamicResource AccentText}" />
+                                                        </DataTrigger>
+                                                    </Label.Triggers>
+                                                </Label>
+                                            </Grid>
+                                            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                                                <Label
+                                                    FontSize="14"
+                                                    TextColor="{DynamicResource TextMuted}"
+                                                    Text="{Binding LastMessage}"
+                                                    LineBreakMode="TailTruncation"
+                                                    MaxLines="1">
+                                                    <Label.Triggers>
+                                                        <DataTrigger TargetType="Label" Binding="{Binding HasUnread}" Value="True">
+                                                            <Setter Property="TextColor" Value="{DynamicResource TextSecondary}" />
+                                                        </DataTrigger>
+                                                    </Label.Triggers>
+                                                </Label>
+                                                <controls:CountBadge Grid.Column="1" Count="{Binding UnreadCount}" />
+                                            </Grid>
+                                        </VerticalStackLayout>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </VerticalStackLayout>
+                </ScrollView>
+            </RefreshView>
+
+            <Border
+                Grid.Row="2"
+                WidthRequest="56"
+                HeightRequest="56"
+                Margin="0,0,20,20"
+                HorizontalOptions="End"
+                VerticalOptions="End"
+                StrokeThickness="0"
+                StrokeShape="RoundRectangle 18"
+                BackgroundColor="{DynamicResource Primary}"
+                SemanticProperties.Description="{l:Text Chats.New}">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding NewChatCommand}" />
+                </Border.GestureRecognizers>
+                <controls:AppIcon Name="plus" Size="24" Color="{DynamicResource OnPrimary}" />
+            </Border>
+        </Grid>
+
+        <!-- The chat open on a wide window, or the request to choose one. -->
+        <Grid x:Name="Pane" Grid.Column="1" IsVisible="False">
+            <BoxView WidthRequest="1" Color="{DynamicResource Border}" HorizontalOptions="Start" />
+            <Grid Margin="1,0,0,0" IsVisible="{Binding HasConversation}">
+                <pages:ChatView ShowsHeader="True" BindingContext="{Binding Conversation}" />
+            </Grid>
+            <controls:EmptyState
+                Icon="message-circle"
+                Text="{l:Text Chats.Choose}"
+                VerticalOptions="Center"
+                IsVisible="{Binding ChoosesChat}" />
+        </Grid>
+    </Grid>
 
 </ContentPage>

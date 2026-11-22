@@ -1,6 +1,6 @@
 namespace AutoElite.Mobile.Pages;
 
-/// <summary>A chat, opened from the chats page; it keeps the latest message in view.</summary>
+/// <summary>A chat, opened from the chats page; leaving a group chat goes back to them.</summary>
 public partial class ChatPage : ContentPage
 {
     private readonly ChatViewModel _viewModel;
@@ -11,11 +11,7 @@ public partial class ChatPage : ContentPage
     {
         InitializeComponent();
         BindingContext = _viewModel = viewModel;
-        _viewModel.PropertyChanged += async (_, args) =>
-        {
-            if (args.PropertyName == nameof(ChatViewModel.Messages))
-                await Scroller.ScrollToAsync(MessageList, ScrollToPosition.End, animated: false);
-        };
+        _viewModel.Left += async (_, _) => await Shell.Current.GoToAsync("..");
     }
 
     /// <inheritdoc />

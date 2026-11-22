@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    x:Class="AutoElite.Mobile.Pages.ChatView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:AutoElite.Mobile.Controls"
+    xmlns:l="clr-namespace:AutoElite.Mobile.Localization"
+    xmlns:pages="clr-namespace:AutoElite.Mobile.Pages"
+    x:DataType="pages:ChatViewModel">
+
+    <!--
+        A conversation: in the pane of the chats page a header with the person or the group and what can be done with
+        the chat, then the messages as bubbles, the user's own on the right in the main color, the files chosen for the
+        next message and the field of the message with attaching and sending.
+    -->
+    <Grid RowDefinitions="Auto,*,Auto,Auto">
+        <Grid x:Name="Header" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12" Padding="20,12,12,12" IsVisible="False">
+            <controls:Avatar Name="{Binding Title}" Size="40" />
+            <Label
+                Grid.Column="1"
+                FontFamily="TextSemiBold"
+                FontSize="16"
+                Text="{Binding Title}"
+                VerticalOptions="Center"
+                LineBreakMode="TailTruncation" />
+            <Grid Grid.Column="2" WidthRequest="44" HeightRequest="44" SemanticProperties.Description="{l:Text Chat.Actions}">
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding ActionsCommand}" />
+                </Grid.GestureRecognizers>
+                <controls:AppIcon Name="ellipsis" Size="20" />
+            </Grid>
+            <BoxView
+                Grid.ColumnSpan="3"
+                HeightRequest="1"
+                Color="{DynamicResource Border}"
+                VerticalOptions="End"
+                Margin="-20,0,-12,-12" />
+        </Grid>
+
+        <ScrollView x:Name="Scroller" Grid.Row="1">
+            <VerticalStackLayout x:Name="MessageList" Padding="20,16" Spacing="8">
+                <Label Style="{StaticResource Secondary}" Text="{Binding Title}" IsVisible="{Binding ShowsFullName}" />
+                <controls:NoticeBanner Text="{Binding Notice}" />
+                <VerticalStackLayout Spacing="8" BindableLayout.ItemsSource="{Binding Messages}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="pages:MessageEntry">
+                            <Border
+                                Padding="14,10"
+                                StrokeThickness="0"
+                                StrokeShape="RoundRectangle 16,16,4,16"
+                                BackgroundColor="{DynamicResource Surface}"
+                                HorizontalOptions="{Binding Alignment}"
+                                MaximumWidthRequest="420">
+                                <Border.Triggers>
+                                    <DataTrigger TargetType="Border" Binding="{Binding IsMine}" Value="True">
+                                        <Setter Property="BackgroundColor" Value="{DynamicResource Primary}" />
+                                        <Setter Property="StrokeShape" Value="RoundRectangle 16,16,16,4" />
+                                    </DataTrigger>
+                                </Border.Triggers>
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding TapCommand}" />
+                                </Border.GestureRecognizers>
+                                <VerticalStackLayout Spacing="4">
+                                    <Label
+                                        FontFamily="TextSemiBold"
+                                        FontSize="13"
+                                        TextColor="{DynamicResource AccentText}"
+                                        Text="{Binding Sender}"
+                                        IsVisible="{Binding IsTheirs}" />
+                                    <Label FontSize="15" Text="{Binding Text}" IsVisible="{Binding HasText}">
+                                        <Label.Triggers>
+                                            <DataTrigger TargetType="Label" Binding="{Binding IsMine}" Value="True">
+                                                <Setter Property="TextColor" Value="{DynamicResource OnPrimary}" />
+                                            </DataTrigger>
+                                        </Label.Triggers>
+                                    </Label>
+                                    <VerticalStackLayout
+                                        Spacing="6"
+                                        IsVisible="{Binding HasFiles}"
+                                        BindableLayout.ItemsSource="{Binding Files}">
+                                        <BindableLayout.ItemTemplate>
+                                            <DataTemplate x:DataType="pages:FileEntry">
+                                                <Border
+                                                    BackgroundColor="{DynamicResource SurfaceRaised}"
+                                                    StrokeThickness="0"
+                                                    StrokeShape="RoundRectangle 10"
+                                                    Padding="10,6"
+                                                    SemanticProperties.Description="{Binding Name}">
+                                                    <Border.GestureRecognizers>
+                                                        <TapGestureRecognizer Command="{Binding Command}" />
+                                                    </Border.GestureRecognizers>
+                                                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
+                                                        <controls:AppIcon
+                                                            Name="paperclip"
+                                                            Size="16"
+                                                            Color="{DynamicResource AccentText}" />
+                                                        <VerticalStackLayout Grid.Column="1">
+                                                            <Label
+                                                                Text="{Binding Name}"
+                                                                TextColor="{DynamicResource AccentText}"
+                                                                LineBreakMode="MiddleTruncation" />
+                                                            <Label Style="{StaticResource Caption}" Text="{Binding Details}" />
+                                                        </VerticalStackLayout>
+                                                    </Grid>
+                                                </Border>
+                                            </DataTemplate>
+                                        </BindableLayout.ItemTemplate>
+                                    </VerticalStackLayout>
+                                    <Label FontSize="11" TextColor="{DynamicResource TextMuted}" Text="{Binding Time}" HorizontalOptions="End">
+                                        <Label.Triggers>
+                                            <DataTrigger TargetType="Label" Binding="{Binding IsMine}" Value="True">
+                                                <Setter Property="TextColor" Value="{DynamicResource OnPrimary}" />
+                                                <Setter Property="Opacity" Value="0.7" />
+                                            </DataTrigger>
+                                        </Label.Triggers>
+                                    </Label>
+                                </VerticalStackLayout>
+                            </Border>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <ScrollView Grid.Row="2" Orientation="Horizontal" IsVisible="{Binding HasPending}" Padding="16,6,16,0">
+            <HorizontalStackLayout Spacing="8" BindableLayout.ItemsSource="{Binding Pending}">
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate x:DataType="pages:FileEntry">
+                        <Border
+                            BackgroundColor="{DynamicResource SurfaceRaised}"
+                            StrokeThickness="0"
+                            StrokeShape="RoundRectangle 16"
+                            Padding="12,4,4,4">
+                            <HorizontalStackLayout Spacing="4">
+                                <Label
+                                    Text="{Binding Name}"
+                                    MaximumWidthRequest="180"
+                                    LineBreakMode="MiddleTruncation"
+                                    VerticalOptions="Center" />
+                                <Grid WidthRequest="32" HeightRequest="32" SemanticProperties.Description="{l:Text Chat.RemoveFile}">
+                                    <Grid.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding Command}" />
+                                    </Grid.GestureRecognizers>
+                                    <controls:AppIcon Name="x" Size="16" Color="{DynamicResource TextSecondary}" />
+                                </Grid>
+                            </HorizontalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
+            </HorizontalStackLayout>
+        </ScrollView>
+
+        <Grid Grid.Row="3" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="8" Padding="12,10,16,14">
+            <BoxView
+                Grid.ColumnSpan="3"
+                HeightRequest="1"
+                Color="{DynamicResource Border}"
+                VerticalOptions="Start"
+                Margin="-12,-10,-16,0" />
+            <Grid WidthRequest="44" HeightRequest="44" VerticalOptions="End" SemanticProperties.Description="{l:Text Chat.Attach}">
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding AttachCommand}" />
+                </Grid.GestureRecognizers>
+                <controls:AppIcon Name="paperclip" Size="22" Color="{DynamicResource TextSecondary}" />
+            </Grid>
+            <Border Grid.Column="1" Style="{StaticResource Field}">
+                <Editor
+                    Text="{Binding Text}"
+                    Placeholder="{l:Text Chat.Placeholder}"
+                    AutoSize="TextChanges"
+                    MaxLength="4000"
+                    MaximumHeightRequest="140" />
+            </Border>
+            <Border
+                Grid.Column="2"
+                WidthRequest="48"
+                HeightRequest="48"
+                StrokeThickness="0"
+                StrokeShape="RoundRectangle 14"
+                BackgroundColor="{DynamicResource Primary}"
+                VerticalOptions="End"
+                SemanticProperties.Description="{l:Text Chat.Send}">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding SendCommand}" />
+                </Border.GestureRecognizers>
+                <Border.Triggers>
+                    <DataTrigger TargetType="Border" Binding="{Binding IsBusy}" Value="True">
+                        <Setter Property="Opacity" Value="0.5" />
+                    </DataTrigger>
+                </Border.Triggers>
+                <Grid>
+                    <controls:AppIcon Name="send" Size="20" Color="{DynamicResource OnPrimary}" IsVisible="{Binding IsNotBusy}" />
+                    <ActivityIndicator
+                        IsRunning="{Binding IsBusy}"
+                        IsVisible="{Binding IsBusy}"
+                        Color="{DynamicResource OnPrimary}"
+                        WidthRequest="22"
+                        HeightRequest="22" />
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+
+</ContentView>
