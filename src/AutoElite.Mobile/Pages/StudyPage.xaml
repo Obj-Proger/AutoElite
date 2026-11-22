@@ -3,6 +3,7 @@
     x:Class="AutoElite.Mobile.Pages.StudyPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:AutoElite.Mobile.Controls"
     xmlns:l="clr-namespace:AutoElite.Mobile.Localization"
     xmlns:pages="clr-namespace:AutoElite.Mobile.Pages"
     x:DataType="pages:StudyPage"
@@ -11,50 +12,42 @@
     Shell.NavBarIsVisible="False">
 
     <!--
-        The studies: of a student, the practice tests, the contracts with their progress and payments, and the
+        The studies as rows: of a student, the practice tests, the contracts with their progress and payments, and the
         documents; of a theory instructor, the questions of the school for the tests.
     -->
     <ScrollView>
-        <VerticalStackLayout Padding="{StaticResource PageMargin}" Spacing="14">
-            <Border Style="{StaticResource Card}" IsVisible="{Binding IsStudent}">
-                <Border.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding OpenTestsCommand}" />
-                </Border.GestureRecognizers>
-                <VerticalStackLayout Spacing="4">
-                    <Label Style="{StaticResource Title}" Text="{l:Text Study.Tests}" />
-                    <Label Style="{StaticResource Secondary}" Text="{l:Text Study.TestsHint}" />
-                </VerticalStackLayout>
-            </Border>
-
-            <Border Style="{StaticResource Card}" IsVisible="{Binding IsStudent}">
-                <Border.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding OpenContractsCommand}" />
-                </Border.GestureRecognizers>
-                <VerticalStackLayout Spacing="4">
-                    <Label Style="{StaticResource Title}" Text="{l:Text Contracts.Title}" />
-                    <Label Style="{StaticResource Secondary}" Text="{l:Text Study.ContractsHint}" />
-                </VerticalStackLayout>
-            </Border>
-
-            <Border Style="{StaticResource Card}" IsVisible="{Binding IsStudent}">
-                <Border.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding OpenDocumentsCommand}" />
-                </Border.GestureRecognizers>
-                <VerticalStackLayout Spacing="4">
-                    <Label Style="{StaticResource Title}" Text="{l:Text Documents.Title}" />
-                    <Label Style="{StaticResource Secondary}" Text="{l:Text Study.DocumentsHint}" />
-                </VerticalStackLayout>
-            </Border>
-
-            <Border Style="{StaticResource Card}" IsVisible="{Binding IsTheoryInstructor}">
-                <Border.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding OpenQuestionsCommand}" />
-                </Border.GestureRecognizers>
-                <VerticalStackLayout Spacing="4">
-                    <Label Style="{StaticResource Title}" Text="{l:Text Questions.Title}" />
-                    <Label Style="{StaticResource Secondary}" Text="{l:Text Study.QuestionsHint}" />
-                </VerticalStackLayout>
-            </Border>
+        <VerticalStackLayout Padding="20,8,20,32" Spacing="8" MaximumWidthRequest="760">
+            <controls:ListRow
+                Icon="clipboard-check"
+                Tone="Accent"
+                Title="{l:Text Study.Tests}"
+                Subtitle="{l:Text Study.TestsHint}"
+                ShowsChevron="True"
+                Command="{Binding OpenTestsCommand}"
+                IsVisible="{Binding IsStudent}" />
+            <controls:ListRow
+                Icon="wallet"
+                Tone="Success"
+                Title="{l:Text Contracts.Title}"
+                Subtitle="{l:Text Study.ContractsHint}"
+                ShowsChevron="True"
+                Command="{Binding OpenContractsCommand}"
+                IsVisible="{Binding IsStudent}" />
+            <controls:ListRow
+                Icon="file-text"
+                Title="{l:Text Documents.Title}"
+                Subtitle="{l:Text Study.DocumentsHint}"
+                ShowsChevron="True"
+                Command="{Binding OpenDocumentsCommand}"
+                IsVisible="{Binding IsStudent}" />
+            <controls:ListRow
+                Icon="book-open"
+                Tone="Accent"
+                Title="{l:Text Questions.Title}"
+                Subtitle="{l:Text Study.QuestionsHint}"
+                ShowsChevron="True"
+                Command="{Binding OpenQuestionsCommand}"
+                IsVisible="{Binding IsTheoryInstructor}" />
         </VerticalStackLayout>
     </ScrollView>
 

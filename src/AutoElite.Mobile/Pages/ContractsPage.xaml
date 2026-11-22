@@ -3,32 +3,67 @@
     x:Class="AutoElite.Mobile.Pages.ContractsPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:AutoElite.Mobile.Controls"
     xmlns:l="clr-namespace:AutoElite.Mobile.Localization"
     xmlns:pages="clr-namespace:AutoElite.Mobile.Pages"
     x:DataType="pages:ContractsViewModel"
     Title="{l:Text Contracts.Title}">
 
+    <!--
+        The contracts of a student, each on a highlighted card: its number and course, the money, the practice hours as
+        a bar, the theory and the quality of the lessons as rows with icons, then the payments.
+    -->
     <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}" RefreshColor="{DynamicResource Accent}">
         <ScrollView>
-            <VerticalStackLayout Padding="{StaticResource PageMargin}" Spacing="14">
-                <Border Style="{StaticResource Card}" IsVisible="{Binding HasNotice}">
-                    <Label Style="{StaticResource Secondary}" Text="{Binding Notice}" />
-                </Border>
+            <VerticalStackLayout Padding="20,8,20,32" Spacing="14" MaximumWidthRequest="760">
+                <controls:NoticeBanner Text="{Binding Notice}" />
 
                 <VerticalStackLayout Spacing="14" BindableLayout.ItemsSource="{Binding Items}">
                     <BindableLayout.ItemTemplate>
                         <DataTemplate x:DataType="pages:ContractEntry">
                             <Border Style="{StaticResource HighlightCard}">
-                                <VerticalStackLayout Spacing="8">
-                                    <Label Style="{StaticResource Overline}" Text="{Binding Number}" />
-                                    <Label Style="{StaticResource Title}" Text="{Binding Course}" />
-                                    <Label Style="{StaticResource BodyLarge}" Text="{Binding Practice}" />
-                                    <ProgressBar Progress="{Binding PracticeProgress}" />
-                                    <Label Style="{StaticResource Secondary}" Text="{Binding Theory}" />
-                                    <Label Style="{StaticResource Secondary}" Text="{Binding Quality}" IsVisible="{Binding HasQuality}" />
-                                    <Label Style="{StaticResource BodyLarge}" Text="{Binding Money}" />
-                                    <VerticalStackLayout Spacing="4" IsVisible="{Binding HasPayments}">
-                                        <Label Style="{StaticResource Caption}" Text="{l:Text Payments.Title}" />
+                                <VerticalStackLayout Spacing="14">
+                                    <VerticalStackLayout Spacing="2">
+                                        <Label
+                                            Style="{StaticResource Overline}"
+                                            TextColor="{DynamicResource TextMuted}"
+                                            Text="{Binding Number}" />
+                                        <Label FontFamily="TextSemiBold" FontSize="17" Text="{Binding Course}" />
+                                    </VerticalStackLayout>
+                                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                                        <controls:IconTile Icon="wallet" Tone="Accent" />
+                                        <Label
+                                            Grid.Column="1"
+                                            Style="{StaticResource BodyLarge}"
+                                            Text="{Binding Money}"
+                                            VerticalOptions="Center" />
+                                    </Grid>
+                                    <BoxView HeightRequest="1" Color="{DynamicResource Border}" />
+                                    <VerticalStackLayout Spacing="8">
+                                        <Label Style="{StaticResource BodyLarge}" Text="{Binding Practice}" />
+                                        <ProgressBar Progress="{Binding PracticeProgress}" />
+                                    </VerticalStackLayout>
+                                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                                        <controls:AppIcon
+                                            Name="book-open"
+                                            Size="18"
+                                            Color="{DynamicResource TextMuted}"
+                                            VerticalOptions="Start" />
+                                        <Label Grid.Column="1" Style="{StaticResource Secondary}" Text="{Binding Theory}" />
+                                    </Grid>
+                                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12" IsVisible="{Binding HasQuality}">
+                                        <controls:AppIcon
+                                            Name="check"
+                                            Size="18"
+                                            Color="{DynamicResource TextMuted}"
+                                            VerticalOptions="Start" />
+                                        <Label Grid.Column="1" Style="{StaticResource Secondary}" Text="{Binding Quality}" />
+                                    </Grid>
+                                    <VerticalStackLayout Spacing="6" IsVisible="{Binding HasPayments}">
+                                        <Label
+                                            Style="{StaticResource Overline}"
+                                            TextColor="{DynamicResource TextMuted}"
+                                            Text="{l:Text Payments.Title}" />
                                         <VerticalStackLayout Spacing="4" BindableLayout.ItemsSource="{Binding Payments}">
                                             <BindableLayout.ItemTemplate>
                                                 <DataTemplate x:DataType="x:String">

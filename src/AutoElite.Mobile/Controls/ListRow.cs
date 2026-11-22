@@ -46,7 +46,7 @@ public sealed class ListRow : Border
     private readonly AppIcon _icon = new() { Size = 22 };
     private readonly Border _tile;
     private readonly Label _title = new() { FontFamily = "TextSemiBold", FontSize = 15, LineBreakMode = LineBreakMode.TailTruncation };
-    private readonly Label _subtitle = new() { FontSize = 13, LineBreakMode = LineBreakMode.TailTruncation };
+    private readonly Label _subtitle = new() { FontSize = 13, LineBreakMode = LineBreakMode.TailTruncation, MaxLines = 2 };
     private readonly Label _trailing = new() { FontFamily = "DisplaySemiBold", FontSize = 15, VerticalOptions = LayoutOptions.Center };
     private readonly AppIcon _chevron = new() { Name = "chevron-right", Size = 18 };
     private readonly TapGestureRecognizer _tap = new();

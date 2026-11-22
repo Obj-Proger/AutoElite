@@ -3,26 +3,34 @@
     x:Class="AutoElite.Mobile.Pages.TestsPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:AutoElite.Mobile.Controls"
     xmlns:l="clr-namespace:AutoElite.Mobile.Localization"
     xmlns:pages="clr-namespace:AutoElite.Mobile.Pages"
     x:DataType="pages:TestsViewModel"
     Title="{l:Text Tests.Title}">
 
+    <!--
+        The tests of a student: the exams they are admitted to, the practice tests on highlighted cards and their past
+        attempts as rows, which open their review.
+    -->
     <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}" RefreshColor="{DynamicResource Accent}">
         <ScrollView>
-            <VerticalStackLayout Padding="{StaticResource PageMargin}" Spacing="14">
-                <Border Style="{StaticResource Card}" IsVisible="{Binding HasNotice}">
-                    <Label Style="{StaticResource Secondary}" Text="{Binding Notice}" />
-                </Border>
+            <VerticalStackLayout Padding="20,8,20,32" Spacing="12" MaximumWidthRequest="760">
+                <controls:NoticeBanner Text="{Binding Notice}" />
 
                 <Label Style="{StaticResource Title}" Text="{l:Text Exams.Title}" IsVisible="{Binding HasExams}" />
-                <VerticalStackLayout Spacing="12" BindableLayout.ItemsSource="{Binding Exams}">
+                <VerticalStackLayout Spacing="10" BindableLayout.ItemsSource="{Binding Exams}">
                     <BindableLayout.ItemTemplate>
                         <DataTemplate x:DataType="pages:TestEntry">
                             <Border Style="{StaticResource Card}">
-                                <VerticalStackLayout Spacing="6">
-                                    <Label Style="{StaticResource BodyLarge}" Text="{Binding Title}" />
-                                    <Label Style="{StaticResource Secondary}" Text="{Binding Details}" />
+                                <VerticalStackLayout Spacing="12">
+                                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="14">
+                                        <controls:IconTile Icon="clipboard-check" Tone="Warning" />
+                                        <VerticalStackLayout Grid.Column="1" Spacing="3" VerticalOptions="Center">
+                                            <Label FontFamily="TextSemiBold" FontSize="15" Text="{Binding Title}" />
+                                            <Label FontSize="13" TextColor="{DynamicResource TextMuted}" Text="{Binding Details}" />
+                                        </VerticalStackLayout>
+                                    </Grid>
                                     <Button Text="{Binding ActionText}" Command="{Binding Command}" IsVisible="{Binding HasAction}" />
                                 </VerticalStackLayout>
                             </Border>
@@ -30,14 +38,19 @@
                     </BindableLayout.ItemTemplate>
                 </VerticalStackLayout>
 
-                <Label Style="{StaticResource Title}" Text="{l:Text Tests.Practice}" />
-                <VerticalStackLayout Spacing="12" BindableLayout.ItemsSource="{Binding Templates}">
+                <Label Style="{StaticResource Title}" Text="{l:Text Tests.Practice}" Margin="0,6,0,0" />
+                <VerticalStackLayout Spacing="10" BindableLayout.ItemsSource="{Binding Templates}">
                     <BindableLayout.ItemTemplate>
                         <DataTemplate x:DataType="pages:TestEntry">
                             <Border Style="{StaticResource HighlightCard}">
-                                <VerticalStackLayout Spacing="6">
-                                    <Label Style="{StaticResource Title}" Text="{Binding Title}" />
-                                    <Label Style="{StaticResource Secondary}" Text="{Binding Details}" />
+                                <VerticalStackLayout Spacing="12">
+                                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="14">
+                                        <controls:IconTile Icon="book-open" Tone="Accent" />
+                                        <VerticalStackLayout Grid.Column="1" Spacing="3" VerticalOptions="Center">
+                                            <Label FontFamily="TextSemiBold" FontSize="15" Text="{Binding Title}" />
+                                            <Label FontSize="13" TextColor="{DynamicResource TextMuted}" Text="{Binding Details}" />
+                                        </VerticalStackLayout>
+                                    </Grid>
                                     <Button Text="{Binding ActionText}" Command="{Binding Command}" />
                                 </VerticalStackLayout>
                             </Border>
@@ -45,20 +58,17 @@
                     </BindableLayout.ItemTemplate>
                 </VerticalStackLayout>
 
-                <Label Style="{StaticResource Title}" Text="{l:Text Tests.Attempts}" IsVisible="{Binding HasAttempts}" />
-                <VerticalStackLayout Spacing="12" BindableLayout.ItemsSource="{Binding Attempts}">
+                <Label Style="{StaticResource Title}" Text="{l:Text Tests.Attempts}" IsVisible="{Binding HasAttempts}" Margin="0,6,0,0" />
+                <VerticalStackLayout Spacing="8" BindableLayout.ItemsSource="{Binding Attempts}">
                     <BindableLayout.ItemTemplate>
                         <DataTemplate x:DataType="pages:TestEntry">
-                            <Border Style="{StaticResource Card}">
-                                <VerticalStackLayout Spacing="6">
-                                    <Label Style="{StaticResource BodyLarge}" Text="{Binding Title}" />
-                                    <Label Style="{StaticResource Secondary}" Text="{Binding Details}" />
-                                    <Button
-                                        Style="{StaticResource SecondaryButton}"
-                                        Text="{Binding ActionText}"
-                                        Command="{Binding Command}" />
-                                </VerticalStackLayout>
-                            </Border>
+                            <controls:ListRow
+                                Icon="check"
+                                Title="{Binding Title}"
+                                Subtitle="{Binding Details}"
+                                Trailing="{Binding ActionText}"
+                                ShowsChevron="True"
+                                Command="{Binding Command}" />
                         </DataTemplate>
                     </BindableLayout.ItemTemplate>
                 </VerticalStackLayout>
