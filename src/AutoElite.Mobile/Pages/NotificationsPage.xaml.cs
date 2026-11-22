@@ -1,6 +1,6 @@
 namespace AutoElite.Mobile.Pages;
 
-/// <summary>The notifications of the user, opened from the home page.</summary>
+/// <summary>The notifications of the user, opened from the bell above every tab.</summary>
 public partial class NotificationsPage : ContentPage
 {
     private readonly NotificationsViewModel _viewModel;

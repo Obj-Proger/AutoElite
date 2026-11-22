@@ -673,20 +673,50 @@
   <data name="NewChat.Title" xml:space="preserve">
     <value>New chat</value>
   </data>
+  <data name="Notifications.All" xml:space="preserve">
+    <value>All</value>
+  </data>
   <data name="Notifications.Empty" xml:space="preserve">
     <value>No notifications yet.</value>
+  </data>
+  <data name="Notifications.HoursAgo" xml:space="preserve">
+    <value>{0} h ago</value>
+  </data>
+  <data name="Notifications.JustNow" xml:space="preserve">
+    <value>Just now</value>
+  </data>
+  <data name="Notifications.MinutesAgo" xml:space="preserve">
+    <value>{0} min ago</value>
+  </data>
+  <data name="Notifications.NoUnread" xml:space="preserve">
+    <value>Everything is read.</value>
   </data>
   <data name="Notifications.Offline" xml:space="preserve">
     <value>No connection. The notifications are as of {0}.</value>
   </data>
   <data name="Notifications.ReadAll" xml:space="preserve">
-    <value>Mark all as read</value>
+    <value>Read all</value>
   </data>
   <data name="Notifications.Title" xml:space="preserve">
     <value>Notifications</value>
   </data>
+  <data name="Notifications.Today" xml:space="preserve">
+    <value>Today</value>
+  </data>
   <data name="Notifications.Unavailable" xml:space="preserve">
     <value>The notifications could not be read: no connection to the school.</value>
+  </data>
+  <data name="Notifications.Unread" xml:space="preserve">
+    <value>Unread · {0}</value>
+  </data>
+  <data name="Notifications.UnreadNone" xml:space="preserve">
+    <value>Unread</value>
+  </data>
+  <data name="Notifications.Yesterday" xml:space="preserve">
+    <value>Yesterday</value>
+  </data>
+  <data name="Notifications.YesterdayAt" xml:space="preserve">
+    <value>Yesterday, {0}</value>
   </data>
   <data name="OfferSlot.Automatic" xml:space="preserve">
     <value>automatic</value>
