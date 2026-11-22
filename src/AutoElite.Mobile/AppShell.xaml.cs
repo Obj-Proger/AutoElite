@@ -47,6 +47,7 @@ public partial class AppShell : Shell
         Routing.RegisterRoute(Routes.ManagedStudent, typeof(ManagedStudentPage));
         Routing.RegisterRoute(Routes.Payment, typeof(PaymentPage));
         Routing.RegisterRoute(Routes.Profile, typeof(ProfilePage));
+        Routing.RegisterRoute(Routes.Personal, typeof(PersonalPage));
         Routing.RegisterRoute(Routes.Lead, typeof(LeadPage));
         sessions.SessionEnded += (_, _) => Dispatcher.Dispatch(async () => await Routes.GoToAsync(Routes.SignIn));
     }

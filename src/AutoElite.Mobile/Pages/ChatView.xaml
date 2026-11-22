@@ -106,7 +106,11 @@
                                             </DataTemplate>
                                         </BindableLayout.ItemTemplate>
                                     </VerticalStackLayout>
-                                    <Label FontSize="11" TextColor="{DynamicResource TextMuted}" Text="{Binding Time}" HorizontalOptions="End">
+                                    <Label
+                                        FontSize="11"
+                                        TextColor="{DynamicResource TextMuted}"
+                                        Text="{Binding Time}"
+                                        HorizontalOptions="End">
                                         <Label.Triggers>
                                             <DataTrigger TargetType="Label" Binding="{Binding IsMine}" Value="True">
                                                 <Setter Property="TextColor" Value="{DynamicResource OnPrimary}" />

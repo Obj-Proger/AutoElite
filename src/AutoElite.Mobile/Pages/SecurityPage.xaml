@@ -3,66 +3,78 @@
     x:Class="AutoElite.Mobile.Pages.SecurityPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:AutoElite.Mobile.Controls"
     xmlns:l="clr-namespace:AutoElite.Mobile.Localization"
     xmlns:pages="clr-namespace:AutoElite.Mobile.Pages"
     x:DataType="pages:SecurityViewModel"
     Title="{l:Text Security.Title}">
 
+    <!-- The password and the email address, opened from the profile: each field under its caption. -->
     <ScrollView>
-        <VerticalStackLayout Padding="{StaticResource PageMargin}" Spacing="14">
-            <Border Style="{StaticResource Card}">
-                <VerticalStackLayout Spacing="8">
-                    <Label Style="{StaticResource Overline}" Text="{l:Text Security.Password}" />
+        <VerticalStackLayout Padding="20,12,20,32" Spacing="24" MaximumWidthRequest="560">
+            <VerticalStackLayout Spacing="14">
+                <Label
+                    Style="{StaticResource Overline}"
+                    TextColor="{DynamicResource TextMuted}"
+                    Text="{l:Text Security.Password}" />
+                <VerticalStackLayout Spacing="6">
+                    <Label Style="{StaticResource Caption}" Text="{l:Text Security.CurrentPassword}" />
                     <Border Style="{StaticResource Field}">
-                        <Entry
-                            Text="{Binding CurrentPassword}"
-                            Placeholder="{l:Text Security.CurrentPassword}"
-                            IsPassword="True"
-                            ReturnType="Next" />
+                        <Entry Text="{Binding CurrentPassword}" IsPassword="True" ReturnType="Next" />
                     </Border>
+                </VerticalStackLayout>
+                <VerticalStackLayout Spacing="6">
+                    <Label Style="{StaticResource Caption}" Text="{l:Text Password.New}" />
                     <Border Style="{StaticResource Field}">
-                        <Entry Text="{Binding NewPassword}" Placeholder="{l:Text Password.New}" IsPassword="True" ReturnType="Next" />
+                        <Entry Text="{Binding NewPassword}" IsPassword="True" ReturnType="Next" />
                     </Border>
+                    <Label Style="{StaticResource Caption}" Text="{l:Text Password.Rules}" />
+                </VerticalStackLayout>
+                <VerticalStackLayout Spacing="6">
+                    <Label Style="{StaticResource Caption}" Text="{l:Text Password.Repeat}" />
                     <Border Style="{StaticResource Field}">
                         <Entry
                             Text="{Binding RepeatedPassword}"
-                            Placeholder="{l:Text Password.Repeat}"
                             IsPassword="True"
                             ReturnType="Go"
                             ReturnCommand="{Binding ChangePasswordCommand}" />
                     </Border>
-                    <Label Style="{StaticResource Caption}" Text="{l:Text Password.Rules}" />
-                    <Label Style="{StaticResource Caption}" Text="{l:Text Security.OtherDevices}" />
-                    <Label Style="{StaticResource Secondary}" Text="{Binding PasswordMessage}" IsVisible="{Binding HasPasswordMessage}" />
-                    <Button Text="{l:Text Security.ChangePassword}" Command="{Binding ChangePasswordCommand}" />
                 </VerticalStackLayout>
-            </Border>
+                <Label Style="{StaticResource Caption}" Text="{l:Text Security.OtherDevices}" />
+                <controls:NoticeBanner Text="{Binding PasswordMessage}" />
+                <Button Text="{l:Text Security.ChangePassword}" Command="{Binding ChangePasswordCommand}" />
+            </VerticalStackLayout>
 
-            <Border Style="{StaticResource Card}">
-                <VerticalStackLayout Spacing="8">
-                    <Label Style="{StaticResource Overline}" Text="{l:Text Security.Email}" />
+            <VerticalStackLayout Spacing="14">
+                <Label
+                    Style="{StaticResource Overline}"
+                    TextColor="{DynamicResource TextMuted}"
+                    Text="{l:Text Security.Email}" />
+                <VerticalStackLayout Spacing="6">
+                    <Label Style="{StaticResource Caption}" Text="{l:Text Security.NewEmail}" />
                     <Border Style="{StaticResource Field}">
                         <Entry
                             Text="{Binding NewEmail}"
-                            Placeholder="{l:Text Security.NewEmail}"
                             Keyboard="Email"
                             IsSpellCheckEnabled="False"
                             IsTextPredictionEnabled="False"
                             ReturnType="Next" />
                     </Border>
+                </VerticalStackLayout>
+                <VerticalStackLayout Spacing="6">
+                    <Label Style="{StaticResource Caption}" Text="{l:Text Security.CurrentPassword}" />
                     <Border Style="{StaticResource Field}">
                         <Entry
                             Text="{Binding EmailPassword}"
-                            Placeholder="{l:Text Security.CurrentPassword}"
                             IsPassword="True"
                             ReturnType="Go"
                             ReturnCommand="{Binding ChangeEmailCommand}" />
                     </Border>
-                    <Label Style="{StaticResource Caption}" Text="{l:Text Security.EmailHint}" />
-                    <Label Style="{StaticResource Secondary}" Text="{Binding EmailMessage}" IsVisible="{Binding HasEmailMessage}" />
-                    <Button Text="{l:Text Security.ChangeEmail}" Command="{Binding ChangeEmailCommand}" />
                 </VerticalStackLayout>
-            </Border>
+                <Label Style="{StaticResource Caption}" Text="{l:Text Security.EmailHint}" />
+                <controls:NoticeBanner Text="{Binding EmailMessage}" />
+                <Button Text="{l:Text Security.ChangeEmail}" Command="{Binding ChangeEmailCommand}" />
+            </VerticalStackLayout>
 
             <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
         </VerticalStackLayout>

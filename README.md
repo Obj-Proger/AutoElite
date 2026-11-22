@@ -231,24 +231,26 @@ above its messages, and on a phone on a page of its own. A personal chat starts,
 user studies or teaches with (`GET /api/v1/chats/contacts`): a student's instructors, an instructor's students. A
 message carries up to ten files, which need a network and open in another application from the cache of the device,
 emptied when the user signs out; the user deletes their own messages, turns the notifications of a chat off and leaves a
-group chat. In the profile the user corrects their name, phone and the language of their notifications and emails, sets
-or removes their photo, changes their password, which signs out their other devices, and asks for a new email address,
-which changes once they follow the link sent to it. An instructor opens the progress of a student they teach from a
-lesson or a personal chat (`GET /api/v1/students/{id}/progress`, without the money of the contracts): the practice
-hours, the driving lessons, the attendance of the group, the tests and the exams, and for a driving instructor the
-lessons with them, with the hours, the grade and the note; they write to or call the student from there. The schedule
-shows the school exams too: a student's own with their result, the practice exams of a driving instructor's branch and
-the exams of a theory instructor's groups. An exam opens with the current members of its group (`members` of `GET
-/api/v1/exams/{id}`) and their results; once a practice exam has begun, a driving instructor records each result, and a
-recorded result is corrected with a reason, a practice one by a driving instructor and a theory one by the instructor
-responsible for the group. A member of the staff sees on the tab of today how many of their tasks are open and overdue;
-the tasks open by their deadline, and the assignee starts a task, marks it done, after which a recurring one comes back,
-and opens it again. In the tab of studies, a student opens the documents of their contracts and adds their own, such as
-a scan of their passport, with a description, and deletes those they added; an opened file is kept in the cache of the
-device until they sign out. The texts of the application are in English, with a Russian translation, in
-`Resources/Strings`; the device's language chooses between them unless the user chooses one in the profile, where they
-also change the school and sign out. The colors follow the light or dark theme of the device, or the theme the user
-chooses in the profile, which shows at once.
+group chat. The profile is a menu: the avatar sets or removes the photo; the personal details, on a page of their own
+with each field under its caption, are the name, phone and the language of the notifications and emails; the theme is
+chosen from three cards that show it; a student opens their contracts and documents from it. There the user changes
+their password, which signs out their other devices, and asks for a new email address, which changes once they follow
+the link sent to it. An instructor opens the progress of a student they teach from a lesson or a personal chat (`GET
+/api/v1/students/{id}/progress`, without the money of the contracts): the practice hours, the driving lessons, the
+attendance of the group, the tests and the exams, and for a driving instructor the lessons with them, with the hours,
+the grade and the note; they write to or call the student from there. The schedule shows the school exams too: a
+student's own with their result, the practice exams of a driving instructor's branch and the exams of a theory
+instructor's groups. An exam opens with the current members of its group (`members` of `GET /api/v1/exams/{id}`) and
+their results; once a practice exam has begun, a driving instructor records each result, and a recorded result is
+corrected with a reason, a practice one by a driving instructor and a theory one by the instructor responsible for the
+group. A member of the staff sees on the tab of today how many of their tasks are open and overdue; the tasks open by
+their deadline, and the assignee starts a task, marks it done, after which a recurring one comes back, and opens it
+again. In the tab of studies, a student opens the documents of their contracts and adds their own, such as a scan of
+their passport, with a description, and deletes those they added; an opened file is kept in the cache of the device
+until they sign out. The texts of the application are in English, with a Russian translation, in `Resources/Strings`;
+the device's language chooses between them unless the user chooses one in the profile, where they also change the school
+and sign out. The colors follow the light or dark theme of the device, or the theme the user chooses in the profile,
+which shows at once.
 
 The application works without a network too (`src/AutoElite.Client.Offline`). A SQLite database in its private storage
 keeps what the user last read, shown as possibly out of date while the API cannot be reached, and the actions the user

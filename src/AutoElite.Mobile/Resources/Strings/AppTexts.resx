@@ -904,6 +904,12 @@
   <data name="Problems.Unreachable" xml:space="preserve">
     <value>The school is unreachable. Check the connection and try again.</value>
   </data>
+  <data name="Profile.Account" xml:space="preserve">
+    <value>Account</value>
+  </data>
+  <data name="Profile.App" xml:space="preserve">
+    <value>Application</value>
+  </data>
   <data name="Profile.ChangePhoto" xml:space="preserve">
     <value>Change photo</value>
   </data>
@@ -927,9 +933,6 @@
   </data>
   <data name="Profile.NotificationLanguage" xml:space="preserve">
     <value>Language of notifications and emails</value>
-  </data>
-  <data name="Profile.OpenSecurity" xml:space="preserve">
-    <value>Password and email</value>
   </data>
   <data name="Profile.Phone" xml:space="preserve">
     <value>Phone</value>
@@ -961,8 +964,8 @@
   <data name="Profile.Saved" xml:space="preserve">
     <value>Saved.</value>
   </data>
-  <data name="Profile.SecurityHint" xml:space="preserve">
-    <value>Change your password or the email address you sign in with.</value>
+  <data name="Profile.Study" xml:space="preserve">
+    <value>Studies</value>
   </data>
   <data name="Profile.Title" xml:space="preserve">
     <value>Profile</value>

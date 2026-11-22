@@ -904,6 +904,12 @@
   <data name="Problems.Unreachable" xml:space="preserve">
     <value>Школа недоступна. Проверьте подключение и попробуйте ещё раз.</value>
   </data>
+  <data name="Profile.Account" xml:space="preserve">
+    <value>Аккаунт</value>
+  </data>
+  <data name="Profile.App" xml:space="preserve">
+    <value>Приложение</value>
+  </data>
   <data name="Profile.ChangePhoto" xml:space="preserve">
     <value>Сменить фото</value>
   </data>
@@ -927,9 +933,6 @@
   </data>
   <data name="Profile.NotificationLanguage" xml:space="preserve">
     <value>Язык уведомлений и писем</value>
-  </data>
-  <data name="Profile.OpenSecurity" xml:space="preserve">
-    <value>Пароль и почта</value>
   </data>
   <data name="Profile.Phone" xml:space="preserve">
     <value>Телефон</value>
@@ -961,8 +964,8 @@
   <data name="Profile.Saved" xml:space="preserve">
     <value>Сохранено.</value>
   </data>
-  <data name="Profile.SecurityHint" xml:space="preserve">
-    <value>Смените пароль или адрес почты, по которому вы входите.</value>
+  <data name="Profile.Study" xml:space="preserve">
+    <value>Обучение</value>
   </data>
   <data name="Profile.Title" xml:space="preserve">
     <value>Профиль</value>

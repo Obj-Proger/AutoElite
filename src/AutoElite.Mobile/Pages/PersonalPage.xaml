@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="AutoElite.Mobile.Pages.PersonalPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:AutoElite.Mobile.Controls"
+    xmlns:l="clr-namespace:AutoElite.Mobile.Localization"
+    xmlns:pages="clr-namespace:AutoElite.Mobile.Pages"
+    x:DataType="pages:PersonalViewModel"
+    Title="{l:Text Profile.Details}">
+
+    <!-- The personal details: each field under its caption, then saving and how it went. -->
+    <ScrollView>
+        <VerticalStackLayout Padding="20,12,20,32" Spacing="16" MaximumWidthRequest="560">
+            <VerticalStackLayout Spacing="6">
+                <Label Style="{StaticResource Caption}" Text="{l:Text Profile.LastName}" />
+                <Border Style="{StaticResource Field}">
+                    <Entry Text="{Binding LastName}" ReturnType="Next" />
+                </Border>
+            </VerticalStackLayout>
+            <VerticalStackLayout Spacing="6">
+                <Label Style="{StaticResource Caption}" Text="{l:Text Profile.FirstName}" />
+                <Border Style="{StaticResource Field}">
+                    <Entry Text="{Binding FirstName}" ReturnType="Next" />
+                </Border>
+            </VerticalStackLayout>
+            <VerticalStackLayout Spacing="6">
+                <Label Style="{StaticResource Caption}" Text="{l:Text Profile.MiddleName}" />
+                <Border Style="{StaticResource Field}">
+                    <Entry Text="{Binding MiddleName}" ReturnType="Next" />
+                </Border>
+            </VerticalStackLayout>
+            <VerticalStackLayout Spacing="6">
+                <Label Style="{StaticResource Caption}" Text="{l:Text Profile.Phone}" />
+                <Border Style="{StaticResource Field}">
+                    <Entry Text="{Binding Phone}" Keyboard="Telephone" ReturnType="Done" />
+                </Border>
+                <Label Style="{StaticResource Caption}" Text="{l:Text Profile.PhoneHint}" />
+            </VerticalStackLayout>
+            <VerticalStackLayout Spacing="6">
+                <Label Style="{StaticResource Caption}" Text="{l:Text Profile.NotificationLanguage}" />
+                <Border Style="{StaticResource Field}">
+                    <Picker ItemsSource="{Binding NotificationLanguages}" SelectedIndex="{Binding NotificationLanguageIndex}" />
+                </Border>
+            </VerticalStackLayout>
+
+            <controls:NoticeBanner Text="{Binding Message}" Tone="Success">
+                <controls:NoticeBanner.Triggers>
+                    <DataTrigger TargetType="controls:NoticeBanner" Binding="{Binding HasFailed}" Value="True">
+                        <Setter Property="Tone" Value="Danger" />
+                    </DataTrigger>
+                </controls:NoticeBanner.Triggers>
+            </controls:NoticeBanner>
+            <Button Text="{l:Text Profile.Save}" Command="{Binding SaveCommand}" />
+            <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

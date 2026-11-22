@@ -8,10 +8,11 @@ using Microsoft.Kiota.Abstractions;
 namespace AutoElite.Mobile.Pages;
 
 /// <summary>
-/// The profile of the user: who they are, read from the API or the device, with their photo, which they change or
-/// remove; their name, phone and the language of their notifications, which they correct; the way to a new password or
-/// email address; the school they are signed in to, which they can change; the language of the application; what the
-/// application is; and signing out. Changing the school or signing out asks first when actions would be lost.
+/// The profile of the user as a menu: who they are, read from the API or the device, with their photo, which they change
+/// or remove from the avatar; the ways to their personal details, to a new password or email address and, for a
+/// student, to their contracts and documents; the language and the theme of the application; the school they are
+/// signed in to, which they can change; what the application is; and signing out. Changing the school or signing out
+/// asks first when actions would be lost.
 /// </summary>
 public sealed class ProfileViewModel : ViewModel
 {
@@ -32,23 +33,16 @@ public sealed class ProfileViewModel : ViewModel
     {
         _session = session;
         _account = account;
-        NotificationLanguages = [AppTexts.Get("Settings.Russian"), AppTexts.Get("Settings.English")];
-        SaveCommand = new Command(async () => await SaveAsync(), () => !IsBusy);
-        ChangePhotoCommand = new Command(async () => await ChangePhotoAsync(), () => !IsBusy);
-        RemovePhotoCommand = new Command(async () => await RemovePhotoAsync(), () => !IsBusy);
+        PhotoCommand = new Command(async () => await OfferPhotoAsync(), () => !IsBusy);
+        PersonalCommand = new Command(async () => await Routes.OpenAsync(Routes.Personal));
         SecurityCommand = new Command(async () => await Routes.OpenAsync(Routes.Security));
-        Languages =
-        [
-            AppTexts.Get("Settings.DeviceLanguage"),
-            AppTexts.Get("Settings.English"),
-            AppTexts.Get("Settings.Russian")
-        ];
-        LanguageIndex = Math.Max(0, AppLanguage.Cultures.ToList().IndexOf(AppLanguage.Chosen));
-        Themes = [AppTexts.Get("Settings.ThemeDevice"), AppTexts.Get("Settings.ThemeDark"), AppTexts.Get("Settings.ThemeLight")];
-        ThemeIndex = (int)AppPalette.Chosen;
-        ChangeSchoolCommand = new Command(async () => await LeaveAsync(changeSchool: true), () => !IsBusy);
+        ContractsCommand = new Command(async () => await Routes.OpenAsync(Routes.Contracts));
+        DocumentsCommand = new Command(async () => await Routes.OpenAsync(Routes.Documents));
+        LanguageCommand = new Command(async () => await ChooseLanguageAsync());
+        ThemeCommand = new Command<string>(ChooseTheme);
+        SchoolCommand = new Command(async () => await OfferSchoolAsync(), () => !IsBusy);
+        AboutCommand = new Command(async () => await ShowAboutAsync());
         SignOutCommand = new Command(async () => await LeaveAsync(changeSchool: false), () => !IsBusy);
-        SourceCodeCommand = new Command(async () => await Launcher.Default.OpenAsync(new Uri(SourceCode)));
     }
 
     /// <summary>Gets the full name of the user.</summary>
@@ -72,13 +66,6 @@ public sealed class ProfileViewModel : ViewModel
         private set => SetProperty(ref field, value);
     } = string.Empty;
 
-    /// <summary>Gets the initials of the user, shown without a photo.</summary>
-    public string Initials
-    {
-        get;
-        private set => SetProperty(ref field, value);
-    } = string.Empty;
-
     /// <summary>Gets the photo of the user, or <see langword="null"/> without one.</summary>
     public ImageSource? Photo
     {
@@ -93,120 +80,83 @@ public sealed class ProfileViewModel : ViewModel
     /// <summary>Gets a value indicating whether the user has a photo.</summary>
     public bool HasPhoto => Photo is not null;
 
-    /// <summary>Gets or sets the last name being edited.</summary>
-    public string LastName
+    /// <summary>Gets a value indicating whether the user is a student, who has contracts and documents.</summary>
+    public bool IsStudent
     {
         get;
-        set => SetProperty(ref field, value);
-    } = string.Empty;
-
-    /// <summary>Gets or sets the first name being edited.</summary>
-    public string FirstName
-    {
-        get;
-        set => SetProperty(ref field, value);
-    } = string.Empty;
-
-    /// <summary>Gets or sets the middle name being edited.</summary>
-    public string MiddleName
-    {
-        get;
-        set => SetProperty(ref field, value);
-    } = string.Empty;
-
-    /// <summary>Gets or sets the phone being edited.</summary>
-    public string Phone
-    {
-        get;
-        set => SetProperty(ref field, value);
-    } = string.Empty;
-
-    /// <summary>Gets the languages of the notifications and emails: Russian, then English.</summary>
-    public IReadOnlyList<string> NotificationLanguages { get; }
-
-    /// <summary>Gets or sets the language of the notifications and emails, by its position.</summary>
-    public int NotificationLanguageIndex
-    {
-        get;
-        set => SetProperty(ref field, value);
+        private set => SetProperty(ref field, value);
     }
 
-    /// <summary>Gets how saving or changing the photo went, or <see langword="null"/>.</summary>
+    /// <summary>Gets how changing the photo or the language went, or <see langword="null"/>.</summary>
     public string? Message
     {
         get;
-        private set
-        {
-            if (SetProperty(ref field, value))
-                OnPropertyChanged(nameof(HasMessage));
-        }
+        private set => SetProperty(ref field, value);
     }
 
-    /// <summary>Gets a value indicating whether there is a message.</summary>
-    public bool HasMessage => Message is not null;
+    /// <summary>Gets the command that offers a new photo or removing the photo.</summary>
+    public Command PhotoCommand { get; }
 
-    /// <summary>Gets the command that saves the name, the phone and the language of the notifications.</summary>
-    public Command SaveCommand { get; }
-
-    /// <summary>Gets the command that chooses a new photo.</summary>
-    public Command ChangePhotoCommand { get; }
-
-    /// <summary>Gets the command that removes the photo.</summary>
-    public Command RemovePhotoCommand { get; }
+    /// <summary>Gets the command that opens the personal details.</summary>
+    public Command PersonalCommand { get; }
 
     /// <summary>Gets the command that opens the change of the password and of the email address.</summary>
     public Command SecurityCommand { get; }
 
+    /// <summary>Gets the command that opens the contracts of a student.</summary>
+    public Command ContractsCommand { get; }
+
+    /// <summary>Gets the command that opens the documents of a student.</summary>
+    public Command DocumentsCommand { get; }
+
+    /// <summary>Gets the command that offers the languages of the application.</summary>
+    public Command LanguageCommand { get; }
+
+    /// <summary>Gets the command that chooses a theme, by its number: 0 the device, 1 dark, 2 light.</summary>
+    public Command<string> ThemeCommand { get; }
+
+    /// <summary>Gets the command that offers changing the school.</summary>
+    public Command SchoolCommand { get; }
+
+    /// <summary>Gets the command that tells what the application is.</summary>
+    public Command AboutCommand { get; }
+
     /// <summary>Gets the school, by the host of its API.</summary>
     public string School { get; } = ApiAddress.Current.Host;
 
-    /// <summary>Gets the languages to choose from.</summary>
-    public IReadOnlyList<string> Languages { get; }
-
-    /// <summary>Gets or sets the chosen language, by its position among <see cref="Languages"/>.</summary>
-    public int LanguageIndex
+    /// <summary>Gets the language of the application: the chosen one, or that of the device.</summary>
+    public string LanguageName
     {
         get;
-        set
-        {
-            if (!SetProperty(ref field, value) || value < 0 || value >= AppLanguage.Cultures.Count)
-                return;
+        private set => SetProperty(ref field, value);
+    } = NameOfChosenLanguage();
 
-            AppLanguage.Choose(AppLanguage.Cultures[value]);
-            LanguageNote = AppLanguage.Chosen == AppLanguage.Started ? null : AppTexts.Get("Settings.Restart");
-        }
-    }
-
-    /// <summary>Gets the themes to choose from: the one of the device, the dark one and the light one.</summary>
-    public IReadOnlyList<string> Themes { get; }
-
-    /// <summary>Gets or sets the chosen theme, by its position among <see cref="Themes"/>; it shows at once.</summary>
-    public int ThemeIndex
-    {
-        get;
-        set
-        {
-            if (SetProperty(ref field, value) && Enum.IsDefined((ThemeChoice)value) && (ThemeChoice)value != AppPalette.Chosen)
-                AppPalette.Choose((ThemeChoice)value);
-        }
-    }
-
-    /// <summary>Gets that a newly chosen language applies after a restart, or <see langword="null"/>.</summary>
-    public string? LanguageNote
+    /// <summary>Gets the theme chosen, which marks its card.</summary>
+    public ThemeChoice Theme
     {
         get;
         private set
         {
-            if (SetProperty(ref field, value))
-                OnPropertyChanged(nameof(HasLanguageNote));
+            if (!SetProperty(ref field, value))
+                return;
+
+            OnPropertyChanged(nameof(IsDeviceTheme));
+            OnPropertyChanged(nameof(IsDarkTheme));
+            OnPropertyChanged(nameof(IsLightTheme));
         }
-    }
+    } = AppPalette.Chosen;
 
-    /// <summary>Gets a value indicating whether a newly chosen language waits for a restart.</summary>
-    public bool HasLanguageNote => LanguageNote is not null;
+    /// <summary>Gets a value indicating whether the theme follows the device.</summary>
+    public bool IsDeviceTheme => Theme == ThemeChoice.Device;
 
-    /// <summary>Gets the version of the application.</summary>
-    public string Version { get; } = AppTexts.Format("Settings.Version", AppInfo.Current.VersionString);
+    /// <summary>Gets a value indicating whether the theme is the dark one.</summary>
+    public bool IsDarkTheme => Theme == ThemeChoice.Dark;
+
+    /// <summary>Gets a value indicating whether the theme is the light one.</summary>
+    public bool IsLightTheme => Theme == ThemeChoice.Light;
+
+    /// <summary>Gets the version of the application, such as 1.0.</summary>
+    public string VersionNumber { get; } = AppInfo.Current.VersionString;
 
     /// <summary>Gets a value indicating whether the profile is being saved or the user signed out.</summary>
     public bool IsBusy
@@ -217,22 +167,14 @@ public sealed class ProfileViewModel : ViewModel
             if (!SetProperty(ref field, value))
                 return;
 
-            ChangeSchoolCommand.ChangeCanExecute();
+            SchoolCommand.ChangeCanExecute();
             SignOutCommand.ChangeCanExecute();
-            SaveCommand.ChangeCanExecute();
-            ChangePhotoCommand.ChangeCanExecute();
-            RemovePhotoCommand.ChangeCanExecute();
+            PhotoCommand.ChangeCanExecute();
         }
     }
 
-    /// <summary>Gets the command that signs out and asks for the address of another school.</summary>
-    public Command ChangeSchoolCommand { get; }
-
     /// <summary>Gets the command that signs out.</summary>
     public Command SignOutCommand { get; }
-
-    /// <summary>Gets the command that opens the source code of the application.</summary>
-    public Command SourceCodeCommand { get; }
 
     /// <summary>Reads the profile of the user from the API or, without a network, from the device.</summary>
     /// <returns>A task that completes when the profile is shown.</returns>
@@ -250,25 +192,15 @@ public sealed class ProfileViewModel : ViewModel
         await ShowPhotoAsync();
     }
 
-    // The initials of a name: the first letters of the first and the last name.
-    private static string InitialsOf(string? firstName, string? lastName) =>
-        string.Concat(new[] { firstName, lastName }.Where(part => !string.IsNullOrWhiteSpace(part)).Select(part => part![0]))
-            .ToUpper(CultureInfo.CurrentCulture);
-
     private void Show(UserProfile profile)
     {
         _userId = profile.Id;
         _photoId = profile.PhotoDocumentId;
         Name = string.Join(
             ' ', new[] { profile.LastName, profile.FirstName, profile.MiddleName }.Where(part => !string.IsNullOrWhiteSpace(part)));
-        Initials = InitialsOf(profile.FirstName, profile.LastName);
         Email = profile.Email ?? string.Empty;
-        Roles = string.Join(", ", (profile.Roles ?? []).OfType<UserRole>().Select(RoleTexts.Of));
-        LastName = profile.LastName ?? string.Empty;
-        FirstName = profile.FirstName ?? string.Empty;
-        MiddleName = profile.MiddleName ?? string.Empty;
-        Phone = profile.Phone ?? string.Empty;
-        NotificationLanguageIndex = profile.PreferredLanguage == Language.English ? 1 : 0;
+        Roles = string.Join(" · ", (profile.Roles ?? []).OfType<UserRole>().Select(RoleTexts.Of));
+        IsStudent = (profile.Roles ?? []).Contains(UserRole.Student);
     }
 
     // Shows the photo of the profile, downloaded once for each photo; without a network the initials stay.
@@ -320,15 +252,69 @@ public sealed class ProfileViewModel : ViewModel
         }
     }
 
-    private Task SaveAsync() => ChangeAsync(
-        () => _account.UpdateProfileAsync(
-            LastName,
-            FirstName,
-            MiddleName,
-            Phone,
-            NotificationLanguageIndex == 1 ? Language.English : Language.Russian,
-            CancellationToken.None),
-        AppTexts.Get("Profile.Saved"));
+    // The names of the languages to choose from: that of the device, English and Russian.
+    private static string NameOfChosenLanguage() =>
+        LanguageNames()[Math.Max(0, AppLanguage.Cultures.ToList().IndexOf(AppLanguage.Chosen))];
+
+    private static string[] LanguageNames() =>
+        [AppTexts.Get("Settings.DeviceLanguage"), AppTexts.Get("Settings.English"), AppTexts.Get("Settings.Russian")];
+
+    private async Task OfferPhotoAsync()
+    {
+        var change = AppTexts.Get("Profile.ChangePhoto");
+        var remove = AppTexts.Get("Profile.RemovePhoto");
+        string[] choices = HasPhoto ? [change, remove] : [change];
+        var choice = await Shell.Current.DisplayActionSheetAsync(
+            AppTexts.Get("Profile.Photo"), AppTexts.Get("Common.Cancel"), null, choices);
+        if (choice == change)
+            await ChangePhotoAsync();
+        else if (choice == remove)
+            await RemovePhotoAsync();
+    }
+
+    // Offers the languages and chooses one; a language other than the one the application started in waits for a restart.
+    private async Task ChooseLanguageAsync()
+    {
+        var names = LanguageNames();
+        var choice = await Shell.Current.DisplayActionSheetAsync(
+            AppTexts.Get("Settings.Language"), AppTexts.Get("Common.Cancel"), null, names);
+        var index = Array.IndexOf(names, choice);
+        if (index < 0 || index >= AppLanguage.Cultures.Count)
+            return;
+
+        AppLanguage.Choose(AppLanguage.Cultures[index]);
+        LanguageName = NameOfChosenLanguage();
+        Message = AppLanguage.Chosen == AppLanguage.Started ? null : AppTexts.Get("Settings.Restart");
+    }
+
+    private void ChooseTheme(string? choice)
+    {
+        if (!int.TryParse(choice, NumberStyles.Integer, CultureInfo.InvariantCulture, out var number)
+            || !Enum.IsDefined((ThemeChoice)number)
+            || (ThemeChoice)number == Theme)
+        {
+            return;
+        }
+
+        AppPalette.Choose((ThemeChoice)number);
+        Theme = AppPalette.Chosen;
+    }
+
+    private async Task OfferSchoolAsync()
+    {
+        var change = AppTexts.Get("SignIn.ChangeSchool");
+        if (await Shell.Current.DisplayActionSheetAsync(School, AppTexts.Get("Common.Cancel"), null, change) == change)
+            await LeaveAsync(changeSchool: true);
+    }
+
+    private async Task ShowAboutAsync()
+    {
+        var sourceCode = AppTexts.Get("Settings.SourceCode");
+        var title = string.Join(
+            Environment.NewLine, AppTexts.Format("Settings.Version", VersionNumber), AppTexts.Get("Settings.License"));
+        if (await Shell.Current.DisplayActionSheetAsync(title, AppTexts.Get("Common.Cancel"), null, sourceCode) == sourceCode)
+            await Launcher.Default.OpenAsync(new Uri(SourceCode));
+    }
 
     private async Task ChangePhotoAsync()
     {
