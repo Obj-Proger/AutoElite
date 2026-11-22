@@ -19,4 +19,7 @@ public partial class LeadPage : ContentPage
         base.OnAppearing();
         await _viewModel.LoadAsync();
     }
+
+    // The tile of a note brings the field of a new note into use.
+    private void OnNoteTapped(object? sender, TappedEventArgs args) => NoteEditor.Focus();
 }

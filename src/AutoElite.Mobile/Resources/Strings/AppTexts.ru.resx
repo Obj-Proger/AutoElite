@@ -448,6 +448,9 @@
   <data name="Lead.Category" xml:space="preserve">
     <value>категория {0}</value>
   </data>
+  <data name="Lead.Comment" xml:space="preserve">
+    <value>Сообщение</value>
+  </data>
   <data name="Lead.ContractHint" xml:space="preserve">
     <value>Договор по заявке оформляется на сайте.</value>
   </data>
@@ -455,7 +458,7 @@
     <value>договор заключён</value>
   </data>
   <data name="Lead.Email" xml:space="preserve">
-    <value>Написать письмо</value>
+    <value>Письмо</value>
   </data>
   <data name="Lead.EmailCopied" xml:space="preserve">
     <value>На этом устройстве нет почтового приложения; адрес {0} скопирован.</value>
@@ -483,6 +486,9 @@
   </data>
   <data name="Lead.NoManager" xml:space="preserve">
     <value>менеджер не назначен</value>
+  </data>
+  <data name="Lead.Note" xml:space="preserve">
+    <value>Заметка</value>
   </data>
   <data name="Lead.NotePlaceholder" xml:space="preserve">
     <value>О чём договорились</value>

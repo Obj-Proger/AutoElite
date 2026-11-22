@@ -448,6 +448,9 @@
   <data name="Lead.Category" xml:space="preserve">
     <value>category {0}</value>
   </data>
+  <data name="Lead.Comment" xml:space="preserve">
+    <value>Message</value>
+  </data>
   <data name="Lead.ContractHint" xml:space="preserve">
     <value>The contract of a lead is drawn up on the website.</value>
   </data>
@@ -483,6 +486,9 @@
   </data>
   <data name="Lead.NoManager" xml:space="preserve">
     <value>no manager yet</value>
+  </data>
+  <data name="Lead.Note" xml:space="preserve">
+    <value>Note</value>
   </data>
   <data name="Lead.NotePlaceholder" xml:space="preserve">
     <value>What was said</value>

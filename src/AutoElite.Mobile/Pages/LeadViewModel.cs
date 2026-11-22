@@ -1,5 +1,6 @@
 using System.Globalization;
 using AutoElite.Client.Api.Models;
+using AutoElite.Mobile.Controls;
 using AutoElite.Mobile.Localization;
 using AutoElite.Mobile.Schedule;
 using Microsoft.Kiota.Abstractions;
@@ -71,12 +72,33 @@ public sealed class LeadViewModel : ViewModel, IQueryAttributable
     /// <summary>Gets a value indicating whether the person wrote something.</summary>
     public bool HasComment => !string.IsNullOrWhiteSpace(Comment);
 
-    /// <summary>Gets the status of the lead, with the reason of a lost one, and its manager.</summary>
+    /// <summary>Gets the status of the lead, such as New, for its pill.</summary>
+    public string Status
+    {
+        get;
+        private set => SetProperty(ref field, value);
+    } = string.Empty;
+
+    /// <summary>Gets what the status tells, which gives the color of its pill.</summary>
+    public StatusTone StatusTone
+    {
+        get;
+        private set => SetProperty(ref field, value);
+    }
+
+    /// <summary>Gets the manager of the lead, with the reason of a lost one.</summary>
     public string State
     {
         get;
         private set => SetProperty(ref field, value);
     } = string.Empty;
+
+    /// <summary>Gets how many leads the user works on of how many they may, under taking a new one, or <see langword="null"/>.</summary>
+    public string? Workload
+    {
+        get;
+        private set => SetProperty(ref field, value);
+    }
 
     /// <summary>Gets the notes of the lead, the latest first.</summary>
     public IReadOnlyList<string> Notes
@@ -125,7 +147,11 @@ public sealed class LeadViewModel : ViewModel, IQueryAttributable
     public bool IsNew
     {
         get;
-        private set => SetProperty(ref field, value);
+        private set
+        {
+            if (SetProperty(ref field, value))
+                OnPropertyChanged(nameof(HasMainAction));
+        }
     }
 
     /// <summary>Gets a value indicating whether the lead is open, new or in progress, so that it can be marked lost.</summary>
@@ -139,8 +165,15 @@ public sealed class LeadViewModel : ViewModel, IQueryAttributable
     public bool IsLost
     {
         get;
-        private set => SetProperty(ref field, value);
+        private set
+        {
+            if (SetProperty(ref field, value))
+                OnPropertyChanged(nameof(HasMainAction));
+        }
     }
+
+    /// <summary>Gets a value indicating whether the bar at the bottom offers taking the lead on or opening it again.</summary>
+    public bool HasMainAction => IsNew || IsLost;
 
     /// <summary>Gets that the lead is from the device, or why it could not be read or an action failed.</summary>
     public string? Notice
@@ -209,6 +242,7 @@ public sealed class LeadViewModel : ViewModel, IQueryAttributable
         {
             var lead = await _leads.ReadAsync(_leadId, CancellationToken.None);
             Show(lead.Value);
+            Workload = IsNew ? await WorkloadAsync() : null;
             Notice = lead.IsFromCache
                 ? AppTexts.Format("Leads.Offline", lead.SavedAt.ToLocalTime().ToString("g", CultureInfo.CurrentCulture))
                 : null;
@@ -216,6 +250,21 @@ public sealed class LeadViewModel : ViewModel, IQueryAttributable
         catch (Exception exception) when (exception is ApiException or HttpRequestException)
         {
             Notice = ProblemTexts.Of(exception);
+        }
+    }
+
+    // The leads the user works on of how many they may, which a new one would add to; without a network nothing.
+    private async Task<string?> WorkloadAsync()
+    {
+        try
+        {
+            var workload = (await _leads.ReadWorkloadAsync(CancellationToken.None)).Value;
+
+            return AppTexts.Format("Leads.MineOf", workload.InProgress ?? 0, workload.Limit ?? 0);
+        }
+        catch (Exception exception) when (exception is ApiException or HttpRequestException)
+        {
+            return null;
         }
     }
 
@@ -233,8 +282,16 @@ public sealed class LeadViewModel : ViewModel, IQueryAttributable
         Contacts = LessonTexts.DetailsOf(lead.Phone, lead.Email);
         Details = LeadTexts.DetailsOf(lead.Source, lead.DesiredCategory, lead.CreatedAtUtc);
         Comment = lead.Comment;
+        var status = LeadTexts.StatusOf(lead.Status);
+        Status = string.Concat(status[..1].ToUpper(CultureInfo.CurrentCulture), status[1..]);
+        StatusTone = lead.Status switch
+        {
+            LeadStatus.New => StatusTone.Accent,
+            LeadStatus.Converted => StatusTone.Success,
+            LeadStatus.Lost => StatusTone.Danger,
+            _ => StatusTone.Neutral
+        };
         State = LessonTexts.DetailsOf(
-            LeadTexts.StatusOf(lead.Status),
             lead.Status == LeadStatus.Lost ? lead.LostReason : null,
             lead.ManagerName is { } manager ? AppTexts.Format("Lead.Manager", manager) : AppTexts.Get("Lead.NoManager"));
         Notes = [.. (lead.Notes ?? []).OfType<LeadNoteItem>().OrderByDescending(note => note.WrittenAtUtc).Select(NoteOf)];

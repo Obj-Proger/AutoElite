@@ -3,77 +3,175 @@
     x:Class="AutoElite.Mobile.Pages.LeadPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:AutoElite.Mobile.Controls"
     xmlns:l="clr-namespace:AutoElite.Mobile.Localization"
     xmlns:pages="clr-namespace:AutoElite.Mobile.Pages"
     x:DataType="pages:LeadViewModel"
     Title="{l:Text Lead.Title}">
 
     <!--
-        The lead: the person with how to reach them, where the lead came from and what they wrote, where it is in the
-        funnel with what the manager can do, then the notes with a field for a new one.
+        The lead: the person with their contacts, the status as a pill with where the lead came from and its manager;
+        calling, writing and a note as three tiles; what they wrote; marking the lead lost; then the notes with a field
+        for a new one. The bar at the bottom takes a new lead on, with how many the user already works on, or opens a
+        lost one again.
     -->
-    <ScrollView>
-        <VerticalStackLayout Padding="{StaticResource PageMargin}" Spacing="14">
-            <Border Style="{StaticResource HighlightCard}">
-                <VerticalStackLayout Spacing="8">
-                    <Label Style="{StaticResource Headline}" Text="{Binding Name}" />
-                    <Label Style="{StaticResource Secondary}" Text="{Binding Contacts}" />
-                    <Label Style="{StaticResource Caption}" Text="{Binding Details}" />
-                    <HorizontalStackLayout Spacing="8">
-                        <Button Text="{l:Text Student.Call}" Command="{Binding CallCommand}" IsVisible="{Binding HasPhone}" />
-                        <Button
-                            Style="{StaticResource SecondaryButton}"
-                            Text="{l:Text Lead.Email}"
-                            Command="{Binding EmailCommand}"
-                            IsVisible="{Binding HasEmail}" />
+    <Grid RowDefinitions="*,Auto">
+        <ScrollView>
+            <VerticalStackLayout Padding="20,16,20,32" Spacing="18" MaximumWidthRequest="760">
+                <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
+                    <controls:Avatar Name="{Binding Name}" Size="80" HorizontalOptions="Center" />
+                    <Label
+                        FontFamily="DisplaySemiBold"
+                        FontSize="22"
+                        Text="{Binding Name}"
+                        HorizontalOptions="Center"
+                        HorizontalTextAlignment="Center" />
+                    <Label
+                        Style="{StaticResource Secondary}"
+                        Text="{Binding Contacts}"
+                        HorizontalOptions="Center"
+                        HorizontalTextAlignment="Center" />
+                    <HorizontalStackLayout Spacing="8" HorizontalOptions="Center">
+                        <controls:StatusPill Text="{Binding Status}" Tone="{Binding StatusTone}" />
+                        <Label Style="{StaticResource Caption}" Text="{Binding Details}" VerticalOptions="Center" />
                     </HorizontalStackLayout>
+                    <Label
+                        Style="{StaticResource Caption}"
+                        Text="{Binding State}"
+                        HorizontalOptions="Center"
+                        HorizontalTextAlignment="Center" />
                 </VerticalStackLayout>
-            </Border>
 
-            <Border Style="{StaticResource Card}" IsVisible="{Binding HasNotice}">
-                <Label Style="{StaticResource Secondary}" Text="{Binding Notice}" />
-            </Border>
+                <Grid ColumnDefinitions="*,*,*" ColumnSpacing="8">
+                    <Border
+                        Grid.Column="0"
+                        Style="{StaticResource Card}"
+                        Padding="8,14"
+                        SemanticProperties.Description="{l:Text Student.Call}">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding CallCommand}" />
+                        </Border.GestureRecognizers>
+                        <Border.Triggers>
+                            <DataTrigger TargetType="Border" Binding="{Binding HasPhone}" Value="False">
+                                <Setter Property="Opacity" Value="0.4" />
+                            </DataTrigger>
+                        </Border.Triggers>
+                        <VerticalStackLayout Spacing="6">
+                            <controls:AppIcon Name="phone" Size="22" Color="{DynamicResource AccentText}" />
+                            <Label
+                                FontFamily="TextSemiBold"
+                                FontSize="13"
+                                Text="{l:Text Student.Call}"
+                                HorizontalOptions="Center"
+                                HorizontalTextAlignment="Center" />
+                        </VerticalStackLayout>
+                    </Border>
+                    <Border
+                        Grid.Column="1"
+                        Style="{StaticResource Card}"
+                        Padding="8,14"
+                        SemanticProperties.Description="{l:Text Lead.Email}">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding EmailCommand}" />
+                        </Border.GestureRecognizers>
+                        <Border.Triggers>
+                            <DataTrigger TargetType="Border" Binding="{Binding HasEmail}" Value="False">
+                                <Setter Property="Opacity" Value="0.4" />
+                            </DataTrigger>
+                        </Border.Triggers>
+                        <VerticalStackLayout Spacing="6">
+                            <controls:AppIcon Name="mail" Size="22" Color="{DynamicResource AccentText}" />
+                            <Label
+                                FontFamily="TextSemiBold"
+                                FontSize="13"
+                                Text="{l:Text Lead.Email}"
+                                HorizontalOptions="Center"
+                                HorizontalTextAlignment="Center" />
+                        </VerticalStackLayout>
+                    </Border>
+                    <Border
+                        Grid.Column="2"
+                        Style="{StaticResource Card}"
+                        Padding="8,14"
+                        SemanticProperties.Description="{l:Text Lead.Note}">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnNoteTapped" />
+                        </Border.GestureRecognizers>
+                        <VerticalStackLayout Spacing="6">
+                            <controls:AppIcon Name="pencil" Size="22" Color="{DynamicResource AccentText}" />
+                            <Label
+                                FontFamily="TextSemiBold"
+                                FontSize="13"
+                                Text="{l:Text Lead.Note}"
+                                HorizontalOptions="Center"
+                                HorizontalTextAlignment="Center" />
+                        </VerticalStackLayout>
+                    </Border>
+                </Grid>
 
-            <Border Style="{StaticResource Card}" IsVisible="{Binding HasComment}">
-                <Label Style="{StaticResource BodyLarge}" Text="{Binding Comment}" />
-            </Border>
+                <controls:NoticeBanner Text="{Binding Notice}" Tone="Warning" />
 
-            <Border Style="{StaticResource Card}">
+                <Border Style="{StaticResource Card}" IsVisible="{Binding HasComment}">
+                    <VerticalStackLayout Spacing="8">
+                        <Label
+                            Style="{StaticResource Overline}"
+                            TextColor="{DynamicResource TextMuted}"
+                            Text="{l:Text Lead.Comment}" />
+                        <Label Style="{StaticResource BodyLarge}" Text="{Binding Comment}" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <VerticalStackLayout Spacing="6" IsVisible="{Binding IsOpen}">
+                    <Button Style="{StaticResource SecondaryButton}" Text="{l:Text Lead.MarkLost}" Command="{Binding LoseCommand}" />
+                    <Label Style="{StaticResource Caption}" Text="{l:Text Lead.ContractHint}" HorizontalOptions="Center" />
+                </VerticalStackLayout>
+
                 <VerticalStackLayout Spacing="10">
-                    <Label Style="{StaticResource BodyLarge}" Text="{Binding State}" />
-                    <Button Text="{l:Text Lead.Take}" Command="{Binding TakeCommand}" IsVisible="{Binding IsNew}" />
+                    <Label Style="{StaticResource Title}" Text="{l:Text Lead.Notes}" />
+                    <Border Style="{StaticResource Field}">
+                        <Editor
+                            x:Name="NoteEditor"
+                            Text="{Binding NoteText}"
+                            Placeholder="{l:Text Lead.NotePlaceholder}"
+                            AutoSize="TextChanges"
+                            MaxLength="2000" />
+                    </Border>
                     <Button
                         Style="{StaticResource SecondaryButton}"
-                        Text="{l:Text Lead.MarkLost}"
-                        Command="{Binding LoseCommand}"
-                        IsVisible="{Binding IsOpen}" />
-                    <Button Text="{l:Text Lead.Reopen}" Command="{Binding ReopenCommand}" IsVisible="{Binding IsLost}" />
-                    <Label Style="{StaticResource Caption}" Text="{l:Text Lead.ContractHint}" IsVisible="{Binding IsOpen}" />
-                </VerticalStackLayout>
-            </Border>
-
-            <VerticalStackLayout Spacing="10">
-                <Label Style="{StaticResource Overline}" Text="{l:Text Lead.Notes}" />
-                <Border Style="{StaticResource Field}">
-                    <Editor Text="{Binding NoteText}" Placeholder="{l:Text Lead.NotePlaceholder}" AutoSize="TextChanges" MaxLength="2000" />
-                </Border>
-                <Button
-                    Style="{StaticResource SecondaryButton}"
-                    Text="{l:Text Lead.AddNote}"
-                    Command="{Binding AddNoteCommand}"
-                    HorizontalOptions="Start" />
-                <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
-                <VerticalStackLayout Spacing="8" BindableLayout.ItemsSource="{Binding Notes}" IsVisible="{Binding HasNotes}">
-                    <BindableLayout.ItemTemplate>
-                        <DataTemplate x:DataType="x:String">
-                            <Border Style="{StaticResource Card}">
-                                <Label Style="{StaticResource Secondary}" Text="{Binding .}" />
-                            </Border>
-                        </DataTemplate>
-                    </BindableLayout.ItemTemplate>
+                        Text="{l:Text Lead.AddNote}"
+                        Command="{Binding AddNoteCommand}"
+                        HorizontalOptions="Start" />
+                    <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
+                    <VerticalStackLayout Spacing="12" BindableLayout.ItemsSource="{Binding Notes}" IsVisible="{Binding HasNotes}">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate x:DataType="x:String">
+                                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                                    <Ellipse
+                                        WidthRequest="8"
+                                        HeightRequest="8"
+                                        Fill="{DynamicResource TextMuted}"
+                                        VerticalOptions="Start"
+                                        Margin="0,6,0,0" />
+                                    <Label Grid.Column="1" Style="{StaticResource Secondary}" Text="{Binding .}" />
+                                </Grid>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </VerticalStackLayout>
                 </VerticalStackLayout>
             </VerticalStackLayout>
-        </VerticalStackLayout>
-    </ScrollView>
+        </ScrollView>
+
+        <Grid Grid.Row="1" RowDefinitions="Auto,Auto,Auto" RowSpacing="8" Padding="20,12,20,20" IsVisible="{Binding HasMainAction}">
+            <BoxView HeightRequest="1" Color="{DynamicResource Border}" Margin="-20,-12,-20,0" VerticalOptions="Start" />
+            <Button Text="{l:Text Lead.Take}" Command="{Binding TakeCommand}" IsVisible="{Binding IsNew}" />
+            <Button Grid.Row="1" Text="{l:Text Lead.Reopen}" Command="{Binding ReopenCommand}" IsVisible="{Binding IsLost}" />
+            <Label
+                Grid.Row="2"
+                Style="{StaticResource Caption}"
+                Text="{Binding Workload}"
+                HorizontalOptions="Center"
+                IsVisible="{Binding IsNew}" />
+        </Grid>
+    </Grid>
 
 </ContentPage>
