@@ -3,39 +3,48 @@
     x:Class="AutoElite.Mobile.Pages.ExamPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:AutoElite.Mobile.Controls"
     xmlns:l="clr-namespace:AutoElite.Mobile.Localization"
     xmlns:pages="clr-namespace:AutoElite.Mobile.Pages"
     x:DataType="pages:ExamViewModel"
     Title="{l:Text Exam.Kind}">
 
+    <!--
+        An exam: what it is, when and where, and its state on a highlighted card, then its members with their results
+        and, for an examiner, recording a result.
+    -->
     <ScrollView>
-        <VerticalStackLayout Padding="{StaticResource PageMargin}" Spacing="14">
+        <VerticalStackLayout Padding="20,12,20,32" Spacing="14" MaximumWidthRequest="760">
             <Border Style="{StaticResource HighlightCard}">
-                <VerticalStackLayout Spacing="4">
-                    <Label Style="{StaticResource Headline}" Text="{Binding Title}" />
-                    <Label Style="{StaticResource Secondary}" Text="{Binding Details}" />
-                    <Label Style="{StaticResource Caption}" Text="{Binding State}" IsVisible="{Binding HasState}" />
-                </VerticalStackLayout>
+                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="14">
+                    <controls:IconTile Icon="clipboard-check" Tone="Warning" />
+                    <VerticalStackLayout Grid.Column="1" Spacing="3" VerticalOptions="Center">
+                        <Label FontFamily="DisplaySemiBold" FontSize="18" Text="{Binding Title}" />
+                        <Label Style="{StaticResource Secondary}" Text="{Binding Details}" />
+                        <Label Style="{StaticResource Caption}" Text="{Binding State}" IsVisible="{Binding HasState}" />
+                    </VerticalStackLayout>
+                </Grid>
             </Border>
 
-            <Label Style="{StaticResource Caption}" Text="{Binding Notice}" IsVisible="{Binding HasNotice}" />
-            <Label Style="{StaticResource Overline}" Text="{l:Text Exam.Members}" />
+            <controls:NoticeBanner Text="{Binding Notice}" Tone="Warning" />
+            <Label Style="{StaticResource Title}" Text="{l:Text Exam.Members}" Margin="0,6,0,0" />
 
-            <VerticalStackLayout Spacing="10" BindableLayout.ItemsSource="{Binding Members}">
+            <VerticalStackLayout Spacing="8" BindableLayout.ItemsSource="{Binding Members}">
                 <BindableLayout.EmptyView>
                     <Label Style="{StaticResource Secondary}" Text="{l:Text Exam.NoMembers}" />
                 </BindableLayout.EmptyView>
                 <BindableLayout.ItemTemplate>
                     <DataTemplate x:DataType="pages:ExamMemberEntry">
-                        <Border Style="{StaticResource Card}">
-                            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
-                                <VerticalStackLayout Spacing="2" VerticalOptions="Center">
-                                    <Label Style="{StaticResource BodyLarge}" Text="{Binding Name}" />
-                                    <Label Style="{StaticResource Secondary}" Text="{Binding Result}" />
+                        <Border Style="{StaticResource Card}" Padding="16,12">
+                            <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
+                                <controls:Avatar Name="{Binding Name}" Size="40" VerticalOptions="Start" />
+                                <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                                    <Label FontFamily="TextSemiBold" FontSize="15" Text="{Binding Name}" />
+                                    <Label FontSize="13" TextColor="{DynamicResource TextSecondary}" Text="{Binding Result}" />
                                     <Label Style="{StaticResource Caption}" Text="{Binding Comment}" IsVisible="{Binding HasComment}" />
                                 </VerticalStackLayout>
                                 <Button
-                                    Grid.Column="1"
+                                    Grid.Column="2"
                                     Style="{StaticResource SecondaryButton}"
                                     Text="{Binding ActionText}"
                                     Command="{Binding Command}"

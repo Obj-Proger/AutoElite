@@ -3,15 +3,19 @@
     x:Class="AutoElite.Mobile.Pages.BookingPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:AutoElite.Mobile.Controls"
     xmlns:l="clr-namespace:AutoElite.Mobile.Localization"
     xmlns:pages="clr-namespace:AutoElite.Mobile.Pages"
     x:DataType="pages:BookingViewModel"
     Title="{l:Text Booking.Title}">
 
-    <!-- Pulling the page down reads the free slots again. -->
+    <!--
+        The free slots a student books: the contract chosen when they have several, then each slot as a card with the
+        icon of driving, its time, vehicle and instructor and booking it. Pulling the page down reads them again.
+    -->
     <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}" RefreshColor="{DynamicResource Accent}">
         <ScrollView>
-            <VerticalStackLayout Padding="{StaticResource PageMargin}" Spacing="14">
+            <VerticalStackLayout Padding="20,8,20,32" Spacing="12" MaximumWidthRequest="760">
                 <VerticalStackLayout Spacing="8" IsVisible="{Binding HasChoice}">
                     <Label Style="{StaticResource Secondary}" Text="{l:Text Booking.Choose}" />
                     <VerticalStackLayout Spacing="8" BindableLayout.ItemsSource="{Binding Contracts}">
@@ -26,20 +30,23 @@
                     </VerticalStackLayout>
                 </VerticalStackLayout>
 
-                <Label Style="{StaticResource Overline}" Text="{Binding Contract}" />
+                <Label Style="{StaticResource Overline}" TextColor="{DynamicResource TextMuted}" Text="{Binding Contract}" Margin="4,0" />
 
-                <Border Style="{StaticResource Card}" IsVisible="{Binding HasNotice}">
-                    <Label Style="{StaticResource Secondary}" Text="{Binding Notice}" />
-                </Border>
+                <controls:NoticeBanner Text="{Binding Notice}" />
 
-                <VerticalStackLayout Spacing="12" BindableLayout.ItemsSource="{Binding Slots}">
+                <VerticalStackLayout Spacing="10" BindableLayout.ItemsSource="{Binding Slots}">
                     <BindableLayout.ItemTemplate>
                         <DataTemplate x:DataType="pages:SlotEntry">
                             <Border Style="{StaticResource Card}">
-                                <VerticalStackLayout Spacing="6">
-                                    <Label Style="{StaticResource Title}" Text="{Binding Time}" />
-                                    <Label Style="{StaticResource BodyLarge}" Text="{Binding Vehicle}" />
-                                    <Label Style="{StaticResource Secondary}" Text="{Binding Details}" />
+                                <VerticalStackLayout Spacing="14">
+                                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="14">
+                                        <controls:IconTile Icon="car" Tone="Accent" />
+                                        <VerticalStackLayout Grid.Column="1" Spacing="3" VerticalOptions="Center">
+                                            <Label FontFamily="DisplaySemiBold" FontSize="16" Text="{Binding Time}" />
+                                            <Label FontSize="14" TextColor="{DynamicResource TextSecondary}" Text="{Binding Vehicle}" />
+                                            <Label FontSize="13" TextColor="{DynamicResource TextMuted}" Text="{Binding Details}" />
+                                        </VerticalStackLayout>
+                                    </Grid>
                                     <Button Text="{l:Text Booking.Book}" Command="{Binding BookCommand}" />
                                 </VerticalStackLayout>
                             </Border>

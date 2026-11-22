@@ -3,41 +3,51 @@
     x:Class="AutoElite.Mobile.Pages.AttendancePage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:AutoElite.Mobile.Controls"
     xmlns:l="clr-namespace:AutoElite.Mobile.Localization"
     xmlns:pages="clr-namespace:AutoElite.Mobile.Pages"
     x:DataType="pages:AttendanceViewModel"
     Title="{l:Text Attendance.Title}">
 
+    <!--
+        The attendance of a theory lesson: its topic and time, then each student of the group with a switch of whether
+        they came, then saving it.
+    -->
     <ScrollView>
-        <VerticalStackLayout Padding="{StaticResource PageMargin}" Spacing="14">
-            <Label Style="{StaticResource Title}" Text="{Binding Topic}" />
-            <Label Style="{StaticResource Secondary}" Text="{Binding Details}" />
-
-            <Border Style="{StaticResource Card}" IsVisible="{Binding HasNotice}">
-                <Label Style="{StaticResource Secondary}" Text="{Binding Notice}" />
+        <VerticalStackLayout Padding="20,12,20,32" Spacing="14" MaximumWidthRequest="760">
+            <Border Style="{StaticResource HighlightCard}">
+                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="14">
+                    <controls:IconTile Icon="book-open" Tone="Accent" />
+                    <VerticalStackLayout Grid.Column="1" Spacing="3" VerticalOptions="Center">
+                        <Label FontFamily="TextSemiBold" FontSize="17" Text="{Binding Topic}" />
+                        <Label Style="{StaticResource Secondary}" Text="{Binding Details}" />
+                    </VerticalStackLayout>
+                </Grid>
             </Border>
 
+            <controls:NoticeBanner Text="{Binding Notice}" Tone="Warning" />
             <Label Style="{StaticResource Caption}" Text="{l:Text Attendance.Hint}" />
 
-            <VerticalStackLayout Spacing="10" BindableLayout.ItemsSource="{Binding Students}">
-                <BindableLayout.ItemTemplate>
-                    <DataTemplate x:DataType="pages:AttendanceEntry">
-                        <Border Style="{StaticResource Card}">
-                            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
-                                <VerticalStackLayout Spacing="2" VerticalOptions="Center">
-                                    <Label Style="{StaticResource BodyLarge}" Text="{Binding Name}" />
+            <Border Style="{StaticResource Card}" Padding="0">
+                <VerticalStackLayout BindableLayout.ItemsSource="{Binding Students}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="pages:AttendanceEntry">
+                            <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12" Padding="16,10">
+                                <controls:Avatar Name="{Binding Name}" Size="40" />
+                                <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                                    <Label FontFamily="TextSemiBold" FontSize="15" Text="{Binding Name}" />
                                     <Label Style="{StaticResource Caption}" Text="{Binding Contract}" />
                                 </VerticalStackLayout>
                                 <Switch
-                                    Grid.Column="1"
+                                    Grid.Column="2"
                                     IsToggled="{Binding IsPresent}"
                                     OnColor="{DynamicResource Accent}"
                                     VerticalOptions="Center" />
                             </Grid>
-                        </Border>
-                    </DataTemplate>
-                </BindableLayout.ItemTemplate>
-            </VerticalStackLayout>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </VerticalStackLayout>
+            </Border>
 
             <Button Text="{l:Text Attendance.Save}" Command="{Binding SaveCommand}" />
         </VerticalStackLayout>
