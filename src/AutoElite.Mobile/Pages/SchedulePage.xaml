@@ -14,13 +14,14 @@
     <!--
         The schedule: the choice between a day and the week, the period with the way back to today and the arrows, the
         strip of the days of the week for a day, the planning of an instructor or the choice of an instructor for a
-        manager, then the lessons, which a swipe moves to the next or previous day or week: a day as a list and a week as
-        a list by days or, on a wide page, both as a grid of hours. An instructor taps free time to offer a slot or
-        schedule a lesson; the name of a day of the week shows that day.
+        manager, then the lessons, which a swipe moves to the next or previous day or week: a day as a list, with the
+        card of the lesson chosen in it beside on a wide page, and a week as a list by days or, on a wide page, as a
+        grid of hours. An instructor taps free time to offer a slot or schedule a lesson; the name of a day of the week
+        shows that day.
     -->
     <Grid Padding="20,4,20,0" RowDefinitions="Auto,*" RowSpacing="10">
         <!-- The choice of the view, the period, the days and the planning, as wide as a readable column. -->
-        <controls:PageColumn Spacing="10" MaximumWidthRequest="840">
+        <controls:PageColumn Spacing="10" MaximumWidthRequest="1280">
             <Border Style="{StaticResource SegmentBar}">
                 <Grid ColumnDefinitions="*,*" ColumnSpacing="4">
                     <Button Style="{StaticResource Segment}" Text="{l:Text Schedule.Day}" Command="{Binding ShowDayCommand}">
@@ -178,17 +179,20 @@
             <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}">
                 <ScrollView>
                     <Grid Margin="0,8,0,24">
-                        <controls:ScheduleAgenda
-                            MaximumWidthRequest="840"
-                            HorizontalOptions="Start"
-                            IsVisible="{Binding ShowsList}"
-                            Entries="{Binding Entries}"
-                            FirstDay="{Binding GridFirstDay}"
-                            DayCount="{Binding GridDayCount}"
-                            ShowsFreeTime="{Binding CanPlan}"
-                            EntryCommand="{Binding OpenEntryCommand}"
-                            EmptyCommand="{Binding PlanAtCommand}"
-                            DayCommand="{Binding ShowDayOfCommand}" />
+                        <!-- The list, with the card of the lesson chosen in a day beside it on a wide page. -->
+                        <controls:SupportingPane MaximumWidthRequest="1280" HorizontalOptions="Start" IsVisible="{Binding ShowsList}">
+                            <controls:ScheduleAgenda
+                                Entries="{Binding Entries}"
+                                FirstDay="{Binding GridFirstDay}"
+                                DayCount="{Binding GridDayCount}"
+                                ShowsFreeTime="{Binding CanPlan}"
+                                EntryCommand="{Binding OpenEntryCommand}"
+                                EmptyCommand="{Binding PlanAtCommand}"
+                                DayCommand="{Binding ShowDayOfCommand}" />
+                            <ContentView IsVisible="{Binding ShowsDayCard}">
+                                <pages:LessonCardView BindingContext="{Binding DayCard}" />
+                            </ContentView>
+                        </controls:SupportingPane>
                         <controls:ScheduleGrid
                             IsVisible="{Binding ShowsGrid}"
                             Entries="{Binding Entries}"

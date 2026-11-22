@@ -5,7 +5,8 @@ namespace AutoElite.Mobile.Controls;
 /// <summary>
 /// The main content of a page with content that supports it, such as today's lesson with the lessons ahead: side by
 /// side from <see cref="Threshold"/> wide, the supporting content on the right in about a third of the width, and one
-/// under the other on a narrower window. Its first child is the main content, its second the supporting one.
+/// under the other on a narrower window. Its first child is the main content, its second the supporting one; while the
+/// supporting one is hidden the main one takes the whole width.
 /// </summary>
 public sealed class SupportingPane : Layout
 {
@@ -90,7 +91,8 @@ public sealed class SupportingPane : Layout
             return bounds.Size;
         }
 
-        private bool IsSideBySide(double width) => width >= pane.Threshold;
+        // Side by side when there is room and something to put beside the main content.
+        private bool IsSideBySide(double width) => width >= pane.Threshold && Parts().Side is not null;
 
         private (double Main, double Side) WidthsOf(double width)
         {

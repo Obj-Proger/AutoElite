@@ -199,7 +199,8 @@ contracts), the students and the leads of a manager, with the count of new leads
 unread messages. The schedule switches between a day, chosen in the strip of its week, and the week. A lesson is a card
 with the icon of its kind, what it is, who and where or its state, and its start and length; a free slot is a dashed
 card, and so is the free time of an instructor between the cards of a day. The week is a list under the names of its
-days with lessons; on a wide window the day and the week are grids of hours, as in desktop calendars; arrows or a swipe
+days with lessons; on a wide window a day puts the card of the lesson chosen in it, with what can be done with it,
+beside its list, as desktop calendars open a lesson beside the day, and the week is a grid of hours; arrows or a swipe
 move the schedule and a link brings it back to today. It shows the lessons of each role of the user, a student also the
 free slots they can book, and tapping a lesson shows what the user can do with it, such as booking, cancelling,
 completing or marking the attendance. A student sees on the tab of today their next lesson in a highlighted card, with

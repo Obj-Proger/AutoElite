@@ -1150,6 +1150,9 @@
   <data name="Schedule.Instructor" xml:space="preserve">
     <value>Instructor</value>
   </data>
+  <data name="Schedule.Lesson" xml:space="preserve">
+    <value>Lesson</value>
+  </data>
   <data name="Schedule.Next" xml:space="preserve">
     <value>Next</value>
   </data>
@@ -1650,6 +1653,9 @@
   </data>
   <data name="Today.Open" xml:space="preserve">
     <value>Open</value>
+  </data>
+  <data name="Today.Over" xml:space="preserve">
+    <value>over</value>
   </data>
   <data name="Today.Route" xml:space="preserve">
     <value>Directions</value>

@@ -29,6 +29,7 @@ public sealed class ScheduleViewModel : ViewModel
     private readonly SlotOffers _offers;
     private readonly ExamBook _exams;
     private readonly TimeProvider _timeProvider;
+    private ScheduleEntry? _chosen;
     private DateOnly? _loadedWeek;
     private IReadOnlyList<ScheduleEntry> _weekEntries = [];
 
@@ -74,7 +75,13 @@ public sealed class ScheduleViewModel : ViewModel
         ShowWeekCommand = new Command(() => IsWeekView = true);
         ShowDayOfCommand = new Command<DateOnly>(async day => await ShowDayOfAsync(day));
         RefreshCommand = new Command(async () => await RefreshAsync());
-        OpenEntryCommand = new Command<ScheduleEntry>(async entry => await OpenAsync(entry));
+        OpenEntryCommand = new Command<ScheduleEntry>(async entry =>
+        {
+            if (ShowsDayCard)
+                Select(entry);
+            else
+                await OpenAsync(entry);
+        });
         PlanAtCommand = new Command<DateTimeOffset>(async start => await PlanAtAsync(start), _ => CanPlan);
         OfferCommand = new Command(async () => await OfferAsync(NextStart()));
         PlanTheoryCommand = new Command(async () => await PlanTheoryAsync(NextStart()));
@@ -95,6 +102,7 @@ public sealed class ScheduleViewModel : ViewModel
             OnPropertyChanged(nameof(Period));
             OnPropertyChanged(nameof(IsAwayFromToday));
             Days = DaysOf(Entries);
+            SelectInDay();
             OnPropertyChanged(nameof(IsEmpty));
             OnPropertyChanged(nameof(IsGridEmpty));
         }
@@ -118,6 +126,7 @@ public sealed class ScheduleViewModel : ViewModel
             OnPropertyChanged(nameof(ShowsGrid));
             OnPropertyChanged(nameof(ShowsList));
             OnPropertyChanged(nameof(IsGridEmpty));
+            OnPropertyChanged(nameof(ShowsDayCard));
         }
     }
 
@@ -136,17 +145,32 @@ public sealed class ScheduleViewModel : ViewModel
             OnPropertyChanged(nameof(ShowsGrid));
             OnPropertyChanged(nameof(ShowsList));
             OnPropertyChanged(nameof(IsGridEmpty));
+            OnPropertyChanged(nameof(ShowsDayCard));
         }
     }
 
-    /// <summary>
-    /// Gets a value indicating whether the day or the week is shown as a grid of hours across the page, as calendars
-    /// do on a wide window, so that switching between them keeps the width.
-    /// </summary>
-    public bool ShowsGrid => IsWide;
+    /// <summary>Gets a value indicating whether the week is shown as a grid of hours, on a wide page.</summary>
+    public bool ShowsGrid => IsWeekView && IsWide;
 
-    /// <summary>Gets a value indicating whether the day or the week is shown as a list of cards, on a narrow screen.</summary>
+    /// <summary>Gets a value indicating whether the period is shown as a list: always a day, and a week on a narrow screen.</summary>
     public bool ShowsList => !ShowsGrid;
+
+    /// <summary>
+    /// Gets the lesson chosen in the day on a wide page, on a highlighted card beside the list with what can be done with
+    /// it, as calendars show the lesson opened beside the day; at first the lesson going on or the next one.
+    /// </summary>
+    public NextLessonCard? DayCard
+    {
+        get;
+        private set
+        {
+            if (SetProperty(ref field, value))
+                OnPropertyChanged(nameof(ShowsDayCard));
+        }
+    }
+
+    /// <summary>Gets a value indicating whether the card of the chosen lesson stands beside the list of a day.</summary>
+    public bool ShowsDayCard => IsWide && IsDayView && DayCard is not null;
 
     /// <summary>Gets a value indicating whether the grid of the week is shown and has no lessons; the list says so itself.</summary>
     public bool IsGridEmpty => ShowsGrid && IsEmpty;
@@ -206,6 +230,7 @@ public sealed class ScheduleViewModel : ViewModel
             Days = DaysOf(value);
             OnPropertyChanged(nameof(IsEmpty));
             OnPropertyChanged(nameof(IsGridEmpty));
+            SelectInDay();
         }
     } = [];
 
@@ -362,6 +387,24 @@ public sealed class ScheduleViewModel : ViewModel
         _loadedWeek == ScheduleWeek.FirstDayOf(SelectedDay) ? Task.CompletedTask : ReloadAsync();
 
     private static DateOnly DayOf(DateTimeOffset moment) => DateOnly.FromDateTime(moment.ToLocalTime().DateTime);
+
+    // Chooses a lesson of the day shown for its card: the one chosen before if it is still there, else the lesson going
+    // on or the next one, else the first of the day.
+    private void SelectInDay()
+    {
+        var day = Entries.Where(entry => DayOf(entry.Start) == SelectedDay).ToList();
+        var now = _timeProvider.GetLocalNow();
+        var kept = _chosen is { } chosen
+            ? day.FirstOrDefault(entry => entry.Start == chosen.Start && entry.Title == chosen.Title && entry.Kind == chosen.Kind)
+            : null;
+        Select(kept ?? TodayCards.NextOf(day, now) ?? day.FirstOrDefault());
+    }
+
+    private void Select(ScheduleEntry? entry)
+    {
+        _chosen = entry;
+        DayCard = entry is null ? null : TodayCards.CardOf(entry, _timeProvider.GetLocalNow(), AppTexts.Get("Schedule.Lesson"));
+    }
 
     private static DateTimeOffset? Earliest(DateTimeOffset? first, DateTimeOffset? second) =>
         first is { } a && second is { } b ? (a < b ? a : b) : first ?? second;

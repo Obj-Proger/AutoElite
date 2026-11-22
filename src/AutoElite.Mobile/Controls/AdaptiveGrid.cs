@@ -5,7 +5,8 @@ namespace AutoElite.Mobile.Controls;
 /// <summary>
 /// Cards of the same kind, such as the leads or the contracts, in as many columns of equal width as fit, each at least
 /// <see cref="MinItemWidth"/> wide and at most <see cref="MaxColumns"/>: one column on a phone, a grid on a wide window.
-/// A row is as tall as its tallest card.
+/// There are never more columns than cards, so that a lone card takes the whole width; a row is as tall as its tallest
+/// card.
 /// </summary>
 public sealed class AdaptiveGrid : Layout
 {
@@ -95,7 +96,8 @@ public sealed class AdaptiveGrid : Layout
         {
             var spacing = grid.Spacing;
             var columns = (int)Math.Floor((width + spacing) / (Math.Max(1, grid.MinItemWidth) + spacing));
-            columns = Math.Clamp(columns, 1, Math.Max(1, grid.MaxColumns));
+            var cards = grid.Count(child => child.Visibility != Visibility.Collapsed);
+            columns = Math.Clamp(columns, 1, Math.Max(1, Math.Min(grid.MaxColumns, cards)));
 
             return (columns, Math.Max(0, (width - ((columns - 1) * spacing)) / columns));
         }

@@ -12,6 +12,9 @@ namespace AutoElite.Mobile.Pages;
 /// </summary>
 public sealed class NextLessonCard
 {
+    /// <summary>Gets what the card shows, such as the next lesson.</summary>
+    public required string Caption { get; init; }
+
     /// <summary>Gets the kind of the lesson, such as Driving.</summary>
     public required string Kind { get; init; }
 
@@ -100,10 +103,12 @@ internal static class TodayCards
     /// <summary>Makes the highlighted card of a lesson.</summary>
     /// <param name="lesson">The lesson.</param>
     /// <param name="now">The current time.</param>
+    /// <param name="caption">What the card shows, the next lesson unless told otherwise.</param>
     /// <returns>The card.</returns>
-    public static NextLessonCard CardOf(ScheduleEntry lesson, DateTimeOffset now)
+    public static NextLessonCard CardOf(ScheduleEntry lesson, DateTimeOffset now, string? caption = null)
     {
-        var isGoingOn = lesson.Start <= now;
+        var isOver = lesson.End <= now;
+        var isGoingOn = !isOver && lesson.Start <= now;
         var route = RouteOf(lesson);
         var main = lesson.Actions.FirstOrDefault(action => action.IsMain) ?? route;
         var others = lesson.Actions.Where(action => action != main).ToList();
@@ -114,9 +119,12 @@ internal static class TodayCards
 
         return new NextLessonCard
         {
+            Caption = caption ?? AppTexts.Get("Today.Next"),
             Kind = days == 0 ? lesson.Kind : LessonTexts.DetailsOf(DayOf(lesson.Start), lesson.Kind),
-            Countdown = isGoingOn ? AppTexts.Format("Today.Ongoing", DurationOf(lesson.End - now)) : CountdownOf(lesson, now, days),
-            CountdownTone = isGoingOn ? StatusTone.Success : StatusTone.Accent,
+            Countdown = isOver
+                ? AppTexts.Get("Today.Over")
+                : isGoingOn ? AppTexts.Format("Today.Ongoing", DurationOf(lesson.End - now)) : CountdownOf(lesson, now, days),
+            CountdownTone = isOver ? StatusTone.Neutral : isGoingOn ? StatusTone.Success : StatusTone.Accent,
             Time = string.Create(CultureInfo.CurrentCulture, $"{lesson.Start.ToLocalTime():t} – {lesson.End.ToLocalTime():t}"),
             Title = lesson.Title,
             TitleIcon = IconOf(lesson.Category),
