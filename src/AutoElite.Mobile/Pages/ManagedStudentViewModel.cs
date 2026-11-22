@@ -37,15 +37,8 @@ public sealed class ManagedStudentViewModel : ViewModel, IQueryAttributable
     public string Name
     {
         get;
-        private set
-        {
-            if (SetProperty(ref field, value))
-                OnPropertyChanged(nameof(Initials));
-        }
+        private set => SetProperty(ref field, value);
     } = string.Empty;
-
-    /// <summary>Gets the initials of the student, shown in place of a photo.</summary>
-    public string Initials => PhoneCalls.InitialsOf(Name);
 
     /// <summary>Gets the phone number and the email address of the student.</summary>
     public string Contacts

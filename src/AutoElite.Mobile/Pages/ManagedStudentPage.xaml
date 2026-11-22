@@ -3,82 +3,84 @@
     x:Class="AutoElite.Mobile.Pages.ManagedStudentPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:AutoElite.Mobile.Controls"
     xmlns:l="clr-namespace:AutoElite.Mobile.Localization"
     xmlns:pages="clr-namespace:AutoElite.Mobile.Pages"
     x:DataType="pages:ManagedStudentViewModel"
     Title="{l:Text Student.Title}">
 
     <!--
-        The student for a manager: how to reach them, then each contract with its money first, its progress and its
-        payments, a payment that waits for its money with a button to confirm it and an active contract with one to
-        record a payment.
+        The student for a manager: the avatar, name and contacts with writing and calling, then each contract on a
+        highlighted card with its money first, recording a payment when it is active, its progress and its payments; a
+        payment that waits for its money has a button to confirm it.
     -->
     <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}" RefreshColor="{DynamicResource Accent}">
         <ScrollView>
-            <VerticalStackLayout Padding="{StaticResource PageMargin}" Spacing="14">
-                <Border Style="{StaticResource HighlightCard}">
-                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="14" RowDefinitions="Auto,Auto" RowSpacing="10">
-                        <Border
-                            WidthRequest="56"
-                            HeightRequest="56"
-                            StrokeThickness="0"
-                            BackgroundColor="{DynamicResource Accent}"
-                            VerticalOptions="Start">
-                            <Border.StrokeShape>
-                                <Ellipse />
-                            </Border.StrokeShape>
-                            <Label
-                                Text="{Binding Initials}"
-                                FontFamily="TextSemiBold"
-                                FontSize="20"
-                                TextColor="{DynamicResource OnAccent}"
-                                HorizontalOptions="Center"
-                                VerticalOptions="Center" />
-                        </Border>
-                        <VerticalStackLayout Grid.Column="1" Spacing="4" VerticalOptions="Center">
-                            <Label Style="{StaticResource Headline}" Text="{Binding Name}" />
-                            <Label Style="{StaticResource Secondary}" Text="{Binding Contacts}" />
-                        </VerticalStackLayout>
-                        <HorizontalStackLayout Grid.Row="1" Grid.ColumnSpan="2" Spacing="8">
-                            <Button Text="{l:Text Student.Write}" Command="{Binding WriteCommand}" />
-                            <Button
-                                Style="{StaticResource SecondaryButton}"
-                                Text="{l:Text Student.Call}"
-                                Command="{Binding CallCommand}"
-                                IsVisible="{Binding HasPhone}" />
-                        </HorizontalStackLayout>
-                    </Grid>
-                </Border>
+            <VerticalStackLayout Padding="20,12,20,32" Spacing="16" MaximumWidthRequest="760">
+                <controls:PersonHeader
+                    Name="{Binding Name}"
+                    Details="{Binding Contacts}"
+                    WriteCommand="{Binding WriteCommand}"
+                    CallCommand="{Binding CallCommand}"
+                    CanCall="{Binding HasPhone}" />
 
-                <Border Style="{StaticResource Card}" IsVisible="{Binding HasNotice}">
-                    <Label Style="{StaticResource Secondary}" Text="{Binding Notice}" />
-                </Border>
+                <controls:NoticeBanner Text="{Binding Notice}" Tone="Warning" />
 
-                <VerticalStackLayout Spacing="14" BindableLayout.ItemsSource="{Binding ContractEntries}">
+                <VerticalStackLayout Spacing="12" BindableLayout.ItemsSource="{Binding ContractEntries}">
                     <BindableLayout.ItemTemplate>
                         <DataTemplate x:DataType="pages:ManagedContractEntry">
-                            <Border Style="{StaticResource Card}">
-                                <VerticalStackLayout Spacing="8">
-                                    <Label Style="{StaticResource Overline}" Text="{Binding Number}" />
-                                    <Label Style="{StaticResource Title}" Text="{Binding Course}" />
-                                    <Label Style="{StaticResource BodyLarge}" Text="{Binding Money}">
-                                        <Label.Triggers>
-                                            <DataTrigger TargetType="Label" Binding="{Binding HasDebt}" Value="True">
-                                                <Setter Property="TextColor" Value="{DynamicResource Warning}" />
-                                            </DataTrigger>
-                                        </Label.Triggers>
-                                    </Label>
+                            <Border Style="{StaticResource HighlightCard}">
+                                <VerticalStackLayout Spacing="14">
+                                    <VerticalStackLayout Spacing="2">
+                                        <Label
+                                            Style="{StaticResource Overline}"
+                                            TextColor="{DynamicResource TextMuted}"
+                                            Text="{Binding Number}" />
+                                        <Label FontFamily="TextSemiBold" FontSize="17" Text="{Binding Course}" />
+                                    </VerticalStackLayout>
+                                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                                        <controls:IconTile Icon="wallet" Tone="Success">
+                                            <controls:IconTile.Triggers>
+                                                <DataTrigger TargetType="controls:IconTile" Binding="{Binding HasDebt}" Value="True">
+                                                    <Setter Property="Tone" Value="Warning" />
+                                                </DataTrigger>
+                                            </controls:IconTile.Triggers>
+                                        </controls:IconTile>
+                                        <Label
+                                            Grid.Column="1"
+                                            Style="{StaticResource BodyLarge}"
+                                            Text="{Binding Money}"
+                                            VerticalOptions="Center">
+                                            <Label.Triggers>
+                                                <DataTrigger TargetType="Label" Binding="{Binding HasDebt}" Value="True">
+                                                    <Setter Property="TextColor" Value="{DynamicResource Warning}" />
+                                                </DataTrigger>
+                                            </Label.Triggers>
+                                        </Label>
+                                    </Grid>
                                     <Button
                                         Text="{l:Text Payment.Add}"
                                         Command="{Binding AddPaymentCommand}"
-                                        IsVisible="{Binding CanAddPayment}"
-                                        HorizontalOptions="Start" />
-                                    <Label Style="{StaticResource Secondary}" Text="{Binding Practice}" />
-                                    <ProgressBar Progress="{Binding PracticeProgress}" />
-                                    <Label Style="{StaticResource Secondary}" Text="{Binding Theory}" />
-                                    <VerticalStackLayout Spacing="6" IsVisible="{Binding HasPayments}">
-                                        <Label Style="{StaticResource Caption}" Text="{l:Text Payments.Title}" />
-                                        <VerticalStackLayout Spacing="6" BindableLayout.ItemsSource="{Binding Payments}">
+                                        IsVisible="{Binding CanAddPayment}" />
+                                    <BoxView HeightRequest="1" Color="{DynamicResource Border}" />
+                                    <VerticalStackLayout Spacing="8">
+                                        <Label Style="{StaticResource Secondary}" Text="{Binding Practice}" />
+                                        <ProgressBar Progress="{Binding PracticeProgress}" />
+                                    </VerticalStackLayout>
+                                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                                        <controls:AppIcon
+                                            Name="book-open"
+                                            Size="18"
+                                            Color="{DynamicResource TextMuted}"
+                                            VerticalOptions="Start" />
+                                        <Label Grid.Column="1" Style="{StaticResource Secondary}" Text="{Binding Theory}" />
+                                    </Grid>
+                                    <VerticalStackLayout Spacing="8" IsVisible="{Binding HasPayments}">
+                                        <Label
+                                            Style="{StaticResource Overline}"
+                                            TextColor="{DynamicResource TextMuted}"
+                                            Text="{l:Text Payments.Title}" />
+                                        <VerticalStackLayout Spacing="8" BindableLayout.ItemsSource="{Binding Payments}">
                                             <BindableLayout.ItemTemplate>
                                                 <DataTemplate x:DataType="pages:PaymentEntry">
                                                     <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">

@@ -40,17 +40,8 @@ public sealed class StudentViewModel : ViewModel, IQueryAttributable
     public string Name
     {
         get;
-        private set
-        {
-            if (SetProperty(ref field, value))
-                OnPropertyChanged(nameof(Initials));
-        }
+        private set => SetProperty(ref field, value);
     } = string.Empty;
-
-    /// <summary>Gets the initials of the student.</summary>
-    public string Initials =>
-        string.Concat(Name.Split(' ', StringSplitOptions.RemoveEmptyEntries).Take(2).Select(part => part[0]))
-            .ToUpper(CultureInfo.CurrentCulture);
 
     /// <summary>Gets the phone and the email address of the student.</summary>
     public string Contacts
