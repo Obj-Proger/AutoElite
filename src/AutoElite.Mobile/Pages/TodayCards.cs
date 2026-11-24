@@ -61,7 +61,7 @@ public sealed class NextLessonCard
     public bool HasMore => MoreCommand is not null;
 }
 
-/// <summary>A lesson after the next one, as a row: tapping it offers what the user can do with it.</summary>
+/// <summary>A lesson after the next one, as a row: tapping it opens the lesson with what the user can do with it.</summary>
 public sealed class LessonRow
 {
     /// <summary>Gets the icon of the kind of the lesson.</summary>
@@ -70,20 +70,20 @@ public sealed class LessonRow
     /// <summary>Gets the tone of the tile of the icon.</summary>
     public StatusTone Tone { get; init; }
 
-    /// <summary>Gets the kind and what the lesson is, such as Theory · Road signs.</summary>
+    /// <summary>Gets what the lesson is, such as Road signs or the vehicle.</summary>
     public required string Title { get; init; }
 
-    /// <summary>Gets the state of the lesson, or the instructor, the place or the group.</summary>
+    /// <summary>Gets the state of the lesson, or its kind with the instructor, the place or the group.</summary>
     public required string Subtitle { get; init; }
 
-    /// <summary>Gets when the lesson starts: the time today, or the day and the time later.</summary>
+    /// <summary>Gets when the lesson starts.</summary>
     public required string Time { get; init; }
 
-    /// <summary>Gets the command that offers what the user can do with the lesson, if anything.</summary>
-    public Command? Command { get; init; }
+    /// <summary>Gets the day of the lesson under its time: today, tomorrow or a date.</summary>
+    public required string Day { get; init; }
 
-    /// <summary>Gets a value indicating whether tapping the row offers something to do.</summary>
-    public bool HasCommand => Command is not null;
+    /// <summary>Gets the command that opens the lesson.</summary>
+    public required Command Command { get; init; }
 }
 
 /// <summary>Makes the cards of the page of today out of the lessons of the user.</summary>
@@ -104,14 +104,19 @@ internal static class TodayCards
     /// <param name="lesson">The lesson.</param>
     /// <param name="now">The current time.</param>
     /// <param name="caption">What the card shows, the next lesson unless told otherwise.</param>
+    /// <param name="leavesPage">
+    /// Whether the card stands on a page of its own, which an action other than the way to the lesson closes first, so
+    /// that the user comes back to the lessons it changed.
+    /// </param>
     /// <returns>The card.</returns>
-    public static NextLessonCard CardOf(ScheduleEntry lesson, DateTimeOffset now, string? caption = null)
+    public static NextLessonCard CardOf(ScheduleEntry lesson, DateTimeOffset now, string? caption = null, bool leavesPage = false)
     {
         var isOver = lesson.End <= now;
         var isGoingOn = !isOver && lesson.Start <= now;
         var route = RouteOf(lesson);
-        var main = lesson.Actions.FirstOrDefault(action => action.IsMain) ?? route;
-        var others = lesson.Actions.Where(action => action != main).ToList();
+        List<EntryAction> actions = [.. lesson.Actions.Select(action => leavesPage ? Leaving(action) : action)];
+        var main = actions.FirstOrDefault(action => action.IsMain) ?? route;
+        var others = actions.Where(action => action != main).ToList();
         if (route is not null && route != main)
             others.Insert(0, route);
 
@@ -149,20 +154,30 @@ internal static class TodayCards
     {
         var culture = CultureInfo.CurrentCulture;
         var start = lesson.Start.ToLocalTime();
-        var actions = lesson.Actions;
+        var days = (start.Date - now.ToLocalTime().Date).Days;
 
         return new LessonRow
         {
             Icon = IconOf(lesson.Category),
             Tone = ToneOf(lesson.Category),
-            Title = LessonTexts.DetailsOf(lesson.Kind, lesson.Title),
-            Subtitle = lesson.Status ?? lesson.Details,
-            Time = start.Date == now.ToLocalTime().Date
-                ? start.ToString("t", culture)
-                : string.Create(culture, $"{start.ToString("ddd d", culture)}, {start:t}"),
-            Command = actions.Count > 0 ? new Command(async () => await OfferAsync(lesson.Title, actions)) : null
+            Title = string.IsNullOrWhiteSpace(lesson.Title) ? lesson.Kind : lesson.Title,
+            Subtitle = lesson.Status ?? LessonTexts.DetailsOf(lesson.Kind, lesson.Details),
+            Time = start.ToString("t", culture),
+            Day = days switch
+            {
+                0 => AppTexts.Get("Today.TodayWord"),
+                1 => AppTexts.Get("Today.Tomorrow"),
+                _ => start.ToString("ddd, d MMM", culture)
+            },
+            Command = new Command(async () => await OpenAsync(lesson))
         };
     }
+
+    /// <summary>Opens a lesson on a page of its own, with its card and what the user can do with it.</summary>
+    /// <param name="lesson">The lesson.</param>
+    /// <returns>A task that completes when the page is open.</returns>
+    public static Task OpenAsync(ScheduleEntry lesson) =>
+        Routes.OpenAsync(Routes.Lesson, new Dictionary<string, object> { [LessonPage.EntryParameter] = lesson });
 
     /// <summary>Gets the icon of a kind of lesson.</summary>
     /// <param name="category">The kind of lesson.</param>
@@ -243,6 +258,18 @@ internal static class TodayCards
 
         yield return new Uri(WebMaps + address);
     }
+
+    // An action that closes the page of the lesson before it is done.
+    private static EntryAction Leaving(EntryAction action) =>
+        action with
+        {
+            Command = new Command(async () =>
+            {
+                await Shell.Current.GoToAsync("..");
+                if (action.Command.CanExecute(null))
+                    action.Command.Execute(null);
+            })
+        };
 
     // Offers what the user can do with a lesson and does what they choose.
     private static async Task OfferAsync(string title, IReadOnlyList<EntryAction> actions)

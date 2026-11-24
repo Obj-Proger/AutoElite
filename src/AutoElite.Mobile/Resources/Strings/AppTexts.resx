@@ -1144,9 +1144,6 @@
   <data name="Schedule.AllInstructors" xml:space="preserve">
     <value>All instructors</value>
   </data>
-  <data name="Schedule.Close" xml:space="preserve">
-    <value>Close</value>
-  </data>
   <data name="Schedule.Day" xml:space="preserve">
     <value>Day</value>
   </data>
@@ -1677,6 +1674,9 @@
   </data>
   <data name="Today.ThisWeek" xml:space="preserve">
     <value>this week</value>
+  </data>
+  <data name="Today.TodayWord" xml:space="preserve">
+    <value>today</value>
   </data>
   <data name="Today.Tomorrow" xml:space="preserve">
     <value>tomorrow</value>

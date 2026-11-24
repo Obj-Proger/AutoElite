@@ -29,15 +29,20 @@
             </Grid>
             <Label Style="{StaticResource Secondary}" Text="{Binding Details}" />
             <Label Style="{StaticResource Caption}" Text="{Binding Status}" IsVisible="{Binding HasStatus}" />
-            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
-                <Button Text="{Binding Main.Text}" Command="{Binding Main.Command}" IsVisible="{Binding HasMain}" />
+            <!-- The two buttons side by side while both captions fit, else one under the other, never cut off. -->
+            <controls:AdaptiveGrid MinItemWidth="150" Spacing="10">
                 <Button
-                    Grid.Column="1"
+                    Text="{Binding Main.Text}"
+                    Command="{Binding Main.Command}"
+                    IsVisible="{Binding HasMain}"
+                    LineBreakMode="WordWrap" />
+                <Button
                     Style="{StaticResource SecondaryButton}"
                     Text="{Binding MoreText}"
                     Command="{Binding MoreCommand}"
-                    IsVisible="{Binding HasMore}" />
-            </Grid>
+                    IsVisible="{Binding HasMore}"
+                    LineBreakMode="WordWrap" />
+            </controls:AdaptiveGrid>
         </VerticalStackLayout>
     </Border>
 

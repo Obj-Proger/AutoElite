@@ -167,7 +167,8 @@
                                     Title="{Binding Title}"
                                     Subtitle="{Binding Subtitle}"
                                     Trailing="{Binding Time}"
-                                    ShowsChevron="{Binding HasCommand}"
+                                    TrailingDetail="{Binding Day}"
+                                    ShowsChevron="True"
                                     Command="{Binding Command}" />
                             </DataTemplate>
                         </BindableLayout.ItemTemplate>

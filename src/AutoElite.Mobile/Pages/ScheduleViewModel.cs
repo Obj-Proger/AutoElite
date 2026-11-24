@@ -710,17 +710,6 @@ public sealed class ScheduleViewModel : ViewModel
         await Shell.Current.DisplayAlertAsync(AppTexts.Get("Schedule.RepeatTitle"), message, AppTexts.Get("Common.Ok"));
     }
 
-    // Shows a lesson with its details and what the user can do with it, and does what they choose.
-    private static async Task OpenAsync(ScheduleEntry entry)
-    {
-        var details = string.Join(
-            Environment.NewLine,
-            new[] { entry.Time, entry.Details, entry.Status }.Where(line => !string.IsNullOrWhiteSpace(line)));
-        string[] choices = [.. entry.Actions.Select(action => action.Text)];
-        var choice = await Shell.Current.DisplayActionSheetAsync(
-            $"{entry.Kind}: {entry.Title}{Environment.NewLine}{details}", AppTexts.Get("Schedule.Close"), null, choices);
-        var chosen = entry.Actions.FirstOrDefault(action => action.Text == choice);
-        if (chosen?.Command.CanExecute(null) == true)
-            chosen.Command.Execute(null);
-    }
+    // Opens a lesson on a page of its own, with its details and what the user can do with it.
+    private static Task OpenAsync(ScheduleEntry entry) => TodayCards.OpenAsync(entry);
 }

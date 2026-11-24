@@ -100,6 +100,9 @@ internal static class Routes
     /// <summary>The profile and the settings of the user, opened from the avatar above the tabs.</summary>
     public const string Profile = "profile";
 
+    /// <summary>A lesson opened from a list of lessons.</summary>
+    public const string Lesson = "lesson";
+
     /// <summary>The personal details of the user, opened from the profile.</summary>
     public const string Personal = "personal";
 

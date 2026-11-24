@@ -1144,9 +1144,6 @@
   <data name="Schedule.AllInstructors" xml:space="preserve">
     <value>Все инструкторы</value>
   </data>
-  <data name="Schedule.Close" xml:space="preserve">
-    <value>Закрыть</value>
-  </data>
   <data name="Schedule.Day" xml:space="preserve">
     <value>День</value>
   </data>
@@ -1677,6 +1674,9 @@
   </data>
   <data name="Today.ThisWeek" xml:space="preserve">
     <value>на неделе</value>
+  </data>
+  <data name="Today.TodayWord" xml:space="preserve">
+    <value>сегодня</value>
   </data>
   <data name="Today.Tomorrow" xml:space="preserve">
     <value>завтра</value>

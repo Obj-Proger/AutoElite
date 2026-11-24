@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="AutoElite.Mobile.Pages.LessonPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:AutoElite.Mobile.Controls"
+    xmlns:l="clr-namespace:AutoElite.Mobile.Localization"
+    xmlns:pages="clr-namespace:AutoElite.Mobile.Pages"
+    Title="{l:Text Schedule.Lesson}">
+
+    <!--
+        A lesson opened from a list: its card with when and where it is, who teaches it and its state, then what the
+        user can do with it, such as the way to the ground, cancelling the booking or completing it.
+    -->
+    <ScrollView>
+        <controls:PageColumn Padding="20,8,20,32" MaximumWidthRequest="640">
+            <pages:LessonCardView x:Name="Card" />
+        </controls:PageColumn>
+    </ScrollView>
+
+</ContentPage>

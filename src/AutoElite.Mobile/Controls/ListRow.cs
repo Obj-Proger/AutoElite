@@ -31,6 +31,10 @@ public sealed class ListRow : Border
     public static readonly BindableProperty TrailingProperty = BindableProperty.Create(
         nameof(Trailing), typeof(string), typeof(ListRow), propertyChanged: OnChanged);
 
+    /// <summary>Identifies the <see cref="TrailingDetail"/> property.</summary>
+    public static readonly BindableProperty TrailingDetailProperty = BindableProperty.Create(
+        nameof(TrailingDetail), typeof(string), typeof(ListRow), propertyChanged: OnChanged);
+
     /// <summary>Identifies the <see cref="ShowsChevron"/> property.</summary>
     public static readonly BindableProperty ShowsChevronProperty = BindableProperty.Create(
         nameof(ShowsChevron), typeof(bool), typeof(ListRow), false, propertyChanged: OnChanged);
@@ -45,9 +49,16 @@ public sealed class ListRow : Border
 
     private readonly AppIcon _icon = new() { Size = 22 };
     private readonly Border _tile;
-    private readonly Label _title = new() { FontFamily = "TextSemiBold", FontSize = 15, LineBreakMode = LineBreakMode.TailTruncation };
+    private readonly Label _title = new()
+    {
+        FontFamily = "TextSemiBold",
+        FontSize = 15,
+        LineBreakMode = LineBreakMode.TailTruncation,
+        MaxLines = 2
+    };
     private readonly Label _subtitle = new() { FontSize = 13, LineBreakMode = LineBreakMode.TailTruncation, MaxLines = 2 };
-    private readonly Label _trailing = new() { FontFamily = "DisplaySemiBold", FontSize = 14, VerticalOptions = LayoutOptions.Center };
+    private readonly Label _trailing = new() { FontFamily = "TextSemiBold", FontSize = 15, HorizontalOptions = LayoutOptions.End };
+    private readonly Label _trailingDetail = new() { FontSize = 12, HorizontalOptions = LayoutOptions.End };
     private readonly AppIcon _chevron = new() { Name = "chevron-right", Size = 18 };
     private readonly TapGestureRecognizer _tap = new();
 
@@ -59,6 +70,7 @@ public sealed class ListRow : Border
         Padding = new Thickness(16, 14);
         SetDynamicResource(BackgroundColorProperty, "Surface");
         _subtitle.SetDynamicResource(Label.TextColorProperty, "TextMuted");
+        _trailingDetail.SetDynamicResource(Label.TextColorProperty, "TextMuted");
         _chevron.SetDynamicResource(AppIcon.ColorProperty, "TextMuted");
 
         _tile = new Border
@@ -88,7 +100,10 @@ public sealed class ListRow : Border
         };
         row.Add(_tile, 0, 0);
         row.Add(texts, 1, 0);
-        row.Add(_trailing, 2, 0);
+        var trailing = new VerticalStackLayout { Spacing = 2, VerticalOptions = LayoutOptions.Center };
+        trailing.Add(_trailing);
+        trailing.Add(_trailingDetail);
+        row.Add(trailing, 2, 0);
         row.Add(_chevron, 3, 0);
         Content = row;
 
@@ -132,6 +147,13 @@ public sealed class ListRow : Border
         set => SetValue(TrailingProperty, value);
     }
 
+    /// <summary>Gets or sets a short line under the trailing text, such as the day under the time of a lesson.</summary>
+    public string? TrailingDetail
+    {
+        get => (string?)GetValue(TrailingDetailProperty);
+        set => SetValue(TrailingDetailProperty, value);
+    }
+
     /// <summary>Gets or sets a value indicating whether an arrow tells that tapping the row opens something.</summary>
     public bool ShowsChevron
     {
@@ -164,12 +186,14 @@ public sealed class ListRow : Border
         _subtitle.IsVisible = !string.IsNullOrWhiteSpace(Subtitle);
         _trailing.Text = Trailing;
         _trailing.IsVisible = !string.IsNullOrWhiteSpace(Trailing);
+        _trailingDetail.Text = TrailingDetail;
+        _trailingDetail.IsVisible = !string.IsNullOrWhiteSpace(TrailingDetail);
         // A row without the arrow keeps its place, so that the trailing texts of the rows of a list line up.
         _chevron.Opacity = ShowsChevron ? 1 : 0;
         _tap.Command = Command;
         _tap.CommandParameter = CommandParameter;
         SemanticProperties.SetDescription(
-            this, string.Join(", ", new[] { Title, Subtitle, Trailing }.Where(part => !string.IsNullOrWhiteSpace(part))));
+            this, string.Join(", ", new[] { Title, Subtitle, Trailing, TrailingDetail }.Where(part => !string.IsNullOrWhiteSpace(part))));
         Paint();
     }
 
