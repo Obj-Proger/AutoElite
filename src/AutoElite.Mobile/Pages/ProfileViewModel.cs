@@ -307,12 +307,15 @@ public sealed class ProfileViewModel : ViewModel
             await LeaveAsync(changeSchool: true);
     }
 
+    // What the application is, in the text of a dialog, which has room for it, with the way to its source code.
     private async Task ShowAboutAsync()
     {
-        var sourceCode = AppTexts.Get("Settings.SourceCode");
-        var title = string.Join(
-            Environment.NewLine, AppTexts.Format("Settings.Version", VersionNumber), AppTexts.Get("Settings.License"));
-        if (await Shell.Current.DisplayActionSheetAsync(title, AppTexts.Get("Common.Cancel"), null, sourceCode) == sourceCode)
+        var openSource = await Shell.Current.DisplayAlertAsync(
+            AppTexts.Format("Settings.Version", VersionNumber),
+            AppTexts.Get("Settings.License"),
+            AppTexts.Get("Settings.SourceCode"),
+            AppTexts.Get("Common.Ok"));
+        if (openSource)
             await Launcher.Default.OpenAsync(new Uri(SourceCode));
     }
 
