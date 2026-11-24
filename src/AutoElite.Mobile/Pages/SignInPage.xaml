@@ -3,38 +3,42 @@
     x:Class="AutoElite.Mobile.Pages.SignInPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:AutoElite.Mobile.Controls"
     xmlns:l="clr-namespace:AutoElite.Mobile.Localization"
     xmlns:pages="clr-namespace:AutoElite.Mobile.Pages"
     x:DataType="pages:SignInViewModel"
     Shell.NavBarIsVisible="False">
 
-    <ScrollView>
-        <VerticalStackLayout
-            Padding="{StaticResource PageMargin}"
-            Spacing="16"
-            MaximumWidthRequest="440"
-            VerticalOptions="Center">
+    <!--
+        Signing in to the school, in the frame of the pages before signing in: the school, the email and the password
+        under their captions, why it failed, then signing in and choosing another school.
+    -->
+    <controls:AuthFrame>
+        <VerticalStackLayout Spacing="16">
             <Label Style="{StaticResource Overline}" Text="{Binding School}" />
-            <Label Style="{StaticResource Display}" Text="AutoElite" />
-            <Label Style="{StaticResource Title}" Text="{l:Text SignIn.Title}" />
-            <Border Style="{StaticResource Field}">
-                <Entry
-                    Text="{Binding Email}"
-                    Placeholder="{l:Text SignIn.Email}"
-                    Keyboard="Email"
-                    IsSpellCheckEnabled="False"
-                    IsTextPredictionEnabled="False"
-                    ReturnType="Next" />
-            </Border>
-            <Border Style="{StaticResource Field}">
-                <Entry
-                    Text="{Binding Password}"
-                    Placeholder="{l:Text SignIn.Password}"
-                    IsPassword="True"
-                    ReturnType="Go"
-                    ReturnCommand="{Binding SignInCommand}" />
-            </Border>
-            <Label Style="{StaticResource ErrorText}" Text="{Binding Error}" IsVisible="{Binding HasError}" />
+            <Label Style="{StaticResource Headline}" Text="{l:Text SignIn.Title}" />
+            <VerticalStackLayout Spacing="6">
+                <Label Style="{StaticResource Caption}" Text="{l:Text SignIn.Email}" />
+                <Border Style="{StaticResource Field}">
+                    <Entry
+                        Text="{Binding Email}"
+                        Keyboard="Email"
+                        IsSpellCheckEnabled="False"
+                        IsTextPredictionEnabled="False"
+                        ReturnType="Next" />
+                </Border>
+            </VerticalStackLayout>
+            <VerticalStackLayout Spacing="6">
+                <Label Style="{StaticResource Caption}" Text="{l:Text SignIn.Password}" />
+                <Border Style="{StaticResource Field}">
+                    <Entry
+                        Text="{Binding Password}"
+                        IsPassword="True"
+                        ReturnType="Go"
+                        ReturnCommand="{Binding SignInCommand}" />
+                </Border>
+            </VerticalStackLayout>
+            <controls:NoticeBanner Text="{Binding Error}" Tone="Danger" />
             <Button Text="{l:Text SignIn.Submit}" Command="{Binding SignInCommand}" />
             <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
             <Button
@@ -42,6 +46,6 @@
                 Text="{l:Text SignIn.ChangeSchool}"
                 Command="{Binding ChangeSchoolCommand}" />
         </VerticalStackLayout>
-    </ScrollView>
+    </controls:AuthFrame>
 
 </ContentPage>

@@ -61,6 +61,9 @@
   <data name="Attendance.Unavailable" xml:space="preserve">
     <value>The lesson could not be read: no connection to the school.</value>
   </data>
+  <data name="Auth.Tagline" xml:space="preserve">
+    <value>The driving school in your pocket: your lessons, studies and chats, and the work of instructors and managers.</value>
+  </data>
   <data name="BookStudent.Book" xml:space="preserve">
     <value>Book</value>
   </data>

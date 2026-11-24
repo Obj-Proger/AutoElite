@@ -61,6 +61,9 @@
   <data name="Attendance.Unavailable" xml:space="preserve">
     <value>Не удалось загрузить занятие: нет связи с автошколой.</value>
   </data>
+  <data name="Auth.Tagline" xml:space="preserve">
+    <value>Автошкола в кармане: ваши занятия, учёба и чаты, а также работа инструкторов и менеджеров.</value>
+  </data>
   <data name="BookStudent.Book" xml:space="preserve">
     <value>Записать</value>
   </data>
