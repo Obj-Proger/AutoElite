@@ -41,7 +41,14 @@ public sealed class QuestionsViewModel : ViewModel
         private set => SetProperty(ref field, value);
     } = [];
 
-    /// <summary>Gets how many questions match, that none do, or why they could not be read.</summary>
+    /// <summary>Gets what the page says when no question matches, or <see langword="null"/>.</summary>
+    public string? EmptyText
+    {
+        get;
+        private set => SetProperty(ref field, value);
+    }
+
+    /// <summary>Gets how many questions match, or why they could not be read.</summary>
     public string? Notice
     {
         get;
@@ -111,7 +118,8 @@ public sealed class QuestionsViewModel : ViewModel
             _total = found.TotalCount ?? 0;
             _items.AddRange((found.Items ?? []).Where(question => question.Id is not null).Select(Entry));
             Items = [.. _items];
-            Notice = _total == 0 ? AppTexts.Get("Questions.None") : AppTexts.Format("Questions.Count", _total);
+            Notice = _total == 0 ? null : AppTexts.Format("Questions.Count", _total);
+            EmptyText = _total == 0 ? AppTexts.Get("Questions.None") : null;
         }
         catch (Exception exception) when (exception is ApiException or HttpRequestException or TaskCanceledException)
         {

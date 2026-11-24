@@ -3,33 +3,66 @@
     x:Class="AutoElite.Mobile.Pages.TestSessionPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:AutoElite.Mobile.Controls"
     xmlns:l="clr-namespace:AutoElite.Mobile.Localization"
     xmlns:pages="clr-namespace:AutoElite.Mobile.Pages"
     x:DataType="pages:TestSessionViewModel"
     Title="{Binding Title}">
 
+    <!--
+        An attempt at a test: the number of the question with a bar and the time left, the question on a card with its
+        illustration and the options as cards to tap; once finished, the outcome on a highlighted card, then each
+        mistake with the answer given and the correct one.
+    -->
     <ScrollView>
-        <VerticalStackLayout Padding="{StaticResource PageMargin}" Spacing="14">
-            <Border Style="{StaticResource Card}" IsVisible="{Binding HasError}">
-                <Label Style="{StaticResource ErrorText}" Text="{Binding Error}" />
-            </Border>
+        <controls:PageColumn Padding="20,8,20,32" Spacing="14" MaximumWidthRequest="760">
+            <controls:NoticeBanner Text="{Binding Error}" Tone="Danger" />
 
             <!-- The question in progress. -->
             <VerticalStackLayout Spacing="14" IsVisible="{Binding IsInProgress}">
-                <Grid ColumnDefinitions="*,Auto">
+                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
                     <Label Style="{StaticResource Overline}" Text="{Binding Progress}" VerticalOptions="Center" />
-                    <Label Grid.Column="1" Style="{StaticResource Title}" Text="{Binding TimeLeft}" />
+                    <HorizontalStackLayout Grid.Column="1" Spacing="6">
+                        <controls:AppIcon Name="clock" Size="18" Color="{DynamicResource TextSecondary}" VerticalOptions="Center" />
+                        <Label FontFamily="DisplaySemiBold" FontSize="18" Text="{Binding TimeLeft}" VerticalOptions="Center" />
+                    </HorizontalStackLayout>
                 </Grid>
-                <Image Source="{Binding Image}" IsVisible="{Binding HasImage}" Aspect="AspectFit" MaximumHeightRequest="260" />
-                <Label Style="{StaticResource BodyLarge}" Text="{Binding Question}" />
+                <ProgressBar Progress="{Binding QuestionProgress}" />
+                <Border Style="{StaticResource Card}">
+                    <VerticalStackLayout Spacing="14">
+                        <Border
+                            StrokeThickness="0"
+                            StrokeShape="RoundRectangle 12"
+                            BackgroundColor="{DynamicResource SurfaceRaised}"
+                            IsVisible="{Binding HasImage}">
+                            <Image Source="{Binding Image}" Aspect="AspectFit" MaximumHeightRequest="280" />
+                        </Border>
+                        <Label FontFamily="TextSemiBold" FontSize="18" Text="{Binding Question}" />
+                    </VerticalStackLayout>
+                </Border>
                 <VerticalStackLayout Spacing="10" BindableLayout.ItemsSource="{Binding Options}">
                     <BindableLayout.ItemTemplate>
                         <DataTemplate x:DataType="pages:EntryAction">
-                            <Button
-                                Style="{StaticResource SecondaryButton}"
-                                Text="{Binding Text}"
-                                Command="{Binding Command}"
-                                LineBreakMode="WordWrap" />
+                            <Border
+                                Padding="16,14"
+                                StrokeThickness="1"
+                                Stroke="{DynamicResource Border}"
+                                StrokeShape="RoundRectangle 16"
+                                BackgroundColor="{DynamicResource Surface}"
+                                SemanticProperties.Description="{Binding Text}">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Command}" />
+                                </Border.GestureRecognizers>
+                                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="14">
+                                    <Ellipse
+                                        WidthRequest="20"
+                                        HeightRequest="20"
+                                        Stroke="{DynamicResource TextMuted}"
+                                        StrokeThickness="2"
+                                        VerticalOptions="Center" />
+                                    <Label Grid.Column="1" FontSize="16" Text="{Binding Text}" VerticalOptions="Center" />
+                                </Grid>
+                            </Border>
                         </DataTemplate>
                     </BindableLayout.ItemTemplate>
                 </VerticalStackLayout>
@@ -38,23 +71,47 @@
             <!-- The outcome of a finished attempt. -->
             <VerticalStackLayout Spacing="14" IsVisible="{Binding IsFinished}">
                 <Border Style="{StaticResource HighlightCard}">
-                    <VerticalStackLayout Spacing="6">
-                        <Label Style="{StaticResource Headline}" Text="{Binding Outcome}" />
-                        <Label Style="{StaticResource BodyLarge}" Text="{Binding Score}" />
-                    </VerticalStackLayout>
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="14">
+                        <controls:IconTile Icon="circle-x" Tone="Danger">
+                            <controls:IconTile.Triggers>
+                                <DataTrigger TargetType="controls:IconTile" Binding="{Binding IsPassed}" Value="True">
+                                    <Setter Property="Icon" Value="check" />
+                                    <Setter Property="Tone" Value="Success" />
+                                </DataTrigger>
+                            </controls:IconTile.Triggers>
+                        </controls:IconTile>
+                        <VerticalStackLayout Grid.Column="1" Spacing="4" VerticalOptions="Center">
+                            <Label Style="{StaticResource Headline}" Text="{Binding Outcome}" />
+                            <Label Style="{StaticResource BodyLarge}" Text="{Binding Score}" />
+                        </VerticalStackLayout>
+                    </Grid>
                 </Border>
                 <VerticalStackLayout Spacing="12" BindableLayout.ItemsSource="{Binding Mistakes}">
                     <BindableLayout.ItemTemplate>
                         <DataTemplate x:DataType="pages:MistakeEntry">
                             <Border Style="{StaticResource Card}">
-                                <VerticalStackLayout Spacing="6">
-                                    <Label Style="{StaticResource BodyLarge}" Text="{Binding Question}" />
-                                    <Label Style="{StaticResource Caption}" Text="{l:Text Test.YourAnswer}" />
-                                    <Label Style="{StaticResource ErrorText}" Text="{Binding YourAnswer}" />
-                                    <Label Style="{StaticResource Caption}" Text="{l:Text Test.CorrectAnswer}" />
-                                    <Label Style="{StaticResource Secondary}" Text="{Binding CorrectAnswer}" />
+                                <VerticalStackLayout Spacing="10">
+                                    <Label FontFamily="TextSemiBold" FontSize="16" Text="{Binding Question}" />
+                                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
+                                        <controls:AppIcon Name="x" Size="18" Color="{DynamicResource Danger}" VerticalOptions="Start" />
+                                        <VerticalStackLayout Grid.Column="1" Spacing="2">
+                                            <Label Style="{StaticResource Caption}" Text="{l:Text Test.YourAnswer}" />
+                                            <Label FontSize="15" TextColor="{DynamicResource Danger}" Text="{Binding YourAnswer}" />
+                                        </VerticalStackLayout>
+                                    </Grid>
+                                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
+                                        <controls:AppIcon
+                                            Name="check"
+                                            Size="18"
+                                            Color="{DynamicResource Success}"
+                                            VerticalOptions="Start" />
+                                        <VerticalStackLayout Grid.Column="1" Spacing="2">
+                                            <Label Style="{StaticResource Caption}" Text="{l:Text Test.CorrectAnswer}" />
+                                            <Label FontSize="15" TextColor="{DynamicResource Success}" Text="{Binding CorrectAnswer}" />
+                                        </VerticalStackLayout>
+                                    </Grid>
                                     <Label
-                                        Style="{StaticResource Caption}"
+                                        Style="{StaticResource Secondary}"
                                         Text="{Binding Explanation}"
                                         IsVisible="{Binding HasExplanation}" />
                                 </VerticalStackLayout>
@@ -63,7 +120,7 @@
                     </BindableLayout.ItemTemplate>
                 </VerticalStackLayout>
             </VerticalStackLayout>
-        </VerticalStackLayout>
+        </controls:PageColumn>
     </ScrollView>
 
 </ContentPage>

@@ -3,6 +3,7 @@
     x:Class="AutoElite.Mobile.Pages.QuestionPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:AutoElite.Mobile.Controls"
     xmlns:l="clr-namespace:AutoElite.Mobile.Localization"
     xmlns:pages="clr-namespace:AutoElite.Mobile.Pages"
     x:DataType="pages:QuestionViewModel"
@@ -13,12 +14,12 @@
         the explanation, then saving and taking it out of new tests.
     -->
     <ScrollView>
-        <VerticalStackLayout Padding="{StaticResource PageMargin}" Spacing="14">
-            <Label Style="{StaticResource ErrorText}" Text="{Binding Message}" IsVisible="{Binding HasMessage}" />
+        <controls:PageColumn Padding="20,8,20,32" Spacing="14" MaximumWidthRequest="760">
+            <controls:NoticeBanner Text="{Binding Message}" Tone="Danger" />
 
             <Border Style="{StaticResource Card}">
                 <VerticalStackLayout Spacing="8">
-                    <Label Style="{StaticResource Overline}" Text="{l:Text Question.Text}" />
+                    <Label Style="{StaticResource Overline}" TextColor="{DynamicResource TextMuted}" Text="{l:Text Question.Text}" />
                     <Border Style="{StaticResource Field}">
                         <Editor
                             Text="{Binding Text}"
@@ -53,7 +54,7 @@
 
             <Border Style="{StaticResource Card}">
                 <VerticalStackLayout Spacing="8">
-                    <Label Style="{StaticResource Overline}" Text="{l:Text Question.Where}" />
+                    <Label Style="{StaticResource Overline}" TextColor="{DynamicResource TextMuted}" Text="{l:Text Question.Where}" />
                     <Border Style="{StaticResource Field}">
                         <Picker Title="{l:Text Question.Course}" ItemsSource="{Binding Courses}" SelectedIndex="{Binding CourseIndex}" />
                     </Border>
@@ -76,14 +77,14 @@
                                     </Border.GestureRecognizers>
                                     <Border.Triggers>
                                         <DataTrigger TargetType="Border" Binding="{Binding IsSelected}" Value="True">
-                                            <Setter Property="BackgroundColor" Value="{DynamicResource Accent}" />
-                                            <Setter Property="Stroke" Value="{DynamicResource Accent}" />
+                                            <Setter Property="BackgroundColor" Value="{DynamicResource Primary}" />
+                                            <Setter Property="Stroke" Value="{DynamicResource Primary}" />
                                         </DataTrigger>
                                     </Border.Triggers>
                                     <Label Text="{Binding Name}" FontFamily="TextSemiBold">
                                         <Label.Triggers>
                                             <DataTrigger TargetType="Label" Binding="{Binding IsSelected}" Value="True">
-                                                <Setter Property="TextColor" Value="{DynamicResource OnAccent}" />
+                                                <Setter Property="TextColor" Value="{DynamicResource OnPrimary}" />
                                             </DataTrigger>
                                         </Label.Triggers>
                                     </Label>
@@ -96,7 +97,7 @@
 
             <Border Style="{StaticResource Card}">
                 <VerticalStackLayout Spacing="8">
-                    <Label Style="{StaticResource Overline}" Text="{l:Text Question.Options}" />
+                    <Label Style="{StaticResource Overline}" TextColor="{DynamicResource TextMuted}" Text="{l:Text Question.Options}" />
                     <Label Style="{StaticResource Caption}" Text="{l:Text Question.OptionsHint}" />
                     <VerticalStackLayout Spacing="8" BindableLayout.ItemsSource="{Binding Options}">
                         <BindableLayout.ItemTemplate>
@@ -112,22 +113,24 @@
                                         <Button.Triggers>
                                             <DataTrigger TargetType="Button" Binding="{Binding IsCorrect}" Value="True">
                                                 <Setter Property="Text" Value="✓" />
-                                                <Setter Property="BackgroundColor" Value="{DynamicResource Accent}" />
-                                                <Setter Property="TextColor" Value="{DynamicResource OnAccent}" />
+                                                <Setter Property="BackgroundColor" Value="{DynamicResource Primary}" />
+                                                <Setter Property="TextColor" Value="{DynamicResource OnPrimary}" />
                                             </DataTrigger>
                                         </Button.Triggers>
                                     </Button>
                                     <Border Grid.Column="1" Style="{StaticResource Field}">
                                         <Entry Text="{Binding Text}" Placeholder="{l:Text Question.OptionPlaceholder}" MaxLength="1000" />
                                     </Border>
-                                    <Button
+                                    <Grid
                                         Grid.Column="2"
-                                        Style="{StaticResource SecondaryButton}"
-                                        Text="✕"
                                         WidthRequest="44"
-                                        Padding="0"
-                                        Command="{Binding RemoveCommand}"
-                                        SemanticProperties.Description="{l:Text Question.RemoveOption}" />
+                                        HeightRequest="44"
+                                        SemanticProperties.Description="{l:Text Question.RemoveOption}">
+                                        <Grid.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding RemoveCommand}" />
+                                        </Grid.GestureRecognizers>
+                                        <controls:AppIcon Name="x" Size="18" Color="{DynamicResource TextMuted}" />
+                                    </Grid>
                                 </Grid>
                             </DataTemplate>
                         </BindableLayout.ItemTemplate>
@@ -141,7 +144,7 @@
 
             <Border Style="{StaticResource Card}">
                 <VerticalStackLayout Spacing="8">
-                    <Label Style="{StaticResource Overline}" Text="{l:Text Question.Explanation}" />
+                    <Label Style="{StaticResource Overline}" TextColor="{DynamicResource TextMuted}" Text="{l:Text Question.Explanation}" />
                     <Border Style="{StaticResource Field}">
                         <Editor
                             Text="{Binding Explanation}"
@@ -159,7 +162,7 @@
                 Command="{Binding ToggleActiveCommand}"
                 IsVisible="{Binding IsExisting}" />
             <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
-        </VerticalStackLayout>
+        </controls:PageColumn>
     </ScrollView>
 
 </ContentPage>

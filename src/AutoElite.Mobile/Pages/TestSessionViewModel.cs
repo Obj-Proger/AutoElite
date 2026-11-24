@@ -61,6 +61,20 @@ public sealed class TestSessionViewModel : ViewModel, IQueryAttributable
         private set => SetProperty(ref field, value);
     } = string.Empty;
 
+    /// <summary>Gets how far through the questions the attempt is, from 0 to 1, for its bar.</summary>
+    public double QuestionProgress
+    {
+        get;
+        private set => SetProperty(ref field, value);
+    }
+
+    /// <summary>Gets a value indicating whether the finished attempt passed, which colors its outcome.</summary>
+    public bool IsPassed
+    {
+        get;
+        private set => SetProperty(ref field, value);
+    }
+
     /// <summary>Gets the time left, as minutes and seconds.</summary>
     public string TimeLeft
     {
@@ -209,6 +223,7 @@ public sealed class TestSessionViewModel : ViewModel, IQueryAttributable
             return;
 
         Progress = AppTexts.Format("Test.Progress", questions.IndexOf(next) + 1, questions.Count);
+        QuestionProgress = questions.Count == 0 ? 0 : (double)questions.IndexOf(next) / questions.Count;
         Question = next.Text ?? string.Empty;
         Options =
         [
@@ -241,6 +256,7 @@ public sealed class TestSessionViewModel : ViewModel, IQueryAttributable
         IsInProgress = false;
         IsFinished = true;
         Outcome = TestTexts.OutcomeOf(session?.Status, session?.FailureReason);
+        IsPassed = session?.Status == TestSessionStatus.Passed;
         Score = AppTexts.Format("Test.Score", session?.CorrectAnswerCount ?? 0, questions.Count);
         Mistakes =
         [
