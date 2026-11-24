@@ -51,12 +51,20 @@
                             Title="{l:Text Lesson.Driving}"
                             Value="{Binding DrivingHours}"
                             Unit="{Binding CourseHours}"
-                            Progress="{Binding DrivingProgress}" />
+                            Progress="{Binding DrivingProgress}">
+                            <controls:StatTile.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding OpenContractsCommand}" />
+                            </controls:StatTile.GestureRecognizers>
+                        </controls:StatTile>
                         <controls:StatTile
                             Grid.Column="1"
                             Title="{l:Text Today.Theory}"
                             Value="{Binding TheoryAttended}"
-                            Unit="{l:Text Today.Attended}" />
+                            Unit="{l:Text Today.Attended}">
+                            <controls:StatTile.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding OpenContractsCommand}" />
+                            </controls:StatTile.GestureRecognizers>
+                        </controls:StatTile>
                     </Grid>
                     <controls:ListRow
                         Icon="wallet"

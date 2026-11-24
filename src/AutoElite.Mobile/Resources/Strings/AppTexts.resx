@@ -1432,6 +1432,18 @@
   <data name="Study.DocumentsHint" xml:space="preserve">
     <value>Your documents and those of your contracts.</value>
   </data>
+  <data name="Study.Due" xml:space="preserve">
+    <value>{0} due</value>
+  </data>
+  <data name="Study.NotMarked" xml:space="preserve">
+    <value>not marked yet</value>
+  </data>
+  <data name="Study.Paid" xml:space="preserve">
+    <value>{0} paid</value>
+  </data>
+  <data name="Study.Payment" xml:space="preserve">
+    <value>Payment</value>
+  </data>
   <data name="Study.QuestionsHint" xml:space="preserve">
     <value>Write and correct the questions of the school for the practice tests.</value>
   </data>
@@ -1440,6 +1452,9 @@
   </data>
   <data name="Study.TestsHint" xml:space="preserve">
     <value>Tickets of the theory exam with a timer and the analysis of mistakes.</value>
+  </data>
+  <data name="Study.TheoryLessons" xml:space="preserve">
+    <value>Theory lessons</value>
   </data>
   <data name="Study.Title" xml:space="preserve">
     <value>Studies</value>

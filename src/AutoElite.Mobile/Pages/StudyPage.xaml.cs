@@ -1,4 +1,5 @@
 using AutoElite.Client.Api.Models;
+using AutoElite.Mobile.Schedule;
 using AutoElite.Mobile.Session;
 using Microsoft.Kiota.Abstractions;
 
@@ -11,12 +12,15 @@ namespace AutoElite.Mobile.Pages;
 public partial class StudyPage : ContentPage
 {
     private readonly UserSession _session;
+    private readonly StudentContracts _contracts;
 
     /// <summary>Initializes a new instance of the <see cref="StudyPage"/> class.</summary>
     /// <param name="session">The user of the application, whose roles choose what the page offers.</param>
-    public StudyPage(UserSession session)
+    /// <param name="contracts">The contracts of a student, for their progress.</param>
+    public StudyPage(UserSession session, StudentContracts contracts)
     {
         _session = session;
+        _contracts = contracts;
         InitializeComponent();
         BindingContext = this;
     }
@@ -43,6 +47,21 @@ public partial class StudyPage : ContentPage
         }
     }
 
+    /// <summary>Gets the progress of the active contract of a student, or <see langword="null"/>.</summary>
+    public ContractFigures? Figures
+    {
+        get;
+        private set
+        {
+            field = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(HasFigures));
+        }
+    }
+
+    /// <summary>Gets a value indicating whether the progress of a contract is shown.</summary>
+    public bool HasFigures => Figures is not null;
+
     /// <summary>Gets the command that opens the practice tests.</summary>
     public Command OpenTestsCommand { get; } = new(async () => await Routes.OpenAsync(Routes.Tests));
 
@@ -64,10 +83,28 @@ public partial class StudyPage : ContentPage
             var roles = (await _session.GetProfileAsync(CancellationToken.None)).Value.Roles ?? [];
             IsStudent = roles.Contains(UserRole.Student);
             IsTheoryInstructor = roles.Contains(UserRole.TheoryInstructor);
+            Figures = IsStudent ? await ReadFiguresAsync() : null;
         }
         catch (Exception exception) when (exception is ApiException or HttpRequestException)
         {
             // Without the profile the page offers what it offered before.
+        }
+    }
+
+    // The progress of the active contract, from the API or the device.
+    private async Task<ContractFigures?> ReadFiguresAsync()
+    {
+        try
+        {
+            var contracts = (await _contracts.ReadContractsAsync(CancellationToken.None)).Value;
+            if (contracts.FirstOrDefault(contract => contract.Status == ContractStatus.Active) is not { Id: { } contractId })
+                return null;
+
+            return ContractFigures.Of((await _contracts.ReadDetailsAsync(contractId, CancellationToken.None)).Value);
+        }
+        catch (Exception exception) when (exception is ApiException or HttpRequestException)
+        {
+            return null;
         }
     }
 }

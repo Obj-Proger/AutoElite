@@ -1432,6 +1432,18 @@
   <data name="Study.DocumentsHint" xml:space="preserve">
     <value>Ваши документы и документы договоров.</value>
   </data>
+  <data name="Study.Due" xml:space="preserve">
+    <value>{0} к оплате</value>
+  </data>
+  <data name="Study.NotMarked" xml:space="preserve">
+    <value>ещё не отмечено</value>
+  </data>
+  <data name="Study.Paid" xml:space="preserve">
+    <value>{0} оплачено</value>
+  </data>
+  <data name="Study.Payment" xml:space="preserve">
+    <value>Оплата</value>
+  </data>
   <data name="Study.QuestionsHint" xml:space="preserve">
     <value>Составляйте и исправляйте вопросы школы для тренировочных тестов.</value>
   </data>
@@ -1440,6 +1452,9 @@
   </data>
   <data name="Study.TestsHint" xml:space="preserve">
     <value>Билеты теоретического экзамена с таймером и разбором ошибок.</value>
+  </data>
+  <data name="Study.TheoryLessons" xml:space="preserve">
+    <value>Занятия по теории</value>
   </data>
   <data name="Study.Title" xml:space="preserve">
     <value>Учёба</value>

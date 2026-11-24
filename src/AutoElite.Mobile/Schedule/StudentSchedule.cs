@@ -1,6 +1,8 @@
+using System.Globalization;
 using AutoElite.Client.Api;
 using AutoElite.Client.Api.Models;
 using AutoElite.Client.Offline;
+using Microsoft.Kiota.Abstractions;
 
 namespace AutoElite.Mobile.Schedule;
 
@@ -17,6 +19,9 @@ public sealed class StudentSchedule(OfflineCache cache, Func<AutoEliteApiClient>
     private static readonly TimeSpan _ahead = TimeSpan.FromDays(61);
     private const string DrivingKey = "me/driving-lessons";
     private const string TheoryKey = "me/theory-lessons";
+
+    // The longest period the API reads at once is 92 days.
+    private static readonly TimeSpan _historyPeriod = TimeSpan.FromDays(90);
 
     /// <summary>Reads the lessons from a day ago to two months ahead, for the home page.</summary>
     /// <param name="cancellationToken">A token that signals cancellation of the operation.</param>
@@ -39,6 +44,49 @@ public sealed class StudentSchedule(OfflineCache cache, Func<AutoEliteApiClient>
             ScheduleWeek.StartOf(firstDay),
             ScheduleWeek.StartOf(firstDay.AddDays(ScheduleWeek.Days)),
             cancellationToken);
+
+    /// <summary>
+    /// Reads the past theory lessons of the student from a day, with their attendance, in periods the API allows, the
+    /// latest first; a period that cannot be read is left out.
+    /// </summary>
+    /// <param name="fromDay">The first day, such as the start of the earliest contract.</param>
+    /// <param name="cancellationToken">A token that signals cancellation of the operation.</param>
+    /// <returns>The lessons.</returns>
+    public async Task<IReadOnlyList<StudentTheoryLessonItem>> ReadTheoryHistoryAsync(
+        DateOnly fromDay, CancellationToken cancellationToken)
+    {
+        var now = timeProvider.GetUtcNow();
+        var from = new DateTimeOffset(fromDay.ToDateTime(TimeOnly.MinValue), TimeSpan.Zero);
+        var lessons = new List<StudentTheoryLessonItem>();
+        for (var end = now; end > from; end -= _historyPeriod)
+        {
+            var start = end - _historyPeriod < from ? from : end - _historyPeriod;
+            try
+            {
+                var period = await cache.GetListAsync(
+                    string.Create(CultureInfo.InvariantCulture, $"{TheoryKey}/history/{start:yyyyMMdd}-{end:yyyyMMdd}"),
+                    token => createApi().Api.V1.Me.TheoryLessons.GetAsync(
+                        request =>
+                        {
+                            request.QueryParameters.FromUtc = start;
+                            request.QueryParameters.ToUtc = end;
+                        },
+                        token),
+                    StudentTheoryLessonItem.CreateFromDiscriminatorValue,
+                    cancellationToken);
+                lessons.AddRange(period.Value);
+            }
+            catch (Exception exception) when (exception is ApiException or HttpRequestException)
+            {
+                // The lessons of this period are left out until they can be read.
+            }
+        }
+
+        return [.. lessons
+            .Where(item => item.Lesson?.EndUtc is { } lessonEnd && lessonEnd <= now)
+            .DistinctBy(item => item.Lesson!.Id)
+            .OrderByDescending(item => item.Lesson!.StartUtc)];
+    }
 
     private async Task<StudentLessons> ReadAsync(
         string drivingKey, string theoryKey, DateTimeOffset fromUtc, DateTimeOffset toUtc, CancellationToken cancellationToken)

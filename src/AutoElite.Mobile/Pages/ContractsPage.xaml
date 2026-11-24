@@ -12,7 +12,7 @@
     <!--
         The contracts of a student, each on a highlighted card: its number and course, then the money, the practice
         hours with a bar and the theory with the quality of the lessons as three tiles, side by side on a wide window,
-        then the payments.
+        then the payments; under the contracts the past theory lessons with whether the student attended them.
     -->
     <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}" RefreshColor="{DynamicResource Accent}">
         <ScrollView>
@@ -85,6 +85,23 @@
                         </DataTemplate>
                     </BindableLayout.ItemTemplate>
                 </controls:AdaptiveGrid>
+
+                <!-- The past theory lessons with whether the student attended them. -->
+                <VerticalStackLayout Spacing="10" IsVisible="{Binding HasTheoryVisits}" Margin="0,8,0,0">
+                    <Label Style="{StaticResource Title}" Text="{l:Text Study.TheoryLessons}" />
+                    <controls:AdaptiveGrid MinItemWidth="340" Spacing="8" BindableLayout.ItemsSource="{Binding TheoryVisits}">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate x:DataType="pages:TheoryVisitEntry">
+                                <controls:ListRow
+                                    Icon="{Binding Icon}"
+                                    Tone="{Binding Tone}"
+                                    Title="{Binding Topic}"
+                                    Subtitle="{Binding Details}"
+                                    TrailingDetail="{Binding State}" />
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </controls:AdaptiveGrid>
+                </VerticalStackLayout>
             </controls:PageColumn>
         </ScrollView>
     </RefreshView>

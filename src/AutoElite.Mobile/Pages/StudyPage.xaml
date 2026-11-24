@@ -12,43 +12,73 @@
     Shell.NavBarIsVisible="False">
 
     <!--
-        The studies as rows: of a student, the practice tests, the contracts with their progress and payments, and the
-        documents; of a theory instructor, the questions of the school for the tests.
+        The studies: of a student, their progress first, the driving hours, the theory lessons attended and the money as
+        tiles that open the contracts, then the practice tests, the contracts and the documents; of a theory instructor,
+        the questions of the school for the tests.
     -->
     <ScrollView>
-        <controls:AdaptiveGrid Padding="20,8,20,32" MinItemWidth="280" MaximumWidthRequest="1200" HorizontalOptions="Start">
-            <controls:ListRow
-                Icon="clipboard-check"
-                Tone="Accent"
-                Title="{l:Text Study.Tests}"
-                Subtitle="{l:Text Study.TestsHint}"
-                ShowsChevron="True"
-                Command="{Binding OpenTestsCommand}"
-                IsVisible="{Binding IsStudent}" />
-            <controls:ListRow
-                Icon="wallet"
-                Tone="Success"
-                Title="{l:Text Contracts.Title}"
-                Subtitle="{l:Text Study.ContractsHint}"
-                ShowsChevron="True"
-                Command="{Binding OpenContractsCommand}"
-                IsVisible="{Binding IsStudent}" />
-            <controls:ListRow
-                Icon="file-text"
-                Title="{l:Text Documents.Title}"
-                Subtitle="{l:Text Study.DocumentsHint}"
-                ShowsChevron="True"
-                Command="{Binding OpenDocumentsCommand}"
-                IsVisible="{Binding IsStudent}" />
-            <controls:ListRow
-                Icon="book-open"
-                Tone="Accent"
-                Title="{l:Text Questions.Title}"
-                Subtitle="{l:Text Study.QuestionsHint}"
-                ShowsChevron="True"
-                Command="{Binding OpenQuestionsCommand}"
-                IsVisible="{Binding IsTheoryInstructor}" />
-        </controls:AdaptiveGrid>
+        <controls:PageColumn Padding="20,8,20,32" Spacing="16" MaximumWidthRequest="1200">
+            <controls:AdaptiveGrid MinItemWidth="220" Spacing="12" IsVisible="{Binding HasFigures}">
+                <controls:StatTile
+                    Title="{l:Text Lesson.Driving}"
+                    Value="{Binding Figures.DrivingHours}"
+                    Unit="{Binding Figures.CourseHours}"
+                    Progress="{Binding Figures.DrivingProgress}">
+                    <controls:StatTile.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding OpenContractsCommand}" />
+                    </controls:StatTile.GestureRecognizers>
+                </controls:StatTile>
+                <controls:StatTile Title="{l:Text Today.Theory}" Value="{Binding Figures.TheoryAttended}" Unit="{l:Text Today.Attended}">
+                    <controls:StatTile.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding OpenContractsCommand}" />
+                    </controls:StatTile.GestureRecognizers>
+                </controls:StatTile>
+                <controls:StatTile
+                    Title="{l:Text Study.Payment}"
+                    Value="{Binding Figures.Money}"
+                    Unit="{Binding Figures.MoneyUnit}"
+                    Progress="{Binding Figures.PaidProgress}"
+                    Tone="{Binding Figures.MoneyTone}">
+                    <controls:StatTile.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding OpenContractsCommand}" />
+                    </controls:StatTile.GestureRecognizers>
+                </controls:StatTile>
+            </controls:AdaptiveGrid>
+
+            <controls:AdaptiveGrid MinItemWidth="280" Spacing="10">
+                <controls:ListRow
+                    Icon="clipboard-check"
+                    Tone="Accent"
+                    Title="{l:Text Study.Tests}"
+                    Subtitle="{l:Text Study.TestsHint}"
+                    ShowsChevron="True"
+                    Command="{Binding OpenTestsCommand}"
+                    IsVisible="{Binding IsStudent}" />
+                <controls:ListRow
+                    Icon="wallet"
+                    Tone="Success"
+                    Title="{l:Text Contracts.Title}"
+                    Subtitle="{l:Text Study.ContractsHint}"
+                    ShowsChevron="True"
+                    Command="{Binding OpenContractsCommand}"
+                    IsVisible="{Binding IsStudent}" />
+                <controls:ListRow
+                    Icon="file-text"
+                    Title="{l:Text Documents.Title}"
+                    Subtitle="{l:Text Study.DocumentsHint}"
+                    ShowsChevron="True"
+                    Command="{Binding OpenDocumentsCommand}"
+                    IsVisible="{Binding IsStudent}" />
+                <controls:ListRow
+                    Icon="book-open"
+                    Tone="Accent"
+                    Title="{l:Text Questions.Title}"
+                    Subtitle="{l:Text Study.QuestionsHint}"
+                    ShowsChevron="True"
+                    Command="{Binding OpenQuestionsCommand}"
+                    IsVisible="{Binding IsTheoryInstructor}" />
+            </controls:AdaptiveGrid>
+        </controls:PageColumn>
     </ScrollView>
 
 </ContentPage>

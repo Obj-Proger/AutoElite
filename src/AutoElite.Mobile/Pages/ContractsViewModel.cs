@@ -1,5 +1,6 @@
 using System.Globalization;
 using AutoElite.Client.Api.Models;
+using AutoElite.Mobile.Controls;
 using AutoElite.Mobile.Localization;
 using AutoElite.Mobile.Schedule;
 using Microsoft.Kiota.Abstractions;
@@ -14,12 +15,15 @@ namespace AutoElite.Mobile.Pages;
 public sealed class ContractsViewModel : ViewModel
 {
     private readonly StudentContracts _contracts;
+    private readonly StudentSchedule _schedule;
 
     /// <summary>Initializes a new instance of the <see cref="ContractsViewModel"/> class.</summary>
     /// <param name="contracts">The contracts of the student.</param>
-    public ContractsViewModel(StudentContracts contracts)
+    /// <param name="schedule">The lessons of the student, for the theory lessons they attended or missed.</param>
+    public ContractsViewModel(StudentContracts contracts, StudentSchedule schedule)
     {
         _contracts = contracts;
+        _schedule = schedule;
         RefreshCommand = new Command(async () => await RefreshAsync());
     }
 
@@ -29,6 +33,20 @@ public sealed class ContractsViewModel : ViewModel
         get;
         private set => SetProperty(ref field, value);
     } = [];
+
+    /// <summary>Gets the past theory lessons of the student with whether they attended, the latest first.</summary>
+    public IReadOnlyList<TheoryVisitEntry> TheoryVisits
+    {
+        get;
+        private set
+        {
+            if (SetProperty(ref field, value))
+                OnPropertyChanged(nameof(HasTheoryVisits));
+        }
+    } = [];
+
+    /// <summary>Gets a value indicating whether there are past theory lessons to show.</summary>
+    public bool HasTheoryVisits => TheoryVisits.Count > 0;
 
     /// <summary>Gets what the page says when it has nothing to show, or <see langword="null"/>.</summary>
     public string? EmptyText
@@ -70,6 +88,7 @@ public sealed class ContractsViewModel : ViewModel
             var contracts = await _contracts.ReadContractsAsync(CancellationToken.None);
             var payments = await _contracts.ReadPaymentsAsync(CancellationToken.None);
             var entries = new List<ContractEntry>();
+            var firstDay = (DateOnly?)null;
             var offlineSince = contracts.IsFromCache ? contracts.SavedAt : (DateTimeOffset?)null;
             foreach (var contract in contracts.Value.OrderBy(contract => contract.Status == ContractStatus.Active ? 0 : 1))
             {
@@ -81,6 +100,12 @@ public sealed class ContractsViewModel : ViewModel
                     offlineSince = details.SavedAt;
 
                 entries.Add(Entry(details.Value, payments.Value.Where(payment => payment.ContractId == contractId)));
+                if (details.Value.StartDate is { } start
+                    && DateOnly.FromDateTime(start.DateTime) is var day
+                    && (firstDay is null || day < firstDay))
+                {
+                    firstDay = day;
+                }
             }
 
             Items = entries;
@@ -88,6 +113,7 @@ public sealed class ContractsViewModel : ViewModel
                 ? AppTexts.Format("Contracts.Offline", savedAt.ToLocalTime().ToString("g", CultureInfo.CurrentCulture))
                 : null;
             EmptyText = entries.Count == 0 ? AppTexts.Get("Contracts.Empty") : null;
+            TheoryVisits = firstDay is { } from ? await ReadVisitsAsync(from) : [];
         }
         catch (Exception exception) when (exception is ApiException or HttpRequestException)
         {
@@ -137,6 +163,36 @@ public sealed class ContractsViewModel : ViewModel
                     MoneyOf(contract.PaidAmount, contract.Currency),
                     MoneyOf(contract.PriceAmount, contract.Currency)),
             Payments = [.. payments.Select(Payment)]
+        };
+    }
+
+    // The past theory lessons of the student, cancelled ones left out.
+    private async Task<IReadOnlyList<TheoryVisitEntry>> ReadVisitsAsync(DateOnly from) =>
+    [
+        .. (await _schedule.ReadTheoryHistoryAsync(from, CancellationToken.None))
+            .Where(item => item.Lesson?.Status != TheoryLessonStatus.Cancelled)
+            .Select(Visit)
+    ];
+
+    // A past theory lesson with whether the student attended, or that it is not marked yet.
+    private static TheoryVisitEntry Visit(StudentTheoryLessonItem item)
+    {
+        var lesson = item.Lesson!;
+        var attended = item.IsPresent == true;
+
+        return new TheoryVisitEntry
+        {
+            Topic = lesson.TopicTitle ?? string.Empty,
+            Details = LessonTexts.DetailsOf(
+                lesson.StartUtc?.ToLocalTime().ToString("d MMMM", CultureInfo.CurrentCulture), lesson.InstructorName),
+            State = item.IsPresent switch
+            {
+                true => AppTexts.Get("Lesson.Attended"),
+                false => AppTexts.Get("Lesson.Absent"),
+                null => AppTexts.Get("Study.NotMarked")
+            },
+            Icon = attended ? "check" : item.IsPresent == false ? "x" : "clock",
+            Tone = attended ? StatusTone.Success : item.IsPresent == false ? StatusTone.Danger : StatusTone.Neutral
         };
     }
 
