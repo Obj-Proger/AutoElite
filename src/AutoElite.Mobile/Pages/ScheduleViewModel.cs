@@ -604,6 +604,7 @@ public sealed class ScheduleViewModel : ViewModel
     private async Task<DateTimeOffset?> ReadStudentWeekAsync(DateOnly week, List<ScheduleEntry> entries, HashSet<Guid> waiting)
     {
         var lessons = await _studentSchedule.ReadWeekAsync(week, CancellationToken.None);
+        await _entries.ReadRulesAsync();
         entries.AddRange(lessons.Driving.Value.Select(lesson => _entries.StudentDriving(lesson, waiting)).OfType<ScheduleEntry>());
         entries.AddRange(lessons.Theory.Value.Select(LessonEntries.StudentTheory).OfType<ScheduleEntry>());
 

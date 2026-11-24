@@ -26,6 +26,7 @@ internal static class PendingActionTexts
         var why = action.RejectedWithStatusCode switch
         {
             404 => AppTexts.Get("Refusal.NotFound"),
+            409 when action.Action is CancelDrivingBooking => AppTexts.Get("Refusal.TooLateToCancel"),
             409 => AppTexts.Get("Refusal.Conflict"),
             403 => AppTexts.Get("Refusal.Forbidden"),
             _ => AppTexts.Get("Refusal.Other")

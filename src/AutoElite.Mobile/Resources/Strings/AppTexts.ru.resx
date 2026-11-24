@@ -658,6 +658,9 @@
   <data name="Lesson.Theory" xml:space="preserve">
     <value>Теория</value>
   </data>
+  <data name="Lesson.TooLateToCancel" xml:space="preserve">
+    <value>Отменить уже нельзя: до начала меньше {0}</value>
+  </data>
   <data name="Lesson.Waiting" xml:space="preserve">
     <value>Изменение ждёт отправки</value>
   </data>
@@ -1119,6 +1122,9 @@
   </data>
   <data name="Refusal.Other" xml:space="preserve">
     <value>отклонено автошколой</value>
+  </data>
+  <data name="Refusal.TooLateToCancel" xml:space="preserve">
+    <value>отменить запись уже нельзя: до занятия осталось слишком мало времени или оно изменилось</value>
   </data>
   <data name="Role.Administrator" xml:space="preserve">
     <value>Администратор</value>
@@ -1614,6 +1620,9 @@
   </data>
   <data name="Today.Free" xml:space="preserve">
     <value>Свободные слоты</value>
+  </data>
+  <data name="Today.Hours" xml:space="preserve">
+    <value>{0} ч</value>
   </data>
   <data name="Today.HoursMinutes" xml:space="preserve">
     <value>{0} ч {1} мин</value>

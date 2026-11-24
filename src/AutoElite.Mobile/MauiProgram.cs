@@ -61,6 +61,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<Chats>();
         builder.Services.AddSingleton<UserAccount>();
         builder.Services.AddSingleton<SlotOffers>();
+        builder.Services.AddSingleton<SchoolRules>();
         builder.Services.AddSingleton<TheoryPlans>();
         builder.Services.AddSingleton<QuestionBank>();
         builder.Services.AddSingleton<StudentProgressBook>();

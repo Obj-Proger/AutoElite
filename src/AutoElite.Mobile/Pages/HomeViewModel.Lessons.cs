@@ -92,6 +92,7 @@ public sealed partial class HomeViewModel
         try
         {
             lessons = await _schedule.ReadAsync(CancellationToken.None);
+            await _entries.ReadRulesAsync();
         }
         catch (Exception exception) when (exception is ApiException or HttpRequestException)
         {

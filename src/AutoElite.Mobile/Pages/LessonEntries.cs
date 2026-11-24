@@ -23,13 +23,22 @@ namespace AutoElite.Mobile.Pages;
 /// <param name="offers">Withdraws the slots of a driving instructor.</param>
 /// <param name="plans">Cancels the theory lessons of a theory instructor.</param>
 /// <param name="timeProvider">The clock.</param>
+/// <param name="rules">The rules of the school, such as how late a student may cancel a booking.</param>
 public sealed class LessonEntries(
-    OfflineSynchronizer synchronizer, SlotOffers offers, TheoryPlans plans, TimeProvider timeProvider)
+    OfflineSynchronizer synchronizer, SlotOffers offers, TheoryPlans plans, TimeProvider timeProvider, SchoolRules rules)
 {
     private const int MaxNoteLength = 2000;
 
+    // How long before a lesson a student may still cancel its booking, once read.
+    private TimeSpan? _cancellationNotice;
+
     /// <summary>Gets or sets what reads the page again after a change.</summary>
     public Func<Task>? Changed { get; set; }
+
+    /// <summary>Reads the rules of the school the cards follow, before the lessons of a student are made.</summary>
+    /// <returns>A task that completes when the rules are read, or are known to be out of reach.</returns>
+    public async Task ReadRulesAsync() =>
+        _cancellationNotice = await rules.ReadStudentCancellationNoticeAsync(CancellationToken.None);
 
     /// <summary>Gives the slot or the theory lesson a waiting action is about, so that its lesson shows the change waiting.</summary>
     /// <param name="action">The action.</param>
@@ -155,7 +164,10 @@ public sealed class LessonEntries(
         var isWaiting = waiting.Contains(slotId);
         var actions = new List<EntryAction>();
         var rating = lesson.Booking?.StudentRating;
-        if (status == DrivingBookingStatus.Active && start > now && !isWaiting)
+
+        // The school refuses a cancellation closer to the lesson than its notice, so it is not offered then.
+        var isTooLate = _cancellationNotice is { } notice && start - now < notice;
+        if (status == DrivingBookingStatus.Active && start > now && !isWaiting && !isTooLate)
             actions.Add(new EntryAction(AppTexts.Get("Lesson.Cancel"), new Command(async () => await CancelBookingAsync(slotId))));
 
         if (status == DrivingBookingStatus.Completed && rating is null && !isWaiting)
@@ -175,6 +187,8 @@ public sealed class LessonEntries(
                 DrivingBookingStatus.Completed when rating is { } given => AppTexts.Format("Lesson.CompletedRated", given),
                 DrivingBookingStatus.Completed => AppTexts.Get("Lesson.Completed"),
                 DrivingBookingStatus.NoShow => AppTexts.Get("Lesson.NoShow"),
+                DrivingBookingStatus.Active when isTooLate && start > now =>
+                    AppTexts.Format("Lesson.TooLateToCancel", TodayCards.DurationOf(_cancellationNotice!.Value)),
                 _ => null
             },
             Actions = actions,

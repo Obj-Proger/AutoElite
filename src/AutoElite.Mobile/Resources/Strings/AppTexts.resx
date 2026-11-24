@@ -658,6 +658,9 @@
   <data name="Lesson.Theory" xml:space="preserve">
     <value>Theory</value>
   </data>
+  <data name="Lesson.TooLateToCancel" xml:space="preserve">
+    <value>Too late to cancel: less than {0} before the start</value>
+  </data>
   <data name="Lesson.Waiting" xml:space="preserve">
     <value>A change waits to be sent</value>
   </data>
@@ -1119,6 +1122,9 @@
   </data>
   <data name="Refusal.Other" xml:space="preserve">
     <value>refused by the school</value>
+  </data>
+  <data name="Refusal.TooLateToCancel" xml:space="preserve">
+    <value>it is too late to cancel the booking: the lesson is too close or has changed</value>
   </data>
   <data name="Role.Administrator" xml:space="preserve">
     <value>Administrator</value>
@@ -1614,6 +1620,9 @@
   </data>
   <data name="Today.Free" xml:space="preserve">
     <value>Free slots</value>
+  </data>
+  <data name="Today.Hours" xml:space="preserve">
+    <value>{0} h</value>
   </data>
   <data name="Today.HoursMinutes" xml:space="preserve">
     <value>{0} h {1} min</value>

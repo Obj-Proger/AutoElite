@@ -183,9 +183,12 @@ internal static class TodayCards
     {
         var minutes = Math.Max(1, (int)Math.Ceiling(duration.TotalMinutes));
 
-        return minutes < 60
-            ? AppTexts.Format("Today.Minutes", minutes)
-            : AppTexts.Format("Today.HoursMinutes", minutes / 60, minutes % 60);
+        return minutes switch
+        {
+            < 60 => AppTexts.Format("Today.Minutes", minutes),
+            _ when minutes % 60 == 0 => AppTexts.Format("Today.Hours", minutes / 60),
+            _ => AppTexts.Format("Today.HoursMinutes", minutes / 60, minutes % 60)
+        };
     }
 
     private static StatusTone ToneOf(ScheduleCategory category) => category switch
