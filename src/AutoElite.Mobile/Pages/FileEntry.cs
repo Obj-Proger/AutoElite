@@ -13,4 +13,10 @@ public sealed class FileEntry
 
     /// <summary>Gets the command that opens the file, or removes it from the next message.</summary>
     public required ICommand Command { get; init; }
+
+    /// <summary>Gets the picture, for a file that is one and was downloaded, shown in the message.</summary>
+    public ImageSource? Image { get; init; }
+
+    /// <summary>Gets a value indicating whether the file is a picture shown in the message.</summary>
+    public bool HasImage => Image is not null;
 }

@@ -31,7 +31,13 @@ public sealed class ChatViewModel : ViewModel, IQueryAttributable
     private readonly OfflineQueue _queue;
     private readonly OfflineSynchronizer _synchronizer;
     private readonly RealtimeConnection _realtime;
+    // The largest picture shown in a message rather than offered as a file only.
+    private const long MaxPictureBytes = 10 * 1024 * 1024;
+
     private readonly Dictionary<Guid, DocumentItem> _files = [];
+
+    // The pictures attached to the messages, downloaded to the cache, by their documents.
+    private readonly Dictionary<Guid, string> _images = [];
     private readonly List<(Guid DocumentId, string Name)> _pending = [];
     private Guid _chatId;
     private bool _isGroup;
@@ -256,6 +262,7 @@ public sealed class ChatViewModel : ViewModel, IQueryAttributable
         {
             var messages = await _chats.ReadMessagesAsync(_chatId, CancellationToken.None);
             await ReadFilesAsync(messages.Value);
+            await ReadImagesAsync(messages.Value);
             Messages = [.. messages.Value.Reverse().Select(message => Entry(message, userId)), .. waiting];
             Notice = messages.IsFromCache
                 ? AppTexts.Format("Chats.Offline", messages.SavedAt.ToLocalTime().ToString("g", CultureInfo.CurrentCulture))
@@ -296,6 +303,41 @@ public sealed class ChatViewModel : ViewModel, IQueryAttributable
         }
     }
 
+    // Downloads the pictures attached to the messages, once, so that the messages show them; a picture that cannot be
+    // downloaded stays a file to open.
+    private async Task ReadImagesAsync(IEnumerable<ChatMessageItem> messages)
+    {
+        var ids = messages
+            .Where(message => message.IsDeleted != true)
+            .SelectMany(message => message.AttachmentIds ?? [])
+            .OfType<Guid>()
+            .Distinct();
+        foreach (var id in ids)
+        {
+            if (_images.ContainsKey(id)
+                || !_files.TryGetValue(id, out var file)
+                || file.FileName is not { } name
+                || !IsPicture(name)
+                || file.SizeBytes > MaxPictureBytes)
+            {
+                continue;
+            }
+
+            try
+            {
+                _images[id] = await _documentFiles.DownloadAsync(id, name, CancellationToken.None);
+            }
+            catch (Exception exception) when (exception is ApiException or HttpRequestException or TaskCanceledException
+                or InvalidOperationException or IOException)
+            {
+                // The picture is offered as a file to open.
+            }
+        }
+    }
+
+    private static bool IsPicture(string fileName) =>
+        Path.GetExtension(fileName).ToUpperInvariant() is ".JPG" or ".JPEG" or ".PNG" or ".WEBP";
+
     private MessageEntry Entry(ChatMessageItem message, Guid? userId)
     {
         var isMine = userId is not null && message.SenderId == userId;
@@ -325,7 +367,8 @@ public sealed class ChatViewModel : ViewModel, IQueryAttributable
         {
             Name = name,
             Details = file?.SizeBytes is { } size ? FileSizes.Of(size) : string.Empty,
-            Command = new Command(async () => await OpenFileAsync(documentId, name))
+            Command = new Command(async () => await OpenFileAsync(documentId, name)),
+            Image = _images.TryGetValue(documentId, out var path) ? ImageSource.FromFile(path) : null
         };
     }
 

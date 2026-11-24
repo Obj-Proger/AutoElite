@@ -178,6 +178,9 @@
   <data name="Chat.Unmuted" xml:space="preserve">
     <value>Уведомления этого чата включены.</value>
   </data>
+  <data name="Chats.Attachment" xml:space="preserve">
+    <value>Вложение</value>
+  </data>
   <data name="Chats.Choose" xml:space="preserve">
     <value>Выберите чат, чтобы открыть переписку.</value>
   </data>

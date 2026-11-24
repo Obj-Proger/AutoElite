@@ -39,7 +39,12 @@ public sealed class DocumentFiles(Func<AutoEliteApiClient> createApi)
         await Launcher.Default.OpenAsync(new OpenFileRequest(fileName, new ReadOnlyFile(path)));
     }
 
-    private async Task<string> DownloadAsync(Guid documentId, string fileName, CancellationToken cancellationToken)
+    /// <summary>Downloads a file, once, and keeps it in the cache of the application, such as a picture to show.</summary>
+    /// <param name="documentId">The document of the file.</param>
+    /// <param name="fileName">The name of the file.</param>
+    /// <param name="cancellationToken">A token that signals cancellation of the operation.</param>
+    /// <returns>The path of the file in the cache.</returns>
+    public async Task<string> DownloadAsync(Guid documentId, string fileName, CancellationToken cancellationToken)
     {
         // The name comes from another user: only its last part, without characters the file system refuses.
         var invalid = Path.GetInvalidFileNameChars();

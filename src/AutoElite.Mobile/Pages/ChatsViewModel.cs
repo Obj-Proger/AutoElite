@@ -204,7 +204,9 @@ public sealed class ChatsViewModel : ViewModel
         {
             Title = title,
             IsGroup = chat.Kind == ChatKind.Group,
-            LastMessage = chat.LastMessageText,
+            LastMessage = string.IsNullOrEmpty(chat.LastMessageText) && chat.LastMessageAtUtc is not null
+                ? AppTexts.Get("Chats.Attachment")
+                : chat.LastMessageText,
             Time = string.Join(
                 " · ",
                 new[] { TimeOf(chat.LastMessageAtUtc), chat.IsMuted == true ? AppTexts.Get("Chats.Muted") : null }.OfType<string>()),

@@ -80,29 +80,40 @@
                                         BindableLayout.ItemsSource="{Binding Files}">
                                         <BindableLayout.ItemTemplate>
                                             <DataTemplate x:DataType="pages:FileEntry">
-                                                <Border
-                                                    BackgroundColor="{DynamicResource SurfaceRaised}"
-                                                    StrokeThickness="0"
-                                                    StrokeShape="RoundRectangle 10"
-                                                    Padding="10,6"
-                                                    SemanticProperties.Description="{Binding Name}">
-                                                    <Border.GestureRecognizers>
+                                                <VerticalStackLayout Spacing="6" SemanticProperties.Description="{Binding Name}">
+                                                    <VerticalStackLayout.GestureRecognizers>
                                                         <TapGestureRecognizer Command="{Binding Command}" />
-                                                    </Border.GestureRecognizers>
-                                                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
-                                                        <controls:AppIcon
-                                                            Name="paperclip"
-                                                            Size="16"
-                                                            Color="{DynamicResource AccentText}" />
-                                                        <VerticalStackLayout Grid.Column="1">
-                                                            <Label
-                                                                Text="{Binding Name}"
-                                                                TextColor="{DynamicResource AccentText}"
-                                                                LineBreakMode="MiddleTruncation" />
-                                                            <Label Style="{StaticResource Caption}" Text="{Binding Details}" />
-                                                        </VerticalStackLayout>
-                                                    </Grid>
-                                                </Border>
+                                                    </VerticalStackLayout.GestureRecognizers>
+                                                    <Border
+                                                        StrokeThickness="0"
+                                                        StrokeShape="RoundRectangle 12"
+                                                        IsVisible="{Binding HasImage}">
+                                                        <Image
+                                                            Source="{Binding Image}"
+                                                            Aspect="AspectFit"
+                                                            MaximumHeightRequest="280"
+                                                            MaximumWidthRequest="360" />
+                                                    </Border>
+                                                    <Border
+                                                        BackgroundColor="{DynamicResource SurfaceRaised}"
+                                                        StrokeThickness="0"
+                                                        StrokeShape="RoundRectangle 10"
+                                                        Padding="10,6">
+                                                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
+                                                            <controls:AppIcon
+                                                                Name="paperclip"
+                                                                Size="16"
+                                                                Color="{DynamicResource AccentText}" />
+                                                            <VerticalStackLayout Grid.Column="1">
+                                                                <Label
+                                                                    Text="{Binding Name}"
+                                                                    TextColor="{DynamicResource AccentText}"
+                                                                    LineBreakMode="MiddleTruncation" />
+                                                                <Label Style="{StaticResource Caption}" Text="{Binding Details}" />
+                                                            </VerticalStackLayout>
+                                                        </Grid>
+                                                    </Border>
+                                                </VerticalStackLayout>
                                             </DataTemplate>
                                         </BindableLayout.ItemTemplate>
                                     </VerticalStackLayout>

@@ -178,6 +178,9 @@
   <data name="Chat.Unmuted" xml:space="preserve">
     <value>The notifications of this chat are on.</value>
   </data>
+  <data name="Chats.Attachment" xml:space="preserve">
+    <value>Attachment</value>
+  </data>
   <data name="Chats.Choose" xml:space="preserve">
     <value>Choose a chat to read it here.</value>
   </data>
