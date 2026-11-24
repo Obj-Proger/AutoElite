@@ -38,7 +38,12 @@ public sealed class AppIcon : ContentView
         HorizontalOptions = LayoutOptions.Center;
         VerticalOptions = LayoutOptions.Center;
         InputTransparent = true;
-        Content = _outline;
+        // The outline keeps the whole grid, placed exactly, and is scaled to the size from its corner, so that no part of
+        // it is cut off however small or large the icon.
+        var canvas = new AbsoluteLayout();
+        AbsoluteLayout.SetLayoutBounds(_outline, new Rect(0, 0, GridSize, GridSize));
+        canvas.Add(_outline);
+        Content = canvas;
         SetDynamicResource(ColorProperty, "Text");
         Resize();
     }
@@ -78,8 +83,8 @@ public sealed class AppIcon : ContentView
     {
         WidthRequest = Size;
         HeightRequest = Size;
-        _outline.WidthRequest = Size;
-        _outline.HeightRequest = Size;
-        _outline.RenderTransform = new ScaleTransform(Size / GridSize, Size / GridSize);
+        _outline.AnchorX = 0;
+        _outline.AnchorY = 0;
+        _outline.Scale = Size / GridSize;
     }
 }
