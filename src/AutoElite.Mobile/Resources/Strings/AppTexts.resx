@@ -469,6 +469,9 @@
   <data name="Lead.Converted" xml:space="preserve">
     <value>contract signed</value>
   </data>
+  <data name="Lead.DrawUpContract" xml:space="preserve">
+    <value>Draw up the contract on the website</value>
+  </data>
   <data name="Lead.Email" xml:space="preserve">
     <value>Email</value>
   </data>
@@ -1815,5 +1818,11 @@
   </data>
   <data name="Today.Tomorrow" xml:space="preserve">
     <value>tomorrow</value>
+  </data>
+  <data name="Website.Title" xml:space="preserve">
+    <value>Website of the school</value>
+  </data>
+  <data name="Website.Unavailable" xml:space="preserve">
+    <value>The website could not be opened. Check the connection and try again.</value>
   </data>
 </root>

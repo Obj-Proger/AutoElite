@@ -12,7 +12,7 @@ namespace AutoElite.Mobile.Pages;
 /// notes, read from the API or, without a network, from the device. The manager calls or writes to the person, takes a
 /// new lead on, which makes them its manager when it has none and which their limit of leads in progress may not allow,
 /// writes a note, marks an open lead lost with the reason and opens a lost one again; these need the network. The
-/// contract of a lead is drawn up on the website.
+/// contract of a lead is drawn up on the website, which the page opens on the lead.
 /// </summary>
 public sealed class LeadViewModel : ViewModel, IQueryAttributable
 {
@@ -20,15 +20,19 @@ public sealed class LeadViewModel : ViewModel, IQueryAttributable
     public const string LeadParameter = "lead";
 
     private readonly LeadBook _leads;
+    private readonly Website _website;
     private Guid _leadId;
     private string? _phone;
     private string? _email;
 
     /// <summary>Initializes a new instance of the <see cref="LeadViewModel"/> class.</summary>
     /// <param name="leads">The leads of the school.</param>
-    public LeadViewModel(LeadBook leads)
+    /// <param name="website">The website of the school, where the contract is drawn up.</param>
+    public LeadViewModel(LeadBook leads, Website website)
     {
         _leads = leads;
+        _website = website;
+        ContractCommand = new Command(async () => await OpenContractAsync());
         CallCommand = new Command(async () => await CallAsync(), () => HasPhone);
         EmailCommand = new Command(async () => await EmailAsync(), () => HasEmail);
         TakeCommand = new Command(async () => await RunAsync(TakeAsync), () => !IsBusy);
@@ -217,6 +221,9 @@ public sealed class LeadViewModel : ViewModel, IQueryAttributable
     /// <summary>Gets the command that marks an open lead lost, asking for the reason.</summary>
     public Command LoseCommand { get; }
 
+    /// <summary>Gets the command that opens the lead on the website, to draw up its contract.</summary>
+    public Command ContractCommand { get; }
+
     /// <summary>Gets the command that opens a lost lead again.</summary>
     public Command ReopenCommand { get; }
 
@@ -301,6 +308,12 @@ public sealed class LeadViewModel : ViewModel, IQueryAttributable
     }
 
     // Sends an action, then reads the lead again; a failure is shown on the page.
+    private async Task OpenContractAsync()
+    {
+        if (!await _website.OpenAsync(string.Create(CultureInfo.InvariantCulture, $"leads/{_leadId}")))
+            Notice = AppTexts.Get("Website.Unavailable");
+    }
+
     private async Task RunAsync(Func<Task<bool>> action)
     {
         if (IsBusy)

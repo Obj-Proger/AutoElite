@@ -123,8 +123,9 @@
                     </Border>
 
                     <VerticalStackLayout Spacing="6" IsVisible="{Binding IsOpen}">
-                        <Button Style="{StaticResource SecondaryButton}" Text="{l:Text Lead.MarkLost}" Command="{Binding LoseCommand}" />
+                        <Button Text="{l:Text Lead.DrawUpContract}" Command="{Binding ContractCommand}" />
                         <Label Style="{StaticResource Caption}" Text="{l:Text Lead.ContractHint}" HorizontalOptions="Center" />
+                        <Button Style="{StaticResource SecondaryButton}" Text="{l:Text Lead.MarkLost}" Command="{Binding LoseCommand}" />
                     </VerticalStackLayout>
                 </VerticalStackLayout>
 

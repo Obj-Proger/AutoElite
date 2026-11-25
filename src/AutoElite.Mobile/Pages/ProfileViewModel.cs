@@ -1,6 +1,7 @@
 using System.Globalization;
 using AutoElite.Client.Api.Models;
 using AutoElite.Mobile.Localization;
+using AutoElite.Mobile.Schedule;
 using AutoElite.Mobile.Session;
 using AutoElite.Mobile.Theming;
 using Microsoft.Kiota.Abstractions;
@@ -11,7 +12,7 @@ namespace AutoElite.Mobile.Pages;
 /// The profile of the user as a menu: who they are, read from the API or the device, with their photo, which they change
 /// or remove from the avatar; the ways to their personal details, to a new password or email address and, for a
 /// student, to their contracts and documents; the language and the theme of the application; the school they are
-/// signed in to, which they can change; what the application is; and signing out. Changing the school or signing out
+/// signed in to, which they can change, and its website; what the application is; and signing out. Changing the school or signing out
 /// asks first when actions would be lost.
 /// </summary>
 public sealed class ProfileViewModel : ViewModel
@@ -20,6 +21,7 @@ public sealed class ProfileViewModel : ViewModel
 
     private readonly UserSession _session;
     private readonly UserAccount _account;
+    private readonly Website _website;
     private Guid? _userId;
     private Guid? _photoId;
 
@@ -29,10 +31,13 @@ public sealed class ProfileViewModel : ViewModel
     /// <summary>Initializes a new instance of the <see cref="ProfileViewModel"/> class.</summary>
     /// <param name="session">The user of the application.</param>
     /// <param name="account">The account of the user, which they change.</param>
-    public ProfileViewModel(UserSession session, UserAccount account)
+    /// <param name="website">The website of the school.</param>
+    public ProfileViewModel(UserSession session, UserAccount account, Website website)
     {
         _session = session;
         _account = account;
+        _website = website;
+        WebsiteCommand = new Command(async () => await OpenWebsiteAsync());
         PhotoCommand = new Command(async () => await OfferPhotoAsync(), () => !IsBusy);
         PersonalCommand = new Command(async () => await Routes.OpenAsync(Routes.Personal));
         SecurityCommand = new Command(async () => await Routes.OpenAsync(Routes.Security));
@@ -120,6 +125,9 @@ public sealed class ProfileViewModel : ViewModel
 
     /// <summary>Gets the command that tells what the application is.</summary>
     public Command AboutCommand { get; }
+
+    /// <summary>Gets the command that opens the website of the school.</summary>
+    public Command WebsiteCommand { get; }
 
     /// <summary>Gets the school, by the host of its API.</summary>
     public string School { get; } = ApiAddress.Current.Host;
@@ -308,6 +316,16 @@ public sealed class ProfileViewModel : ViewModel
     }
 
     // What the application is, in the text of a dialog, which has room for it, with the way to its source code.
+    // The website does what the application leaves to it; when it cannot be opened, the user is told so.
+    private async Task OpenWebsiteAsync()
+    {
+        if (!await _website.OpenAsync(string.Empty))
+        {
+            await Shell.Current.DisplayAlertAsync(
+                AppTexts.Get("Website.Title"), AppTexts.Get("Website.Unavailable"), AppTexts.Get("Common.Ok"));
+        }
+    }
+
     private async Task ShowAboutAsync()
     {
         var openSource = await Shell.Current.DisplayAlertAsync(
