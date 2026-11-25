@@ -1615,6 +1615,9 @@
   <data name="Summary.Converted" xml:space="preserve">
     <value>Became contracts: {0}</value>
   </data>
+  <data name="Summary.Excel" xml:space="preserve">
+    <value>Excel workbook</value>
+  </data>
   <data name="Summary.Hint" xml:space="preserve">
     <value>Money, leads, contracts and the work of the staff</value>
   </data>
@@ -1654,11 +1657,20 @@
   <data name="Summary.Overdue" xml:space="preserve">
     <value>overdue</value>
   </data>
+  <data name="Summary.Pdf" xml:space="preserve">
+    <value>PDF document</value>
+  </data>
   <data name="Summary.Quarter" xml:space="preserve">
     <value>3 months</value>
   </data>
   <data name="Summary.Rating" xml:space="preserve">
     <value>rating</value>
+  </data>
+  <data name="Summary.Report" xml:space="preserve">
+    <value>Download a report</value>
+  </data>
+  <data name="Summary.ReportFailed" xml:space="preserve">
+    <value>The report could not be saved on the device.</value>
   </data>
   <data name="Summary.Revenue" xml:space="preserve">
     <value>Revenue</value>

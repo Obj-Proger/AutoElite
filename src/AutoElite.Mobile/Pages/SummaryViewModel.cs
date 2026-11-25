@@ -11,7 +11,8 @@ namespace AutoElite.Mobile.Pages;
 /// The summary of the school for an administrator or a manager, for this month, the last one or the last three: the
 /// key figures first, the money, the leads with their conversion, the contracts drawn up and the driving lessons, then
 /// the leads by source, the work of the instructors and the overdue tasks of the staff. The figures are read from the
-/// API or, without a network, from the device; the reports and the figures of a branch are on the website.
+/// API or, without a network, from the device; each of them is downloaded for the period as a PDF document or an Excel
+/// workbook, which needs the network. The figures of a branch or a course are on the website.
 /// </summary>
 public sealed class SummaryViewModel : ViewModel
 {
@@ -27,6 +28,7 @@ public sealed class SummaryViewModel : ViewModel
         _timeProvider = timeProvider;
         ShowPeriodCommand = new Command<string>(async period => await ShowAsync(Enum.Parse<SummaryPeriod>(period)));
         RefreshCommand = new Command(async () => await RefreshAsync());
+        ReportCommand = new Command(async () => await ChooseReportAsync(), () => !IsDownloading);
     }
 
     /// <summary>Gets the period shown.</summary>
@@ -188,6 +190,20 @@ public sealed class SummaryViewModel : ViewModel
 
     /// <summary>Gets the command that shows a period, given by the name of a <see cref="SummaryPeriod"/>.</summary>
     public Command<string> ShowPeriodCommand { get; }
+
+    /// <summary>Gets the command that downloads a report of the period.</summary>
+    public Command ReportCommand { get; }
+
+    /// <summary>Gets a value indicating whether a report is being downloaded.</summary>
+    public bool IsDownloading
+    {
+        get;
+        private set
+        {
+            if (SetProperty(ref field, value))
+                ReportCommand.ChangeCanExecute();
+        }
+    }
 
     /// <summary>Gets the command that reads the figures again.</summary>
     public Command RefreshCommand { get; }
@@ -353,6 +369,50 @@ public sealed class SummaryViewModel : ViewModel
                 .OrderByDescending(instructor => (double)(instructor.DrivingHours ?? 0) + (double)(instructor.TheoryHours ?? 0))
                 .Select(InstructorRow)
         ];
+    }
+
+    // The figures of the report, then its format; the report covers the period shown, for the whole school.
+    private async Task ChooseReportAsync()
+    {
+        (string Kind, string Name)[] kinds =
+        [
+            ("Revenue", AppTexts.Get("Summary.Revenue")),
+            ("LeadStatistics", AppTexts.Get("Summary.Leads")),
+            ("ContractSummary", AppTexts.Get("Summary.Contracts")),
+            ("InstructorWorkload", AppTexts.Get("Summary.Instructors")),
+            ("StaffActivity", AppTexts.Get("Summary.Staff"))
+        ];
+        var kindName = await Shell.Current.DisplayActionSheetAsync(
+            AppTexts.Get("Summary.Report"), AppTexts.Get("Common.Cancel"), null, [.. kinds.Select(kind => kind.Name)]);
+        var chosen = kinds.FirstOrDefault(kind => kind.Name == kindName);
+        if (chosen.Name is null)
+            return;
+
+        var pdf = AppTexts.Get("Summary.Pdf");
+        var excel = AppTexts.Get("Summary.Excel");
+        var formatName = await Shell.Current.DisplayActionSheetAsync(chosen.Name, AppTexts.Get("Common.Cancel"), null, pdf, excel);
+        if (formatName != pdf && formatName != excel)
+            return;
+
+        var (from, to) = DaysOf(Period);
+        IsDownloading = true;
+        try
+        {
+            await _summary.OpenReportAsync(
+                chosen.Kind, formatName == excel ? ReportFormat.Excel : ReportFormat.Pdf, from, to, CancellationToken.None);
+        }
+        catch (Exception exception) when (exception is ApiException or HttpRequestException or TaskCanceledException)
+        {
+            Notice = ProblemTexts.Of(exception);
+        }
+        catch (IOException)
+        {
+            Notice = AppTexts.Get("Summary.ReportFailed");
+        }
+        finally
+        {
+            IsDownloading = false;
+        }
     }
 
     private async Task RefreshAsync()

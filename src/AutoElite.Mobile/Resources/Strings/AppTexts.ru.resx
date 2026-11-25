@@ -1615,6 +1615,9 @@
   <data name="Summary.Converted" xml:space="preserve">
     <value>В договор: {0}</value>
   </data>
+  <data name="Summary.Excel" xml:space="preserve">
+    <value>Таблица Excel</value>
+  </data>
   <data name="Summary.Hint" xml:space="preserve">
     <value>Деньги, заявки, договоры и работа сотрудников</value>
   </data>
@@ -1654,11 +1657,20 @@
   <data name="Summary.Overdue" xml:space="preserve">
     <value>просрочено</value>
   </data>
+  <data name="Summary.Pdf" xml:space="preserve">
+    <value>Документ PDF</value>
+  </data>
   <data name="Summary.Quarter" xml:space="preserve">
     <value>3 месяца</value>
   </data>
   <data name="Summary.Rating" xml:space="preserve">
     <value>оценка</value>
+  </data>
+  <data name="Summary.Report" xml:space="preserve">
+    <value>Скачать отчёт</value>
+  </data>
+  <data name="Summary.ReportFailed" xml:space="preserve">
+    <value>Не удалось сохранить отчёт на устройстве.</value>
   </data>
   <data name="Summary.Revenue" xml:space="preserve">
     <value>Выручка</value>

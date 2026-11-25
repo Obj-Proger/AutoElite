@@ -10,8 +10,8 @@
     Title="{l:Text Summary.Title}">
 
     <!--
-        The summary of the school: the period, the four key figures as tiles, then the leads by source, the instructors
-        and the tasks of the staff as rows, side by side on a wide window.
+        The summary of the school: the period with the download of a report of it, the four key figures as tiles, then the
+        leads by source, the instructors and the tasks of the staff as rows, side by side on a wide window.
     -->
     <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}" RefreshColor="{DynamicResource Accent}">
         <ScrollView>
@@ -61,6 +61,12 @@
                     </Border>
                     <Label Style="{StaticResource Caption}" Text="{Binding Days}" Margin="4,0" />
                 </VerticalStackLayout>
+
+                <Button
+                    Style="{StaticResource SecondaryButton}"
+                    Text="{l:Text Summary.Report}"
+                    Command="{Binding ReportCommand}"
+                    HorizontalOptions="Start" />
 
                 <controls:NoticeBanner Text="{Binding Notice}" Tone="Warning" />
 
