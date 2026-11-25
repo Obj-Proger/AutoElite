@@ -85,7 +85,7 @@ public partial class AppShell : Shell
             var roles = (await _session.GetProfileAsync(CancellationToken.None)).Value.Roles ?? [];
             StudyTab.IsVisible = roles.Contains(UserRole.Student) || roles.Contains(UserRole.TheoryInstructor);
             var isOffice = roles.Contains(UserRole.Manager) || roles.Contains(UserRole.Administrator);
-            StudentsTab.IsVisible = isOffice || roles.Contains(UserRole.PracticeInstructor);
+            StudentsTab.IsVisible = isOffice || roles.Contains(UserRole.DrivingInstructor);
             LeadsTab.IsVisible = isOffice;
         }
         catch (Exception exception) when (exception is ApiException or HttpRequestException)

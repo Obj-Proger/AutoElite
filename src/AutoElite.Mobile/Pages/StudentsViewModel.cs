@@ -108,7 +108,7 @@ public sealed class StudentsViewModel : ViewModel
         {
             var profile = (await _session.GetProfileAsync(CancellationToken.None)).Value;
             var roles = profile.Roles ?? [];
-            IsDriver = roles.Contains(UserRole.PracticeInstructor);
+            IsDriver = roles.Contains(UserRole.DrivingInstructor);
             IsOffice = roles.Contains(UserRole.Manager) || roles.Contains(UserRole.Administrator);
             OnPropertyChanged(nameof(HasBoth));
             if (IsDriver && profile.Id is { } instructorId)
