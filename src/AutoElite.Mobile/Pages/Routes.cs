@@ -121,6 +121,12 @@ internal static class Routes
     /// <summary>The summary of the school for the office.</summary>
     public const string Summary = "summary";
 
+    /// <summary>The hub of the practice of the questions, for a student.</summary>
+    public const string Practice = "practice";
+
+    /// <summary>A practice of the questions, opened from its hub with a <see cref="PracticeRequest"/>.</summary>
+    public const string PracticeSession = "practice-session";
+
     // How often and how long a navigation waits for one that the shell is still finishing.
     private const int NavigationAttempts = 20;
     private static readonly TimeSpan _navigationRetryDelay = TimeSpan.FromMilliseconds(50);

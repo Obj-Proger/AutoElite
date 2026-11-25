@@ -1,8 +1,12 @@
+using System.Windows.Input;
 using AutoElite.Mobile.Controls;
 
 namespace AutoElite.Mobile.Pages;
 
-/// <summary>A line of the summary of the school: a source of leads, an instructor or a staff member with their figures.</summary>
+/// <summary>
+/// A line of figures: in the summary of the school a source of leads, an instructor or a staff member; in the practice
+/// of a student a topic, which opens its practice.
+/// </summary>
 public sealed class SummaryRow
 {
     /// <summary>Gets the icon of the row.</summary>
@@ -22,4 +26,7 @@ public sealed class SummaryRow
 
     /// <summary>Gets what the main figure is.</summary>
     public string? Detail { get; init; }
+
+    /// <summary>Gets what tapping the row does, if anything.</summary>
+    public ICommand? Command { get; init; }
 }

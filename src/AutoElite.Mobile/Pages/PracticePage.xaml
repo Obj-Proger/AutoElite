@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="AutoElite.Mobile.Pages.PracticePage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:AutoElite.Mobile.Controls"
+    xmlns:l="clr-namespace:AutoElite.Mobile.Localization"
+    xmlns:pages="clr-namespace:AutoElite.Mobile.Pages"
+    x:DataType="pages:PracticeViewModel"
+    Title="{l:Text Practice.Title}">
+
+    <!--
+        The hub of the practice: how many questions are answered of all of them, the marathon, the mistakes and the exam
+        tickets, then each topic with its answers and mistakes; every row opens its practice.
+    -->
+    <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}" RefreshColor="{DynamicResource Accent}">
+        <ScrollView>
+            <controls:PageColumn Padding="20,8,20,32" Spacing="16" MaximumWidthRequest="1200">
+                <controls:NoticeBanner Text="{Binding Notice}" Tone="Warning" />
+                <controls:EmptyState Icon="book-open" Text="{Binding EmptyText}" HidesWithoutText="True" />
+
+                <VerticalStackLayout Spacing="16" IsVisible="{Binding HasQuestions}">
+                    <controls:StatTile
+                        Title="{l:Text Practice.Progress}"
+                        Value="{Binding Answered}"
+                        Progress="{Binding AnsweredProgress}"
+                        MaximumWidthRequest="560"
+                        HorizontalOptions="Start" />
+
+                    <controls:AdaptiveGrid MinItemWidth="280" Spacing="10">
+                        <controls:ListRow
+                            Icon="navigation"
+                            Tone="Accent"
+                            Title="{l:Text Practice.Marathon}"
+                            Subtitle="{Binding MarathonDetails}"
+                            ShowsChevron="True"
+                            Command="{Binding MarathonCommand}" />
+                        <controls:ListRow
+                            Icon="circle-x"
+                            Tone="{Binding MistakeTone}"
+                            Title="{l:Text Practice.Mistakes}"
+                            Subtitle="{Binding MistakeDetails}"
+                            Trailing="{Binding MistakeCount}"
+                            ShowsChevron="True"
+                            Command="{Binding MistakesCommand}" />
+                        <controls:ListRow
+                            Icon="clipboard-check"
+                            Tone="Warning"
+                            Title="{l:Text Practice.Tickets}"
+                            Subtitle="{l:Text Practice.TicketsDetails}"
+                            ShowsChevron="True"
+                            Command="{Binding TicketsCommand}" />
+                    </controls:AdaptiveGrid>
+
+                    <Label Style="{StaticResource Title}" Text="{l:Text Practice.Topics}" />
+                    <controls:AdaptiveGrid MinItemWidth="340" Spacing="10" BindableLayout.ItemsSource="{Binding Topics}">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate x:DataType="pages:SummaryRow">
+                                <controls:ListRow
+                                    Icon="{Binding Icon}"
+                                    Tone="{Binding Tone}"
+                                    Title="{Binding Title}"
+                                    Subtitle="{Binding Subtitle}"
+                                    Trailing="{Binding Trailing}"
+                                    ShowsChevron="True"
+                                    Command="{Binding Command}" />
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </controls:AdaptiveGrid>
+                </VerticalStackLayout>
+            </controls:PageColumn>
+        </ScrollView>
+    </RefreshView>
+
+</ContentPage>

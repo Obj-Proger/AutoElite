@@ -65,6 +65,9 @@ public partial class StudyPage : ContentPage
     /// <summary>Gets the command that opens the practice tests.</summary>
     public Command OpenTestsCommand { get; } = new(async () => await Routes.OpenAsync(Routes.Tests));
 
+    /// <summary>Gets the command that opens the practice of the questions.</summary>
+    public Command OpenPracticeCommand { get; } = new(async () => await Routes.OpenAsync(Routes.Practice));
+
     /// <summary>Gets the command that opens the contracts.</summary>
     public Command OpenContractsCommand { get; } = new(async () => await Routes.OpenAsync(Routes.Contracts));
 

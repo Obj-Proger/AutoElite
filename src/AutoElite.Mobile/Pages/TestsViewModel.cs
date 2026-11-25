@@ -92,6 +92,9 @@ public sealed class TestsViewModel : ViewModel
         set => SetProperty(ref field, value);
     }
 
+    /// <summary>Gets the command that opens the practice of the questions: by topic, a marathon and the mistakes.</summary>
+    public Command OpenPracticeCommand { get; } = new(async () => await Routes.OpenAsync(Routes.Practice));
+
     /// <summary>Gets the command that reads the templates and the attempts again.</summary>
     public Command RefreshCommand { get; }
 

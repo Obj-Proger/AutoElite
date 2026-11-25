@@ -47,6 +47,14 @@
 
             <controls:AdaptiveGrid MinItemWidth="280" Spacing="10">
                 <controls:ListRow
+                    Icon="book-open"
+                    Tone="Accent"
+                    Title="{l:Text Practice.Title}"
+                    Subtitle="{l:Text Study.PracticeHint}"
+                    ShowsChevron="True"
+                    Command="{Binding OpenPracticeCommand}"
+                    IsVisible="{Binding IsStudent}" />
+                <controls:ListRow
                     Icon="clipboard-check"
                     Tone="Accent"
                     Title="{l:Text Study.Tests}"

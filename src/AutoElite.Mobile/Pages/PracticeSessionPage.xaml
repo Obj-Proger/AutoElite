@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="AutoElite.Mobile.Pages.PracticeSessionPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:AutoElite.Mobile.Controls"
+    xmlns:l="clr-namespace:AutoElite.Mobile.Localization"
+    xmlns:pages="clr-namespace:AutoElite.Mobile.Pages"
+    x:DataType="pages:PracticeSessionViewModel"
+    Title="{Binding Title}">
+
+    <!--
+        A practice: the number of the question with a bar and the right and wrong answers, the question on a card with
+        its illustration and the options as cards to tap. Once answered, the correct option turns green and a wrong
+        choice red, the verdict and the explanation follow, then the button to the next question. At the end the right
+        answers of all of them, with going through again and practising the mistakes.
+    -->
+    <ScrollView>
+        <controls:PageColumn Padding="20,8,20,32" Spacing="14" MaximumWidthRequest="760">
+            <controls:NoticeBanner Text="{Binding Error}" Tone="Danger" />
+            <controls:EmptyState Icon="check" Text="{Binding EmptyText}" HidesWithoutText="True" />
+
+            <!-- The question in progress. -->
+            <VerticalStackLayout Spacing="14" IsVisible="{Binding IsInProgress}">
+                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                    <Label Style="{StaticResource Overline}" Text="{Binding Progress}" VerticalOptions="Center" />
+                    <Label Grid.Column="1" Style="{StaticResource Caption}" Text="{Binding Score}" VerticalOptions="Center" />
+                </Grid>
+                <ProgressBar Progress="{Binding QuestionProgress}" />
+                <Border Style="{StaticResource Card}">
+                    <VerticalStackLayout Spacing="14">
+                        <Border
+                            StrokeThickness="0"
+                            StrokeShape="RoundRectangle 12"
+                            BackgroundColor="{DynamicResource SurfaceRaised}"
+                            IsVisible="{Binding HasImage}">
+                            <Image Source="{Binding Image}" Aspect="AspectFit" MaximumHeightRequest="280" />
+                        </Border>
+                        <Label FontFamily="TextSemiBold" FontSize="18" Text="{Binding Question}" />
+                    </VerticalStackLayout>
+                </Border>
+                <VerticalStackLayout Spacing="10" BindableLayout.ItemsSource="{Binding Options}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="pages:PracticeOptionEntry">
+                            <Border
+                                Padding="16,14"
+                                StrokeThickness="1"
+                                Stroke="{DynamicResource Border}"
+                                StrokeShape="RoundRectangle 16"
+                                BackgroundColor="{DynamicResource Surface}"
+                                SemanticProperties.Description="{Binding Text}">
+                                <Border.Triggers>
+                                    <DataTrigger TargetType="Border" Binding="{Binding IsRight}" Value="True">
+                                        <Setter Property="Stroke" Value="{DynamicResource Success}" />
+                                        <Setter Property="StrokeThickness" Value="2" />
+                                    </DataTrigger>
+                                    <DataTrigger TargetType="Border" Binding="{Binding IsWrong}" Value="True">
+                                        <Setter Property="Stroke" Value="{DynamicResource Danger}" />
+                                        <Setter Property="StrokeThickness" Value="2" />
+                                    </DataTrigger>
+                                </Border.Triggers>
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Command}" />
+                                </Border.GestureRecognizers>
+                                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="14">
+                                    <Grid WidthRequest="20" HeightRequest="20" VerticalOptions="Center">
+                                        <Ellipse Stroke="{DynamicResource TextMuted}" StrokeThickness="2" />
+                                        <controls:AppIcon
+                                            Name="check"
+                                            Size="20"
+                                            Color="{DynamicResource Success}"
+                                            IsVisible="{Binding IsRight}" />
+                                        <controls:AppIcon
+                                            Name="x"
+                                            Size="20"
+                                            Color="{DynamicResource Danger}"
+                                            IsVisible="{Binding IsWrong}" />
+                                    </Grid>
+                                    <Label Grid.Column="1" FontSize="16" Text="{Binding Text}" VerticalOptions="Center" />
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </VerticalStackLayout>
+
+                <!-- The verdict and the explanation of an answered question. -->
+                <Border Style="{StaticResource Card}" IsVisible="{Binding IsAnswered}">
+                    <VerticalStackLayout Spacing="8">
+                        <Label FontFamily="TextSemiBold" FontSize="16" Text="{Binding Verdict}" TextColor="{DynamicResource Danger}">
+                            <Label.Triggers>
+                                <DataTrigger TargetType="Label" Binding="{Binding IsRight}" Value="True">
+                                    <Setter Property="TextColor" Value="{DynamicResource Success}" />
+                                </DataTrigger>
+                            </Label.Triggers>
+                        </Label>
+                        <Label Style="{StaticResource Secondary}" Text="{Binding Explanation}" IsVisible="{Binding HasExplanation}" />
+                    </VerticalStackLayout>
+                </Border>
+                <Button Text="{l:Text Practice.Next}" Command="{Binding NextCommand}" IsVisible="{Binding IsAnswered}" />
+                <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
+            </VerticalStackLayout>
+
+            <!-- The end of the practice. -->
+            <VerticalStackLayout Spacing="14" IsVisible="{Binding IsFinished}">
+                <Border Style="{StaticResource HighlightCard}">
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="14">
+                        <controls:IconTile Icon="check" Tone="Success" />
+                        <VerticalStackLayout Grid.Column="1" Spacing="4" VerticalOptions="Center">
+                            <Label Style="{StaticResource Headline}" Text="{l:Text Practice.Done}" />
+                            <Label Style="{StaticResource BodyLarge}" Text="{Binding Outcome}" />
+                        </VerticalStackLayout>
+                    </Grid>
+                </Border>
+                <Button Text="{l:Text Practice.PractiseMistakes}" Command="{Binding MistakesCommand}" IsVisible="{Binding HasMistakes}" />
+                <Button Style="{StaticResource SecondaryButton}" Text="{l:Text Practice.Again}" Command="{Binding AgainCommand}" />
+            </VerticalStackLayout>
+        </controls:PageColumn>
+    </ScrollView>
+
+</ContentPage>
