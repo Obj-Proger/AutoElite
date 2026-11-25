@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="AutoElite.Mobile.Pages.MoveLessonPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:AutoElite.Mobile.Controls"
+    xmlns:l="clr-namespace:AutoElite.Mobile.Localization"
+    xmlns:pages="clr-namespace:AutoElite.Mobile.Pages"
+    x:DataType="pages:MoveLessonViewModel"
+    Title="{l:Text MoveLesson.Title}">
+
+    <!-- The lesson that is moved, then the free slots it can move to, each with its time and day; tapping one moves it. -->
+    <ScrollView>
+        <controls:PageColumn Padding="20,8,20,32" Spacing="12" MaximumWidthRequest="1200">
+            <Label Style="{StaticResource Secondary}" Text="{Binding Summary}" />
+            <controls:NoticeBanner Text="{Binding Message}" Tone="Danger" />
+            <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
+            <controls:EmptyState Icon="calendar" Text="{Binding EmptyText}" HidesWithoutText="True" />
+
+            <controls:AdaptiveGrid BindableLayout.ItemsSource="{Binding Slots}">
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate x:DataType="pages:LessonRow">
+                        <controls:ListRow
+                            Icon="{Binding Icon}"
+                            Tone="{Binding Tone}"
+                            Title="{Binding Title}"
+                            Subtitle="{Binding Subtitle}"
+                            Trailing="{Binding Time}"
+                            TrailingDetail="{Binding Day}"
+                            ShowsChevron="True"
+                            Command="{Binding Command}" />
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
+            </controls:AdaptiveGrid>
+        </controls:PageColumn>
+    </ScrollView>
+
+</ContentPage>

@@ -1,5 +1,6 @@
 using System.Globalization;
 using AutoElite.Client.Api.Models;
+using AutoElite.Mobile.Controls;
 using AutoElite.Mobile.Localization;
 using AutoElite.Mobile.Schedule;
 using Microsoft.Kiota.Abstractions;
@@ -7,10 +8,11 @@ using Microsoft.Kiota.Abstractions;
 namespace AutoElite.Mobile.Pages;
 
 /// <summary>
-/// The card of a student for a manager or an administrator: how to reach them, then each contract with what was paid
-/// and what is owed, the progress of the training and the payments, read from the API or, without a network, from the
-/// device. The manager writes to the student, calls them, records a payment towards a contract and confirms a payment
-/// whose money has come; these need the network.
+/// The card of a student for a manager or an administrator: how to reach them, their driving lessons of the next weeks,
+/// then each contract with what was paid and what is owed, the progress of the training and the payments, read from
+/// the API or, without a network, from the device. The manager writes to the student, calls them, moves a driving
+/// lesson to another slot or cancels it, records a payment towards a contract and confirms a payment whose money has
+/// come; these need the network.
 /// </summary>
 public sealed class ManagedStudentViewModel : ViewModel, IQueryAttributable
 {
@@ -19,15 +21,18 @@ public sealed class ManagedStudentViewModel : ViewModel, IQueryAttributable
 
     private readonly StudentDirectory _directory;
     private readonly Chats _chats;
+    private readonly TimeProvider _timeProvider;
     private Guid _studentId;
 
     /// <summary>Initializes a new instance of the <see cref="ManagedStudentViewModel"/> class.</summary>
     /// <param name="directory">The students of the school.</param>
     /// <param name="chats">The chats, to write to the student.</param>
-    public ManagedStudentViewModel(StudentDirectory directory, Chats chats)
+    /// <param name="timeProvider">The clock.</param>
+    public ManagedStudentViewModel(StudentDirectory directory, Chats chats, TimeProvider timeProvider)
     {
         _directory = directory;
         _chats = chats;
+        _timeProvider = timeProvider;
         WriteCommand = new Command(async () => await WriteAsync());
         CallCommand = new Command(async () => await CallAsync(), () => HasPhone);
         RefreshCommand = new Command(async () => await RefreshAsync());
@@ -57,6 +62,20 @@ public sealed class ManagedStudentViewModel : ViewModel, IQueryAttributable
                 CallCommand.ChangeCanExecute();
         }
     }
+
+    /// <summary>Gets the driving lessons the student has booked in the next weeks, the earliest first.</summary>
+    public IReadOnlyList<LessonRow> Lessons
+    {
+        get;
+        private set
+        {
+            if (SetProperty(ref field, value))
+                OnPropertyChanged(nameof(HasLessons));
+        }
+    } = [];
+
+    /// <summary>Gets a value indicating whether the student has driving lessons ahead.</summary>
+    public bool HasLessons => Lessons.Count > 0;
 
     /// <summary>Gets the contracts of the student, the newest first.</summary>
     public IReadOnlyList<ManagedContractEntry> ContractEntries
@@ -144,12 +163,88 @@ public sealed class ManagedStudentViewModel : ViewModel, IQueryAttributable
             }
 
             ContractEntries = entries;
+            savedAt = await ReadLessonsAsync(savedAt);
             Notice = savedAt is { } saved
                 ? AppTexts.Format("Contracts.Offline", saved.ToLocalTime().ToString("g", CultureInfo.CurrentCulture))
                 : null;
             EmptyText = entries.Count == 0 ? AppTexts.Get("Contracts.Empty") : null;
         }
         catch (Exception exception) when (exception is ApiException or HttpRequestException)
+        {
+            Notice = ProblemTexts.Of(exception);
+        }
+    }
+
+    // The lessons of the student ahead; they are left out when the schedule cannot be read, and the card still shows.
+    private async Task<DateTimeOffset?> ReadLessonsAsync(DateTimeOffset? savedAt)
+    {
+        try
+        {
+            var lessons = await _directory.ReadLessonsAheadAsync(_studentId, CancellationToken.None);
+            var now = _timeProvider.GetUtcNow();
+            Lessons = [.. lessons.Value.Select(item => LessonOf(item, now)).OfType<LessonRow>()];
+
+            return lessons.IsFromCache && (savedAt is null || lessons.SavedAt < savedAt) ? lessons.SavedAt : savedAt;
+        }
+        catch (Exception exception) when (exception is ApiException or HttpRequestException)
+        {
+            Lessons = [];
+
+            return savedAt;
+        }
+    }
+
+    private LessonRow? LessonOf(DrivingScheduleItem item, DateTimeOffset now)
+    {
+        if (item is not { Slot: { Id: { } slotId, StartUtc: { } start, EndUtc: { } end } slot, Booking.ContractId: { } contractId })
+            return null;
+
+        var summary = LessonTexts.DetailsOf(LessonTexts.TimeOf(start, end), slot.InstructorName, slot.VehicleName);
+        var request = new MoveLessonRequest(slotId, contractId, Name, summary, slot.Category, slot.Transmission);
+
+        return new LessonRow
+        {
+            Icon = "car",
+            Tone = StatusTone.Accent,
+            Title = LessonTexts.DetailsOf(slot.VehicleName, GearboxOf(slot.Transmission)),
+            Subtitle = LessonTexts.DetailsOf(slot.InstructorName, slot.TrainingGroundName),
+            Time = start.ToLocalTime().ToString("t", CultureInfo.CurrentCulture),
+            Day = TodayCards.DayWordOf(start, now),
+            Command = new Command(async () => await ChooseAsync(request))
+        };
+    }
+
+    // What the manager does with a lesson ahead: move it to another slot, or cancel it with the reason.
+    private async Task ChooseAsync(MoveLessonRequest request)
+    {
+        var move = AppTexts.Get("MoveLesson.Move");
+        var cancel = AppTexts.Get("Lesson.Cancel");
+        var choice = await Shell.Current.DisplayActionSheetAsync(request.Summary, AppTexts.Get("Common.Cancel"), cancel, move);
+        if (choice == move)
+        {
+            await Routes.OpenAsync(Routes.MoveLesson, new Dictionary<string, object> { [MoveLessonViewModel.LessonParameter] = request });
+
+            return;
+        }
+
+        if (choice != cancel)
+            return;
+
+        var reason = await Shell.Current.DisplayPromptAsync(
+            AppTexts.Get("Lesson.CancelTitle"),
+            AppTexts.Get("Lesson.CancelReason"),
+            AppTexts.Get("Lesson.CancelConfirm"),
+            AppTexts.Get("Lesson.Keep"),
+            maxLength: 500);
+        if (string.IsNullOrWhiteSpace(reason))
+            return;
+
+        try
+        {
+            await _directory.CancelBookingAsync(request.SlotId, reason.Trim(), CancellationToken.None);
+            await LoadAsync();
+        }
+        catch (Exception exception) when (exception is ApiException or HttpRequestException or TaskCanceledException)
         {
             Notice = ProblemTexts.Of(exception);
         }

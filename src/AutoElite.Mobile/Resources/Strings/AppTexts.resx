@@ -733,6 +733,30 @@
   <data name="Money.WaitingCount" xml:space="preserve">
     <value>To confirm · {0}</value>
   </data>
+  <data name="MoveLesson.Confirm" xml:space="preserve">
+    <value>Move the lesson of {0} to {1}?</value>
+  </data>
+  <data name="MoveLesson.ConfirmTitle" xml:space="preserve">
+    <value>Move the lesson</value>
+  </data>
+  <data name="MoveLesson.Empty" xml:space="preserve">
+    <value>No free slot on such a vehicle in the next 30 days.</value>
+  </data>
+  <data name="MoveLesson.Move" xml:space="preserve">
+    <value>Move</value>
+  </data>
+  <data name="MoveLesson.OldKept" xml:space="preserve">
+    <value>The new slot is booked, but the old lesson could not be cancelled: {0} Cancel it on the card of the student.</value>
+  </data>
+  <data name="MoveLesson.Reason" xml:space="preserve">
+    <value>Moved to {0}</value>
+  </data>
+  <data name="MoveLesson.Summary" xml:space="preserve">
+    <value>{0}: {1}</value>
+  </data>
+  <data name="MoveLesson.Title" xml:space="preserve">
+    <value>Move the lesson</value>
+  </data>
   <data name="NewChat.Empty" xml:space="preserve">
     <value>Your instructors or students appear here once you start lessons together.</value>
   </data>

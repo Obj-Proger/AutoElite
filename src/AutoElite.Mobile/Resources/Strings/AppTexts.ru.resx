@@ -733,6 +733,30 @@
   <data name="Money.WaitingCount" xml:space="preserve">
     <value>К подтверждению · {0}</value>
   </data>
+  <data name="MoveLesson.Confirm" xml:space="preserve">
+    <value>Перенести занятие ученика {0} на {1}?</value>
+  </data>
+  <data name="MoveLesson.ConfirmTitle" xml:space="preserve">
+    <value>Перенос занятия</value>
+  </data>
+  <data name="MoveLesson.Empty" xml:space="preserve">
+    <value>На такой машине нет свободных слотов в ближайшие 30 дней.</value>
+  </data>
+  <data name="MoveLesson.Move" xml:space="preserve">
+    <value>Перенести</value>
+  </data>
+  <data name="MoveLesson.OldKept" xml:space="preserve">
+    <value>Новый слот забронирован, но старое занятие отменить не удалось: {0} Отмените его в карточке ученика.</value>
+  </data>
+  <data name="MoveLesson.Reason" xml:space="preserve">
+    <value>Перенесено на {0}</value>
+  </data>
+  <data name="MoveLesson.Summary" xml:space="preserve">
+    <value>{0}: {1}</value>
+  </data>
+  <data name="MoveLesson.Title" xml:space="preserve">
+    <value>Перенос занятия</value>
+  </data>
   <data name="NewChat.Empty" xml:space="preserve">
     <value>Здесь появятся ваши преподаватели или ученики, когда начнутся совместные занятия.</value>
   </data>

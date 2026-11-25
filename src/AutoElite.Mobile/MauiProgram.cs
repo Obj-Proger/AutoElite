@@ -152,6 +152,8 @@ public static class MauiProgram
         builder.Services.AddTransient<NewLeadViewModel>();
         builder.Services.AddTransient<MoneyPage>();
         builder.Services.AddTransient<MoneyViewModel>();
+        builder.Services.AddTransient<MoveLessonPage>();
+        builder.Services.AddTransient<MoveLessonViewModel>();
 
 #if DEBUG
         builder.Logging.AddDebug();

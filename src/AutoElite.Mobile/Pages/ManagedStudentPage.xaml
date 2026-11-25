@@ -10,9 +10,10 @@
     Title="{l:Text Student.Title}">
 
     <!--
-        The student for a manager: the avatar, name and contacts with writing and calling, then each contract on a
-        highlighted card with its money first, recording a payment when it is active, its progress and its payments; a
-        payment that waits for its money has a button to confirm it.
+        The student for a manager: the avatar, name and contacts with writing and calling, the driving lessons ahead,
+        which are moved or cancelled from their rows, then each contract on a highlighted card with its money first,
+        recording a payment when it is active, its progress and its payments; a payment that waits for its money has a
+        button to confirm it.
     -->
     <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}" RefreshColor="{DynamicResource Accent}">
         <ScrollView>
@@ -26,6 +27,25 @@
 
                 <controls:NoticeBanner Text="{Binding Notice}" Tone="Warning" />
                 <controls:EmptyState Icon="wallet" Text="{Binding EmptyText}" HidesWithoutText="True" />
+
+                <VerticalStackLayout Spacing="8" IsVisible="{Binding HasLessons}">
+                    <Label Style="{StaticResource Title}" Text="{l:Text Today.Ahead}" />
+                    <controls:AdaptiveGrid BindableLayout.ItemsSource="{Binding Lessons}">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate x:DataType="pages:LessonRow">
+                                <controls:ListRow
+                                    Icon="{Binding Icon}"
+                                    Tone="{Binding Tone}"
+                                    Title="{Binding Title}"
+                                    Subtitle="{Binding Subtitle}"
+                                    Trailing="{Binding Time}"
+                                    TrailingDetail="{Binding Day}"
+                                    ShowsChevron="True"
+                                    Command="{Binding Command}" />
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </controls:AdaptiveGrid>
+                </VerticalStackLayout>
 
                 <controls:AdaptiveGrid
                     MinItemWidth="420"

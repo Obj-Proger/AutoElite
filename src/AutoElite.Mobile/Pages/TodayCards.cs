@@ -154,7 +154,6 @@ internal static class TodayCards
     {
         var culture = CultureInfo.CurrentCulture;
         var start = lesson.Start.ToLocalTime();
-        var days = (start.Date - now.ToLocalTime().Date).Days;
 
         return new LessonRow
         {
@@ -163,13 +162,24 @@ internal static class TodayCards
             Title = string.IsNullOrWhiteSpace(lesson.Title) ? lesson.Kind : lesson.Title,
             Subtitle = lesson.Status ?? LessonTexts.DetailsOf(lesson.Kind, lesson.Details),
             Time = start.ToString("t", culture),
-            Day = days switch
-            {
-                0 => AppTexts.Get("Today.TodayWord"),
-                1 => AppTexts.Get("Today.Tomorrow"),
-                _ => start.ToString("ddd, d MMM", culture)
-            },
+            Day = DayWordOf(lesson.Start, now),
             Command = new Command(async () => await OpenAsync(lesson))
+        };
+    }
+
+    /// <summary>The day of a lesson under its time in a row: today, tomorrow or a short date.</summary>
+    /// <param name="start">The start of the lesson.</param>
+    /// <param name="now">The current time.</param>
+    /// <returns>The day.</returns>
+    public static string DayWordOf(DateTimeOffset start, DateTimeOffset now)
+    {
+        var local = start.ToLocalTime();
+
+        return (local.Date - now.ToLocalTime().Date).Days switch
+        {
+            0 => AppTexts.Get("Today.TodayWord"),
+            1 => AppTexts.Get("Today.Tomorrow"),
+            _ => local.ToString("ddd, d MMM", CultureInfo.CurrentCulture)
         };
     }
 
