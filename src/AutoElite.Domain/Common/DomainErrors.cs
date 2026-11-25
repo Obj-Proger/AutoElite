@@ -673,6 +673,16 @@ public static class DomainErrors
         public static readonly Error NotConfirmed = new("Payment.NotConfirmed", "Only a confirmed payment can be refunded.", ErrorType.Conflict);
     }
 
+    /// <summary>Errors related to the <see cref="Entities.PracticeRecord"/> aggregate.</summary>
+    public static class PracticeRecord
+    {
+        /// <summary>The student identifier is an empty GUID.</summary>
+        public static readonly Error StudentIdEmpty = new("PracticeRecord.StudentIdEmpty", "Student ID cannot be an empty GUID.", ErrorType.Validation);
+
+        /// <summary>The question identifier is an empty GUID.</summary>
+        public static readonly Error QuestionIdEmpty = new("PracticeRecord.QuestionIdEmpty", "Question ID cannot be an empty GUID.", ErrorType.Validation);
+    }
+
     /// <summary>Errors related to <see cref="ValueObjects.PhoneNumber"/> validation.</summary>
     public static class PhoneNumber
     {

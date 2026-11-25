@@ -193,6 +193,15 @@
   <data name="ChatMessage.TooManyAttachments" xml:space="preserve">
     <value>В сообщении может быть не больше 10 вложений.</value>
   </data>
+  <data name="PracticeRecord.NotFound" xml:space="preserve">
+    <value>Запись о тренировке не найдена.</value>
+  </data>
+  <data name="PracticeRecord.QuestionIdEmpty" xml:space="preserve">
+    <value>Идентификатор вопроса не может быть пустым.</value>
+  </data>
+  <data name="PracticeRecord.StudentIdEmpty" xml:space="preserve">
+    <value>Идентификатор ученика не может быть пустым.</value>
+  </data>
   <data name="Request.UnreadableValue" xml:space="preserve">
     <value>Значение не удалось прочитать.</value>
   </data>

@@ -76,6 +76,9 @@
   <data name="Payment.NotFound" xml:space="preserve">
     <value>Payment was not found.</value>
   </data>
+  <data name="PracticeRecord.NotFound" xml:space="preserve">
+    <value>Practice record was not found.</value>
+  </data>
   <data name="Question.NotFound" xml:space="preserve">
     <value>Question was not found.</value>
   </data>
