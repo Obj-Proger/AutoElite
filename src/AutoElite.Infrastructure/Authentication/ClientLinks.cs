@@ -3,8 +3,9 @@ using Microsoft.Extensions.Options;
 namespace AutoElite.Infrastructure.Authentication;
 
 /// <summary>
-/// Builds the links to the web client's pages that emails carry. The pages read the parameters from the query string;
-/// every value is escaped, since tokens contain characters that have a meaning in addresses.
+/// Builds the links to the web client's pages that emails carry, and the address of its start page. The pages read the
+/// parameters from the query string; every value is escaped, since tokens contain characters that have a meaning in
+/// addresses.
 /// </summary>
 internal sealed class ClientLinks(IOptions<ClientOptions> options) : IClientLinks
 {
@@ -16,6 +17,15 @@ internal sealed class ClientLinks(IOptions<ClientOptions> options) : IClientLink
 
     /// <summary>The page that confirms a new email address.</summary>
     public const string EmailChangePage = "confirm-email-change";
+
+    /// <inheritdoc />
+    public Uri Website()
+    {
+        var baseUrl = options.Value.BaseUrl ?? throw new InvalidOperationException("Client:BaseUrl is not set.");
+
+        // A new address, so that its text, which is what is serialized, has the slash too.
+        return new Uri(baseUrl.AbsoluteUri.EndsWith('/') ? baseUrl.AbsoluteUri : baseUrl.AbsoluteUri + "/");
+    }
 
     /// <inheritdoc />
     public Uri Invitation(Guid userId, string token) =>
@@ -31,11 +41,9 @@ internal sealed class ClientLinks(IOptions<ClientOptions> options) : IClientLink
 
     private Uri Page(string page, params (string Name, string Value)[] parameters)
     {
-        var baseUrl = options.Value.BaseUrl ?? throw new InvalidOperationException("Client:BaseUrl is not set.");
-        var root = baseUrl.AbsoluteUri.EndsWith('/') ? baseUrl : new Uri(baseUrl.AbsoluteUri + "/");
         var query = string.Join('&', parameters.Select(parameter =>
             $"{Uri.EscapeDataString(parameter.Name)}={Uri.EscapeDataString(parameter.Value)}"));
 
-        return new Uri(root, $"{page}?{query}");
+        return new Uri(Website(), $"{page}?{query}");
     }
 }

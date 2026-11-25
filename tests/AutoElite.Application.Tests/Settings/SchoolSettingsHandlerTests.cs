@@ -1,5 +1,6 @@
 using AutoElite.Application.Settings;
 using AutoElite.Application.Settings.GetSchoolSettings;
+using AutoElite.Application.Settings.GetWebsite;
 using AutoElite.Application.Settings.UpdateSchoolSettings;
 using AutoElite.Domain.Entities;
 
@@ -118,5 +119,14 @@ public class SchoolSettingsHandlerTests
         var result = new UpdateSchoolSettingsCommandValidator().Validate(_command with { DefaultCurrency = currency });
 
         result.Errors.Should().ContainSingle().Which.ErrorCode.Should().Be(code);
+    }
+
+    [Fact]
+    public async Task GetWebsite_ReturnsTheStartPageOfTheWebClient()
+    {
+        var result = await new GetWebsiteQueryHandler(new FakeClientLinks())
+            .Handle(new GetWebsiteQuery(), TestContext.Current.CancellationToken);
+
+        result.Value.Address.Should().Be("https://app.test/");
     }
 }

@@ -36,6 +36,16 @@ public sealed class ClientLinksTests
     }
 
     [Theory]
+    [InlineData("https://school.example.ru/app")]
+    [InlineData("https://school.example.ru/app/")]
+    public void Website_EndsWithASlash(string baseUrl)
+    {
+        var link = Links(baseUrl).Website();
+
+        link.OriginalString.Should().Be("https://school.example.ru/app/");
+    }
+
+    [Theory]
     [InlineData(null)]
     [InlineData("ftp://school.example.ru/")]
     public void Settings_WithoutAWebAddress_HaveAProblem(string? baseUrl)

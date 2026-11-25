@@ -127,4 +127,14 @@ public sealed class AdministrationControllerTests(ApiFactory api)
         read.GetProperty("studentCancellationNoticeMinutes").GetInt32().Should().Be(notice + 60);
         restored.StatusCode.Should().Be(HttpStatusCode.NoContent);
     }
+
+    [Fact]
+    public async Task AnyUser_ReadsWhereTheWebsiteIs()
+    {
+        using var student = await api.SignedInClientAsync(UserRole.Student);
+
+        var website = await student.GetJsonAsync("/api/v1/settings/website");
+
+        website.GetProperty("address").GetString().Should().Be("http://localhost:5173/");
+    }
 }
