@@ -1540,8 +1540,32 @@
   <data name="Student.Write" xml:space="preserve">
     <value>Write</value>
   </data>
+  <data name="Students.All" xml:space="preserve">
+    <value>All the students</value>
+  </data>
+  <data name="Students.Done" xml:space="preserve">
+    <value>Lessons done: {0}</value>
+  </data>
+  <data name="Students.Filter" xml:space="preserve">
+    <value>Find among my students</value>
+  </data>
+  <data name="Students.Last" xml:space="preserve">
+    <value>last on {0}</value>
+  </data>
+  <data name="Students.Mine" xml:space="preserve">
+    <value>My students</value>
+  </data>
+  <data name="Students.NoNext" xml:space="preserve">
+    <value>not booked</value>
+  </data>
+  <data name="Students.NoneOfMine" xml:space="preserve">
+    <value>No student had or has a lesson with you in the last weeks.</value>
+  </data>
   <data name="Students.NotFound" xml:space="preserve">
     <value>No students found.</value>
+  </data>
+  <data name="Students.Offline" xml:space="preserve">
+    <value>No connection. The data of {0}.</value>
   </data>
   <data name="Students.Search" xml:space="preserve">
     <value>Name, email or phone</value>

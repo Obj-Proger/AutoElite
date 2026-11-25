@@ -1540,8 +1540,32 @@
   <data name="Student.Write" xml:space="preserve">
     <value>Написать</value>
   </data>
+  <data name="Students.All" xml:space="preserve">
+    <value>Все ученики</value>
+  </data>
+  <data name="Students.Done" xml:space="preserve">
+    <value>Проведено занятий: {0}</value>
+  </data>
+  <data name="Students.Filter" xml:space="preserve">
+    <value>Найти среди своих учеников</value>
+  </data>
+  <data name="Students.Last" xml:space="preserve">
+    <value>последнее {0}</value>
+  </data>
+  <data name="Students.Mine" xml:space="preserve">
+    <value>Мои ученики</value>
+  </data>
+  <data name="Students.NoNext" xml:space="preserve">
+    <value>не записан</value>
+  </data>
+  <data name="Students.NoneOfMine" xml:space="preserve">
+    <value>За последние недели у вас не было и нет занятий с учениками.</value>
+  </data>
   <data name="Students.NotFound" xml:space="preserve">
     <value>Учеников не найдено.</value>
+  </data>
+  <data name="Students.Offline" xml:space="preserve">
+    <value>Нет связи. Данные на {0}.</value>
   </data>
   <data name="Students.Search" xml:space="preserve">
     <value>Имя, почта или телефон</value>

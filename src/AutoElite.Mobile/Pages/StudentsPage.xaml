@@ -11,11 +11,48 @@
     ControlTemplate="{StaticResource TabPage}"
     Shell.NavBarIsVisible="False">
 
-    <!-- The students of the school for a manager: the search, then the students found, each opening their card. -->
-    <ScrollView>
-        <controls:PageColumn Padding="20,8,20,32" MaximumWidthRequest="840" Spacing="14">
-            <controls:StudentSearchView BindingContext="{Binding Search}" />
-        </controls:PageColumn>
-    </ScrollView>
+    <!--
+        The students tab: for a driving instructor their students, filtered by name, each with the lessons done and the
+        next one; for the office the search of all the students. A user with both roles sees both under headings.
+    -->
+    <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}" RefreshColor="{DynamicResource Accent}">
+        <ScrollView>
+            <controls:PageColumn Padding="20,8,20,32" MaximumWidthRequest="1200" Spacing="14">
+                <controls:NoticeBanner Text="{Binding Notice}" Tone="Warning" />
+
+                <VerticalStackLayout Spacing="10" IsVisible="{Binding IsDriver}">
+                    <Label Style="{StaticResource Title}" Text="{l:Text Students.Mine}" IsVisible="{Binding HasBoth}" />
+                    <Border Style="{StaticResource Field}" MaximumWidthRequest="560" HorizontalOptions="Start">
+                        <Entry
+                            Text="{Binding Filter}"
+                            Placeholder="{l:Text Students.Filter}"
+                            IsSpellCheckEnabled="False"
+                            IsTextPredictionEnabled="False" />
+                    </Border>
+                    <controls:EmptyState Icon="users" Text="{Binding EmptyText}" HidesWithoutText="True" />
+                    <controls:AdaptiveGrid BindableLayout.ItemsSource="{Binding Students}">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate x:DataType="pages:LessonRow">
+                                <controls:ListRow
+                                    Icon="{Binding Icon}"
+                                    Tone="{Binding Tone}"
+                                    Title="{Binding Title}"
+                                    Subtitle="{Binding Subtitle}"
+                                    Trailing="{Binding Time}"
+                                    TrailingDetail="{Binding Day}"
+                                    ShowsChevron="True"
+                                    Command="{Binding Command}" />
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </controls:AdaptiveGrid>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Spacing="10" IsVisible="{Binding IsOffice}" MaximumWidthRequest="840" HorizontalOptions="Start">
+                    <Label Style="{StaticResource Title}" Text="{l:Text Students.All}" IsVisible="{Binding HasBoth}" />
+                    <controls:StudentSearchView BindingContext="{Binding Search}" />
+                </VerticalStackLayout>
+            </controls:PageColumn>
+        </ScrollView>
+    </RefreshView>
 
 </ContentPage>

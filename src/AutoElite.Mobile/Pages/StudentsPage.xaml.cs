@@ -1,6 +1,6 @@
 namespace AutoElite.Mobile.Pages;
 
-/// <summary>The students of the school for a manager or an administrator, a tab of the shell.</summary>
+/// <summary>The students of a driving instructor and the search of the students for the office, a tab of the shell.</summary>
 public partial class StudentsPage : ContentPage
 {
     private readonly StudentsViewModel _viewModel;
