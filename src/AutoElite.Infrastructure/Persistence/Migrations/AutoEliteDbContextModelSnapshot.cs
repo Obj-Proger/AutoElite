@@ -1547,6 +1547,55 @@ namespace AutoElite.Infrastructure.Persistence.Migrations
                     b.ToTable("payments", (string)null);
                 });
 
+            modelBuilder.Entity("AutoElite.Domain.Entities.PracticeRecord", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<int>("AnswerCount")
+                        .HasColumnType("integer")
+                        .HasColumnName("answer_count");
+
+                    b.Property<bool>("IsLastAnswerCorrect")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_last_answer_correct");
+
+                    b.Property<DateTime>("LastAnsweredAtUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("last_answered_at_utc");
+
+                    b.Property<int>("MistakeCount")
+                        .HasColumnType("integer")
+                        .HasColumnName("mistake_count");
+
+                    b.Property<Guid>("QuestionId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("question_id");
+
+                    b.Property<uint>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("xid")
+                        .HasColumnName("xmin");
+
+                    b.Property<Guid>("StudentId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("student_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_practice_records");
+
+                    b.HasIndex("QuestionId")
+                        .HasDatabaseName("ix_practice_records_question_id");
+
+                    b.HasIndex("StudentId", "QuestionId")
+                        .IsUnique()
+                        .HasDatabaseName("ix_practice_records_student_id_question_id");
+
+                    b.ToTable("practice_records", (string)null);
+                });
+
             modelBuilder.Entity("AutoElite.Domain.Entities.Question", b =>
                 {
                     b.Property<Guid>("Id")
@@ -3308,6 +3357,23 @@ namespace AutoElite.Infrastructure.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
                         .HasConstraintName("fk_payments_user_student_id");
+                });
+
+            modelBuilder.Entity("AutoElite.Domain.Entities.PracticeRecord", b =>
+                {
+                    b.HasOne("AutoElite.Domain.Entities.Question", null)
+                        .WithMany()
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_practice_records_questions_question_id");
+
+                    b.HasOne("AutoElite.Domain.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_practice_records_users_student_id");
                 });
 
             modelBuilder.Entity("AutoElite.Domain.Entities.Question", b =>

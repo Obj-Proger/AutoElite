@@ -10,6 +10,7 @@ using AutoElite.Application.Exams;
 using AutoElite.Application.Leads;
 using AutoElite.Application.Notifications;
 using AutoElite.Application.Payments;
+using AutoElite.Application.Practice;
 using AutoElite.Application.Questions;
 using AutoElite.Application.Questions.ImportQuestions;
 using AutoElite.Application.Settings;
@@ -138,6 +139,8 @@ public static class DependencyInjection
         services.AddScoped<IRepository<TestSession>>(provider => provider.GetRequiredService<ITestSessionRepository>());
         services.AddScoped<ITestSessionQueries, TestSessionQueries>();
         services.AddScoped<IQuestionPicker, QuestionPicker>();
+        services.AddScoped<IPracticeRecordRepository, PracticeRecordRepository>();
+        services.AddScoped<IRepository<PracticeRecord>>(provider => provider.GetRequiredService<IPracticeRecordRepository>());
         services.AddScoped<IExamRepository, ExamRepository>();
         services.AddScoped<IRepository<Exam>>(provider => provider.GetRequiredService<IExamRepository>());
         services.AddScoped<IExamQueries, ExamQueries>();
