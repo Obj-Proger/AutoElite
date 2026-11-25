@@ -118,6 +118,9 @@ internal static class Routes
     /// <summary>The move of a booked driving lesson, opened from the card of a student with a <see cref="MoveLessonRequest"/>.</summary>
     public const string MoveLesson = "move-lesson";
 
+    /// <summary>The summary of the school for the office.</summary>
+    public const string Summary = "summary";
+
     // How often and how long a navigation waits for one that the shell is still finishing.
     private const int NavigationAttempts = 20;
     private static readonly TimeSpan _navigationRetryDelay = TimeSpan.FromMilliseconds(50);

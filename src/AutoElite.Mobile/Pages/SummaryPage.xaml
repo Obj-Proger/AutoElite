@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="AutoElite.Mobile.Pages.SummaryPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:AutoElite.Mobile.Controls"
+    xmlns:l="clr-namespace:AutoElite.Mobile.Localization"
+    xmlns:pages="clr-namespace:AutoElite.Mobile.Pages"
+    x:DataType="pages:SummaryViewModel"
+    Title="{l:Text Summary.Title}">
+
+    <!--
+        The summary of the school: the period, the four key figures as tiles, then the leads by source, the instructors
+        and the tasks of the staff as rows, side by side on a wide window.
+    -->
+    <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}" RefreshColor="{DynamicResource Accent}">
+        <ScrollView>
+            <controls:PageColumn Padding="20,8,20,32" Spacing="16" MaximumWidthRequest="1200">
+                <VerticalStackLayout Spacing="6">
+                    <Border Style="{StaticResource SegmentBar}" MaximumWidthRequest="560" HorizontalOptions="Start">
+                        <Grid ColumnDefinitions="*,*,*" ColumnSpacing="4">
+                            <Button
+                                Style="{StaticResource Segment}"
+                                Text="{l:Text Summary.Month}"
+                                Command="{Binding ShowPeriodCommand}"
+                                CommandParameter="Month">
+                                <Button.Triggers>
+                                    <DataTrigger TargetType="Button" Binding="{Binding IsMonth}" Value="True">
+                                        <Setter Property="BackgroundColor" Value="{DynamicResource SurfaceRaised}" />
+                                        <Setter Property="TextColor" Value="{DynamicResource Text}" />
+                                    </DataTrigger>
+                                </Button.Triggers>
+                            </Button>
+                            <Button
+                                Grid.Column="1"
+                                Style="{StaticResource Segment}"
+                                Text="{l:Text Summary.LastMonth}"
+                                Command="{Binding ShowPeriodCommand}"
+                                CommandParameter="LastMonth">
+                                <Button.Triggers>
+                                    <DataTrigger TargetType="Button" Binding="{Binding IsLastMonth}" Value="True">
+                                        <Setter Property="BackgroundColor" Value="{DynamicResource SurfaceRaised}" />
+                                        <Setter Property="TextColor" Value="{DynamicResource Text}" />
+                                    </DataTrigger>
+                                </Button.Triggers>
+                            </Button>
+                            <Button
+                                Grid.Column="2"
+                                Style="{StaticResource Segment}"
+                                Text="{l:Text Summary.Quarter}"
+                                Command="{Binding ShowPeriodCommand}"
+                                CommandParameter="Quarter">
+                                <Button.Triggers>
+                                    <DataTrigger TargetType="Button" Binding="{Binding IsQuarter}" Value="True">
+                                        <Setter Property="BackgroundColor" Value="{DynamicResource SurfaceRaised}" />
+                                        <Setter Property="TextColor" Value="{DynamicResource Text}" />
+                                    </DataTrigger>
+                                </Button.Triggers>
+                            </Button>
+                        </Grid>
+                    </Border>
+                    <Label Style="{StaticResource Caption}" Text="{Binding Days}" Margin="4,0" />
+                </VerticalStackLayout>
+
+                <controls:NoticeBanner Text="{Binding Notice}" Tone="Warning" />
+
+                <controls:AdaptiveGrid MinItemWidth="240" MaxColumns="4" Spacing="12">
+                    <controls:StatTile Title="{l:Text Summary.Revenue}" Value="{Binding Revenue}" Unit="{Binding RevenueDetails}" />
+                    <controls:StatTile
+                        Title="{l:Text Summary.Leads}"
+                        Value="{Binding Leads}"
+                        Unit="{Binding Conversion}"
+                        Progress="{Binding ConversionProgress}" />
+                    <controls:StatTile
+                        Title="{l:Text Summary.Contracts}"
+                        Value="{Binding Contracts}"
+                        Unit="{Binding Completion}"
+                        Progress="{Binding CompletionProgress}" />
+                    <controls:StatTile Title="{l:Text Summary.Lessons}" Value="{Binding Lessons}" Unit="{Binding LessonDetails}" />
+                </controls:AdaptiveGrid>
+
+                <controls:AdaptiveGrid MinItemWidth="340" MaxColumns="3" Spacing="16">
+                    <VerticalStackLayout Spacing="8">
+                        <Label Style="{StaticResource Title}" Text="{l:Text Summary.Sources}" />
+                        <Label Style="{StaticResource Secondary}" Text="{l:Text Summary.NoLeads}" IsVisible="{Binding HasNoSources}" />
+                        <VerticalStackLayout Spacing="8" BindableLayout.ItemsSource="{Binding Sources}">
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate x:DataType="pages:SummaryRow">
+                                    <controls:ListRow
+                                        Icon="{Binding Icon}"
+                                        Tone="{Binding Tone}"
+                                        Title="{Binding Title}"
+                                        Subtitle="{Binding Subtitle}"
+                                        Trailing="{Binding Trailing}"
+                                        TrailingDetail="{Binding Detail}" />
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="8">
+                        <Label Style="{StaticResource Title}" Text="{l:Text Summary.Instructors}" />
+                        <Label
+                            Style="{StaticResource Secondary}"
+                            Text="{l:Text Summary.NoLessons}"
+                            IsVisible="{Binding HasNoInstructors}" />
+                        <VerticalStackLayout Spacing="8" BindableLayout.ItemsSource="{Binding Instructors}">
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate x:DataType="pages:SummaryRow">
+                                    <controls:ListRow
+                                        Icon="{Binding Icon}"
+                                        Tone="{Binding Tone}"
+                                        Title="{Binding Title}"
+                                        Subtitle="{Binding Subtitle}"
+                                        Trailing="{Binding Trailing}"
+                                        TrailingDetail="{Binding Detail}" />
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="8">
+                        <Label Style="{StaticResource Title}" Text="{l:Text Summary.Staff}" />
+                        <Label Style="{StaticResource Secondary}" Text="{l:Text Summary.NoTasks}" IsVisible="{Binding HasNoStaff}" />
+                        <VerticalStackLayout Spacing="8" BindableLayout.ItemsSource="{Binding Staff}">
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate x:DataType="pages:SummaryRow">
+                                    <controls:ListRow
+                                        Icon="{Binding Icon}"
+                                        Tone="{Binding Tone}"
+                                        Title="{Binding Title}"
+                                        Subtitle="{Binding Subtitle}"
+                                        Trailing="{Binding Trailing}"
+                                        TrailingDetail="{Binding Detail}" />
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+                </controls:AdaptiveGrid>
+            </controls:PageColumn>
+        </ScrollView>
+    </RefreshView>
+
+</ContentPage>

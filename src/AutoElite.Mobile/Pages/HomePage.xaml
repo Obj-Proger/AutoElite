@@ -136,7 +136,7 @@
                         </VerticalStackLayout>
                     </Border>
 
-                    <!-- The staff: the tasks; the office: the payments waiting for their money and the debts. -->
+                    <!-- The staff: the tasks; the office: the payments waiting for their money, the debts and the summary. -->
                     <VerticalStackLayout Spacing="8" IsVisible="{Binding IsStaff}">
                         <Label Style="{StaticResource Title}" Text="{l:Text Today.Attention}" Margin="0,6,0,0" />
                         <controls:ListRow
@@ -164,6 +164,13 @@
                             Trailing="{Binding DebtsCount}"
                             ShowsChevron="True"
                             Command="{Binding OpenDebtsCommand}"
+                            IsVisible="{Binding IsManager}" />
+                        <controls:ListRow
+                            Icon="chart-column"
+                            Title="{l:Text Summary.Title}"
+                            Subtitle="{l:Text Summary.Hint}"
+                            ShowsChevron="True"
+                            Command="{Binding OpenSummaryCommand}"
                             IsVisible="{Binding IsManager}" />
                     </VerticalStackLayout>
                 </VerticalStackLayout>

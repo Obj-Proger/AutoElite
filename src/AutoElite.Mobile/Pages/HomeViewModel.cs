@@ -14,7 +14,7 @@ namespace AutoElite.Mobile.Pages;
 /// Today, the first tab of the signed-in user: the lesson going on or the next one in a highlighted card, with what the
 /// user can do with it; the figures of their role (the hours driven and the debt of a student, the lessons of the day
 /// and the free slots of an instructor, the leads of a manager); the tasks of the staff, and for the office the payments
-/// that wait for their money and the students who owe money; the next lessons as rows
+/// that wait for their money, the students who owe money and the summary of the school; the next lessons as rows
 /// (HomeViewModel.Lessons.cs); and whether the data is from the device, with the actions that wait to be sent and those
 /// the school did not accept. The bell above the tabs counts the notifications; the other sections are tabs.
 /// </summary>
@@ -76,6 +76,7 @@ public sealed partial class HomeViewModel : ViewModel
         OpenTasksCommand = new Command(async () => await Routes.OpenAsync(Routes.Tasks));
         OpenLeadsCommand = new Command(async () => await Routes.GoToAsync(Routes.Leads));
         OpenWaitingCommand = new Command(async () => await Routes.OpenAsync(Routes.Money));
+        OpenSummaryCommand = new Command(async () => await Routes.OpenAsync(Routes.Summary));
         OpenDebtsCommand = new Command(async () => await Routes.OpenAsync(
             Routes.Money, new Dictionary<string, object> { [MoneyViewModel.ViewParameter] = MoneyViewModel.DebtsView }));
         RefreshCommand = new Command(async () => await RefreshAsync());
@@ -403,6 +404,9 @@ public sealed partial class HomeViewModel : ViewModel
 
     /// <summary>Gets the command that opens the students who owe money.</summary>
     public Command OpenDebtsCommand { get; }
+
+    /// <summary>Gets the command that opens the summary of the school.</summary>
+    public Command OpenSummaryCommand { get; }
 
     /// <summary>Gets the command that sends the waiting actions and reads everything again.</summary>
     public Command RefreshCommand { get; }

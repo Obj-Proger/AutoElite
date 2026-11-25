@@ -1603,6 +1603,84 @@
   <data name="Study.Title" xml:space="preserve">
     <value>Studies</value>
   </data>
+  <data name="Summary.Completion" xml:space="preserve">
+    <value>Completed {0} of the closed · {1} active</value>
+  </data>
+  <data name="Summary.Contracts" xml:space="preserve">
+    <value>Contracts</value>
+  </data>
+  <data name="Summary.Conversion" xml:space="preserve">
+    <value>Became contracts: {0}</value>
+  </data>
+  <data name="Summary.Converted" xml:space="preserve">
+    <value>Became contracts: {0}</value>
+  </data>
+  <data name="Summary.Hint" xml:space="preserve">
+    <value>Money, leads, contracts and the work of the staff</value>
+  </data>
+  <data name="Summary.Instructors" xml:space="preserve">
+    <value>Instructors</value>
+  </data>
+  <data name="Summary.LastMonth" xml:space="preserve">
+    <value>Last month</value>
+  </data>
+  <data name="Summary.Leads" xml:space="preserve">
+    <value>Leads</value>
+  </data>
+  <data name="Summary.LessonDetails" xml:space="preserve">
+    <value>{0} h · no-shows: {1}</value>
+  </data>
+  <data name="Summary.Lessons" xml:space="preserve">
+    <value>Driving lessons</value>
+  </data>
+  <data name="Summary.Month" xml:space="preserve">
+    <value>This month</value>
+  </data>
+  <data name="Summary.NoLeads" xml:space="preserve">
+    <value>No lead arrived in the period.</value>
+  </data>
+  <data name="Summary.NoLessons" xml:space="preserve">
+    <value>No lesson in the period.</value>
+  </data>
+  <data name="Summary.NoTasks" xml:space="preserve">
+    <value>No task in the period.</value>
+  </data>
+  <data name="Summary.Offline" xml:space="preserve">
+    <value>No connection. The figures of {0}.</value>
+  </data>
+  <data name="Summary.OtherSource" xml:space="preserve">
+    <value>Other</value>
+  </data>
+  <data name="Summary.Overdue" xml:space="preserve">
+    <value>overdue</value>
+  </data>
+  <data name="Summary.Quarter" xml:space="preserve">
+    <value>3 months</value>
+  </data>
+  <data name="Summary.Rating" xml:space="preserve">
+    <value>rating</value>
+  </data>
+  <data name="Summary.Revenue" xml:space="preserve">
+    <value>Revenue</value>
+  </data>
+  <data name="Summary.RevenueDetails" xml:space="preserve">
+    <value>Received {0} · refunded {1}</value>
+  </data>
+  <data name="Summary.Sources" xml:space="preserve">
+    <value>Leads by source</value>
+  </data>
+  <data name="Summary.Staff" xml:space="preserve">
+    <value>Tasks of the staff</value>
+  </data>
+  <data name="Summary.Tasks" xml:space="preserve">
+    <value>Set {0} · completed {1}</value>
+  </data>
+  <data name="Summary.Title" xml:space="preserve">
+    <value>Summary of the school</value>
+  </data>
+  <data name="Summary.Workload" xml:space="preserve">
+    <value>Driving {0} · {1} h · theory {2} · no-shows {3}</value>
+  </data>
   <data name="Tab.Chats" xml:space="preserve">
     <value>Chats</value>
   </data>

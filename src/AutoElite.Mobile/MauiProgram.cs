@@ -74,6 +74,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<LeadBook>();
         builder.Services.AddSingleton<OfficeMoney>();
         builder.Services.AddSingleton<Website>();
+        builder.Services.AddSingleton<SchoolSummary>();
         builder.Services.AddSingleton<AppChrome>();
         builder.Services.AddSingleton(provider => new RealtimeConnection(
             () => ApiAddress.Current, provider.GetRequiredService<AuthSessionManager>()));
@@ -155,6 +156,8 @@ public static class MauiProgram
         builder.Services.AddTransient<MoneyViewModel>();
         builder.Services.AddTransient<MoveLessonPage>();
         builder.Services.AddTransient<MoveLessonViewModel>();
+        builder.Services.AddTransient<SummaryPage>();
+        builder.Services.AddTransient<SummaryViewModel>();
 
 #if DEBUG
         builder.Logging.AddDebug();

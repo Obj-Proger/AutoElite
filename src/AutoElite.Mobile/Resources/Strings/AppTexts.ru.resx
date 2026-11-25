@@ -1603,6 +1603,84 @@
   <data name="Study.Title" xml:space="preserve">
     <value>Учёба</value>
   </data>
+  <data name="Summary.Completion" xml:space="preserve">
+    <value>Завершено {0} из закрытых · действуют {1}</value>
+  </data>
+  <data name="Summary.Contracts" xml:space="preserve">
+    <value>Договоры</value>
+  </data>
+  <data name="Summary.Conversion" xml:space="preserve">
+    <value>В договор: {0}</value>
+  </data>
+  <data name="Summary.Converted" xml:space="preserve">
+    <value>В договор: {0}</value>
+  </data>
+  <data name="Summary.Hint" xml:space="preserve">
+    <value>Деньги, заявки, договоры и работа сотрудников</value>
+  </data>
+  <data name="Summary.Instructors" xml:space="preserve">
+    <value>Инструкторы</value>
+  </data>
+  <data name="Summary.LastMonth" xml:space="preserve">
+    <value>Прошлый месяц</value>
+  </data>
+  <data name="Summary.Leads" xml:space="preserve">
+    <value>Заявки</value>
+  </data>
+  <data name="Summary.LessonDetails" xml:space="preserve">
+    <value>{0} ч · неявок: {1}</value>
+  </data>
+  <data name="Summary.Lessons" xml:space="preserve">
+    <value>Занятия по вождению</value>
+  </data>
+  <data name="Summary.Month" xml:space="preserve">
+    <value>Этот месяц</value>
+  </data>
+  <data name="Summary.NoLeads" xml:space="preserve">
+    <value>За период заявок не было.</value>
+  </data>
+  <data name="Summary.NoLessons" xml:space="preserve">
+    <value>За период занятий не было.</value>
+  </data>
+  <data name="Summary.NoTasks" xml:space="preserve">
+    <value>За период задач не было.</value>
+  </data>
+  <data name="Summary.Offline" xml:space="preserve">
+    <value>Нет связи. Данные на {0}.</value>
+  </data>
+  <data name="Summary.OtherSource" xml:space="preserve">
+    <value>Другое</value>
+  </data>
+  <data name="Summary.Overdue" xml:space="preserve">
+    <value>просрочено</value>
+  </data>
+  <data name="Summary.Quarter" xml:space="preserve">
+    <value>3 месяца</value>
+  </data>
+  <data name="Summary.Rating" xml:space="preserve">
+    <value>оценка</value>
+  </data>
+  <data name="Summary.Revenue" xml:space="preserve">
+    <value>Выручка</value>
+  </data>
+  <data name="Summary.RevenueDetails" xml:space="preserve">
+    <value>Получено {0} · возвраты {1}</value>
+  </data>
+  <data name="Summary.Sources" xml:space="preserve">
+    <value>Заявки по источникам</value>
+  </data>
+  <data name="Summary.Staff" xml:space="preserve">
+    <value>Задачи сотрудников</value>
+  </data>
+  <data name="Summary.Tasks" xml:space="preserve">
+    <value>Поставлено {0} · выполнено {1}</value>
+  </data>
+  <data name="Summary.Title" xml:space="preserve">
+    <value>Сводка школы</value>
+  </data>
+  <data name="Summary.Workload" xml:space="preserve">
+    <value>Вождение {0} · {1} ч · теория {2} · неявок {3}</value>
+  </data>
   <data name="Tab.Chats" xml:space="preserve">
     <value>Чаты</value>
   </data>
