@@ -372,6 +372,28 @@ public static class ApplicationErrors
             "TestSession.NotEnoughQuestions", "The question bank does not have enough active questions for this test.");
     }
 
+    /// <summary>Errors of the practice of the questions outside tests.</summary>
+    public static class Practice
+    {
+        /// <summary>The mode is not a <see cref="Application.Practice.PracticeMode"/>.</summary>
+        public static readonly Error ModeNotDefined = Error.Validation("Practice.ModeNotDefined", "Practice mode is not valid.");
+
+        /// <summary>The practice of a topic was asked for without the topic.</summary>
+        public static readonly Error TopicRequired = Error.Validation("Practice.TopicRequired", "Choose the topic to practise.");
+
+        /// <summary>The position of the part in the practice is negative.</summary>
+        public static readonly Error OffsetNegative = Error.Validation(
+            "Practice.OffsetNegative", "The position in the practice cannot be negative.");
+
+        /// <summary>The part asks for no questions or for more than can be read at a time.</summary>
+        public static readonly Error CountOutOfRange = Error.Validation(
+            "Practice.CountOutOfRange", "From 1 to 50 questions can be read at a time.");
+
+        /// <summary>The chosen option is not one of the question.</summary>
+        public static readonly Error OptionNotInQuestion = Error.Validation(
+            "Practice.OptionNotInQuestion", "The chosen answer is not an option of the question.");
+    }
+
     /// <summary>Errors of exams that need more than the exam to check.</summary>
     public static class Exam
     {

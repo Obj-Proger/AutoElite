@@ -193,6 +193,21 @@
   <data name="ChatMessage.TooManyAttachments" xml:space="preserve">
     <value>В сообщении может быть не больше 10 вложений.</value>
   </data>
+  <data name="Practice.CountOutOfRange" xml:space="preserve">
+    <value>За раз можно получить от 1 до 50 вопросов.</value>
+  </data>
+  <data name="Practice.ModeNotDefined" xml:space="preserve">
+    <value>Неизвестный режим тренировки.</value>
+  </data>
+  <data name="Practice.OffsetNegative" xml:space="preserve">
+    <value>Позиция в тренировке не может быть отрицательной.</value>
+  </data>
+  <data name="Practice.OptionNotInQuestion" xml:space="preserve">
+    <value>Выбранный ответ не относится к этому вопросу.</value>
+  </data>
+  <data name="Practice.TopicRequired" xml:space="preserve">
+    <value>Выберите тему для тренировки.</value>
+  </data>
   <data name="PracticeRecord.NotFound" xml:space="preserve">
     <value>Запись о тренировке не найдена.</value>
   </data>

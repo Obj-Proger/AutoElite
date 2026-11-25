@@ -18,6 +18,7 @@ using AutoElite.Application.Questions;
 using AutoElite.Application.Settings;
 using AutoElite.Application.StaffTasks;
 using AutoElite.Application.StudyGroups;
+using AutoElite.Application.Practice;
 using AutoElite.Application.TestSessions;
 using AutoElite.Application.TestTemplates;
 using AutoElite.Application.TheoryLessons;
@@ -71,6 +72,7 @@ public static class DependencyInjection
         services.AddScoped<QuestionContent>();
         services.AddScoped<TestTemplateContent>();
         services.AddScoped<SessionQuestions>();
+        services.AddScoped<PracticeContracts>();
         services.AddScoped<TestAttempts>();
         services.AddScoped<ExamAccess>();
         services.AddScoped<ChatAccess>();
