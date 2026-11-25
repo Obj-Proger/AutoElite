@@ -10,13 +10,14 @@ namespace AutoElite.Mobile.Pages;
 /// <summary>
 /// The leads of a manager: the new ones of their branch scope, which anyone may take on, and those they are working on,
 /// with how many of them their limit allows, read from the API or, without a network, from the device; each opens the
-/// lead.
+/// lead. A lead that comes by phone or in person is recorded from here.
 /// </summary>
 /// <param name="leads">The leads of the school.</param>
 /// <param name="session">The user of the application, whose leads are theirs.</param>
 public sealed class LeadsViewModel(LeadBook leads, UserSession session) : ViewModel
 {
     private Command? _refresh;
+    private Command? _newLead;
 
     /// <summary>Gets the new leads.</summary>
     public IReadOnlyList<LeadEntry> NewLeads
@@ -80,6 +81,9 @@ public sealed class LeadsViewModel(LeadBook leads, UserSession session) : ViewMo
         get;
         set => SetProperty(ref field, value);
     }
+
+    /// <summary>Gets the command that opens a new lead, for a call or a visit.</summary>
+    public Command NewLeadCommand => _newLead ??= new Command(async () => await Routes.OpenAsync(Routes.NewLead));
 
     /// <summary>Gets the command that reads the leads again.</summary>
     public Command RefreshCommand => _refresh ??= new Command(async () => await RefreshAsync());

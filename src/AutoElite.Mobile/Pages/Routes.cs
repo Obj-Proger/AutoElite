@@ -109,6 +109,9 @@ internal static class Routes
     /// <summary>A lead for a manager, opened over the leads with a <see cref="LeadRequest"/>.</summary>
     public const string Lead = "lead";
 
+    /// <summary>A lead that a manager records from a call or a visit, opened over the leads.</summary>
+    public const string NewLead = "new-lead";
+
     // How often and how long a navigation waits for one that the shell is still finishing.
     private const int NavigationAttempts = 20;
     private static readonly TimeSpan _navigationRetryDelay = TimeSpan.FromMilliseconds(50);

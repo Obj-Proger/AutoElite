@@ -688,6 +688,45 @@
   <data name="NewChat.Title" xml:space="preserve">
     <value>Новый чат</value>
   </data>
+  <data name="NewLead.AnyCategory" xml:space="preserve">
+    <value>Пока не решил</value>
+  </data>
+  <data name="NewLead.Category" xml:space="preserve">
+    <value>Категория прав</value>
+  </data>
+  <data name="NewLead.Comment" xml:space="preserve">
+    <value>Что спрашивал</value>
+  </data>
+  <data name="NewLead.CommentPlaceholder" xml:space="preserve">
+    <value>Вопросы, пожелания, когда перезвонить</value>
+  </data>
+  <data name="NewLead.Email" xml:space="preserve">
+    <value>Почта, если удобнее писать</value>
+  </data>
+  <data name="NewLead.Name" xml:space="preserve">
+    <value>Имя</value>
+  </data>
+  <data name="NewLead.NoContact" xml:space="preserve">
+    <value>Укажите телефон или почту.</value>
+  </data>
+  <data name="NewLead.NoName" xml:space="preserve">
+    <value>Укажите, как зовут человека.</value>
+  </data>
+  <data name="NewLead.Phone" xml:space="preserve">
+    <value>Телефон</value>
+  </data>
+  <data name="NewLead.PhonePlaceholder" xml:space="preserve">
+    <value>+7 900 000-00-00</value>
+  </data>
+  <data name="NewLead.Save" xml:space="preserve">
+    <value>Сохранить заявку</value>
+  </data>
+  <data name="NewLead.Source" xml:space="preserve">
+    <value>Откуда узнал</value>
+  </data>
+  <data name="NewLead.Title" xml:space="preserve">
+    <value>Новая заявка</value>
+  </data>
   <data name="Notifications.All" xml:space="preserve">
     <value>Все</value>
   </data>

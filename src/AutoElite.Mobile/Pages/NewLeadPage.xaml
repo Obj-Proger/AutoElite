@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="AutoElite.Mobile.Pages.NewLeadPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:AutoElite.Mobile.Controls"
+    xmlns:l="clr-namespace:AutoElite.Mobile.Localization"
+    xmlns:pages="clr-namespace:AutoElite.Mobile.Pages"
+    x:DataType="pages:NewLeadViewModel"
+    Title="{l:Text NewLead.Title}">
+
+    <!--
+        What a manager types while the person is on the phone: the contact first, the phone number with the keyboard of
+        digits, then where the person came from, the category and what they asked.
+    -->
+    <ScrollView>
+        <controls:PageColumn Padding="20,8,20,32" MaximumWidthRequest="560" Spacing="14">
+            <Border Style="{StaticResource Card}">
+                <VerticalStackLayout Spacing="8">
+                    <Label Style="{StaticResource Caption}" Text="{l:Text NewLead.Name}" />
+                    <Border Style="{StaticResource Field}">
+                        <Entry Text="{Binding Name}" MaxLength="200" Keyboard="Text" ReturnType="Next" />
+                    </Border>
+                    <Label Style="{StaticResource Caption}" Text="{l:Text NewLead.Phone}" />
+                    <Border Style="{StaticResource Field}">
+                        <Entry
+                            Text="{Binding Phone}"
+                            Placeholder="{l:Text NewLead.PhonePlaceholder}"
+                            Keyboard="Telephone"
+                            MaxLength="24"
+                            ReturnType="Next" />
+                    </Border>
+                    <Label Style="{StaticResource Caption}" Text="{l:Text NewLead.Email}" />
+                    <Border Style="{StaticResource Field}">
+                        <Entry Text="{Binding Email}" Keyboard="Email" MaxLength="254" ReturnType="Done" />
+                    </Border>
+                </VerticalStackLayout>
+            </Border>
+
+            <Border Style="{StaticResource Card}">
+                <VerticalStackLayout Spacing="8">
+                    <Label Style="{StaticResource Caption}" Text="{l:Text NewLead.Source}" />
+                    <Border Style="{StaticResource Field}">
+                        <Picker Title="{l:Text NewLead.Source}" ItemsSource="{Binding Sources}" SelectedIndex="{Binding SourceIndex}" />
+                    </Border>
+                    <Label Style="{StaticResource Caption}" Text="{l:Text NewLead.Category}" />
+                    <Border Style="{StaticResource Field}">
+                        <Picker
+                            Title="{l:Text NewLead.Category}"
+                            ItemsSource="{Binding Categories}"
+                            SelectedIndex="{Binding CategoryIndex}" />
+                    </Border>
+                    <Label Style="{StaticResource Caption}" Text="{l:Text NewLead.Comment}" />
+                    <Border Style="{StaticResource Field}">
+                        <Editor
+                            Text="{Binding Comment}"
+                            Placeholder="{l:Text NewLead.CommentPlaceholder}"
+                            AutoSize="TextChanges"
+                            MaxLength="2000" />
+                    </Border>
+                </VerticalStackLayout>
+            </Border>
+
+            <controls:NoticeBanner Text="{Binding Message}" Tone="Danger" />
+            <Button Text="{l:Text NewLead.Save}" Command="{Binding SaveCommand}" />
+            <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
+        </controls:PageColumn>
+    </ScrollView>
+
+</ContentPage>

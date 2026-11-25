@@ -688,6 +688,45 @@
   <data name="NewChat.Title" xml:space="preserve">
     <value>New chat</value>
   </data>
+  <data name="NewLead.AnyCategory" xml:space="preserve">
+    <value>Not decided yet</value>
+  </data>
+  <data name="NewLead.Category" xml:space="preserve">
+    <value>Licence category</value>
+  </data>
+  <data name="NewLead.Comment" xml:space="preserve">
+    <value>What they asked</value>
+  </data>
+  <data name="NewLead.CommentPlaceholder" xml:space="preserve">
+    <value>Questions, wishes, when to call back</value>
+  </data>
+  <data name="NewLead.Email" xml:space="preserve">
+    <value>Email, if they prefer it</value>
+  </data>
+  <data name="NewLead.Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="NewLead.NoContact" xml:space="preserve">
+    <value>Enter a phone number or an email address.</value>
+  </data>
+  <data name="NewLead.NoName" xml:space="preserve">
+    <value>Enter the name the person gave.</value>
+  </data>
+  <data name="NewLead.Phone" xml:space="preserve">
+    <value>Phone</value>
+  </data>
+  <data name="NewLead.PhonePlaceholder" xml:space="preserve">
+    <value>+7 900 000-00-00</value>
+  </data>
+  <data name="NewLead.Save" xml:space="preserve">
+    <value>Save the lead</value>
+  </data>
+  <data name="NewLead.Source" xml:space="preserve">
+    <value>Where they came from</value>
+  </data>
+  <data name="NewLead.Title" xml:space="preserve">
+    <value>New lead</value>
+  </data>
   <data name="Notifications.All" xml:space="preserve">
     <value>All</value>
   </data>

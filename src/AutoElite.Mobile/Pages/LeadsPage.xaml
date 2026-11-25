@@ -11,7 +11,10 @@
     Shell.NavBarIsVisible="False"
     ControlTemplate="{StaticResource TabPage}">
 
-    <!-- The leads of a manager: the new ones first, then those they are working on; each opens the lead. -->
+    <!--
+        The leads of a manager: the new ones first, then those they are working on; each opens the lead. The button at
+        the bottom records a lead that came by phone or in person.
+    -->
     <ContentPage.Resources>
         <DataTemplate x:Key="Lead" x:DataType="pages:LeadEntry">
             <Border Style="{StaticResource Card}" Padding="16,14" SemanticProperties.Description="{Binding Name}">
@@ -35,35 +38,58 @@
         </DataTemplate>
     </ContentPage.Resources>
 
-    <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}" RefreshColor="{DynamicResource Accent}">
-        <ScrollView>
-            <controls:PageColumn Padding="20,8,20,32" Spacing="16" MaximumWidthRequest="1200">
-                <controls:NoticeBanner Text="{Binding Notice}" />
-                <controls:EmptyState Icon="inbox" Text="{Binding EmptyText}" HidesWithoutText="True" />
+    <Grid>
+        <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}" RefreshColor="{DynamicResource Accent}">
+            <ScrollView>
+                <controls:PageColumn Padding="20,8,20,96" Spacing="16" MaximumWidthRequest="1200">
+                    <controls:NoticeBanner Text="{Binding Notice}" />
+                    <controls:EmptyState
+                        Icon="inbox"
+                        Text="{Binding EmptyText}"
+                        ActionText="{l:Text NewLead.Title}"
+                        Command="{Binding NewLeadCommand}"
+                        HidesWithoutText="True" />
 
-                <VerticalStackLayout Spacing="8" IsVisible="{Binding HasNewLeads}">
-                    <Label
-                        Style="{StaticResource Overline}"
-                        TextColor="{DynamicResource TextMuted}"
-                        Text="{l:Text Leads.New}"
-                        Margin="4,0" />
-                    <controls:AdaptiveGrid
-                        BindableLayout.ItemsSource="{Binding NewLeads}"
-                        BindableLayout.ItemTemplate="{StaticResource Lead}" />
-                </VerticalStackLayout>
+                    <VerticalStackLayout Spacing="8" IsVisible="{Binding HasNewLeads}">
+                        <Label
+                            Style="{StaticResource Overline}"
+                            TextColor="{DynamicResource TextMuted}"
+                            Text="{l:Text Leads.New}"
+                            Margin="4,0" />
+                        <controls:AdaptiveGrid
+                            BindableLayout.ItemsSource="{Binding NewLeads}"
+                            BindableLayout.ItemTemplate="{StaticResource Lead}" />
+                    </VerticalStackLayout>
 
-                <VerticalStackLayout Spacing="8" IsVisible="{Binding HasMyLeads}">
-                    <Label
-                        Style="{StaticResource Overline}"
-                        TextColor="{DynamicResource TextMuted}"
-                        Text="{Binding MyLeadsTitle}"
-                        Margin="4,0" />
-                    <controls:AdaptiveGrid
-                        BindableLayout.ItemsSource="{Binding MyLeads}"
-                        BindableLayout.ItemTemplate="{StaticResource Lead}" />
-                </VerticalStackLayout>
-            </controls:PageColumn>
-        </ScrollView>
-    </RefreshView>
+                    <VerticalStackLayout Spacing="8" IsVisible="{Binding HasMyLeads}">
+                        <Label
+                            Style="{StaticResource Overline}"
+                            TextColor="{DynamicResource TextMuted}"
+                            Text="{Binding MyLeadsTitle}"
+                            Margin="4,0" />
+                        <controls:AdaptiveGrid
+                            BindableLayout.ItemsSource="{Binding MyLeads}"
+                            BindableLayout.ItemTemplate="{StaticResource Lead}" />
+                    </VerticalStackLayout>
+                </controls:PageColumn>
+            </ScrollView>
+        </RefreshView>
+
+        <Border
+            WidthRequest="56"
+            HeightRequest="56"
+            Margin="0,0,20,20"
+            HorizontalOptions="End"
+            VerticalOptions="End"
+            StrokeThickness="0"
+            StrokeShape="RoundRectangle 18"
+            BackgroundColor="{DynamicResource Primary}"
+            SemanticProperties.Description="{l:Text NewLead.Title}">
+            <Border.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding NewLeadCommand}" />
+            </Border.GestureRecognizers>
+            <controls:AppIcon Name="plus" Size="24" Color="{DynamicResource OnPrimary}" />
+        </Border>
+    </Grid>
 
 </ContentPage>

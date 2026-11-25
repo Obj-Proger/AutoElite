@@ -8,9 +8,9 @@ namespace AutoElite.Mobile.Schedule;
 /// <summary>
 /// The leads of the school as a manager works with them in the application: the new ones of their branch scope and
 /// those they are working on, a lead with its notes, read from the API or, without a network, from the device; and the
-/// actions of the funnel short of a contract, which is drawn up on the website: taking a lead on, writing a note, marking
-/// it lost and opening it again; and how many leads the user works on of the number their limit allows. The actions need
-/// the network.
+/// actions of the funnel short of a contract, which is drawn up on the website: recording a lead that came by phone or in
+/// person, taking a lead on, writing a note, marking it lost and opening it again; and how many leads the user works on
+/// of the number their limit allows. The actions need the network.
 /// </summary>
 /// <param name="cache">What the user last read.</param>
 /// <param name="createApi">Creates the client of the API.</param>
@@ -52,6 +52,19 @@ public sealed class LeadBook(OfflineCache cache, Func<AutoEliteApiClient> create
             token => createApi().Api.V1.Leads[leadId].GetAsync(cancellationToken: token),
             LeadDetails.CreateFromDiscriminatorValue,
             cancellationToken);
+
+    /// <summary>
+    /// Records a lead that came by phone, in person or another way; a manager's lead goes to their branch and to them.
+    /// </summary>
+    /// <param name="lead">The name, the contacts, the source, the category wanted and the comment.</param>
+    /// <param name="cancellationToken">A token that signals cancellation of the operation.</param>
+    /// <returns>The lead.</returns>
+    public async Task<Guid> CreateAsync(CreateLeadCommand lead, CancellationToken cancellationToken)
+    {
+        var created = await createApi().Api.V1.Leads.PostAsync(lead, cancellationToken: cancellationToken);
+
+        return created?.Id ?? throw new InvalidOperationException("The API answered without the lead.");
+    }
 
     /// <summary>Makes a manager responsible for a lead.</summary>
     /// <param name="leadId">The lead.</param>
