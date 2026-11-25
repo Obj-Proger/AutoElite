@@ -415,8 +415,14 @@
   <data name="Home.Empty" xml:space="preserve">
     <value>В ближайшие два месяца занятий нет.</value>
   </data>
+  <data name="Home.NoDebts" xml:space="preserve">
+    <value>Долгов нет</value>
+  </data>
   <data name="Home.NoTasks" xml:space="preserve">
     <value>Открытых задач нет</value>
+  </data>
+  <data name="Home.NoWaiting" xml:space="preserve">
+    <value>Всё подтверждено</value>
   </data>
   <data name="Home.Offline" xml:space="preserve">
     <value>Нет связи. Данные на {0}.</value>
@@ -678,6 +684,54 @@
   </data>
   <data name="Lesson.WithdrawTitle" xml:space="preserve">
     <value>Снять слот</value>
+  </data>
+  <data name="Money.CancelPayment" xml:space="preserve">
+    <value>Отменить платёж</value>
+  </data>
+  <data name="Money.CancelReason" xml:space="preserve">
+    <value>Почему отменяется платёж на {0}? Причина останется в истории.</value>
+  </data>
+  <data name="Money.CancelTitle" xml:space="preserve">
+    <value>Отмена платежа</value>
+  </data>
+  <data name="Money.Debts" xml:space="preserve">
+    <value>Долги</value>
+  </data>
+  <data name="Money.DebtsCount" xml:space="preserve">
+    <value>Долги · {0}</value>
+  </data>
+  <data name="Money.NoDebts" xml:space="preserve">
+    <value>Ни у кого нет долга по действующему договору.</value>
+  </data>
+  <data name="Money.NoWaiting" xml:space="preserve">
+    <value>Нет платежей, ожидающих подтверждения.</value>
+  </data>
+  <data name="Money.OfPrice" xml:space="preserve">
+    <value>из {0}</value>
+  </data>
+  <data name="Money.Offline" xml:space="preserve">
+    <value>Нет связи. Данные на {0}.</value>
+  </data>
+  <data name="Money.Online" xml:space="preserve">
+    <value>Онлайн</value>
+  </data>
+  <data name="Money.OpenStudent" xml:space="preserve">
+    <value>Карточка ученика</value>
+  </data>
+  <data name="Money.PaymentOf" xml:space="preserve">
+    <value>{0}, {1}</value>
+  </data>
+  <data name="Money.Title" xml:space="preserve">
+    <value>Платежи и долги</value>
+  </data>
+  <data name="Money.Total" xml:space="preserve">
+    <value>На сумму {0}</value>
+  </data>
+  <data name="Money.Waiting" xml:space="preserve">
+    <value>Платежи к подтверждению</value>
+  </data>
+  <data name="Money.WaitingCount" xml:space="preserve">
+    <value>К подтверждению · {0}</value>
   </data>
   <data name="NewChat.Empty" xml:space="preserve">
     <value>Здесь появятся ваши преподаватели или ученики, когда начнутся совместные занятия.</value>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="AutoElite.Mobile.Pages.MoneyPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:AutoElite.Mobile.Controls"
+    xmlns:l="clr-namespace:AutoElite.Mobile.Localization"
+    xmlns:pages="clr-namespace:AutoElite.Mobile.Pages"
+    x:DataType="pages:MoneyViewModel"
+    Title="{l:Text Money.Title}">
+
+    <!--
+        The payments waiting for their money and the debts of the students, one view at a time, with what the view comes
+        to above its rows; a payment offers to confirm or cancel it, a debt opens the card of the student.
+    -->
+    <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}" RefreshColor="{DynamicResource Accent}">
+        <ScrollView>
+            <controls:PageColumn Padding="20,8,20,32" Spacing="12" MaximumWidthRequest="1200">
+                <Border Style="{StaticResource SegmentBar}" MaximumWidthRequest="560" HorizontalOptions="Start">
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="4">
+                        <Button Style="{StaticResource Segment}" Text="{Binding WaitingTitle}" Command="{Binding ShowWaitingCommand}">
+                            <Button.Triggers>
+                                <DataTrigger TargetType="Button" Binding="{Binding ShowsWaiting}" Value="True">
+                                    <Setter Property="BackgroundColor" Value="{DynamicResource SurfaceRaised}" />
+                                    <Setter Property="TextColor" Value="{DynamicResource Text}" />
+                                </DataTrigger>
+                            </Button.Triggers>
+                        </Button>
+                        <Button
+                            Grid.Column="1"
+                            Style="{StaticResource Segment}"
+                            Text="{Binding DebtsTitle}"
+                            Command="{Binding ShowDebtsCommand}">
+                            <Button.Triggers>
+                                <DataTrigger TargetType="Button" Binding="{Binding ShowsDebts}" Value="True">
+                                    <Setter Property="BackgroundColor" Value="{DynamicResource SurfaceRaised}" />
+                                    <Setter Property="TextColor" Value="{DynamicResource Text}" />
+                                </DataTrigger>
+                            </Button.Triggers>
+                        </Button>
+                    </Grid>
+                </Border>
+
+                <controls:NoticeBanner Text="{Binding Notice}" Tone="Warning" />
+                <Label Style="{StaticResource Secondary}" Text="{Binding Total}" IsVisible="{Binding HasItems}" Margin="4,0" />
+                <controls:EmptyState Icon="wallet" Text="{Binding EmptyText}" HidesWithoutText="True" />
+
+                <controls:AdaptiveGrid BindableLayout.ItemsSource="{Binding Items}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="pages:MoneyEntry">
+                            <controls:ListRow
+                                Icon="wallet"
+                                Tone="{Binding Tone}"
+                                Title="{Binding Title}"
+                                Subtitle="{Binding Subtitle}"
+                                Trailing="{Binding Amount}"
+                                TrailingDetail="{Binding Detail}"
+                                ShowsChevron="True"
+                                Command="{Binding Command}" />
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </controls:AdaptiveGrid>
+            </controls:PageColumn>
+        </ScrollView>
+    </RefreshView>
+
+</ContentPage>

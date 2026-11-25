@@ -13,7 +13,8 @@ namespace AutoElite.Mobile.Pages;
 /// <summary>
 /// Today, the first tab of the signed-in user: the lesson going on or the next one in a highlighted card, with what the
 /// user can do with it; the figures of their role (the hours driven and the debt of a student, the lessons of the day
-/// and the free slots of an instructor, the leads of a manager); the tasks of the staff; the next lessons as rows
+/// and the free slots of an instructor, the leads of a manager); the tasks of the staff, and for the office the payments
+/// that wait for their money and the students who owe money; the next lessons as rows
 /// (HomeViewModel.Lessons.cs); and whether the data is from the device, with the actions that wait to be sent and those
 /// the school did not accept. The bell above the tabs counts the notifications; the other sections are tabs.
 /// </summary>
@@ -30,6 +31,7 @@ public sealed partial class HomeViewModel : ViewModel
     private readonly StaffTasks _tasks;
     private readonly LeadBook _leads;
     private readonly StudentContracts _contracts;
+    private readonly OfficeMoney _money;
 
     /// <summary>Initializes a new instance of the <see cref="HomeViewModel"/> class.</summary>
     /// <param name="session">The user of the application.</param>
@@ -43,6 +45,7 @@ public sealed partial class HomeViewModel : ViewModel
     /// <param name="tasks">The tasks the school gives a member of its staff.</param>
     /// <param name="leads">The leads of the school, for a manager.</param>
     /// <param name="contracts">The contracts of a student, for their hours and debt.</param>
+    /// <param name="money">The payments and debts the office follows.</param>
     public HomeViewModel(
         UserSession session,
         StudentSchedule schedule,
@@ -54,7 +57,8 @@ public sealed partial class HomeViewModel : ViewModel
         LessonEntries entries,
         StaffTasks tasks,
         LeadBook leads,
-        StudentContracts contracts)
+        StudentContracts contracts,
+        OfficeMoney money)
     {
         _session = session;
         _schedule = schedule;
@@ -68,8 +72,12 @@ public sealed partial class HomeViewModel : ViewModel
         _tasks = tasks;
         _leads = leads;
         _contracts = contracts;
+        _money = money;
         OpenTasksCommand = new Command(async () => await Routes.OpenAsync(Routes.Tasks));
         OpenLeadsCommand = new Command(async () => await Routes.GoToAsync(Routes.Leads));
+        OpenWaitingCommand = new Command(async () => await Routes.OpenAsync(Routes.Money));
+        OpenDebtsCommand = new Command(async () => await Routes.OpenAsync(
+            Routes.Money, new Dictionary<string, object> { [MoneyViewModel.ViewParameter] = MoneyViewModel.DebtsView }));
         RefreshCommand = new Command(async () => await RefreshAsync());
         DismissRefusalsCommand = new Command(async () => await DismissRefusalsAsync());
         BookCommand = new Command(async () => await Routes.OpenAsync(Routes.Booking));
@@ -355,6 +363,47 @@ public sealed partial class HomeViewModel : ViewModel
     /// <summary>Gets the command that opens the leads.</summary>
     public Command OpenLeadsCommand { get; }
 
+    /// <summary>Gets what the payments that wait for their confirmation come to.</summary>
+    public string WaitingSummary
+    {
+        get;
+        private set => SetProperty(ref field, value);
+    } = string.Empty;
+
+    /// <summary>Gets how many payments wait for their confirmation.</summary>
+    public string WaitingCount
+    {
+        get;
+        private set => SetProperty(ref field, value);
+    } = string.Empty;
+
+    /// <summary>Gets how much the students owe.</summary>
+    public string DebtsSummary
+    {
+        get;
+        private set => SetProperty(ref field, value);
+    } = string.Empty;
+
+    /// <summary>Gets how many contracts have a debt.</summary>
+    public string DebtsCount
+    {
+        get;
+        private set => SetProperty(ref field, value);
+    } = string.Empty;
+
+    /// <summary>Gets the tone of the debts: danger when there are some.</summary>
+    public StatusTone DebtsTone
+    {
+        get;
+        private set => SetProperty(ref field, value);
+    }
+
+    /// <summary>Gets the command that opens the payments that wait for their confirmation.</summary>
+    public Command OpenWaitingCommand { get; }
+
+    /// <summary>Gets the command that opens the students who owe money.</summary>
+    public Command OpenDebtsCommand { get; }
+
     /// <summary>Gets the command that sends the waiting actions and reads everything again.</summary>
     public Command RefreshCommand { get; }
 
@@ -422,7 +471,10 @@ public sealed partial class HomeViewModel : ViewModel
             await CountTasksAsync();
 
         if (IsManager)
+        {
             await CountLeadsAsync();
+            await CountMoneyAsync();
+        }
 
         await ConnectAsync();
     }
@@ -468,6 +520,32 @@ public sealed partial class HomeViewModel : ViewModel
         catch (Exception exception) when (exception is ApiException or HttpRequestException)
         {
             // The numbers are shown once the leads can be read.
+        }
+    }
+
+    // Shows how many payments wait for their money and how many students owe money; without a network the last numbers
+    // stay.
+    private async Task CountMoneyAsync()
+    {
+        try
+        {
+            var waiting = (await _money.ReadWaitingAsync(CancellationToken.None)).Value;
+            var debts = (await _money.ReadDebtsAsync(CancellationToken.None)).Value
+                .Where(contract => contract.DebtAmount > 0)
+                .ToList();
+            WaitingCount = waiting.Count.ToString(CultureInfo.CurrentCulture);
+            WaitingSummary = waiting.Count == 0
+                ? AppTexts.Get("Home.NoWaiting")
+                : MoneyViewModel.TotalOf(waiting.Select(payment => (payment.Currency, payment.Amount ?? 0)));
+            DebtsCount = debts.Count.ToString(CultureInfo.CurrentCulture);
+            DebtsSummary = debts.Count == 0
+                ? AppTexts.Get("Home.NoDebts")
+                : MoneyViewModel.TotalOf(debts.Select(contract => (contract.Currency, contract.DebtAmount ?? 0)));
+            DebtsTone = debts.Count > 0 ? StatusTone.Danger : StatusTone.Neutral;
+        }
+        catch (Exception exception) when (exception is ApiException or HttpRequestException)
+        {
+            // The numbers are shown once the money can be read.
         }
     }
 

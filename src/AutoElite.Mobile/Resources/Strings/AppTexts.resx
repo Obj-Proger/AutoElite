@@ -415,8 +415,14 @@
   <data name="Home.Empty" xml:space="preserve">
     <value>No lessons in the next two months.</value>
   </data>
+  <data name="Home.NoDebts" xml:space="preserve">
+    <value>No one owes money</value>
+  </data>
   <data name="Home.NoTasks" xml:space="preserve">
     <value>No open tasks</value>
+  </data>
+  <data name="Home.NoWaiting" xml:space="preserve">
+    <value>Every payment is confirmed</value>
   </data>
   <data name="Home.Offline" xml:space="preserve">
     <value>No connection. The data is as of {0}.</value>
@@ -678,6 +684,54 @@
   </data>
   <data name="Lesson.WithdrawTitle" xml:space="preserve">
     <value>Withdraw the slot</value>
+  </data>
+  <data name="Money.CancelPayment" xml:space="preserve">
+    <value>Cancel the payment</value>
+  </data>
+  <data name="Money.CancelReason" xml:space="preserve">
+    <value>Why is the payment of {0} cancelled? The reason stays in its history.</value>
+  </data>
+  <data name="Money.CancelTitle" xml:space="preserve">
+    <value>Cancel the payment</value>
+  </data>
+  <data name="Money.Debts" xml:space="preserve">
+    <value>Debts</value>
+  </data>
+  <data name="Money.DebtsCount" xml:space="preserve">
+    <value>Debts · {0}</value>
+  </data>
+  <data name="Money.NoDebts" xml:space="preserve">
+    <value>No student owes money on an active contract.</value>
+  </data>
+  <data name="Money.NoWaiting" xml:space="preserve">
+    <value>No payment waits for its confirmation.</value>
+  </data>
+  <data name="Money.OfPrice" xml:space="preserve">
+    <value>of {0}</value>
+  </data>
+  <data name="Money.Offline" xml:space="preserve">
+    <value>No connection. The data of {0}.</value>
+  </data>
+  <data name="Money.Online" xml:space="preserve">
+    <value>Online</value>
+  </data>
+  <data name="Money.OpenStudent" xml:space="preserve">
+    <value>Open the student</value>
+  </data>
+  <data name="Money.PaymentOf" xml:space="preserve">
+    <value>{0}, {1}</value>
+  </data>
+  <data name="Money.Title" xml:space="preserve">
+    <value>Payments and debts</value>
+  </data>
+  <data name="Money.Total" xml:space="preserve">
+    <value>Total {0}</value>
+  </data>
+  <data name="Money.Waiting" xml:space="preserve">
+    <value>Payments to confirm</value>
+  </data>
+  <data name="Money.WaitingCount" xml:space="preserve">
+    <value>To confirm · {0}</value>
   </data>
   <data name="NewChat.Empty" xml:space="preserve">
     <value>Your instructors or students appear here once you start lessons together.</value>
