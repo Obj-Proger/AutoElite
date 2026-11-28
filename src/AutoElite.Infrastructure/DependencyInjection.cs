@@ -35,6 +35,7 @@ using AutoElite.Infrastructure.Persistence;
 using AutoElite.Infrastructure.Persistence.Interceptors;
 using AutoElite.Infrastructure.Persistence.Queries;
 using AutoElite.Infrastructure.Persistence.Repositories;
+using AutoElite.Infrastructure.Push;
 using AutoElite.Infrastructure.Realtime;
 using AutoElite.Infrastructure.Reports;
 using AutoElite.Infrastructure.Storage;
@@ -62,7 +63,8 @@ public static class DependencyInjection
     /// The host must register <see cref="ICurrentUser"/>, which reports the system outside a request, since the outbox
     /// handlers and the jobs run on its behalf, and logging; and configure the <see cref="JwtOptions.SectionName"/>,
     /// <see cref="ClientOptions.SectionName"/>, <see cref="ChatEncryptionOptions.SectionName"/>,
-    /// <see cref="EmailOptions.SectionName"/> and <see cref="FileStorageOptions.SectionName"/> sections.
+    /// <see cref="EmailOptions.SectionName"/> and <see cref="FileStorageOptions.SectionName"/> sections, and may configure
+    /// the <see cref="PushOptions.SectionName"/> one.
     /// </summary>
     /// <param name="services">The services to add to.</param>
     /// <param name="configuration">The configuration with the connection string <see cref="ConnectionStringName"/>.</param>
@@ -170,6 +172,7 @@ public static class DependencyInjection
         AddChatEncryption(services, configuration);
         AddOutbox(services, configuration);
         AddEmailDelivery(services, configuration);
+        AddPush(services, configuration);
         AddFileStorage(services, configuration);
         AddBackgroundJobs(services, configuration, connectionString);
         AddAccounts(services);
@@ -229,6 +232,29 @@ public static class DependencyInjection
         provider.GetRequiredService<IOptions<FileStorageOptions>>().Value.Provider == FileStorageProvider.S3
             ? provider.GetRequiredService<S3FileStorage>()
             : provider.GetRequiredService<LocalFileStorage>();
+
+    /// <summary>
+    /// Registers the sending of push notifications from the <see cref="PushOptions.SectionName"/> section: through
+    /// Firebase Cloud Messaging when a service account is set, which is checked when the host starts, or nowhere.
+    /// </summary>
+    private static void AddPush(IServiceCollection services, IConfiguration configuration)
+    {
+        var section = configuration.GetSection(PushOptions.SectionName);
+        services.AddOptions<PushOptions>().Bind(section).ValidateOnStart();
+        services.AddSingleton<IValidateOptions<PushOptions>>(new SettingsValidator<PushOptions>(options => options.Problems()));
+        if (section.Get<PushOptions>()?.IsEnabled != true)
+        {
+            services.AddSingleton<IPushSender, NoPushSender>();
+
+            return;
+        }
+
+        services.AddHttpClient(FcmAccessTokens.HttpClientName, client => client.Timeout = TimeSpan.FromSeconds(30));
+        services.AddSingleton(provider => FirebaseServiceAccount.Parse(
+            File.ReadAllText(provider.GetRequiredService<IOptions<PushOptions>>().Value.ServiceAccountFile!)));
+        services.AddSingleton<FcmAccessTokens>();
+        services.AddSingleton<IPushSender, FcmPushSender>();
+    }
 
     /// <summary>
     /// Registers the delivery of the queued emails, which runs in the host, from the <see cref="EmailOptions.SectionName"/>

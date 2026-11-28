@@ -33,6 +33,11 @@ appsettings.Production.json
 appsettings.Staging.json
 secrets.json
 
+# Firebase: the key of a service account is a secret, and the configuration of the Android application belongs to the
+# project of each school
+*-firebase-adminsdk-*.json
+google-services.json
+
 # File Storage
 uploads/
 wwwroot/uploads/
