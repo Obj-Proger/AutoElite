@@ -1596,6 +1596,51 @@ namespace AutoElite.Infrastructure.Persistence.Migrations
                     b.ToTable("practice_records", (string)null);
                 });
 
+            modelBuilder.Entity("AutoElite.Domain.Entities.PushDevice", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Platform")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)")
+                        .HasColumnName("platform");
+
+                    b.Property<DateTime>("RegisteredAtUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("registered_at_utc");
+
+                    b.Property<uint>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("xid")
+                        .HasColumnName("xmin");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasMaxLength(4096)
+                        .HasColumnType("character varying(4096)")
+                        .HasColumnName("token");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_push_devices");
+
+                    b.HasIndex("Token")
+                        .IsUnique()
+                        .HasDatabaseName("ix_push_devices_token");
+
+                    b.HasIndex("UserId")
+                        .HasDatabaseName("ix_push_devices_user_id");
+
+                    b.ToTable("push_devices", (string)null);
+                });
+
             modelBuilder.Entity("AutoElite.Domain.Entities.Question", b =>
                 {
                     b.Property<Guid>("Id")
@@ -3374,6 +3419,16 @@ namespace AutoElite.Infrastructure.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
                         .HasConstraintName("fk_practice_records_users_student_id");
+                });
+
+            modelBuilder.Entity("AutoElite.Domain.Entities.PushDevice", b =>
+                {
+                    b.HasOne("AutoElite.Domain.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_push_devices_users_user_id");
                 });
 
             modelBuilder.Entity("AutoElite.Domain.Entities.Question", b =>

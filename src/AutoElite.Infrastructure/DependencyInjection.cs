@@ -142,6 +142,8 @@ public static class DependencyInjection
         services.AddScoped<IPracticeRecordRepository, PracticeRecordRepository>();
         services.AddScoped<IRepository<PracticeRecord>>(provider => provider.GetRequiredService<IPracticeRecordRepository>());
         services.AddScoped<IPracticeQueries, PracticeQueries>();
+        services.AddScoped<IPushDeviceRepository, PushDeviceRepository>();
+        services.AddScoped<IRepository<PushDevice>>(provider => provider.GetRequiredService<IPushDeviceRepository>());
         services.AddScoped<IExamRepository, ExamRepository>();
         services.AddScoped<IRepository<Exam>>(provider => provider.GetRequiredService<IExamRepository>());
         services.AddScoped<IExamQueries, ExamQueries>();
