@@ -79,6 +79,9 @@
   <data name="PracticeRecord.NotFound" xml:space="preserve">
     <value>Practice record was not found.</value>
   </data>
+  <data name="PushDevice.NotFound" xml:space="preserve">
+    <value>Device was not found.</value>
+  </data>
   <data name="Question.NotFound" xml:space="preserve">
     <value>Question was not found.</value>
   </data>

@@ -673,6 +673,22 @@ public static class DomainErrors
         public static readonly Error NotConfirmed = new("Payment.NotConfirmed", "Only a confirmed payment can be refunded.", ErrorType.Conflict);
     }
 
+    /// <summary>Errors related to the <see cref="Entities.PushDevice"/> aggregate.</summary>
+    public static class PushDevice
+    {
+        /// <summary>The user identifier is an empty GUID.</summary>
+        public static readonly Error UserIdEmpty = new("PushDevice.UserIdEmpty", "User ID cannot be an empty GUID.", ErrorType.Validation);
+
+        /// <summary>The token is empty.</summary>
+        public static readonly Error TokenEmpty = new("PushDevice.TokenEmpty", "The token of the device is required.", ErrorType.Validation);
+
+        /// <summary>The token is longer than <see cref="Entities.PushDevice.MaxTokenLength"/> characters.</summary>
+        public static readonly Error TokenTooLong = new("PushDevice.TokenTooLong", "The token of the device is too long.", ErrorType.Validation);
+
+        /// <summary>The platform is not a <see cref="Enums.PushPlatform"/>.</summary>
+        public static readonly Error PlatformNotDefined = new("PushDevice.PlatformNotDefined", "The push platform is not valid.", ErrorType.Validation);
+    }
+
     /// <summary>Errors related to the <see cref="Entities.PracticeRecord"/> aggregate.</summary>
     public static class PracticeRecord
     {

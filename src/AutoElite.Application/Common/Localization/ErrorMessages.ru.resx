@@ -217,6 +217,21 @@
   <data name="PracticeRecord.StudentIdEmpty" xml:space="preserve">
     <value>Идентификатор ученика не может быть пустым.</value>
   </data>
+  <data name="PushDevice.NotFound" xml:space="preserve">
+    <value>Устройство не найдено.</value>
+  </data>
+  <data name="PushDevice.PlatformNotDefined" xml:space="preserve">
+    <value>Неизвестная платформа push-уведомлений.</value>
+  </data>
+  <data name="PushDevice.TokenEmpty" xml:space="preserve">
+    <value>Не указан токен устройства.</value>
+  </data>
+  <data name="PushDevice.TokenTooLong" xml:space="preserve">
+    <value>Токен устройства слишком длинный.</value>
+  </data>
+  <data name="PushDevice.UserIdEmpty" xml:space="preserve">
+    <value>Идентификатор пользователя не может быть пустым.</value>
+  </data>
   <data name="Request.UnreadableValue" xml:space="preserve">
     <value>Значение не удалось прочитать.</value>
   </data>
